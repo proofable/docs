@@ -1,0 +1,235 @@
+---
+title: MCP OAuth
+description: "OAuth 2.0 with PKCE for MCP client authentication: discovery, authorization, token exchange, refresh, and revocation."
+icon: shield-check
+---
+
+Proofable MCP uses **OAuth 2.0 Authorization Code with PKCE** for MCP clients. The user signs in on Proofable (same passkey/wallet flow as the product).
+
+<Note>
+  **Default:** add `https://mcp.proofable.me/mcp` and click **Connect**. Optional terminal installer: `npx -y -p @proofable/sdk proofable setup`. Use this page for custom MCP hosts, security review, standalone sign-in, or raw HTTP integration.
+</Note>
+
+## Flow overview
+
+```text
+MCP client discovers Proofable MCP
+  → GET /.well-known/oauth-protected-resource
+  → GET /.well-known/oauth-protected-resource/mcp
+  → GET /.well-known/oauth-authorization-server
+  → GET /oauth/authorize (validates OAuth params; redirects to hosted login if needed)
+  → User authenticates on proofable.me (passkey, wallet, or Google/Microsoft)
+  → Browser returns to /oauth/authorize with session; backend issues auth code
+  → Redirect to client callback with code
+  → POST /api/v1/auth/mcp/token (exchange code for access token)
+  → Client uses Bearer token on MCP requests
+```
+
+`/oauth/authorize` validates OAuth parameters. Without a session it redirects to `https://proofable.me/verify?intent=mcp&returnTo=/oauth/authorize?...`. After login it issues a single-use code (10-minute TTL) and redirects to `redirect_uri`. Repeated identical `resource` values are accepted (RFC 8707).
+
+Token exchange and revocation are public OAuth endpoints on `proofable.me`.
+
+## Discovery
+
+### Protected resource metadata
+
+```http
+GET https://mcp.proofable.me/.well-known/oauth-protected-resource
+GET https://mcp.proofable.me/.well-known/oauth-protected-resource/mcp
+```
+
+```json
+{
+  "resource": "https://mcp.proofable.me/mcp",
+  "authorization_servers": ["https://proofable.me"],
+  "scopes_supported": [
+    "neus:core",
+    "neus:profile",
+    "neus:secrets"
+  ],
+  "resource_documentation": "https://docs.proofable.me/mcp/overview"
+}
+```
+
+`tools/list` and `ping` stay public for marketplace listing. Unauthenticated `initialize` and every `tools/call` return:
+
+```http
+HTTP/1.1 401 Unauthorized
+WWW-Authenticate: Bearer resource_metadata="https://mcp.proofable.me/mcp/.well-known/oauth-protected-resource", scope="neus:core neus:profile neus:secrets"
+```
+
+### Authorization server metadata
+
+```http
+GET https://proofable.me/.well-known/oauth-authorization-server
+```
+
+```json
+{
+  "issuer": "https://proofable.me",
+  "authorization_endpoint": "https://proofable.me/oauth/authorize",
+  "token_endpoint": "https://proofable.me/api/v1/auth/mcp/token",
+  "revocation_endpoint": "https://proofable.me/api/v1/auth/mcp/revoke",
+  "registration_endpoint": "https://proofable.me/oauth/register",
+  "response_types_supported": ["code"],
+  "grant_types_supported": ["authorization_code", "refresh_token"],
+  "code_challenge_methods_supported": ["S256"],
+  "token_endpoint_auth_methods_supported": ["none"],
+  "scopes_supported": [
+    "neus:core",
+    "neus:profile",
+    "neus:secrets",
+    "offline_access"
+  ],
+  "resource_indicators_supported": true,
+  "authorization_response_iss_parameter_supported": true
+}
+```
+
+## Authorization
+
+The example below shows the **Proofable SDK CLI** loopback flow (`proofable auth --oauth`). Host MCP clients use the same endpoint with the `client_id` issued to them by DCR and their own loopback `redirect_uri`. Never use `neus-cli` for host clients.
+
+```http
+GET https://proofable.me/oauth/authorize
+  ?response_type=code
+  &client_id=neus-cli
+  &redirect_uri=http://127.0.0.1:PORT/callback
+  &code_challenge=BASE64URL(SHA256(code_verifier))
+  &code_challenge_method=S256
+  &state=RANDOM_CSRF_VALUE
+  &scope=neus:core neus:profile neus:secrets offline_access
+  &resource=https://mcp.proofable.me/mcp
+```
+
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `response_type` | Yes | Must be `code` |
+| `client_id` | Yes | Registered client identifier |
+| `redirect_uri` | Yes | Must exactly match a registered URI |
+| `code_challenge` | Yes | PKCE challenge (BASE64URL of SHA-256 of code_verifier) |
+| `code_challenge_method` | Yes | Must be `S256` |
+| `state` | Yes | CSRF protection: returned verbatim |
+| `scope` | No | Default: `neus:core neus:profile neus:secrets offline_access` |
+| `resource` | No | Missing defaults to `https://mcp.proofable.me/mcp`. Repeated identical canonical values are accepted (RFC 8707). |
+| `iss` | Returned | The AS returns `iss=https://proofable.me` on the callback. Clients MUST validate it matches the expected issuer (RFC 9207). |
+
+## Token exchange
+
+```http
+POST https://proofable.me/api/v1/auth/mcp/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code
+code=AUTH_CODE
+redirect_uri=http://127.0.0.1:PORT/callback
+client_id=neus-cli
+code_verifier=ORIGINAL_CODE_VERIFIER
+resource=https://mcp.proofable.me/mcp
+```
+
+Response:
+
+```json
+{
+  "access_token": "eyJ...",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "refresh_token": "rt_...",
+  "scope": "neus:core neus:profile neus:secrets"
+}
+```
+
+## Refresh tokens
+
+```http
+POST https://proofable.me/api/v1/auth/mcp/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=refresh_token
+refresh_token=rt_...
+client_id=neus-cli
+resource=https://mcp.proofable.me/mcp
+```
+
+Refresh tokens rotate on each use. Include `offline_access` in the initial scope to receive one.
+
+## Token claims
+
+The MCP access token is a JWT:
+
+| Claim | Value | Description |
+|-------|-------|-------------|
+| `iss` | `https://proofable.me` | Token issuer |
+| `aud` | `https://mcp.proofable.me/mcp` | Resource audience: MCP server validates this |
+| `sub` | Profile subject ID | Unique user identifier |
+| `did` | `did:pkh:...` | Decentralized identifier |
+| `azp` | Client ID | Client that requested the token |
+| `scope` | Space-separated | Granted scopes |
+| `token_use` | `mcp_access` | Token type: MCP server rejects other values |
+| `iat` | Unix seconds | Issued at |
+| `exp` | Unix seconds | Expires at |
+
+OAuth access tokens are valid only when `aud` is `https://mcp.proofable.me/mcp`, `iss` is `https://proofable.me`, `token_use` is `mcp_access`, and the token is not expired or revoked.
+
+## Scope model
+
+| Scope | Description | Default |
+|-------|-------------|---------|
+| `neus:core` | Public protocol tools (context, catalog, public proof reads) | Yes |
+| `neus:profile` | Signed-in profile context and ownership checks | Yes |
+| `neus:secrets` | Portable encrypted secrets in Vault | Yes |
+| `offline_access` | Refresh token so the client can stay signed in | Yes |
+
+These four scopes are the complete public permission model. Profile access keys (`npk_*`) are a full-profile server credential.
+
+## Revocation
+
+```http
+POST https://proofable.me/api/v1/auth/mcp/revoke
+Content-Type: application/x-www-form-urlencoded
+
+token=eyJ...
+token_type_hint=access_token
+client_id=neus-cli
+```
+
+Revoking an access token also invalidates all associated refresh tokens.
+
+## Registered clients
+
+| `client_id` | Use |
+|-------------|-----|
+| `neus-cli` | Proofable SDK CLI (`proofable auth --oauth`): loopback redirect on `127.0.0.1` only |
+| `neus-mcp-host` | Host MCP clients: issued by DCR for non-loopback flows |
+
+Hosted MCP clients use a **URL-only** MCP config. The host discovers OAuth metadata via `/.well-known/oauth-protected-resource`, runs its own Dynamic Client Registration (DCR) against `/oauth/register`, and owns its PKCE + silent-refresh lifecycle. DCR returns `neus-cli` only for the CLI loopback `http://127.0.0.1:<port>/callback`. Every other redirect URI receives `neus-mcp-host`. Do not pin `neus-cli` for host-owned OAuth.
+
+The OAuth examples above show `client_id=neus-cli` because they document the CLI loopback path (`proofable auth --oauth`). Host clients receive their own `client_id` from DCR and send that instead, plus the same `resource=https://mcp.proofable.me/mcp`.
+
+## Security properties
+
+| Property | Enforcement |
+|----------|-------------|
+| PKCE required | `code_challenge_method=S256` is mandatory |
+| Exact redirect_uri match | Prevents open redirect attacks |
+| State parameter preserved | CSRF protection |
+| Resource indicator required | Prevents token misuse across services |
+| Issuer validation (RFC 9207) | Client confirms `iss` on auth response matches expected AS; closes IdP mix-up |
+| Token audience validated | MCP tokens cannot be used for other Proofable services |
+| Refresh token rotation | Old refresh token invalidated on each use |
+| Tokens never in query strings | Bearer header only |
+| Single-use auth codes | Code invalidated after first exchange |
+| Access key fallback | For servers and automation where browser is unavailable |
+
+<CardGroup cols={3}>
+  <Card title="Auth" icon="lock" href="./auth">
+    Keys and headers.
+  </Card>
+  <Card title="Setup" icon="code" href="./setup">
+    Install and configure.
+  </Card>
+  <Card title="Endpoints" icon="globe" href="./endpoints">
+    Discovery URLs.
+  </Card>
+</CardGroup>

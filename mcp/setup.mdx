@@ -1,0 +1,156 @@
+---
+title: "Connect Proofable"
+description: "Connect Proofable once. Load your agents, tools, skills, context, permissions, and proofs in supported AI clients."
+icon: plug
+---
+
+Proofable MCP connects supported chats, IDEs, jobs, and agent runtimes to the same portable profile. Your agents, approved tools, skills, connected apps, selected context, permissions, jobs, and proofs are ready without rebuilding the stack for each client.
+
+## Install (one minute)
+
+1. Open [proofable.me/install](https://proofable.me/install), or add `https://mcp.proofable.me/mcp` in your editor, chat, or agent.
+2. Click **Connect**. Sign in in the browser.
+3. Ask for your profile, agents, approved tools, and current proofs.
+
+Proofable answers **Passed**, **Action needed**, or **Blocked**.
+
+If the host already offers a Proofable plugin, install that.
+
+Have the CLI?
+
+```bash
+proofable setup
+```
+
+## Any host
+
+Paste this URL in the host’s MCP settings:
+
+`https://mcp.proofable.me/mcp`
+
+```json
+{
+  "mcpServers": {
+    "proofable": {
+      "url": "https://mcp.proofable.me/mcp"
+    }
+  }
+}
+```
+
+If the host requires the spec `type` field:
+
+```json
+{
+  "mcpServers": {
+    "proofable": {
+      "type": "http",
+      "url": "https://mcp.proofable.me/mcp"
+    }
+  }
+}
+```
+
+## Paste this prompt
+
+```text
+# Proofable connect
+
+Connect this host to Proofable. MCP is how I use Proofable from any chat, IDE, or job runtime: profile, proofs, listings, permissions, and private context.
+
+1. Install Proofable on this host (plugin, install page, or https://mcp.proofable.me/mcp). Do not add a second `proofable` entry.
+2. Tell me to click Connect if sign-in is not done.
+3. Call proofable_context once. Reuse existing proofs before a new check. Before spend, publish, secrets, or a sensitive tool, check proofs first. Summarize as Proofable: Passed, Action needed, or Blocked.
+4. If I want to sell: open payouts at https://proofable.me/profile?tab=treasury, then create a listing at https://proofable.me/profile/portals/new. Walk me through type, what to verify, price, and Listed. Do not invent proof IDs or verifier IDs.
+5. If I need an agent, create or import it on my signed-in profile. Use generate only for a dedicated spend key.
+
+Canonical endpoint: https://mcp.proofable.me/mcp
+Docs: https://docs.proofable.me/mcp/setup
+```
+
+## After Connect
+
+### Check the connection
+
+Ask:
+
+> Reuse what I already have. Before a sensitive action, check my current proofs.
+
+Read a known proof with **`proofable_proofs_get`**.
+
+Create or import an agent when you need one:
+
+```text
+Create or import an agent on my Proofable profile. Use generate if I need a
+separate spend account. Set spend and action limits. Then confirm it is
+ready.
+```
+
+That uses **`proofable_agent_create`**. Default is your signed-in account. Use **`generate`** only for a dedicated spend key. Confirm with **`proofable_agent_link`**.
+
+Open **Connections** on [proofable.me](https://proofable.me) to link apps. [Connections](../cookbook/connector-integrations)
+
+Cursor, Claude Code, Codex, Hermes, and Grok use the same endpoint. Optional project mount:
+
+```bash
+npx -y -p @proofable/sdk proofable mount <agentId> --apply cursor
+```
+
+Valid `--apply` values: `cursor`, `claude`, `codex`. See [Connect agent context](../agents/runtime-mount).
+
+### List and sell
+
+1. **Payouts** (paid listings): [Treasury](https://proofable.me/profile?tab=treasury) → Set up payouts.
+2. **New listing:** [Create listing](https://proofable.me/profile/portals/new).
+3. Pick the type (AI service, skill, digital product, and the other live types).
+4. Add what buyers must verify. Set a price or keep it free. Discovery: **Listed**.
+5. Share the listing link.
+
+Job placeholders become buyer inputs. Buyers connect apps at checkout.
+
+Embed a gate in your own app: [Sell access](../quickstart).
+
+## From a terminal
+
+Optional if you have the CLI. Writes the same hosted URL and the public workflow skill:
+
+```bash
+proofable setup
+```
+
+If you use npm and do not have the CLI on your PATH:
+
+```bash
+npx -y -p @proofable/sdk proofable setup
+```
+
+If a Proofable plugin is already installed, setup skips a second `proofable` entry.
+
+## Advanced: access keys
+
+Use Connect for interactive clients. Use a [profile access key](https://proofable.me/profile?tab=account) only when browser sign-in is unavailable, such as a server or CI job.
+
+```bash
+export PROOFABLE_ACCESS_KEY=npk_...
+proofable setup
+```
+
+Treat the key like a password. Never paste it into chat or commit it to a repository.
+
+## Disconnect
+
+```bash
+proofable disconnect --access-key <token>
+```
+
+## Troubleshooting
+
+- **No tools appear:** restart the MCP client after the endpoint is registered.
+- **No Connect, or Unauthorized with Logout visible:** click **Logout**, then **Connect**.
+- **Host has no Connect:** use the host’s own MCP login after the endpoint is registered.
+- **Two Proofable servers:** a marketplace plugin and a user MCP config both registered Proofable. Remove the extra `proofable` key from the host MCP config. If you used the CLI, run `proofable setup` again to drop the leftover user entry.
+- **Confirm the connection:** `proofable doctor --live` (Node).
+- **Agent permission missing:** create or refresh the agent permission on Proofable, then run `proofable mount` again.
+- **Search-only endpoint:** use `https://mcp.proofable.me/mcp`. `https://docs.proofable.me/mcp` only searches documentation.
+
+[MCP overview](./overview) lists the twelve tools. For a laptop, server, or confidential VM, see [Private Cloud Trust Harness](../cookbook/private-cloud-agents).

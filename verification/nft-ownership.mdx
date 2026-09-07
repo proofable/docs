@@ -1,0 +1,42 @@
+---
+title: NFT holder
+sidebarTitle: NFT
+description: Gate access when a wallet holds a specific NFT.
+icon: image
+---
+
+**Verifier ID:** `nft-ownership`
+
+## Use cases
+
+- Token-gated access
+- Drops and collector-only content
+
+## Flow type
+
+Lookup. Proofable checks on-chain ownership.
+
+## Required Fields
+
+| Field | Required | Notes |
+|------|----------|-------|
+| `contractAddress` | Yes | NFT contract or mint |
+| `tokenId` | Yes | Token ID |
+| `chainId` or `chain` | Yes | Chain id or CAIP-2 chain |
+| `tokenType` | No | `erc721` (default) or `erc1155` |
+| `ownerAddress` | No | Wallet to check; defaults to the signer |
+| `blockNumber` | No | Check ownership at a specific block |
+
+## Example
+
+```json
+{
+  "contractAddress": "0x...",
+  "tokenId": "1",
+  "chainId": 8453
+}
+```
+
+High-stakes access: pair with freshness checks or require a new proof when policy demands it.
+
+Full schema: [`nft-ownership.json`](https://github.com/proofable/network/blob/main/docs/verifiers/schemas/nft-ownership.json).

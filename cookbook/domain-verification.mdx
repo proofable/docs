@@ -1,0 +1,42 @@
+---
+title: Verify a domain
+sidebarTitle: Domain recipe
+description: Confirm domain control with a DNS TXT record.
+icon: globe
+---
+
+Check: [`ownership-dns-txt`](../verification/ownership-dns-txt). Optional. Not required to [sell access](../quickstart) or run VerifyGate.
+
+## Steps
+
+1. **TXT** at `_neus.<yourdomain>` (DNS host/name is often `_neus` when the zone is your apex or subdomain).
+
+   ```text
+   wallet=<your-wallet-or-account-address>
+   ```
+
+   Example for Ethereum (use **lowercase** hex so it matches what Proofable expects):
+
+   ```text
+   wallet=0x...
+   ```
+
+   The check reads **`wallet=`** only (not `neus=` or other prefixes).
+
+2. **Request:** include at least `domain` in `data`. You may omit `data.walletAddress` when the same request carries a verified **top-level** `walletAddress` (typical signed flow); the service fills in that signer address before the DNS check. The TXT line must use the same wallet or account address Proofable uses for the check.
+
+   ```javascript
+   const proof = await client.verify({
+     verifier: 'ownership-dns-txt',
+     data: { domain: 'example.com', walletAddress: '0x...' },
+     walletAddress: '0x...',
+   });
+   ```
+
+3. **Check**
+
+   ```bash
+   GET /api/v1/proofs/check?verifierIds=ownership-dns-txt&address=0x...
+   ```
+
+DNS can take minutes to propagate (sometimes longer per provider).

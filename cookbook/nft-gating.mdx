@@ -1,0 +1,26 @@
+---
+title: NFT gating
+description: Require NFT ownership before content or rewards.
+icon: image
+---
+
+Use the [NFT ownership](../verification/nft-ownership) check. Ownership is point-in-time. Set the contract, token policy, and recency in your published gate.
+
+## Widget
+
+```jsx
+import { VerifyGate } from '@proofable/sdk/widgets';
+
+export function NFTGatedContent() {
+  return (
+    <VerifyGate gateId="gate_your-nft-gate">
+      <ProtectedContent />
+    </VerifyGate>
+  );
+}
+```
+
+## Next
+
+- [Sell access](../quickstart)
+- [NFT ownership check](../verification/nft-ownership)

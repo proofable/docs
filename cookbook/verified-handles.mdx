@@ -1,0 +1,147 @@
+---
+title: Verified creator handles
+description: Bind a pseudonymous handle to a wallet, display a verified badge, and gate creator actions with Proofable Proofs.
+icon: badge-check
+---
+
+Use Proofable to make creator handles portable and verifiable. A user claims a handle, Proofable binds it to their wallet with the `ownership-pseudonym` verifier, and your app gets a reusable proof ID it can badge, link, and gate.
+
+## When to use this
+
+- Creator platforms, media networks, or launchpads that need handle ownership proof.
+- Pseudonymous identity without legal identity exposure.
+- Gating drops, founders tables, or premium calls behind a verified handle.
+
+## What you need
+
+- A published Proofable gate with `ownership-pseudonym` enabled (or use direct verification with in-app signing).
+- The user's wallet address.
+- A `namespace` to isolate your handles from the default `neus` namespace.
+
+## Flow
+
+1. User claims a handle in your app.
+2. Your app asks Proofable to bind `handle` + `namespace` + `walletAddress`.
+3. Proofable returns a proof ID in `qHash` and a proof URL.
+4. Your app stores the proof ID with the user record.
+5. Surface a verified badge that links to the public proof page.
+6. Before any privileged action, check the proof on your server.
+
+## Direct verification (in-app signing)
+
+Use `ProofableClient.verify()` when your app already handles wallet signatures.
+
+```js
+import { ProofableClient } from '@proofable/sdk';
+
+const client = new ProofableClient();
+
+const proof = await client.verify({
+  verifier: 'ownership-pseudonym',
+  data: {
+    pseudonymId: 'alice123',     // 3-64 lowercase chars
+    namespace: 'acme',         // isolate from default neus namespace
+    displayName: 'Alice',
+    metadata: { platform: 'acme' }
+  },
+  wallet: window.ethereum        // EVM provider
+});
+
+// Store proof.qHash with the user record
+// proof.proofUrl === https://proofable.me/proof/{qHash}
+```
+
+`pseudonymId` must match `^[a-z0-9._-]{3,64}$` (3–64 lowercase chars).
+
+## Hosted Verify (no in-app signing)
+
+Send the user to Proofable and get the proof ID back on return.
+
+```js
+import { getHostedCheckoutUrl } from '@proofable/sdk';
+
+const url = getHostedCheckoutUrl({
+  gateId: 'gate_acme-handles',
+  returnUrl: 'https://acme.network/handle/callback',
+});
+
+window.location.assign(url);
+```
+
+Read the proof ID from the `qHash` field in the callback URL or popup message and store it.
+
+## Show the badge
+
+Drop the SDK widget next to the handle.
+
+```jsx
+import { ProofBadge } from '@proofable/sdk/widgets';
+
+export function CreatorHandle({ handle, qHash }) {
+  return (
+    <div className="handle-row">
+      <span>@{handle}</span>
+      <ProofBadge qHash={qHash} showChains />
+    </div>
+  );
+}
+```
+
+The badge links to `https://proofable.me/proof/{qHash}` and shows live proof status.
+
+## Gate creator actions on the server
+
+Always check the proof server-side before allowing privileged actions.
+
+```js
+import { ProofableClient } from '@proofable/sdk';
+
+const client = new ProofableClient();
+
+const result = await client.gateCheck({
+  gateId: 'gate_acme-handles',
+  address: walletAddress
+});
+
+if (result.data?.gate?.allRequiredSatisfied !== true) {
+  throw new Error('Handle not verified');
+}
+```
+
+Or call the HTTP API directly:
+
+```bash
+curl "https://api.proofable.me/api/v1/proofs/check?gateId=gate_acme-handles&address=0x...&namespace=acme"
+```
+
+## Namespace policy
+
+Namespaces other than `neus` require the namespace owner to confirm DNS control with `ownership-dns-txt`, or Proofable admin approval. Contact Proofable to reserve a production namespace for your platform.
+
+## Optional: link social accounts
+
+Layer `ownership-social` to also confirm a linked X, Discord, Telegram, GitHub, or other social account. Social checks are interactive and hosted-only, so they usually run through `VerifyGate` or Hosted Verify rather than direct signing.
+
+```jsx
+import { VerifyGate } from '@proofable/sdk/widgets';
+
+<VerifyGate
+  gateId="gate_acme-social"
+  onVerified={result => {
+    console.log(result.qHash || result.qHashes);
+  }}
+>
+  <button>Verify social account</button>
+</VerifyGate>
+```
+
+## Full example
+
+See the [verified-handle-react example](https://github.com/proofable/network/tree/main/examples/verified-handle-react) for a complete React + Vite app.
+
+## Next
+
+- [Username](../verification/ownership-pseudonym)
+- [SDK Quickstart](../quickstart)
+- [Hosted Verify](./auth-hosted-verify)
+- [API: GET /proofs/check](../api/overview)

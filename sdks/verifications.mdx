@@ -1,0 +1,85 @@
+---
+title: Verify patterns
+sidebarTitle: Verify patterns
+description: Reuse, fresh, hosted checkout, and server verification.
+icon: network-wired
+---
+
+Default strategy: **`reuse-or-create`**.
+
+## Privacy
+
+`client.verify()` is an advanced server or controlled-signing path. `VerifyGate` create opens **Hosted Verify** and uses the published gate policy. Full matrix: [Privacy](../platform/security-and-trust)
+
+| Option | When |
+|--------|------|
+| `privacyLevel: 'private'` | Default; owner or authorized access for private reads |
+| `privacyLevel: 'public'` | Public reuse without owner auth; pair with `publicDisplay` |
+| `publicDisplay: false` | Unlisted - still public to anyone with id |
+| `publicDisplay: true` | Listed / discoverable (needs `public`) |
+
+`storeOriginalContent` and explicit visibility options are advanced `client.verify()` storage controls, not the default VerifyGate path.
+
+## Reuse-first
+
+```jsx
+<VerifyGate
+  gateId="gate_your-app-name"
+  strategy="reuse-or-create"
+>
+  <Protected />
+</VerifyGate>
+```
+
+## Fresh
+
+High-stakes actions - force new proof:
+
+```jsx
+<VerifyGate strategy="fresh" gateId="gate_your-app-name">
+  <Protected />
+</VerifyGate>
+```
+
+## Read-only gate
+
+```jsx
+<VerifyGate strategy="reuse" gateId="gate_your-app-name">
+  <Protected />
+</VerifyGate>
+```
+
+## Hosted interactive
+
+Hand off to `/verify` with a published gate:
+
+```jsx
+<VerifyGate
+  gateId="gate_your-app-name"
+  hostedCheckoutUrl="https://proofable.me/verify"
+/>
+```
+
+[Hosted Verify](../cookbook/auth-hosted-verify)
+
+## Server check
+
+Prefer **`gateCheck`** over pulling full proofs for every decision:
+
+```javascript
+const result = await client.gateCheck({
+  gateId: 'gate_your-app-name',
+  address: '0x...',
+});
+```
+
+## Next
+
+<CardGroup cols={2}>
+ <Card title="VerifyGate" icon="object-group" href="../widgets/verifygate">
+ Props.
+ </Card>
+ <Card title="Start" icon="bolt" href="/">
+ Loop.
+ </Card>
+</CardGroup>

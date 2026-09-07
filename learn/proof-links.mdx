@@ -1,0 +1,66 @@
+---
+title: Proof links and versioning
+description: Optional patterns for linking portable proofs with typed references and supersedes tags.
+icon: link
+---
+
+Use these patterns when an integration needs linked proofs, version history, or tag-based lookup.
+
+**Proof ID** in API responses is `qHash`.
+
+## Typed reference: `reference.type: "qhash"`
+
+The `ownership-basic` check accepts a `reference` object with `type: "qhash"` and `id` set to another proof's ID. That creates a typed link from one proof to another.
+
+```json
+{
+  "verifierIds": ["ownership-basic"],
+  "data": {
+    "owner": "0x...",
+    "reference": {
+      "type": "qhash",
+      "id": "0xe1a2b3c4d5e6f7081920212232425262728292a2b2c2d2e2f303132333435363",
+      "title": "Agent identity proof"
+    }
+  }
+}
+```
+
+Reference payloads for the same target commonly hash from `qhash:{targetId}` in the signed content. Confirm current behavior in the [ownership-basic](../verification/ownership-basic) capability reference and live API responses. Do not invent proof IDs.
+
+## Version chain: `supersedes:<qHash>` tag
+
+When you update a memory or instruction proof, Proofable can tag the new proof with `supersedes:<previousQHash>`. Newer proofs point back to older ones.
+
+```text
+Proof A → supersedes:none
+Proof B → supersedes:0xA  (replaces A)
+Proof C → supersedes:0xB  (replaces B)
+```
+
+Use `proofable_proofs_get` to walk the chain and read history.
+
+## Tag prefixes for discovery
+
+Tag prefixes help you filter related proofs. Common prefixes include subject facets (`topic:`, `domain:`) and review state (`quality:draft` / `quality:approved`). Query tagged proofs with [`proofable_proofs_get`](../mcp/proofs-get). To attach an agent profile to a project, see [Connect agent context](../agents/runtime-mount).
+
+## Large content
+
+Inline proof content has a size limit (about 50,000 characters). For larger artifacts, store the canonical file elsewhere and attach a short proof that references it (`reference` URL or content hash), or split content across multiple proofs only when your integration explicitly supports that pattern.
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Proofs" icon="shield-check" href="../platform/proofs">
+    How proofs work on Proofable.
+  </Card>
+  <Card title="Guard an agent action" icon="refresh-cw" href="../mcp/guarded-action">
+    Check permissions before a tool runs.
+  </Card>
+  <Card title="Proofs read" icon="search" href="../mcp/proofs-get">
+    Query proofs by tag and scope.
+  </Card>
+  <Card title="ownership-basic" icon="file" href="../verification/ownership-basic">
+    Check inputs for content and references.
+  </Card>
+</CardGroup>

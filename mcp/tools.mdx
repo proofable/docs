@@ -1,0 +1,86 @@
+---
+title: MCP tools
+description: Reuse a current proof before you create another.
+icon: wrench
+---
+
+Call **`proofable_context`** once, then pick the tool for the job.
+
+| Job | Tool | What it does |
+|---|---|---|
+| Start | `proofable_context` | Signed-in profile, what you can verify, and the recommended flow. |
+| List what you can verify | `proofable_verifiers_catalog` | Required inputs and supported networks. |
+| Reuse a proof | `proofable_proofs_check` | Read-only. Reports whether a current proof already satisfies the request. |
+| Finish what's missing | `proofable_verify_or_guide` | Reuses a proof, or returns the next step. |
+| Create or refresh a proof | `proofable_verify` | Creates the proof when a new one is needed. |
+| Read a proof | `proofable_proofs_get` | Current proof records and status. |
+| Create or import an agent | `proofable_agent_create` | Links the agent to your profile. Optional separate spend account and controls. Use `generate` for a dedicated key. |
+| Confirm the agent is ready | `proofable_agent_link` | Identity and the permissions that account needs. |
+| Load the agent | `proofable_agent_mount` | Identity, permissions, skills, and current settings. |
+| Store a secret | `proofable_secret_create` | Encrypted Vault secret. |
+| List secrets | `proofable_secret_list` | Stored names and details. Never the secret itself. |
+| Revoke a secret | `proofable_secret_revoke` | Removes a stored secret by proof ID. |
+
+| Topic | Detail |
+|-------|--------|
+| Session context | Call **`proofable_context`** first. After Connect it includes the signed-in profile. |
+| Create in-session | **`proofable_verify`** when signed in and ownership can finish here. |
+| Interactive | **`proofable_verify_or_guide`** reuses a proof, then continues with **`proofable_verify`** or returns a hosted link for an outside login, payment, or different account. |
+
+## Field names
+
+| Tool | Address field | Verifiers / filters |
+|------|---------------|---------------------|
+| `proofable_proofs_check` | `wallet` | `verifiers` |
+| `proofable_verify`, `proofable_verify_or_guide` | `walletAddress` | `verifierIds` |
+| `proofable_proofs_get` | `identifier` | optional `tags` (comma-separated proof tags) |
+
+Wallet address in native format, or `did:pkh:…`. Delegated reads: **`agentWallet`** on **`proofable_proofs_get`** (**`x-agent-wallet`** on the API).
+
+## Order
+
+| Phase | Calls |
+|-------|-------|
+| Default | Connect → **`proofable_context`** → **`proofable_agent_link`** for agents → **`proofable_proofs_check`** → continue if satisfied |
+| Project agent | **`proofable_agent_mount`** or `proofable mount <agentId> --apply <host>` in the repo |
+| Details | **`proofable_proofs_get`** for proof records, tags, delegated context, and proof fields |
+| Secrets | **`proofable_secret_list`** / **`proofable_secret_create`** / **`proofable_secret_revoke`** when auth is configured ([Secrets](./secrets)) |
+| Fallback | **`proofable_verify_or_guide`** only when something is missing |
+| Catalog | **`proofable_verifiers_catalog`** only when you need raw schemas beyond the compact `verifierSummary` in `proofable_context` |
+
+Same flow as [Overview](./overview).
+
+## Reference pages
+
+<CardGroup cols={2}>
+  <Card title="Context" icon="plug" href="./context">
+    Load profile, proofs, and workflow once per session.
+  </Card>
+  <Card title="Catalog" icon="list-tree" href="./verifiers-catalog">
+    Live verifier schemas and required inputs.
+  </Card>
+  <Card title="Proof reuse" icon="circle-check" href="./proofs-check">
+    Reuse existing proofs before verifying.
+  </Card>
+  <Card title="Verify" icon="circle-plus" href="./verify">
+    Create a proof in-session when possible.
+  </Card>
+  <Card title="Verify or guide" icon="signs-post" href="./verify-or-guide">
+    Reuse a proof or return the next step.
+  </Card>
+  <Card title="Proofs get" icon="receipt" href="./proofs-get">
+    Read proof records and current status.
+  </Card>
+  <Card title="Agent create" icon="robot" href="./agent-create">
+    Create or import an agent. Optional separate spend account.
+  </Card>
+  <Card title="Agent link" icon="link" href="./agent-link">
+    Confirm an agent is ready to act.
+  </Card>
+  <Card title="Connect agent context" icon="layer-group" href="../agents/runtime-mount">
+    Load identity, permissions, and skills into a project.
+  </Card>
+  <Card title="Secrets" icon="key" href="./secrets">
+    Store and revoke encrypted Vault secrets.
+  </Card>
+</CardGroup>

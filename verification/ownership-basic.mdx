@@ -1,0 +1,80 @@
+---
+title: Content ownership
+sidebarTitle: Content ownership
+description: Confirm you own the words, files, or releases. Reuse the result later.
+icon: wallet
+---
+
+**Verifier ID:** `ownership-basic`
+
+## Use cases
+
+Release notes, policy text, agent outputs, licensing claims, bounty submissions, and marketplace listings where **who said it** and **what the exact text was** must be verifiable later.
+
+## Workflow
+
+1. The owning wallet signs.
+2. Attach **`content`** (full text, up to 50,000 characters) and/or **`reference`** (`{ type, id }`).
+3. Proofable saves a durable result for check, link, and reuse.
+
+Visibility: private vault, link-only, or public. [Privacy](../platform/security-and-trust).
+
+## Content and storage
+
+| Field | Required | Notes |
+|-------|----------|-------|
+| `owner` | Yes | Must match the signer wallet |
+| `content` | No | Text to bind to the account |
+| `reference` | No | Stable pointer `{ type, id }`. Not a bare string |
+| `contentHash` | No | Proofable verifier hash (`0x` + 64 hex) only if precomputed; otherwise omit and send `content` |
+| `provenance` | No | Advisory human / AI / mixed metadata |
+
+Send at least one of `content`, `contentHash`, or `reference.id`.
+
+## Verification links in hosted gates
+
+A hosted gate can evaluate current JSON returned by a visitor-supplied HTTPS URL. Add an output match such as `resolved.verified = true`; `/verify` then reads JSON from the submitted URL or its conventional `.json` representation and evaluates the returned fields.
+
+```json
+{
+  "verifierId": "ownership-basic",
+  "match": [
+    { "path": "reference.type", "op": "eq", "value": "url" },
+    { "path": "resolved.verified", "op": "eq", "value": "true" }
+  ],
+  "maxAgeMs": 300000
+}
+```
+
+The visitor supplies only the URL. Resolver rules and expected output remain server-controlled. Ordinary URL references without `resolved.*` gate matches are not fetched.
+
+To store the exact string on the proof, set **`storeOriginalContent: true`** when you need to override defaults. Read back with **`proof.publicContent.content`**. [Privacy](../platform/security-and-trust) covers defaults.
+
+**Pre-hash:** Do not paste a generic SHA256 as `contentHash`. Send `content`, verify, and use the returned verifier hash from Proofable.
+
+### Example payload
+
+```json
+{
+  "owner": "0x...",
+  "content": "Release notes for v1.2",
+  "reference": {
+    "type": "url",
+    "id": "https://example.com/releases/v1-2",
+    "title": "Release notes v1.2"
+  },
+  "provenance": {
+    "declaredKind": "mixed",
+    "aiContext": {
+      "generatorType": "agent",
+      "provider": "Proofable",
+      "model": "release-workflow",
+      "runId": "release-v1-2"
+    }
+  }
+}
+```
+
+If storage was off or only a hash/pointer was anchored, callers may see a resolution status such as `hash_only_not_recoverable` instead of full prose.
+
+Schema: [`ownership-basic.json`](https://github.com/proofable/network/blob/main/docs/verifiers/schemas/ownership-basic.json).

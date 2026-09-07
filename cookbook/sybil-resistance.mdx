@@ -1,0 +1,47 @@
+---
+title: Abuse and layered access
+description: Layer account, social, and proof of human for stronger assurance than a single signal.
+icon: shield-halved
+---
+
+One weak signal is easy to game. Publish a listing that **layers** hosted account signals so visitors must pass more than one requirement.
+
+| Layer | Verifier ID | When |
+|-------|----------|------|
+| Social / work account | `ownership-social` or `ownership-org-oauth` | Linked identity most products need first |
+| Human | `proof-of-human` | Anti-bot and fair access |
+| Account uniqueness | `ownership-basic` | Baseline uniqueness when you also need a signed account check |
+
+Prefer social + human for consumer apps. Add `ownership-basic` or `wallet-risk` only when your threat model needs them.
+
+## Publish the layered gate
+
+In **Profile → Listings**, require the verifiers above, set pricing, and publish. Visitors never see your API key. They only need your `gateId`.
+
+## VerifyGate
+
+```jsx
+<VerifyGate
+  gateId="gate_layered"
+  onVerified={(result) => {
+    // persist result.qHash for replay protection
+  }}
+>
+  <button>Verify to continue</button>
+</VerifyGate>
+```
+
+## Server eligibility
+
+```javascript
+const layered = await client.gateCheck({
+  gateId: 'gate_layered',
+  address: user.accountAddress, // from Hosted Verify / proof subject
+});
+```
+
+<Warning>
+Configure recency on the gate for point-in-time checks. Store proof IDs (`qHash`) where replay matters.
+</Warning>
+
+**Next:** [Sell access](../quickstart), [Hosted Verify](./auth-hosted-verify), [Pricing](../platform/pricing)

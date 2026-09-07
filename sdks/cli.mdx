@@ -1,0 +1,21 @@
+---
+title: Proofable CLI
+sidebarTitle: Proofable CLI
+description: Set up hosted MCP, validate the connection, and load trusted agent context from the terminal.
+---
+
+The official Proofable CLI ships in [`@proofable/sdk`](https://www.npmjs.com/package/@proofable/sdk). Product page: [https://proofable.me/cli](https://proofable.me/cli).
+
+```bash
+npx -y -p @proofable/sdk proofable
+```
+
+| Command | Purpose |
+|---------|---------|
+| `npx -y -p @proofable/sdk proofable setup` | Register hosted MCP on the local client |
+| `npx -y -p @proofable/sdk proofable doctor --live` | Confirm the live connection |
+| `npx -y -p @proofable/sdk proofable auth` | Sign in when the host needs a profile session |
+
+After install you can use the short commands `proofable setup`, `proofable doctor --live`, and `proofable auth`.
+
+The CLI configures hosted MCP and loads trusted agent context. HTTP agents should fetch [Proofable OpenAPI](https://api.proofable.me/openapi.json). Assistants should use [Proofable MCP](https://mcp.proofable.me/mcp).

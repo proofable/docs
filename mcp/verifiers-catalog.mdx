@@ -1,0 +1,23 @@
+---
+title: MCP verifier catalog
+sidebarTitle: Verifier catalog
+description: List what you can verify and what each one needs.
+icon: table
+---
+
+| Situation | Tool |
+|-----------|------|
+| Typical integration | **`proofable_context`** |
+| Complete verifier list and schemas | This tool |
+
+## Input
+
+```json
+{}
+```
+
+## Output
+
+An array of live verifier **IDs** (strings), e.g. `["ownership-basic", "proof-of-human", ...]`. Use it to confirm which verifiers exist before building a request.
+
+For input fields and schemas per verifier, see the [Verifiers](../verification/verifiers) pages and the JSON schemas in [`docs/verifiers/schemas/`](https://github.com/proofable/network/tree/main/docs/verifiers/schemas), or call `GET /api/v1/verification/verifiers` for the full metadata response.

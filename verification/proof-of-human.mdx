@@ -1,0 +1,46 @@
+---
+title: Proof of human
+sidebarTitle: Human
+description: Confirm a person before rewards, drops, or high-value access.
+icon: user-check
+---
+
+**Verifier ID:** `proof-of-human`
+
+## Use cases
+
+- Sybil resistance
+- Rewards and trusted onboarding
+
+## Flow type
+
+Interactive, hosted-only. The user completes the personhood step on Proofable and returns with a result. This check cannot be combined with other checks in one request.
+
+## What you configure (hosted)
+
+| Field | Required | Notes |
+|------|----------|-------|
+| `provider` | Yes | Pin a supported provider (e.g. `zkpassport`) |
+| `scope` | No | Scope for the personhood identifier (defaults to `neus-v1`) |
+
+For direct API submission after a hosted proof, the request carries the provider `proofs` and `queryResult` returned by the hosted step. You do not assemble these yourself. Use Hosted Verify or `VerifyGate` for the standard path.
+
+## Response Fields
+
+| Field | Visibility | Description |
+|-------|-----------|-------------|
+| `provider` | Public | Provider that verified (e.g. `zkpassport`) |
+| `assuranceLevel` | Public | Confidence level: `low`, `medium`, or `high` |
+| `claims` | Public | Privacy-preserving booleans (e.g. `personhood_verified`, `sanctions_passed`) |
+| `traits` | Public | Provider metadata (scope, domain, verifiedAt) |
+| `expiresAt` | Public | Expiry timestamp |
+
+## Assurance Levels
+
+| Level | Criteria |
+|-------|----------|
+| `high` | Strict facematch verified |
+| `medium` | Facematch (non-strict) or KYC bundle verified |
+| `low` | Age/sanctions/personhood only |
+
+Full schema: [`proof-of-human.json`](https://github.com/proofable/network/blob/main/docs/verifiers/schemas/proof-of-human.json).

@@ -1,0 +1,64 @@
+---
+title: Widgets
+sidebarTitle: Widgets
+description: Add React gates and status badges with one gate ID while keeping check logic out of your app.
+icon: puzzle-piece
+"og:image": "/images/og-widgets.png"
+"twitter:image": "/images/og-widgets.png"
+---
+
+Put **VerifyGate** in front of protected content. Put **ProofBadge** where you show status. Same results your server trusts.
+
+- **VerifyGate** reuses a saved result, opens Hosted Verify only when needed, then shows your content. Pass one `gateId`.
+- **ProofBadge** shows status for any saved result. Pass a proof ID.
+
+## Install
+
+```bash
+npm install @proofable/sdk react react-dom
+```
+
+| Export | For |
+|--------|-----|
+| `VerifyGate` | Require a current check before content, payment, or a tool runs |
+| `ProofBadge` | Status badge |
+| `SimpleProofBadge` | Minimal verified badge |
+| `ProofablePillLink` | Link to the result page |
+| `VerifiedIcon` | Standalone icon |
+
+Import from `@proofable/sdk/widgets`.
+
+## VerifyGate
+
+```jsx
+import { VerifyGate } from '@proofable/sdk/widgets';
+
+export default function ProtectedPage() {
+  return (
+    <VerifyGate gateId="gate_your-app-name">
+      <ProtectedContent />
+    </VerifyGate>
+  );
+}
+```
+
+The published gate owns check inputs, pricing, and checkout. [Privacy](../platform/security-and-trust)
+
+## ProofBadge
+
+```jsx
+import { ProofBadge } from '@proofable/sdk/widgets';
+
+<ProofBadge qHash={proof.qHash} showChains />
+```
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="VerifyGate" icon="object-group" href="./verifygate">
+    Props, modes, and Hosted Verify handoff.
+  </Card>
+  <Card title="Start" icon="bolt" href="/">
+    Browser, server, and assistant paths.
+  </Card>
+</CardGroup>

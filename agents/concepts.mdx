@@ -1,0 +1,38 @@
+---
+title: Agent concepts
+sidebarTitle: Concepts
+description: Create or import an agent on your profile. Optional spend limits. Other tools can check that record.
+icon: book-open
+---
+
+Create or import the agent on your profile. Add spend and action limits only when you need them. Then do the work on Proofable or in your editor. Other tools check the record instead of starting over.
+
+Default is your signed-in profile. Use `"generate"` only when the agent needs its own spend account.
+
+## Limits
+
+| Need | Field |
+|------|--------|
+| Allowed / blocked actions | `allowedActions` / `deniedActions` |
+| Spend cap | `maxSpend` (whole-number string; USDC uses six decimals) |
+| Where it applies | `scope` (default `global`) |
+| End date | `expiresAt` |
+
+Ready means identity is on file. A separate spend account also needs signed limits. Full field list: [Permissions](./agent-delegation).
+
+## Next
+
+<CardGroup cols={2}>
+ <Card title="Do the work" icon="robot" href="./overview">
+ Start here.
+ </Card>
+ <Card title="Team agents" icon="user-group" href="./team-agents">
+ Several agents on one profile.
+ </Card>
+ <Card title="Permissions" icon="key" href="./agent-delegation">
+ Full field reference.
+ </Card>
+ <Card title="Setup order" icon="route" href="./agent-verification-flow">
+ Create, confirm, work.
+ </Card>
+</CardGroup>

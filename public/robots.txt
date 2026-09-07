@@ -1,0 +1,8 @@
+# Proofable public documentation is crawlable.
+# Robots rules are discovery preferences, not an access-control boundary.
+
+User-agent: *
+Allow: /
+
+# Sitemap (Mintlify auto-generates one at the hosted edge).
+Sitemap: https://docs.proofable.me/sitemap.xml

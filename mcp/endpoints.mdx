@@ -1,0 +1,52 @@
+---
+title: Discovery & Endpoints
+description: MCP transport, OAuth discovery, hosted verify, and well-known URLs.
+icon: globe
+---
+
+The **MCP URL** and the **HTTP API** use different transports and base paths. Discovery and the [agent card](https://proofable.me/.well-known/agent-card.json) list what your integration needs.
+
+## MCP endpoint
+
+| URL | Role |
+|-----|------|
+| `https://mcp.proofable.me/mcp` | MCP. [Setup](./setup) |
+
+## OAuth discovery
+
+| URL | Role |
+|-----|------|
+| `https://mcp.proofable.me/.well-known/oauth-protected-resource` | Protected resource metadata (RFC 9728 origin) |
+| `https://mcp.proofable.me/.well-known/oauth-protected-resource/mcp` | Protected resource metadata (RFC 9728 path insertion) |
+| `https://proofable.me/.well-known/oauth-authorization-server` | Authorization server metadata (RFC 8414) |
+
+## OAuth endpoints
+
+| URL | Role |
+|-----|------|
+| `https://proofable.me/oauth/authorize` | Authorization endpoint (browser login) |
+| `https://proofable.me/api/v1/auth/mcp/token` | Token endpoint (code exchange + refresh) |
+| `https://proofable.me/api/v1/auth/mcp/revoke` | Token revocation |
+
+Full OAuth reference: [MCP OAuth](./oauth).
+
+## Other discovery
+
+| URL | Role |
+|-----|------|
+| `https://mcp.proofable.me/.well-known/mcp` | MCP discovery (extensionless handshake) |
+| `https://mcp.proofable.me/.well-known/mcp.json` | MCP discovery |
+| `https://proofable.me/.well-known/mcp` | Same discovery card on the product domain (`url` stays `https://mcp.proofable.me/mcp`) |
+| `https://mcp.proofable.me/.well-known/mcp/server-card.json` | MCP server card |
+| `https://mcp.proofable.me/.well-known/glama.json` | Glama connector claim |
+| `https://proofable.me/.well-known/a2a/agent-card.json` | Platform A2A agent card. [Docs](../agents/named-agent-card) |
+| `https://proofable.me/.well-known/agent-card.json` | EIP-8004 agent registration |
+
+<CardGroup cols={2}>
+  <Card title="MCP OAuth" icon="shield-check" href="./oauth">
+    OAuth flow reference.
+  </Card>
+  <Card title="Setup" icon="code" href="./setup">
+    Install and configure.
+  </Card>
+</CardGroup>

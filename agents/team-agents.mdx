@@ -1,0 +1,51 @@
+---
+title: Team agents
+sidebarTitle: Team agents
+description: Several agents on one profile. Each one has its own limits.
+icon: user-group
+---
+
+Install Proofable, click **Connect**, then ask:
+
+> Create agents research, writer, and ops on my Proofable profile. Use generate if any need a separate spend account. Set limits. Confirm they are ready.
+
+## Do the work
+
+Chat now, or create a Pro job that runs in the background or on a schedule. Open **Connections** to link apps. [Connections](../cookbook/connector-integrations)
+
+Cursor, Claude Code, Codex, Hermes, and Grok use the same endpoint.
+
+**Private cloud.** Point the runtime at `https://mcp.proofable.me/mcp`. [Private Cloud Trust Harness](../cookbook/private-cloud-agents).
+
+## Set it up
+
+<Steps>
+  <Step title="Connect">
+    Add `https://mcp.proofable.me/mcp`, then click **Connect**.
+  </Step>
+  <Step title="Create each agent">
+    **`proofable_agent_create`** per agent. Default is your signed-in profile. Use **`agentWallet: "generate"`** only when that agent needs its own spend account.
+  </Step>
+  <Step title="Confirm">
+    **`proofable_agent_link`** until **`linked: true`**.
+  </Step>
+</Steps>
+
+Revoke one agent without touching the others.
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="MCP setup" icon="plug" href="../mcp/setup">
+    Install Proofable and click Connect.
+  </Card>
+  <Card title="Agents" icon="robot" href="./overview">
+    Create or import, then do the work.
+  </Card>
+  <Card title="Limits" icon="handshake" href="./agent-delegation">
+    Spend, actions, expiry, revoke.
+  </Card>
+  <Card title="Connections" icon="grid-2" href="../cookbook/connector-integrations">
+    Link apps in Connections.
+  </Card>
+</CardGroup>

@@ -1,0 +1,36 @@
+{
+  "$id": "https://proofable.me/schemas/ownership-pseudonym.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Associate an available .neus username with a wallet",
+  "properties": {
+    "displayName": {
+      "description": "Optional display label for UX; omit or minimize PII if you do not need it.",
+      "maxLength": 64,
+      "type": "string"
+    },
+    "metadata": {
+      "description": "Optional app-defined structured fields (keep small; avoid secrets).",
+      "type": "object"
+    },
+    "namespace": {
+      "default": "neus",
+      "description": "Logical partition so the same `pseudonymId` can exist in different apps or communities. Omit to use the default namespace.",
+      "maxLength": 64,
+      "minLength": 1,
+      "pattern": "^[a-z0-9]([a-z0-9._-]*[a-z0-9])?$",
+      "type": "string"
+    },
+    "pseudonymId": {
+      "description": "Stable handle for this identity within `namespace` (lowercase alphanumeric, dots, hyphens, underscores; 3–32 chars).",
+      "maxLength": 32,
+      "minLength": 3,
+      "pattern": "^[a-z0-9][a-z0-9._-]{1,30}[a-z0-9]$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "pseudonymId"
+  ],
+  "title": "ownership-pseudonym",
+  "type": "object"
+}

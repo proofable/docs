@@ -1,0 +1,3862 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Proofable API",
+    "version": "1.3.9",
+    "description": "Public HTTP API for Proofable integrators.\n\nRecommended integration order (simplest first):\n1. Browser: VerifyGate widget or hosted verify at https://proofable.me/verify (wallet, passkey, and OAuth handled by Proofable).\n2. JavaScript: `@proofable/sdk` `client.verify()` signs and submits for signature-based verifiers; use VerifyGate for hosted/interactive verifiers.\n3. Server gate checks: `GET /api/v1/proofs/check` with `gateId` or criteria before granting access.\n4. Raw HTTP: two-phase signing below only when you cannot use the SDK or hosted flows.\n\nRaw HTTP verification uses POST /api/v1/verification/standardize → sign signerString → POST /api/v1/verification with the same body plus signature. Session-authenticated callers may skip the signature when a valid session is present.\n\nUse your deployment base URL (for example https://api.proofable.me). Some verifiers require pro access. Administrative endpoints are not included in this specification.\n\nVersioning: public HTTP is `/api/v1` on https://api.proofable.me. Breaking changes ship as a new path version. The current public surface stays `/api/v1`. Deprecations are announced in the public changelog. Retired paths will send `Deprecation` and `Sunset` headers.\n\nMachine-readable spec: https://api.proofable.me/openapi.json\nTyped errors use the ErrorResponse object (`success`, `error.code`, `error.message`). See https://docs.proofable.me/api/errors.",
+    "license": {
+      "name": "Proprietary — all rights reserved",
+      "url": "https://proofable.me/legal/terms-of-use"
+    }
+  },
+  "security": [],
+  "servers": [
+    {
+      "url": "https://api.proofable.me",
+      "description": "Production API"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Timestamp": {
+        "oneOf": [
+          {
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "type": "number"
+          }
+        ]
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "error"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "enum": [
+              false
+            ]
+          },
+          "error": {
+            "type": "object",
+            "required": [
+              "code",
+              "message"
+            ],
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "details": {}
+            },
+            "additionalProperties": true
+          },
+          "timestamp": {
+            "$ref": "#/components/schemas/Timestamp"
+          },
+          "requestId": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "StandardizeRequest": {
+        "type": "object",
+        "description": "Phase 1 of the raw HTTP verification handshake. Send the exact JSON body you intend to submit for verification. The returned signerString is the only valid message to sign for that body.",
+        "required": [
+          "walletAddress",
+          "verifierIds",
+          "data",
+          "signedTimestamp"
+        ],
+        "properties": {
+          "walletAddress": {
+            "type": "string",
+            "description": "Signer wallet address. Must be the same wallet that signs the returned signerString and the same walletAddress later submitted to POST /api/v1/verification."
+          },
+          "verifierIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "ownership-basic",
+                "ownership-social",
+                "ownership-pseudonym",
+                "ownership-dns-txt",
+                "ownership-org-oauth",
+                "contract-ownership",
+                "proof-of-human",
+                "nft-ownership",
+                "token-holding",
+                "wallet-risk",
+                "wallet-link",
+                "ai-content-moderation",
+                "agent-identity",
+                "agent-delegation"
+              ]
+            },
+            "minItems": 1
+          },
+          "data": {
+            "oneOf": [
+              {
+                "type": "object"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "signedTimestamp": {
+            "type": "number",
+            "description": "Unix ms timestamp that becomes part of the signerString. For raw HTTP, reuse this exact value unchanged when later submitting POST /api/v1/verification."
+          },
+          "chainId": {
+            "type": "integer",
+            "description": "Advanced/optional. EVM signing-context hint; auto-resolved to the protocol hub chain when omitted. Not required for standard integrations. For non-EVM, use chain (CAIP-2) instead. For chain-specific asset claims (NFT, token, contract), set chainId inside verifier data, not here."
+          },
+          "chain": {
+            "type": "string",
+            "description": "CAIP-2 chain identifier for non-EVM wallets (e.g. solana:mainnet). EVM wallets do not need this field; the protocol resolves hub context automatically."
+          },
+          "signatureMethod": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      },
+      "StandardizeResponse": {
+        "type": "object",
+        "description": "Phase 1 response for raw HTTP verification. Sign data.signerString exactly as returned, then submit the same request body plus signature to POST /api/v1/verification.",
+        "required": [
+          "success",
+          "data"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "data": {
+            "type": "object",
+            "required": [
+              "signerString",
+              "bodyPreview"
+            ],
+            "properties": {
+              "signerString": {
+                "type": "string",
+                "description": "Exact UTF-8 message to sign for the standardized request body. Do not hand-build or modify this string."
+              },
+              "bodyPreview": {
+                "type": "object",
+                "description": "Normalized preview of the standardized request. This is diagnostic only; submit the same original request body, not a body reconstructed from this preview.",
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "VerificationRequest": {
+        "type": "object",
+        "description": "Phase 2 of the raw HTTP verification handshake. For raw HTTP callers, first call POST /api/v1/verification/standardize with this same body (minus signature), sign the returned signerString, then submit this body with signature. Treat this as a continuation of the standardized request, not as an independent one-step POST.",
+        "required": [
+          "verifierIds",
+          "data",
+          "walletAddress"
+        ],
+        "properties": {
+          "verifierIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "ownership-basic",
+                "ownership-social",
+                "ownership-pseudonym",
+                "ownership-dns-txt",
+                "ownership-org-oauth",
+                "contract-ownership",
+                "proof-of-human",
+                "nft-ownership",
+                "token-holding",
+                "wallet-risk",
+                "wallet-link",
+                "ai-content-moderation",
+                "agent-identity",
+                "agent-delegation"
+              ]
+            },
+            "minItems": 1
+          },
+          "data": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/VerificationDataFlat"
+              },
+              {
+                "$ref": "#/components/schemas/VerificationDataNamespaced"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "walletAddress": {
+            "type": "string",
+            "description": "Signer wallet address (who authenticates the request). For raw HTTP, this must match the walletAddress used during POST /api/v1/verification/standardize and the wallet that produced signature."
+          },
+          "subjectWallet": {
+            "type": "string",
+            "description": "Optional: Wallet being verified (delegated subject). Must match signed payload for verifiers that support delegated subjects (allowsDelegatedSubject: true). Defaults to walletAddress if omitted. Only valid when all verifiers in verifierIds support allowsDelegatedSubject: true."
+          },
+          "signature": {
+            "type": "string",
+            "description": "Required unless authenticated session is present. For raw HTTP, sign the exact signerString returned by POST /api/v1/verification/standardize for this same request body."
+          },
+          "signedTimestamp": {
+            "type": "number",
+            "description": "Required unless authenticated session is present. For raw HTTP, this must exactly match the signedTimestamp used during POST /api/v1/verification/standardize."
+          },
+          "chainId": {
+            "type": "integer",
+            "description": "Advanced/optional. EVM signing-context hint; auto-resolved to the protocol hub chain when omitted. Not required for standard integrations. For non-EVM, use chain (CAIP-2) instead. For chain-specific asset claims (NFT, token, contract), set chainId inside verifier data, not here."
+          },
+          "chain": {
+            "type": "string",
+            "description": "CAIP-2 chain identifier for non-EVM wallets (e.g. solana:mainnet). EVM wallets do not need this field; the protocol resolves hub context automatically."
+          },
+          "signatureMethod": {
+            "type": "string"
+          },
+          "options": {
+            "type": "object",
+            "description": "Optional verification options. By default the proof persists offchain with no on-chain transaction.",
+            "properties": {
+              "publishToHub": {
+                "type": "boolean",
+                "description": "Opt in to an on-chain hub registry transaction when targetChains is empty. Default false: offchain receipt only."
+              },
+              "targetChains": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                },
+                "description": "Optional chain IDs for cross-chain propagation. Empty (default) = no cross-chain spokes."
+              },
+              "enableIpfs": {
+                "type": "boolean",
+                "description": "Pin proof metadata to IPFS (public proofs only)."
+              },
+              "privacyLevel": {
+                "type": "string",
+                "enum": [
+                  "private",
+                  "public"
+                ]
+              },
+              "publicDisplay": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": true
+          },
+          "meta": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "VerificationAcceptedResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "status",
+          "message",
+          "data"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "status": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "qHash": {
+                "type": "string",
+                "pattern": "^0x[a-fA-F0-9]{64}$"
+              },
+              "proofUrl": {
+                "type": "string",
+                "description": "Standardized URL to fetch the proof record (GET /api/v1/proofs/{qHash})"
+              },
+              "receipt": {
+                "$ref": "#/components/schemas/ReceiptDescriptor"
+              },
+              "portableProof": {
+                "$ref": "#/components/schemas/PortableProofEnvelope"
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "VerificationCompleteResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "status",
+          "message",
+          "data"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "status": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "receipt": {
+                "$ref": "#/components/schemas/ReceiptDescriptor"
+              },
+              "portableProof": {
+                "$ref": "#/components/schemas/PortableProofEnvelope"
+              }
+            },
+            "additionalProperties": true
+          },
+          "creditInfo": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "ReceiptDescriptor": {
+        "type": "object",
+        "required": [
+          "format",
+          "portable"
+        ],
+        "properties": {
+          "format": {
+            "type": "string",
+            "enum": [
+              "caip-380-envelope",
+              "neus-receipt"
+            ]
+          },
+          "portable": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": false
+      },
+      "PortableProofEnvelope": {
+        "type": "object",
+        "description": "Complete wallet-signed request envelope returned to the creator. Retain it for offline verification; it is not available from public proof lookup by default.",
+        "required": [
+          "qHash",
+          "did",
+          "walletAddress",
+          "verifierIds",
+          "data",
+          "signedTimestamp",
+          "signature",
+          "signatureMethod"
+        ],
+        "properties": {
+          "qHash": {
+            "type": "string",
+            "pattern": "^0x[a-fA-F0-9]{64}$"
+          },
+          "did": {
+            "type": "string"
+          },
+          "walletAddress": {
+            "type": "string"
+          },
+          "verifierIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "signedTimestamp": {
+            "type": "number"
+          },
+          "chainId": {
+            "type": "number"
+          },
+          "chain": {
+            "type": "string"
+          },
+          "signature": {
+            "type": "string"
+          },
+          "signatureMethod": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ProofRecordResponse": {
+        "type": "object",
+        "description": "Proof record and verification state. The `data` object is shaped for the caller (public, owner-authenticated, or minimal private).",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "status": {
+            "type": "string"
+          },
+          "qHash": {
+            "type": "string"
+          },
+          "cached": {
+            "type": "boolean"
+          },
+          "cachedAt": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": true
+      },
+      "VerificationStatusBatchResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "results": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "properties": {
+                "qHash": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "lastUpdated": {},
+                "completedAt": {
+                  "nullable": true,
+                  "type": "string"
+                },
+                "privacyLevel": {
+                  "type": "string"
+                },
+                "cached": {
+                  "type": "boolean"
+                },
+                "cachedAt": {
+                  "nullable": true,
+                  "type": "number"
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      },
+      "ProofsByWalletResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "data"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "data": {
+            "type": "object",
+            "required": [
+              "proofs",
+              "totalCount",
+              "hasMore",
+              "resolved",
+              "pagination"
+            ],
+            "properties": {
+              "proofs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              },
+              "totalCount": {
+                "type": "number",
+                "nullable": true
+              },
+              "hasMore": {
+                "type": "boolean"
+              },
+              "nextOffset": {
+                "nullable": true,
+                "type": "number"
+              },
+              "nextCursor": {
+                "nullable": true,
+                "type": "string"
+              },
+              "pageInfo": {
+                "type": "object",
+                "additionalProperties": true,
+                "properties": {
+                  "limit": {
+                    "type": "integer"
+                  },
+                  "hasNextPage": {
+                    "type": "boolean"
+                  },
+                  "nextCursor": {
+                    "nullable": true,
+                    "type": "string"
+                  }
+                }
+              },
+              "resolved": {
+                "type": "object",
+                "additionalProperties": true
+              },
+              "pagination": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            },
+            "additionalProperties": true
+          },
+          "timestamp": {
+            "$ref": "#/components/schemas/Timestamp"
+          }
+        },
+        "additionalProperties": true
+      },
+      "GateCheckResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "data"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "data": {
+            "$ref": "#/components/schemas/GateCheckData"
+          },
+          "timestamp": {
+            "$ref": "#/components/schemas/Timestamp"
+          }
+        },
+        "additionalProperties": true
+      },
+      "GateCheckData": {
+        "type": "object",
+        "description": "Gate eligibility result. The gate block is the readiness contract. allRequiredSatisfied is the only signal that authorizes submit/fulfill.",
+        "properties": {
+          "gate": {
+            "type": "object",
+            "description": "Gate evaluation against the caller's proof inventory.",
+            "properties": {
+              "allRequiredSatisfied": {
+                "type": "boolean",
+                "description": "True when every gate requirement row is satisfied by an existing or reused proof. This is the only signal that authorizes submit/fulfill."
+              },
+              "satisfiedVerifierIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Verifier IDs whose requirement rows are satisfied."
+              },
+              "missingVerifierIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Verifier IDs that still need a proof to satisfy the gate."
+              },
+              "reusedVerifierProofs": {
+                "type": "object",
+                "description": "Map of verifierId to qHash (or qHash array) of existing proofs that can be reused instead of re-running a check.",
+                "additionalProperties": true
+              },
+              "matchedQHashes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "qHashes of proofs that matched gate requirements."
+              },
+              "rows": {
+                "type": "array",
+                "description": "Per-requirement row evaluation results.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "verifierId": {
+                      "type": "string"
+                    },
+                    "satisfied": {
+                      "type": "boolean"
+                    },
+                    "qHash": {
+                      "type": "string",
+                      "nullable": true
+                    },
+                    "reused": {
+                      "type": "boolean"
+                    }
+                  },
+                  "additionalProperties": true
+                }
+              }
+            },
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "RevokeSelfRequest": {
+        "type": "object",
+        "required": [
+          "walletAddress",
+          "signature",
+          "signedTimestamp"
+        ],
+        "properties": {
+          "walletAddress": {
+            "type": "string"
+          },
+          "signature": {
+            "type": "string"
+          },
+          "signedTimestamp": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": true
+      },
+      "RevokeSelfResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "alreadyRevoked",
+          "timestamp"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "enum": [
+              true
+            ]
+          },
+          "alreadyRevoked": {
+            "type": "boolean"
+          },
+          "timestamp": {
+            "$ref": "#/components/schemas/Timestamp"
+          }
+        },
+        "additionalProperties": true
+      },
+      "VerifierData_ownership_basic": {
+        "type": "object",
+        "description": "Ownership proofs require owner plus at least one durable anchor: content, contentHash, or reference.id. Use reference and provenance to keep proofs linkable and explain origin without storing unnecessary raw content.",
+        "required": [
+          "owner"
+        ],
+        "anyOf": [
+          {
+            "required": [
+              "content"
+            ]
+          },
+          {
+            "required": [
+              "contentHash"
+            ]
+          },
+          {
+            "required": [
+              "reference"
+            ]
+          }
+        ],
+        "properties": {
+          "content": {
+            "type": "string",
+            "maxLength": 50000,
+            "description": "Exact text/content being claimed (max 50KB inline). Use when you want Proofable to derive the ownership anchor from the submitted content."
+          },
+          "contentHash": {
+            "type": "string",
+            "pattern": "^0x[a-fA-F0-9]{64}$",
+            "description": "Pre-computed ownership-basic verifier hash (32-byte hex). If content is also provided, the verifier integrity-checks that they match."
+          },
+          "contentType": {
+            "type": "string",
+            "maxLength": 100,
+            "description": "MIME type hint"
+          },
+          "owner": {
+            "type": "string",
+            "description": "Owner identifier (must match request walletAddress). Supports EVM (0x..), Solana (base58), NEAR (account IDs), and other universal address formats depending on chain context.",
+            "minLength": 1,
+            "pattern": "^(0x[a-fA-F0-9]{40}|[1-9A-HJ-NP-Za-km-z]{32,44}|[a-z0-9._-]{2,64})$"
+          },
+          "reference": {
+            "type": "object",
+            "required": [
+              "type",
+              "id"
+            ],
+            "description": "Stable pointer to the thing being proven. Use this for files, URLs, releases, repository paths, transactions, prior proofs, or external records.",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "ipfs",
+                  "ipfs-hash",
+                  "url",
+                  "license-nft",
+                  "contract",
+                  "qhash",
+                  "ethereum-tx",
+                  "on-chain-tx",
+                  "tx",
+                  "file",
+                  "doc",
+                  "media",
+                  "username-claim",
+                  "job",
+                  "job-status",
+                  "other"
+                ],
+                "description": "Reference type"
+              },
+              "id": {
+                "type": "string",
+                "maxLength": 2048,
+                "description": "Stable reference identifier such as a URL, CID, transaction hash, repository path, file key, or prior proof qHash."
+              },
+              "title": {
+                "type": "string",
+                "maxLength": 200,
+                "description": "Human-readable title for proof pages, inventory, and agent/tool summaries."
+              },
+              "description": {
+                "type": "string",
+                "maxLength": 500,
+                "description": "Short explanation of what the reference points to."
+              },
+              "mime": {
+                "type": "string",
+                "maxLength": 100,
+                "description": "MIME type when the reference points to a file or media artifact."
+              },
+              "name": {
+                "type": "string",
+                "maxLength": 255,
+                "description": "File, artifact, or object name when available."
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Referenced object size in bytes when available."
+              }
+            }
+          },
+          "provenance": {
+            "type": "object",
+            "description": "Origin metadata for the claim. Use declaredKind and aiContext to make AI-assisted or agent-created work understandable without changing proof identity.",
+            "properties": {
+              "declaredKind": {
+                "type": "string",
+                "enum": [
+                  "human",
+                  "ai",
+                  "mixed",
+                  "unknown"
+                ],
+                "description": "Declared origin of the claimed content."
+              },
+              "aiContext": {
+                "type": "object",
+                "description": "AI or agent generation context when declaredKind is ai or mixed.",
+                "properties": {
+                  "generatorType": {
+                    "type": "string",
+                    "enum": [
+                      "local",
+                      "saas",
+                      "agent"
+                    ],
+                    "description": "Where generation happened."
+                  },
+                  "provider": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "description": "AI provider, runtime, or agent system."
+                  },
+                  "model": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "description": "Model or agent version when available."
+                  },
+                  "runId": {
+                    "type": "string",
+                    "maxLength": 128,
+                    "description": "Non-secret run or job reference for traceability."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "VerifierData_ownership_social": {
+        "type": "object",
+        "required": [
+          "provider",
+          "internalSocialToken"
+        ],
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "discord",
+              "github",
+              "facebook",
+              "x",
+              "linkedin",
+              "telegram",
+              "coinbase"
+            ],
+            "description": "OAuth provider to verify against."
+          },
+          "internalSocialToken": {
+            "type": "string",
+            "description": "Opaque token from the hosted link session after the user authorizes; not your app API key."
+          },
+          "walletAddress": {
+            "type": "string",
+            "description": "Wallet bound to the social account when applicable.",
+            "pattern": "^(0x[a-fA-F0-9]{40}|[1-9A-HJ-NP-Za-km-z]{32,44}|[a-z0-9._-]{2,64})$"
+          }
+        }
+      },
+      "VerifierData_ownership_pseudonym": {
+        "type": "object",
+        "required": [
+          "pseudonymId"
+        ],
+        "properties": {
+          "pseudonymId": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]{1,30}[a-z0-9]$",
+            "minLength": 3,
+            "maxLength": 32,
+            "description": "Stable handle for this identity within `namespace` (lowercase alphanumeric, dots, hyphens, underscores; 3–32 chars)."
+          },
+          "namespace": {
+            "type": "string",
+            "pattern": "^[a-z0-9]([a-z0-9._-]*[a-z0-9])?$",
+            "minLength": 1,
+            "maxLength": 64,
+            "default": "neus",
+            "description": "Logical partition so the same `pseudonymId` can exist in different apps or communities. Omit to use the default namespace."
+          },
+          "displayName": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "Optional display label for UX; omit or minimize PII if you do not need it."
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Optional app-defined structured fields (keep small; avoid secrets)."
+          }
+        }
+      },
+      "VerifierData_ownership_dns_txt": {
+        "type": "object",
+        "required": [
+          "domain"
+        ],
+        "properties": {
+          "domain": {
+            "type": "string",
+            "format": "hostname",
+            "minLength": 1,
+            "description": "Hostname to verify (TXT lookup at _neus.<domain>)."
+          },
+          "walletAddress": {
+            "type": "string",
+            "description": "Optional in data when options.walletAddress supplies the signer; filled in if omitted. If present, it must match the signing wallet and any allowed delegation rules. The TXT record must use wallet= with the same address Proofable checks.",
+            "pattern": "^(0x[a-fA-F0-9]{40}|[1-9A-HJ-NP-Za-km-z]{32,44}|[a-z0-9._-]{2,64})$"
+          }
+        }
+      },
+      "VerifierData_ownership_org_oauth": {
+        "type": "object",
+        "required": [
+          "provider",
+          "internalSocialToken"
+        ],
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "google",
+              "microsoft"
+            ],
+            "description": "Identity provider for workspace or org sign-in."
+          },
+          "internalSocialToken": {
+            "type": "string",
+            "description": "Opaque token from the hosted org sign-in session; not your app API key."
+          },
+          "walletAddress": {
+            "type": "string",
+            "description": "Wallet to associate with the verified org identity.",
+            "pattern": "^(0x[a-fA-F0-9]{40}|[1-9A-HJ-NP-Za-km-z]{32,44}|[a-z0-9._-]{2,64})$"
+          },
+          "expectedOrgDomain": {
+            "type": "string",
+            "format": "hostname",
+            "description": "Optional DNS hostname for the organization (e.g. company.com) to match against the IdP directory."
+          }
+        }
+      },
+      "VerifierData_contract_ownership": {
+        "type": "object",
+        "required": [
+          "contractAddress",
+          "chainId"
+        ],
+        "properties": {
+          "contractAddress": {
+            "type": "string",
+            "pattern": "^0x[a-fA-F0-9]{40}$"
+          },
+          "chainId": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "walletAddress": {
+            "type": "string",
+            "pattern": "^0x[a-fA-F0-9]{40}$"
+          },
+          "method": {
+            "type": "string",
+            "enum": [
+              "owner",
+              "admin",
+              "accessControl"
+            ]
+          }
+        }
+      },
+      "VerifierData_proof_of_human": {
+        "type": "object",
+        "required": [
+          "proofs",
+          "queryResult"
+        ],
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "zkpassport"
+            ]
+          },
+          "proofs": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 10
+          },
+          "queryResult": {
+            "type": "object"
+          },
+          "scope": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_-]{1,64}$"
+          },
+          "neusPersonhoodId": {
+            "type": "string",
+            "pattern": "^0x[a-fA-F0-9]{64}$",
+            "description": "Salted SHA-256 personhood ID for sybil resistance (not returned in API responses)"
+          },
+          "assuranceLevel": {
+            "type": "string",
+            "enum": [
+              "low",
+              "medium",
+              "high"
+            ],
+            "description": "Verification confidence level derived from proof claims"
+          },
+          "claims": {
+            "type": "object",
+            "description": "Privacy-preserving boolean/numeric verification claims"
+          },
+          "traits": {
+            "type": "object",
+            "description": "Provider-specific verification metadata"
+          },
+          "expiresAt": {
+            "type": "number",
+            "description": "Unix timestamp (ms) when the proof expires"
+          }
+        }
+      },
+      "VerifierData_nft_ownership": {
+        "type": "object",
+        "required": [
+          "contractAddress",
+          "tokenId"
+        ],
+        "oneOf": [
+          {
+            "required": [
+              "chainId"
+            ]
+          },
+          {
+            "required": [
+              "chain"
+            ]
+          }
+        ],
+        "properties": {
+          "ownerAddress": {
+            "type": "string",
+            "pattern": "^(0x[a-fA-F0-9]{40}|[1-9A-HJ-NP-Za-km-z]{32,44}|[a-z0-9._-]{2,64})$"
+          },
+          "contractAddress": {
+            "type": "string",
+            "pattern": "^(0x[a-fA-F0-9]{40}|[1-9A-HJ-NP-Za-km-z]{32,44}|[a-z0-9._-]{2,64})$"
+          },
+          "tokenId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tokenType": {
+            "type": "string",
+            "enum": [
+              "erc721",
+              "erc1155"
+            ],
+            "default": "erc721"
+          },
+          "chainId": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "chain": {
+            "type": "string",
+            "description": "CAIP-2 for Solana (e.g. solana:mainnet)"
+          },
+          "blockNumber": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "VerifierData_token_holding": {
+        "type": "object",
+        "required": [
+          "contractAddress",
+          "minBalance"
+        ],
+        "oneOf": [
+          {
+            "required": [
+              "chainId"
+            ]
+          },
+          {
+            "required": [
+              "chain"
+            ]
+          }
+        ],
+        "properties": {
+          "ownerAddress": {
+            "type": "string",
+            "pattern": "^(0x[a-fA-F0-9]{40}|[1-9A-HJ-NP-Za-km-z]{32,44}|[a-z0-9._-]{2,64})$"
+          },
+          "contractAddress": {
+            "type": "string",
+            "pattern": "^(0x[a-fA-F0-9]{40}|[1-9A-HJ-NP-Za-km-z]{32,44}|[a-z0-9._-]{2,64})$"
+          },
+          "minBalance": {
+            "type": "string",
+            "minLength": 1
+          },
+          "chainId": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "chain": {
+            "type": "string",
+            "description": "CAIP-2 for Solana (e.g. solana:mainnet)"
+          },
+          "blockNumber": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      },
+      "VerifierData_wallet_risk": {
+        "type": "object",
+        "required": [
+          "walletAddress"
+        ],
+        "properties": {
+          "provider": {
+            "type": "string",
+            "enum": [
+              "webacy"
+            ],
+            "default": "webacy"
+          },
+          "walletAddress": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^0x[a-fA-F0-9]{40}$"
+              },
+              {
+                "type": "string",
+                "pattern": "^[1-9A-HJ-NP-Za-km-z]{32,44}$"
+              },
+              {
+                "type": "string",
+                "format": "ton-address"
+              },
+              {
+                "type": "string",
+                "format": "sui-address"
+              },
+              {
+                "type": "string",
+                "format": "sei-address"
+              },
+              {
+                "type": "string",
+                "format": "bitcoin-address"
+              },
+              {
+                "type": "string",
+                "format": "stellar-address"
+              }
+            ]
+          },
+          "chain": {
+            "type": "string",
+            "enum": [
+              "eth",
+              "base",
+              "bsc",
+              "pol",
+              "opt",
+              "arb",
+              "sol",
+              "ton",
+              "sei",
+              "sui",
+              "btc",
+              "stellar"
+            ]
+          },
+          "chainId": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      },
+      "VerifierData_wallet_link": {
+        "type": "object",
+        "required": [
+          "signature",
+          "signatureMethod",
+          "signedTimestamp"
+        ],
+        "anyOf": [
+          {
+            "required": [
+              "primaryAccountId",
+              "secondaryAccountId"
+            ]
+          },
+          {
+            "required": [
+              "primaryWalletAddress",
+              "secondaryWalletAddress",
+              "chain"
+            ]
+          }
+        ],
+        "properties": {
+          "primaryAccountId": {
+            "type": "string",
+            "format": "caip10-account"
+          },
+          "secondaryAccountId": {
+            "type": "string",
+            "format": "caip10-account"
+          },
+          "primaryChainRef": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+:[a-zA-Z0-9._-]+$"
+          },
+          "secondaryChainRef": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+:[a-zA-Z0-9._-]+$"
+          },
+          "primaryWalletAddress": {
+            "type": "string",
+            "pattern": "^(0x[a-fA-F0-9]{40}|[1-9A-HJ-NP-Za-km-z]{32,44}|[a-z0-9._-]{2,64})$"
+          },
+          "secondaryWalletAddress": {
+            "type": "string",
+            "pattern": "^(0x[a-fA-F0-9]{40}|[1-9A-HJ-NP-Za-km-z]{32,44}|[a-z0-9._-]{2,64})$"
+          },
+          "signature": {
+            "type": "string",
+            "minLength": 1
+          },
+          "chain": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+:[a-zA-Z0-9._-]+$"
+          },
+          "signatureMethod": {
+            "type": "string",
+            "minLength": 1
+          },
+          "signedTimestamp": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "relationshipType": {
+            "type": "string",
+            "enum": [
+              "primary",
+              "personal",
+              "org",
+              "affiliate",
+              "agent",
+              "linked"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 64
+          }
+        }
+      },
+      "VerifierData_ai_content_moderation": {
+        "type": "object",
+        "required": [
+          "content",
+          "contentType"
+        ],
+        "properties": {
+          "content": {
+            "type": "string",
+            "maxLength": 13653334
+          },
+          "contentType": {
+            "type": "string",
+            "enum": [
+              "image/jpeg",
+              "image/png",
+              "image/webp",
+              "image/gif",
+              "text/plain",
+              "text/markdown",
+              "text/x-markdown",
+              "application/json",
+              "application/xml"
+            ]
+          },
+          "provider": {
+            "type": "string",
+            "enum": [
+              "google-vision",
+              "google-perspective"
+            ]
+          }
+        }
+      },
+      "VerifierData_agent_identity": {
+        "type": "object",
+        "description": "Register an agent identity signed by the agent wallet. Uses CAIP-2 chain references; proof output may include CAIP-10 account identifiers. Provide chain context as agentChainRef in data and/or as chain (CAIP-2) or chainId (EVM) on the verification request. Does not grant permissions; use agent-delegation for authority.",
+        "required": [
+          "agentId",
+          "agentWallet",
+          "agentChainRef"
+        ],
+        "properties": {
+          "agentId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "agentChainRef": {
+            "type": "string",
+            "description": "CAIP-2 network reference for agentWallet (for example eip155:8453). Supply in data or on the verification request as chain (CAIP-2) or chainId (EVM).",
+            "pattern": "^[a-z0-9]+:[a-zA-Z0-9._-]+$"
+          },
+          "agentWallet": {
+            "type": "string",
+            "pattern": "^(0x[a-fA-F0-9]{40}|[1-9A-HJ-NP-Za-km-z]{32,44}|[a-z0-9._-]{2,64})$"
+          },
+          "agentAccountId": {
+            "type": "string",
+            "format": "caip10-account",
+            "description": "Optional CAIP-10 account identifier for agentWallet. May be injected when inputs are normalized from wallet + chain context."
+          },
+          "agentLabel": {
+            "type": "string",
+            "maxLength": 128
+          },
+          "agentType": {
+            "type": "string",
+            "enum": [
+              "ai",
+              "bot",
+              "service",
+              "automation",
+              "agent"
+            ]
+          },
+          "avatar": {
+            "type": "string",
+            "maxLength": 512,
+            "description": "Public agent avatar/logo URL or ipfs:// URI."
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 500
+          },
+          "capabilities": {
+            "type": "object",
+            "description": "Agent capabilities as boolean flags",
+            "properties": {
+              "wallet": {
+                "type": "boolean"
+              },
+              "signing": {
+                "type": "boolean"
+              },
+              "spending": {
+                "type": "boolean"
+              },
+              "publishing": {
+                "type": "boolean"
+              },
+              "search": {
+                "type": "boolean"
+              },
+              "browser": {
+                "type": "boolean"
+              },
+              "mcp": {
+                "type": "boolean"
+              },
+              "webhooks": {
+                "type": "boolean"
+              },
+              "receipts": {
+                "type": "boolean"
+              },
+              "proofs": {
+                "type": "boolean"
+              },
+              "delegation": {
+                "type": "boolean"
+              }
+            },
+            "additionalProperties": false
+          },
+          "instructions": {
+            "type": "string",
+            "maxLength": 16000
+          },
+          "skills": {
+            "type": "array",
+            "description": "Agent skills as structured objects",
+            "maxItems": 48,
+            "items": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                "label": {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                "version": {
+                  "type": "string",
+                  "maxLength": 32
+                },
+                "provider": {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "native",
+                    "integration",
+                    "plugin",
+                    "mcp",
+                    "toolkit"
+                  ]
+                },
+                "configId": {
+                  "type": "string",
+                  "maxLength": 128,
+                  "description": "Optional opaque integration or provider configuration reference. Not a secret, not an OAuth token, not credential material."
+                },
+                "enabled": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "services": {
+            "type": "array",
+            "maxItems": 16,
+            "items": {
+              "type": "object",
+              "required": [
+                "name",
+                "endpoint"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                "endpoint": {
+                  "type": "string",
+                  "format": "uri",
+                  "maxLength": 256
+                },
+                "version": {
+                  "type": "string",
+                  "maxLength": 32
+                }
+              }
+            }
+          },
+          "defaultRuntime": {
+            "type": "object",
+            "description": "Default runtime display hints, NOT security-authoritative; delegation runtimePolicy overrides these. These are convenience metadata for UI and tooling, not proof of which model/provider the agent actually uses.",
+            "properties": {
+              "provider": {
+                "type": "string",
+                "maxLength": 64,
+                "description": "Default inference provider label (e.g., \"ollama\", \"openai\")."
+              },
+              "model": {
+                "type": "string",
+                "maxLength": 128,
+                "description": "Default inference model label (e.g., \"kimi-k2.6\", \"gpt-5.4\")."
+              },
+              "mode": {
+                "type": "string",
+                "maxLength": 64,
+                "description": "Default inference mode (e.g., \"openai-chat\", \"openai-responses\")."
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "VerifierData_agent_delegation": {
+        "type": "object",
+        "description": "Delegation from a controller account to an agent; the controller signs. Use CAIP-2 chain references per wallet, or set chain or chainId on the verification request when both parties share the same network context. Proof output may include CAIP-10 account identifiers.",
+        "required": [
+          "controllerWallet",
+          "controllerChainRef",
+          "agentWallet",
+          "agentChainRef"
+        ],
+        "properties": {
+          "controllerChainRef": {
+            "type": "string",
+            "description": "CAIP-2 network reference for controllerWallet. Supply in data or on the verification request as chain (CAIP-2) or chainId (EVM).",
+            "pattern": "^[a-z0-9]+:[a-zA-Z0-9._-]+$"
+          },
+          "controllerWallet": {
+            "type": "string",
+            "pattern": "^(0x[a-fA-F0-9]{40}|[1-9A-HJ-NP-Za-km-z]{32,44}|[a-z0-9._-]{2,64})$"
+          },
+          "controllerAccountId": {
+            "type": "string",
+            "format": "caip10-account",
+            "description": "Optional CAIP-10 account identifier for controllerWallet. May be injected when inputs are normalized from wallet + chain context."
+          },
+          "agentChainRef": {
+            "type": "string",
+            "description": "CAIP-2 network reference for agentWallet. Supply in data or on the verification request as chain (CAIP-2) or chainId (EVM).",
+            "pattern": "^[a-z0-9]+:[a-zA-Z0-9._-]+$"
+          },
+          "agentWallet": {
+            "type": "string",
+            "pattern": "^(0x[a-fA-F0-9]{40}|[1-9A-HJ-NP-Za-km-z]{32,44}|[a-z0-9._-]{2,64})$"
+          },
+          "agentAccountId": {
+            "type": "string",
+            "format": "caip10-account",
+            "description": "Optional CAIP-10 account identifier for agentWallet. May be injected when inputs are normalized from wallet + chain context."
+          },
+          "agentId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "scope": {
+            "type": "string",
+            "maxLength": 128,
+            "default": "global",
+            "description": "Delegation scope. Defaults to \"global\" (all permissions) when omitted."
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64
+            },
+            "maxItems": 32
+          },
+          "maxSpend": {
+            "type": "string",
+            "pattern": "^[0-9]{1,78}$",
+            "description": "Maximum amount for one proposed payment, encoded as a whole-number string in token base units. This field is not a cumulative balance. USDC uses six decimal places."
+          },
+          "allowedPaymentTypes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 32
+            },
+            "maxItems": 8
+          },
+          "receiptDisclosure": {
+            "type": "string",
+            "enum": [
+              "none",
+              "summary",
+              "full"
+            ]
+          },
+          "expiresAt": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "instructions": {
+            "type": "string",
+            "maxLength": 16000
+          },
+          "skills": {
+            "type": "array",
+            "description": "Agent skills as structured objects",
+            "maxItems": 48,
+            "items": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                "label": {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                "version": {
+                  "type": "string",
+                  "maxLength": 32
+                },
+                "provider": {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                "kind": {
+                  "type": "string",
+                  "enum": [
+                    "native",
+                    "integration",
+                    "plugin",
+                    "mcp",
+                    "toolkit"
+                  ]
+                },
+                "configId": {
+                  "type": "string",
+                  "maxLength": 128,
+                  "description": "Optional opaque integration or provider configuration reference. Not a secret, not an OAuth token, not credential material."
+                },
+                "enabled": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "model": {
+            "type": "string",
+            "maxLength": 128,
+            "description": "Preferred inference model label (backward compat; prefer runtimePolicy.allowedModelClasses for structured policy). Owner-view-only: not included in public proof responses."
+          },
+          "provider": {
+            "type": "string",
+            "maxLength": 64,
+            "description": "Preferred inference provider label (backward compat; prefer runtimePolicy.allowedProviders for structured policy). Owner-view-only: not included in public proof responses."
+          },
+          "runtimePolicy": {
+            "type": "object",
+            "description": "Runtime execution policy, security-authoritative, overrides identity defaultRuntime. Owner-view-only: not included in public proof responses. Only include when model/provider constraints affect the permission boundary.",
+            "properties": {
+              "allowedProviders": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "maxLength": 64
+                },
+                "maxItems": 8,
+                "description": "Allowed inference provider labels (e.g., [\"ollama\", \"openai\"])."
+              },
+              "allowedModelClasses": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "maxLength": 128
+                },
+                "maxItems": 8,
+                "description": "Allowed model class patterns (e.g., [\"gpt-4.1-*\", \"approved-public-content-models\"])."
+              },
+              "requiresHumanApproval": {
+                "type": "boolean",
+                "description": "Whether the agent must pause for explicit human approval before irreversible actions."
+              },
+              "secretsExposedToReceipt": {
+                "type": "boolean",
+                "description": "Whether the delegation policy allows secrets to appear in action proofs (default false)."
+              }
+            },
+            "additionalProperties": false
+          },
+          "allowedActions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 128
+            },
+            "maxItems": 32,
+            "description": "Explicit allowlist of canonical actions the agent may perform (e.g., [\"read_context\", \"read_proofs\", \"execute_jobs\"]). Owner-view-only: not included in public proof responses."
+          },
+          "deniedActions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 128
+            },
+            "maxItems": 32,
+            "description": "Explicit denylist of action types the agent may NOT perform. Takes precedence over allowedActions and permissions. Owner-view-only: not included in public proof responses."
+          },
+          "approvalPolicy": {
+            "type": "object",
+            "description": "Approval requirements for the delegated agent. Owner-view-only: not included in public proof responses.",
+            "properties": {
+              "humanApprovalRequiredForNewClaims": {
+                "type": "boolean",
+                "description": "Whether the agent must get human approval before creating new proof claims on behalf of the controller."
+              },
+              "preApprovedContentOnly": {
+                "type": "boolean",
+                "description": "Whether the agent may only publish content pre-approved by the controller."
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "additionalProperties": false
+      },
+      "VerificationDataFlat": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/VerifierData_ownership_basic"
+          },
+          {
+            "$ref": "#/components/schemas/VerifierData_ownership_social"
+          },
+          {
+            "$ref": "#/components/schemas/VerifierData_ownership_pseudonym"
+          },
+          {
+            "$ref": "#/components/schemas/VerifierData_ownership_dns_txt"
+          },
+          {
+            "$ref": "#/components/schemas/VerifierData_ownership_org_oauth"
+          },
+          {
+            "$ref": "#/components/schemas/VerifierData_contract_ownership"
+          },
+          {
+            "$ref": "#/components/schemas/VerifierData_proof_of_human"
+          },
+          {
+            "$ref": "#/components/schemas/VerifierData_nft_ownership"
+          },
+          {
+            "$ref": "#/components/schemas/VerifierData_token_holding"
+          },
+          {
+            "$ref": "#/components/schemas/VerifierData_wallet_risk"
+          },
+          {
+            "$ref": "#/components/schemas/VerifierData_wallet_link"
+          },
+          {
+            "$ref": "#/components/schemas/VerifierData_ai_content_moderation"
+          },
+          {
+            "$ref": "#/components/schemas/VerifierData_agent_identity"
+          },
+          {
+            "$ref": "#/components/schemas/VerifierData_agent_delegation"
+          }
+        ]
+      },
+      "VerificationDataNamespaced": {
+        "type": "object",
+        "additionalProperties": {
+          "oneOf": [
+            {
+              "$ref": "#/components/schemas/VerifierData_ownership_basic"
+            },
+            {
+              "$ref": "#/components/schemas/VerifierData_ownership_social"
+            },
+            {
+              "$ref": "#/components/schemas/VerifierData_ownership_pseudonym"
+            },
+            {
+              "$ref": "#/components/schemas/VerifierData_ownership_dns_txt"
+            },
+            {
+              "$ref": "#/components/schemas/VerifierData_ownership_org_oauth"
+            },
+            {
+              "$ref": "#/components/schemas/VerifierData_contract_ownership"
+            },
+            {
+              "$ref": "#/components/schemas/VerifierData_proof_of_human"
+            },
+            {
+              "$ref": "#/components/schemas/VerifierData_nft_ownership"
+            },
+            {
+              "$ref": "#/components/schemas/VerifierData_token_holding"
+            },
+            {
+              "$ref": "#/components/schemas/VerifierData_wallet_risk"
+            },
+            {
+              "$ref": "#/components/schemas/VerifierData_wallet_link"
+            },
+            {
+              "$ref": "#/components/schemas/VerifierData_ai_content_moderation"
+            },
+            {
+              "$ref": "#/components/schemas/VerifierData_agent_identity"
+            },
+            {
+              "$ref": "#/components/schemas/VerifierData_agent_delegation"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "operationId": "healthCheck",
+        "summary": "Health check",
+        "tags": [
+          "Health"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Health-check rate limit exceeded"
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Unhealthy"
+          }
+        }
+      }
+    },
+    "/api/v1/verification/verifiers": {
+      "get": {
+        "operationId": "getVerifierCatalog",
+        "summary": "Get supported verifiers and configuration",
+        "description": "Returns the public verifier catalog: supported verifier IDs, sanitized public metadata (input schemas + direct-vs-hosted capabilities), and backend chain configuration (hub chain, asset allowlists). Non-public transport/provider fields are not exposed here.",
+        "tags": [
+          "Verification"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Verifier catalog"
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/verification/standardize": {
+      "post": {
+        "operationId": "buildSigningString",
+        "summary": "Phase 1: build the standard signing string",
+        "description": "Raw HTTP verification uses a strict two-phase handshake. First send the exact verification body here, sign the returned signerString, then submit the same body plus signature to POST /api/v1/verification.",
+        "tags": [
+          "Verification"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StandardizeRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StandardizeResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/verification": {
+      "post": {
+        "operationId": "submitVerification",
+        "summary": "Phase 2: submit a verification request",
+        "description": "For raw HTTP callers, this request must continue a prior POST /api/v1/verification/standardize call using the same body and signedTimestamp. Do not treat this as a one-step schema-only POST; sign the exact signerString from phase 1 and submit that signature here.",
+        "tags": [
+          "Verification"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerificationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationCompleteResponse"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationAcceptedResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/verification/status-batch": {
+      "post": {
+        "operationId": "getVerificationStatusBatch",
+        "summary": "Batch get verification status (minimal)",
+        "tags": [
+          "Verification"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerificationStatusBatchResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/proofs/by-wallet/{address}": {
+      "get": {
+        "operationId": "getProofsByWallet",
+        "summary": "Get proofs by wallet or DID",
+        "tags": [
+          "Proofs"
+        ],
+        "parameters": [
+          {
+            "name": "address",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 50
+            },
+            "description": "Max results per page (default: 50 for public, 1000 for authenticated owner vault; maximum: 1000). Use cursor or offset pagination for larger sets."
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "cursor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 2048
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "visibility",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "public"
+              ]
+            }
+          },
+          {
+            "name": "isPublicRead",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true",
+                "yes"
+              ]
+            }
+          },
+          {
+            "name": "includeHistory",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true",
+                "yes"
+              ]
+            }
+          },
+          {
+            "name": "tag",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "includeSecrets",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true",
+                "yes",
+                "0",
+                "false",
+                "no"
+              ]
+            }
+          },
+          {
+            "name": "qHash",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{64}$",
+              "description": "Filter to single proof by qHash"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signed-timestamp",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-chain",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "CAIP-2 chain reference for non-EVM signature verification (e.g. solana:mainnet)"
+            }
+          },
+          {
+            "name": "x-signature-method",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Signature method hint for non-EVM signatures (e.g. ed25519)"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProofsByWalletResponse"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Not modified"
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/proofs/check": {
+      "get": {
+        "operationId": "proofCheck",
+        "summary": "Check gate eligibility or proof criteria (server-side)",
+        "description": "Primary server-side integrator and x402 v2 resource for pre-action trust decisions. Pass gateId from your deployed gate, or explicit verifier/criteria filters. Unpaid public calls receive HTTP 402 with base64-encoded PAYMENT-REQUIRED instructions; retry the identical request with PAYMENT-SIGNATURE. Returns eligible plus matched proof references without exposing private proof payloads.",
+        "tags": [
+          "Proofs",
+          "Gates"
+        ],
+        "parameters": [
+          {
+            "name": "address",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "qHash",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{64}$"
+            }
+          },
+          {
+            "name": "gateId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 80,
+              "pattern": "^[a-zA-Z0-9:_-]+$"
+            }
+          },
+          {
+            "name": "verifierIds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "verifierId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "requireAll",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "minCount",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "sinceDays",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 3650
+            }
+          },
+          {
+            "name": "since",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000
+            }
+          },
+          {
+            "name": "referenceType",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "referenceId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tag",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tags",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "contentType",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "content",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "contentHash",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "contractAddress",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "tokenId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "chainId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "EVM chain ID of the asset being checked (e.g. 1 for Ethereum Mainnet, 8453 for Base). Required for asset verifiers (nft-ownership, token-holding, contract-ownership). Not a hub or proof-storage filter."
+            }
+          },
+          {
+            "name": "domain",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "minBalance",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "handle",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "namespace",
+            "in": "query",
+            "required": false,
+            "description": "When set, requires ownership-pseudonym proofs to include this namespace (matches verifier data.namespace; legacy proofs without namespace default to neus).",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[a-z0-9._-]+$"
+            }
+          },
+          {
+            "name": "traitPath",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "traitGte",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "select",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ownerAddress",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "riskLevel",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sanctioned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "poisoned",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "primaryWalletAddress",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "secondaryWalletAddress",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "controllerWallet",
+            "in": "query",
+            "required": false,
+            "description": "Approving account (delegation grantor) for agent-delegation checks; optional filter. Not the agent wallet.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "agentWallet",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "delegationScope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "agentId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "verificationMethod",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "neusPersonhoodId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ageMin",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 150
+            }
+          },
+          {
+            "name": "sanctionsPassed",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "subject",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "me"
+              ]
+            }
+          },
+          {
+            "name": "includePrivate",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signed-timestamp",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-chain",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "CAIP-2 chain reference for non-EVM signature verification (e.g. solana:mainnet)"
+            }
+          },
+          {
+            "name": "x-signature-method",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Signature method hint for non-EVM signatures (e.g. ed25519)"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GateCheckResponse"
+                }
+              }
+            },
+            "headers": {
+              "PAYMENT-RESPONSE": {
+                "description": "Base64-encoded x402 v2 settlement result when the request was paid with x402",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required for subject=me",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "x402 v2 payment required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "Base64-encoded x402 v2 PaymentRequired object",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/proofs/revoke-self/{qHash}": {
+      "post": {
+        "operationId": "revokeSelf",
+        "summary": "Revoke a proof you control",
+        "tags": [
+          "Proofs"
+        ],
+        "parameters": [
+          {
+            "name": "qHash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeSelfRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Revoked",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevokeSelfResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Not authorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/proofs/erase-all": {
+      "post": {
+        "operationId": "eraseAllProofs",
+        "summary": "Erase all proofs for a wallet",
+        "tags": [
+          "Proofs"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevokeSelfRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Batch deletion result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevokeSelfResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Storage unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/proofs/{qHash}": {
+      "get": {
+        "operationId": "getProofRecord",
+        "summary": "Get proof record by id",
+        "description": "Returns the proof record and verification state. Payload is shaped for the caller (public vs owner vs private).",
+        "tags": [
+          "Proofs"
+        ],
+        "parameters": [
+          {
+            "name": "qHash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{64}$"
+            }
+          },
+          {
+            "name": "latestScope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true",
+                "yes"
+              ]
+            }
+          },
+          {
+            "name": "trackView",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "walletAddress",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "verifierId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "scopeKey",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-wallet-address",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-track-view",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ]
+            }
+          },
+          {
+            "name": "x-signature",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-signed-timestamp",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProofRecordResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/profile/gates/discoverable": {
+      "get": {
+        "operationId": "listDiscoverableGates",
+        "summary": "List public, discoverable marketplace gates",
+        "description": "Returns public gates that are active, deployed, and tagged as marketplace listings. Bounded scan; a dedicated gate index is the post-launch optimization if listing volume grows.",
+        "tags": [
+          "Gates"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "List of discoverable gates"
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded"
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/profile/gates/{gateId}": {
+      "get": {
+        "operationId": "getGate",
+        "summary": "Get a published gate snapshot (checkout contract)",
+        "description": "Returns the public gate snapshot: requirements, monetization charge, schedule, checkout plan, and artifact metadata. Never includes the secret reward value.",
+        "tags": [
+          "Gates"
+        ],
+        "parameters": [
+          {
+            "name": "gateId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9:_-]+$",
+              "maxLength": 80
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Gate snapshot"
+          },
+          "400": {
+            "description": "Invalid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Gate not found or not published"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/profile/gates/{gateId}/fulfill": {
+      "post": {
+        "operationId": "fulfillGate",
+        "summary": "Deliver the gate reward after verification and payment",
+        "description": "Post-verify reward delivery. Requires a verified proof (qHash) for the caller wallet. Paid gates also require paymentCheckoutSessionId (Stripe) or paymentTxHash (USDC). Returns the fulfillment payload and optional rewardProof / rewardPack. Payments are bound to a single gateId + qHash pair. Reuse returns 409 PAYMENT_ALREADY_USED.",
+        "tags": [
+          "Gates"
+        ],
+        "parameters": [
+          {
+            "name": "gateId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9:_-]+$",
+              "maxLength": 80
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Fulfillment result"
+          },
+          "400": {
+            "description": "Invalid request, proof not verified, or gate misconfigured"
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Gate or proof not found"
+          },
+          "409": {
+            "description": "Payment already used for a different checkout"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Fulfillment temporarily unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/payments/pricing": {
+      "get": {
+        "operationId": "getPaymentPricing",
+        "summary": "Get pricing information for all payment types",
+        "tags": [
+          "Payments"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Pricing information"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/payments/methods": {
+      "get": {
+        "operationId": "getPaymentMethods",
+        "summary": "Get available payment methods",
+        "tags": [
+          "Payments"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Available payment methods"
+          },
+          "400": {
+            "description": "Invalid request"
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

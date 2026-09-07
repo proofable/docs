@@ -1,0 +1,75 @@
+---
+title: Read proofs (`proofable_proofs_get`)
+description: Filtered proof records, tags, status, and optional content for a wallet or DID.
+icon: receipt
+---
+
+Use when you have an **`identifier`** and need proof records, fields, tags, or delegated context. In the reuse-first flow, call this after **`proofable_proofs_check`** when you need details beyond yes/no eligibility. Profile totals and account context come from **`proofable_context`**.
+
+In user-facing replies, summarize the result in plain language and link only real proof URLs returned by Proofable.
+
+| Auth | Visibility |
+|------|------------|
+| None | Public-scope view |
+| Bearer | Can include **private** proofs for that account ([Auth](./auth)) |
+
+## Common Reads
+
+| Need | Use |
+|------|-----|
+| Show prior proofs | Read recent proofs for the account |
+| Reuse assistant context | Filter by tags such as `memory`, `rules`, or `instruction` |
+| Confirm an agent handoff | Include `agentWallet` for delegated reads |
+| Continue a session | Filter by the tags your app saved on earlier proofs |
+
+Keep tag values short and product-facing in your own app. Avoid exposing private workflow names in assistant replies.
+
+## Input
+
+```json
+{
+  "identifier": "0x...",
+  "limit": 25,
+  "offset": 0,
+  "tags": "memory,rules,instruction",
+  "agentWallet": "0x...",
+  "include": "metadata"
+}
+```
+
+| Field | Notes |
+|-------|-------|
+| `identifier` | Wallet address or **`did:pkh:...`** |
+| `tags` | Comma-separated proof tag filter |
+| `agentWallet` | Delegation (**`x-agent-wallet`**) |
+| `include` | `metadata` for the minimal index; `content` only when full proof bodies are required |
+| `qHash` | When set, returns that one record instead of a vault page |
+
+When `identifier` is a DID, Proofable resolves the DID to its native account. Non-EVM signing and account context still use CAIP-2 `chain`; see [CAIP-380 Portable Proof](../learn/standards/caip-380).
+
+## Response
+
+`include: "metadata"` returns a compact paginated proof index: proof id, status, check ids and outcomes, title, tags, timestamps, and content length when known. It does not include proof bodies, profile summary, or agent context.
+
+Use `include: "content"` for a specific proof or tightly filtered page when the body is required. Use the paginated `proofs` list for history and the profile summary from `proofable_context` for aggregate totals. Never infer a total or absence from one page.
+
+## Assistant Output
+
+Do:
+
+```txt
+Proofable: Passed. Requirement satisfied. Result on file. Next: Continue.
+```
+
+Avoid raw JSON, private implementation tags, or guessed proof URLs.
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Proof check" icon="circle-check" href="./proofs-check">
+    Confirm existing proofs before creating new ones.
+  </Card>
+  <Card title="MCP overview" icon="plug" href="./overview">
+    Install, session flow, and tool map.
+  </Card>
+</CardGroup>

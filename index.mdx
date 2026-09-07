@@ -1,0 +1,94 @@
+---
+title: "Don't restart from zero."
+sidebarTitle: "Home"
+description: "Connect once. Carry agents, tools, skills, context, permissions, jobs, and proofs across supported AI models and runtimes."
+icon: house
+"og:image": "/images/og-default.png"
+"twitter:image": "/images/og-default.png"
+---
+
+Portable Trust Infrastructure for Humans and AI.
+
+Portable Proof carries verified identity, authority, and action evidence across apps, agents, and networks. Owners connect once. Builders can reuse trusted results before access, payment, or action without replacing their authentication, payment, or agent stack.
+
+Portable Proof is the signed record. Proofable keeps it current, private by default, and available to connected products.
+
+The receiving product owns the decision and enforces the result.
+
+<CardGroup cols={3}>
+  <Card title="Any agent. Any tools." icon="plug" href="./mcp/setup">
+    Cursor, Claude, ChatGPT, Hermes, OpenClaw. Install Proofable. Click Connect.
+  </Card>
+  <Card title="Identity and context that travel" icon="id-card" href="./agents/overview">
+    Who the agent is, what it may do, what it already proved. Private by default.
+  </Card>
+  <Card title="Private Cloud Trust Harness" icon="cloud" href="./cookbook/private-cloud-agents">
+    Same agent on a laptop, a server, or a confidential VM.
+  </Card>
+</CardGroup>
+
+## Connect
+
+Install Proofable in your editor or chat. Click **Connect**.
+
+`https://mcp.proofable.me/mcp`
+
+```json
+{
+  "mcpServers": {
+    "proofable": {
+      "url": "https://mcp.proofable.me/mcp"
+    }
+  }
+}
+```
+
+Then ask:
+
+> Reuse what I already have. Before a sensitive action, check my current proofs.
+
+Proofable answers **Passed**, **Action needed**, or **Blocked**.
+
+One-click: [proofable.me/install](https://proofable.me/install). Full steps: [Connect Proofable](./mcp/setup).
+
+<Frame>
+  <img
+    src="/images/how-it-works.png"
+    alt="Verify once. A connected app reuses the Proof before access, payment, or execution."
+  />
+</Frame>
+
+<CardGroup cols={2}>
+  <Card title="Connect Proofable" icon="plug" href="./mcp/setup">
+    One connection for chat, IDEs, listings, and proofs.
+  </Card>
+  <Card title="Do the work" icon="robot" href="./agents/overview">
+    Create or import an agent. Open Connections. Chat, start a Pro job, or publish a listing.
+  </Card>
+  <Card title="Add hosted sign-in" icon="shield-check" href="./cookbook/auth-hosted-verify">
+    Open a hosted flow for supported identity, ownership, risk, or permission checks.
+  </Card>
+  <Card title="Sell protected access" icon="rocket" href="./quickstart">
+    Publish the checks and price once. Add one component to your app.
+  </Card>
+</CardGroup>
+
+## Verify once. Prove everywhere.
+
+1. **Verify once.** Use the hosted screen, MCP, or SDK.
+2. **Prove everywhere.** Proofable saves the result with its current status and expiration when one applies.
+3. **Enforce before action.** Connected apps require that proof before access, payment, or execution.
+
+Read the flow in [How verification works](./verification/how-it-works) and [Standards](./learn/standards).
+
+## Where Proofable sits
+
+Keep your sign-in, identity provider, payment, and agent framework. Add Proofable via MCP, SDK, or API. Work accounts, domains, social accounts, and passkeys all work.
+
+Browse [Solutions](https://proofable.me/solutions).
+
+Builder reference: [OpenAPI](https://api.proofable.me/openapi.json) · [JavaScript SDK](./sdks/javascript) · [MCP](./mcp/overview)
+
+## Release status
+
+Published APIs and verifier schemas may change between minor versions. Breaking changes are listed in the [changelog](https://github.com/proofable/docs/blob/main/CHANGELOG.md).

@@ -1,0 +1,77 @@
+---
+title: "Proofable MCP"
+sidebarTitle: "MCP"
+description: "Connect once. Carry agents, tools, skills, context, permissions, and proofs across supported AI clients."
+icon: plug
+"og:image": "/images/og-mcp.png"
+"twitter:image": "/images/og-mcp.png"
+---
+
+Connect Proofable once. Carry your agents, tools, skills, connected apps, selected context, permissions, jobs, and proofs across supported AI clients.
+
+Register the hosted remote, then click **Connect**:
+
+`https://mcp.proofable.me/mcp`
+
+Use a marketplace plugin or registry listing when the host offers one. `npx -y -p @proofable/sdk proofable setup` writes the same URL from a terminal.
+
+Then ask the new client to load what you already built:
+
+> Show my Proofable profile, agents, approved tools, and current proofs.
+
+Proofable answers **Passed**, **Action needed**, or **Blocked**.
+
+## Do the work
+
+Call `proofable_context`. Create or import an agent, or publish a listing.
+
+> Create or import an agent on my Proofable profile. Use generate if I need a separate spend account. Set spend and action limits. Then confirm it is ready.
+
+Open **Connections** on [proofable.me](https://proofable.me) to link apps. [Connections](../cookbook/connector-integrations)
+
+To sell: set payouts, then publish a listing. Full steps: [Connect Proofable](./setup).
+
+Chat now. Pro jobs run in the background or on a schedule.
+
+Cursor, Claude Code, Codex, Hermes, and Grok can connect to this endpoint.
+
+**Private cloud.** Point the runtime at the same URL. [Private Cloud Trust Harness](../cookbook/private-cloud-agents).
+
+Same install block: [Connect Proofable](./setup).
+
+## Tools
+
+Call `proofable_context` once. Reuse a current proof before you create another.
+
+| Job | Tool | What it does |
+|---|---|---|
+| Start | `proofable_context` | Signed-in profile, what you can verify, and the recommended flow. Call once. |
+| List what you can verify | `proofable_verifiers_catalog` | Required inputs and supported networks. |
+| Reuse a proof | `proofable_proofs_check` | Read-only. Reports whether a current proof already satisfies the request. |
+| Finish what's missing | `proofable_verify_or_guide` | Reuses a proof, or returns the next step. |
+| Create or refresh a proof | `proofable_verify` | Creates the proof when a new one is needed. Signed-in ownership finishes here. |
+| Read a proof | `proofable_proofs_get` | Current proof records and status. Request the body only when you need it. |
+| Create or import an agent | `proofable_agent_create` | Links the agent to your profile. Optional separate spend account and controls. Use `generate` for a dedicated key. |
+| Confirm the agent is ready | `proofable_agent_link` | Identity and the permissions that account needs. |
+| Load the agent | `proofable_agent_mount` | Identity, permissions, skills, and current settings. |
+| Store a secret | `proofable_secret_create` | Encrypted Vault secret. Confirm the name and proof ID. |
+| List secrets | `proofable_secret_list` | Stored names and details. Never the secret itself. |
+| Revoke a secret | `proofable_secret_revoke` | Removes a stored secret by proof ID. |
+
+Field names and per-tool pages: [MCP tools](./tools).
+
+## Privacy
+
+Proofable returns the result and the proof. It does not return the private data used to complete it. Proofs are private by default. The client or runtime must enforce that result.
+
+What you can carry across supported clients:
+
+- Your profile, agents, and current permissions
+- Approved tools, skills, and selected context
+- Connected apps and custom MCP servers
+- On-demand and scheduled jobs
+- Completed checks that are still valid
+- Proofs another connected product can confirm
+- Vault context when you allow it
+
+To load an agent into a project, see [Connect agent context](../agents/runtime-mount). For a laptop, server, or confidential VM, see [Private Cloud Trust Harness](../cookbook/private-cloud-agents).

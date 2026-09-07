@@ -1,0 +1,39 @@
+---
+title: Contract control
+sidebarTitle: Contract
+description: Confirm a wallet controls a contract before you grant admin access.
+icon: file-contract
+---
+
+**Verifier ID:** `contract-ownership`
+
+## Use cases
+
+- App ownership
+- Contract admin access
+- Partner and ecosystem trust
+
+## Flow type
+
+Lookup. Proofable checks owner or admin authority on-chain.
+
+## Required Fields
+
+| Field | Required | Notes |
+|------|----------|-------|
+| `contractAddress` | Yes | EVM contract address |
+| `chainId` | Yes | EVM chain ID |
+| `method` | No | `owner`, `admin`, or `accessControl` (defaults to `owner`) |
+| `walletAddress` | No | Address to check; defaults to the signer |
+
+## Example
+
+```json
+{
+  "contractAddress": "0x...",
+  "chainId": 8453,
+  "method": "owner"
+}
+```
+
+Full schema: [`contract-ownership.json`](https://github.com/proofable/network/blob/main/docs/verifiers/schemas/contract-ownership.json).

@@ -1,0 +1,84 @@
+---
+title: Hosted sign-in and verify
+description: Use Proofable for passkey, OAuth, and listing checkout without building sign-in UI in your app.
+icon: key
+---
+
+Send users to `https://proofable.me/verify` for sign-in, proof of human, social links, or listing checkout. You never embed passkey, OAuth, or wallet UI.
+
+Wallet steps appear only when a published gate requires them. Sign-in and gate checkout share one surface. See [Trust stack](../platform/trust-stack).
+
+## What runs here
+
+| Query intent | User completes on Proofable |
+|--------------|-------------------------|
+| `intent=login` | Proofable session: passkey sign-in (primary), optional wallet attach |
+| `gateId` | Gate checkout; wallet steps **only** if the published gate requires them |
+| Social / org | OAuth inside a verifier. [ownership-social](../verification/ownership-social), [ownership-org-oauth](../verification/ownership-org-oauth) |
+
+## Login vs verification
+
+| Topic | `intent=login` | Gate checkout (`gateId`, no login-only intent) |
+|--|----------------|---------------------------------------------------------------------|
+| Purpose | Proofable **session** (Hub, profile, later proofs) | **Proof** / listing outcome |
+| Screen | Dedicated login shell | Composer |
+
+## Parameters
+
+| Param | Use |
+| --- | --- |
+| `intent=login` | Hosted **login** only |
+| `returnUrl` | Absolute `https://…` back to **your** app after completion. Validated before redirect. |
+| `returnTo` | **proofable.me** path only (e.g. `/profile`). Not for third-party domains. `@proofable/sdk` `getHostedCheckoutUrl` does not set this; append manually if needed. |
+| `connect=1` | Optional for wallet-native products. With `intent=login`, auto-starts wallet connect on load |
+| `gateId` | Gate definition |
+| `mode=popup` | Popup; requires `origin` |
+| `origin` | Opener origin for postMessage |
+| `appId` | Advanced server/app attribution only; not required for published gate checkout |
+
+## Redirect examples
+
+**Checkout / proof (your app):**
+
+```javascript
+import { getHostedCheckoutUrl } from '@proofable/sdk';
+
+window.location.href = getHostedCheckoutUrl({
+  gateId: 'gate_your-app-name',
+  returnUrl: 'https://myapp.com/auth/callback',
+});
+```
+
+After redirect, read the **proof ID** from the `qHash` field in your callback URL.
+
+**Login then return to your app:**
+
+```javascript
+import { getHostedCheckoutUrl } from '@proofable/sdk';
+
+window.location.href = getHostedCheckoutUrl({
+  intent: 'login',
+  returnUrl: 'https://myapp.com/auth/after-login',
+});
+```
+
+**First-party only** (stay on `proofable.me`):
+
+```txt
+https://proofable.me/verify?intent=login&returnTo=/profile
+```
+
+`/login` on `proofable.me` redirects to `/verify?intent=login&…` with a validated `returnTo`.
+
+## Popup
+
+Open with `mode: 'popup'` and `origin: window.location.origin`.
+
+| Flow | Opener listens for |
+|------|-------------------|
+| Verification / gate | `neus_checkout_done` (includes `qHash` when applicable) |
+| `intent=login` | `neus_login_complete` |
+
+## No browser handoff
+
+Server-created proofs and access keys: [Integrations](../cookbook/integrations).

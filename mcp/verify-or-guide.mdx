@@ -1,0 +1,37 @@
+---
+title: Reuse or verify (`proofable_verify_or_guide`)
+sidebarTitle: Reuse or verify
+description: Reuse a saved Proof, or return the next step.
+icon: signs-post
+---
+
+**Default reuse-or-verify tool.** Looks up existing proofs first. When signed in, ownership proofs continue with **`proofable_verify`**. A hosted link is returned only for outside login, payment, or a different account.
+
+When signed in, **omit `walletAddress`** to use your profile wallet from `proofable_context`.
+
+## What it does
+
+1. Looks up existing proofs for the required verifiers
+2. If satisfied → `already_verified` (continue silently)
+3. If not, and signed in for an instant verifier → `next_action: call_proofable_verify` (no hosted link)
+4. If not, and an outside step is required → one hosted link
+
+Summarize the outcome for users as **Passed**, **Action needed**, or **Blocked**. Do not ask the user to open a browser unless this tool returned a hosted link.
+
+## Input
+
+`verifierIds` (required). Optional `walletAddress` when not signed in, `requireAll`, `chain`, `data`, and `options.returnUrl` (where to send the user after a hosted step).
+
+```json
+{
+  "verifierIds": ["ownership-basic"]
+}
+```
+
+## Output
+
+`action` (`already_verified` | `verification_required`), `eligible`, `next_action`. `hostedVerifyUrl` only when a browser step is required.
+
+After hosted completion, read proof state with **`proofable_proofs_get`**.
+
+Journeys: [MCP journeys](./journeys)

@@ -1,0 +1,117 @@
+---
+title: Proofable API
+sidebarTitle: Proofable API
+description: Call Proofable from your backend with the same results as the SDK while keeping credentials out of browsers.
+icon: terminal
+"og:image": "/images/og-api.png"
+"twitter:image": "/images/og-api.png"
+---
+
+Call Proofable from servers, workers, and CLIs. Publish a listing, pass its `gateId`, and Proofable resolves policy and billing. Proof IDs match the SDK (`qHash` in responses).
+
+**Base URL:** `https://api.proofable.me`
+
+**OpenAPI:** [`https://api.proofable.me/openapi.json`](https://api.proofable.me/openapi.json)
+
+Public HTTP is versioned on the path as `/api/v1`. Breaking changes ship as a new path version. The current public surface stays `/api/v1`. Deprecations are announced in the changelog. Retired paths will send `Deprecation` and `Sunset` headers.
+
+## Browsers
+
+Send end users through the **[JavaScript SDK](../sdks/javascript)** or **[Hosted Verify](../cookbook/auth-hosted-verify)**. If a web client needs behavior outside those surfaces, **your backend** should call Proofable so secrets stay off the client and CORS stays predictable.
+
+## Reads vs writes
+
+| Operation | Typical use |
+|-----------|-------------|
+| **GET** (below) | Eligibility and proof reads |
+| **POST `/api/v1/verification`** | Create a proof ([Authentication](./authentication)); prefer the SDK or Hosted Verify unless you need raw HTTP |
+
+## Endpoints
+
+| Path | Method | Purpose |
+|------|--------|---------|
+| `/api/v1/proofs/check` | GET | Eligibility (gates) |
+| `/api/v1/profile/gates/{gateId}` | GET | Public gate snapshot (requirements, price, schedule) |
+| `/api/v1/profile/gates/{gateId}/fulfill` | POST | Deliver gate reward after verify (+ payment). See [Hosted Gate Checkout](../platform/hosted-gate-checkout) |
+| `/api/v1/profile/gates/discoverable` | GET | List public, discoverable gates |
+| `/api/v1/proofs/by-wallet/{address}` | GET | List by wallet |
+| `/api/v1/proofs/{qHash}` | GET | Fetch by `qHash` |
+| `/api/v1/proofs/revoke-self/{qHash}` | POST | Owner revokes their own proof |
+| `/api/v1/verification` | POST | Create proof (server) |
+| `/api/v1/verification/access/grant` | POST | Create a signed private-proof sharing capability |
+| `/api/v1/verification/standardize` | POST | Phase 1 of raw HTTP: returns `signerString` for the exact body you will submit |
+| `/api/v1/verification/verifiers` | GET | Verifier catalog |
+| `/api/v1/health` | GET | Service health |
+
+The SDK's `getGate()` / `fulfillGate()` wrap the gate endpoints above.
+
+> **Scope note:** This reference covers the core HTTP proof and verification surface. Gate endpoints (`/api/v1/profile/gates/{gateId}`, `.../fulfill`, `/api/v1/profile/gates/discoverable`) and `POST /api/v1/payments/verify` (x402 pay-per-call settlement) are product checkout endpoints documented in [Hosted Gate Checkout](../platform/hosted-gate-checkout) and [x402](../platform/x402). Three resources support x402 pay-per-call: `GET /api/v1/proofs/check`, `POST /api/v1/verification`, and `POST /api/v1/verification/access/grant`.
+
+**Same-origin in the product app:** `https://proofable.me/api/v1/gates/{gateId}` and `.../fulfill` return the same gate contract for browser calls. Server integrations should call `api.proofable.me` paths directly (or use the SDK).
+
+## Examples
+
+**By wallet**
+
+```bash
+curl "https://api.proofable.me/api/v1/proofs/by-wallet/0x...?limit=50"
+```
+
+Paged responses include `proofs`, `totalCount`, `hasMore`, and continuation fields:
+
+- **`nextCursor`**: preferred for owner vaults and large histories (keyset paging).
+- **`nextOffset`**: used when the merged vault is multi-wallet or cursor is unavailable.
+
+Pass **`cursor`** (not `offset`) on the next request when `nextCursor` is present:
+
+```bash
+curl "https://api.proofable.me/api/v1/proofs/by-wallet/0x...?limit=1000&cursor=<nextCursor>"
+```
+
+Public and unlisted proofs: often callable without auth. **Private** proofs: only with allowed access ([Authentication](./authentication)).
+
+**Check**
+
+```bash
+curl "https://api.proofable.me/api/v1/proofs/check?address=0x...&gateId=gate_your-app-name&includeQHashes=true"
+```
+
+When `gateId` is set, the response includes a per-requirement `data.gate` block. `gate.allRequiredSatisfied === true` is the readiness signal for checkout, and `gate.reusedVerifierProofs` feeds `options.reusedVerifierProofs` on submit. Full lifecycle: [Hosted Gate Checkout](../platform/hosted-gate-checkout).
+
+Direct `verifierIds` checks are for advanced protocol tooling. Product access checks should use `gateId`.
+
+**Create a proof (raw HTTP, advanced)**
+
+Most products use the SDK or **`https://proofable.me/verify`**. Raw HTTP is a **fixed two-phase** flow:
+
+1. Build the final JSON body.
+2. `POST /api/v1/verification/standardize` with that body.
+3. Sign the returned **`signerString`**.
+4. `POST /api/v1/verification` with the **same body** plus **`signature`**.
+
+If step 4 rejects the signature, repeat step 2 on the **same** payload and compare `signerString` before retrying step 4.
+
+**Catalog**
+
+```bash
+curl https://api.proofable.me/api/v1/verification/verifiers
+```
+
+## Auth
+
+- **Reads:** public and unlisted proofs are often open; private proofs require permitted access.
+- **Writes:** follow [Authentication](./authentication) (signature, session, or app-attributed rules).
+
+## Next
+
+<CardGroup cols={2}>
+ <Card title="Start here" icon="book" href="/">
+   Choose an agent, app, or SDK path.
+ </Card>
+ <Card title="Authentication" icon="key" href="./authentication">
+   Keys, delegation, signing.
+ </Card>
+ <Card title="Errors" icon="triangle-exclamation" href="./errors">
+   HTTP error codes.
+ </Card>
+</CardGroup>

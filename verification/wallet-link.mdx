@@ -1,0 +1,61 @@
+---
+title: Linked wallets
+sidebarTitle: Linked wallets
+description: Bind a secondary wallet to a primary account. Reuse the link later.
+icon: link
+---
+
+**Verifier ID:** `wallet-link`
+
+## Use cases
+
+- Multi-wallet identity
+- Agent and controller wallets
+- Account portability
+
+## Flow type
+
+Instant. The secondary wallet signs the linking payload.
+
+## Browser UX
+
+For end-user browser flows, prefer **Hosted Verify** at [`/verify`](https://proofable.me/verify). The hosted flow now stages wallet linking first:
+
+1. Connect the secondary wallet
+2. Sign the wallet-link payload
+3. Show **Linked**
+4. Continue to create the proof
+
+Use direct/API mode only for advanced integrations that already control the secondary-wallet signature step.
+
+## Required Fields
+
+| Field | Required | Notes |
+|------|----------|-------|
+| `primaryWalletAddress` | Yes | Primary wallet |
+| `secondaryWalletAddress` | Yes | Secondary wallet |
+| `signature` | Yes | Secondary wallet signature |
+| `signatureMethod` | Yes | `eip191` for EVM, `ed25519` for non-EVM |
+| `chain` | Yes | CAIP-2 chain |
+| `signedTimestamp` | Yes | Unix ms timestamp |
+| `relationshipType` | No | `linked` (default), `controller`, or `delegate` |
+| `label` | No | Display label for the link |
+
+Instead of `primaryWalletAddress` / `secondaryWalletAddress` + `chain`, you may pass CAIP-10 `primaryAccountId` and `secondaryAccountId`.
+
+## Example
+
+Advanced direct/API payload after the secondary wallet has already signed:
+
+```json
+{
+  "primaryWalletAddress": "0x...",
+  "secondaryWalletAddress": "0x...",
+  "signature": "0x...",
+  "signatureMethod": "eip191",
+  "chain": "eip155:84532",
+  "signedTimestamp": 1730000000000
+}
+```
+
+Full schema: [`wallet-link.json`](https://github.com/proofable/network/blob/main/docs/verifiers/schemas/wallet-link.json).

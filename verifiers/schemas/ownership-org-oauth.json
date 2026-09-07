@@ -1,0 +1,35 @@
+{
+  "$id": "https://proofable.me/schemas/ownership-org-oauth.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Confirm a work or organization account through sign-in",
+  "properties": {
+    "expectedOrgDomain": {
+      "description": "Optional DNS hostname for the organization (e.g. company.com) to match against the IdP directory.",
+      "format": "hostname",
+      "type": "string"
+    },
+    "internalSocialToken": {
+      "description": "Opaque token from the hosted org sign-in session; not your app API key.",
+      "type": "string"
+    },
+    "provider": {
+      "description": "Identity provider for workspace or org sign-in.",
+      "enum": [
+        "google",
+        "microsoft"
+      ],
+      "type": "string"
+    },
+    "walletAddress": {
+      "description": "Wallet to associate with the verified org identity.",
+      "format": "universal-address",
+      "type": "string"
+    }
+  },
+  "required": [
+    "provider",
+    "internalSocialToken"
+  ],
+  "title": "ownership-org-oauth",
+  "type": "object"
+}

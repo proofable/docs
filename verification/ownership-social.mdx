@@ -1,0 +1,46 @@
+---
+title: Linked social accounts
+sidebarTitle: Social
+description: Confirm a social account before you grant access. Reuse the result.
+icon: share-nodes
+---
+
+**Verifier ID:** `ownership-social`
+
+Confirm a person controls a social account, then reuse that result across your apps. OAuth runs on Proofable. You never handle tokens.
+
+## Use cases
+
+- Trust pages and reputation
+- Community onboarding and gating
+- Linking a social handle to a wallet or profile
+
+## Flow type
+
+Interactive, hosted-only. The user authorizes the provider on Proofable and returns with a result. This check cannot be submitted from your backend, and it cannot be combined with other checks in one request.
+
+## Supported providers
+
+`discord`, `github`, `facebook`, `x`, `linkedin`, `telegram`, `coinbase`.
+
+## The simplest path
+
+Send the user to Hosted Verify, then read the proof back:
+
+```text
+https://proofable.me/verify?verifiers=ownership-social&returnUrl=https://app.example.com/verified
+```
+
+You get a proof ID in the `qHash` field. Store it and reuse it. Do not re-run the flow on every visit. Never collect raw OAuth tokens.
+
+## Fields
+
+| Field | Required | Notes |
+|------|----------|-------|
+| `provider` | Yes | One of the supported providers above |
+| `internalSocialToken` | Yes (direct submit) | Short-lived token issued by the hosted OAuth step |
+| `walletAddress` | No | Subject override to bind the handle to a wallet |
+
+`internalSocialToken` is produced by the hosted flow. Your app does not create it. For almost all integrations, use Hosted Verify or `VerifyGate` and skip direct submission.
+
+Full schema: [`ownership-social.json`](https://github.com/proofable/network/blob/main/docs/verifiers/schemas/ownership-social.json).

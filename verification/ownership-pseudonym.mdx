@@ -1,0 +1,44 @@
+---
+title: Username
+sidebarTitle: Username
+description: Bind a public handle to an account without a legal identity.
+icon: id-badge
+---
+
+**Verifier ID:** `ownership-pseudonym`
+
+Claim a portable handle with a wallet signature. A public name, not a legal identity.
+
+## Use cases
+
+- Product handles
+- Portable public names
+- Pseudonymous creator identity
+
+## Flow type
+
+Instant. The user signs once and the pseudonym binding is created.
+
+## Fields
+
+| Field | Required | Notes |
+|------|----------|-------|
+| `pseudonymId` | Yes | Handle, 3–32 chars, pattern `^[a-z0-9][a-z0-9._-]{1,30}[a-z0-9]$` |
+| `namespace` | No | Defaults to `neus` |
+| `displayName` | No | Human-readable label |
+| `metadata` | No | Optional object for app-specific attributes |
+
+## Example
+
+```json
+{
+  "pseudonymId": "alice123",
+  "displayName": "Alice"
+}
+```
+
+## Expiry
+
+Pseudonym proofs are time-bound: the proof includes an `expiresAt`. Re-verify to refresh before it lapses.
+
+Full schema: [`ownership-pseudonym.json`](https://github.com/proofable/network/blob/main/docs/verifiers/schemas/ownership-pseudonym.json).

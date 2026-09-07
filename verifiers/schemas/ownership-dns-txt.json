@@ -1,0 +1,23 @@
+{
+  "$id": "https://proofable.me/schemas/ownership-dns-txt.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Confirm control of a domain with a DNS TXT record",
+  "properties": {
+    "domain": {
+      "description": "Hostname to verify (TXT lookup at _neus.<domain>).",
+      "format": "hostname",
+      "minLength": 1,
+      "type": "string"
+    },
+    "walletAddress": {
+      "description": "Optional in data when options.walletAddress supplies the signer; filled in if omitted. If present, it must match the signing wallet and any allowed delegation rules. The TXT record must use wallet= with the same address Proofable checks.",
+      "format": "universal-address",
+      "type": "string"
+    }
+  },
+  "required": [
+    "domain"
+  ],
+  "title": "ownership-dns-txt",
+  "type": "object"
+}

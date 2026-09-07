@@ -1,0 +1,135 @@
+---
+title: Pay per call
+sidebarTitle: Pay per call
+description: Pay for a single check without creating an account.
+icon: coins
+---
+
+Pay for a single check without creating an account or API key. Three endpoints support this:
+
+| Resource | Method | What it does | Base cost |
+|----------|--------|--------------|-----------|
+| `/api/v1/proofs/check` | GET | Evaluate existing proofs at a gate | 1 credit ($0.0025) |
+| `/api/v1/verification` | POST | Create a new proof | 3+ credits (gate + verifier + proof write) |
+| `/api/v1/verification/access/grant` | POST | Create a signed private-proof sharing capability | 2 credits |
+
+The exact price for each request is in the `PAYMENT-REQUIRED` header. It scales with the number of checks, query complexity, and optional add-ons (IPFS pinning, extra chains).
+
+## Flow
+
+<Steps>
+  <Step title="Request the resource">
+    Send the normal request with the required parameters (address, check IDs, or gate ID).
+  </Step>
+  <Step title="Read the payment requirements">
+    An unpaid request returns **HTTP 402**. Decode the base64 **`PAYMENT-REQUIRED`** response header as an x402 v2 `PaymentRequired` object.
+  </Step>
+  <Step title="Authorize payment">
+    Use an x402-compatible client to select the payment method and sign the payload. Private key stays in the client or wallet.
+  </Step>
+  <Step title="Retry the same request">
+    Repeat the identical method, URL, query, and body with the base64 **`PAYMENT-SIGNATURE`** request header.
+  </Step>
+  <Step title="Confirm settlement">
+    A successful paid call returns **HTTP 200**, the result, and a base64 **`PAYMENT-RESPONSE`** settlement header.
+  </Step>
+</Steps>
+
+## Proof check
+
+Check existing proofs before granting access, releasing a payment, or allowing an agent action:
+
+```http
+GET https://api.proofable.me/api/v1/proofs/check
+```
+
+```bash
+curl --include --get \
+  "https://api.proofable.me/api/v1/proofs/check" \
+  --data-urlencode "address=0x1111111111111111111111111111111111111111" \
+  --data-urlencode "verifierId=ownership-basic"
+```
+
+A single-verifier gate check costs **1 credit (0.0025 USDC)**. The price scales with the number of verifier IDs requested, query complexity, and result limit:
+
+| Parameter | Effect on price |
+|-----------|----------------|
+| `verifierId` | Base check (1 credit) |
+| `verifierIds=a,b,c` | 1 credit + 1 per additional verifier |
+| `gateId` | Uses the gate's check policy (creator pays by default) |
+| `traitPath`, `contentHash`, `contractAddress`, `domain`, `riskLevel`, `sanctioned`, `poisoned` | +2 credits (complex query surcharge) |
+| `sinceDays` or `since` | +1 credit (time-window surcharge) |
+| `limit` > 50 | +1 credit per 50 additional results |
+
+The `PAYMENT-REQUIRED` header always carries the exact amount for that request.
+
+## Proof creation
+
+Create a new proof by paying per call:
+
+```http
+POST https://api.proofable.me/api/v1/verification
+```
+
+Cost = gate check (1 credit) + each verifier's weight + proof write (2 credits) + optional add-ons. Verifier weights range from 1 (ownership-basic) to 70 (wallet-risk). See [Verifiers](../verification/verifiers) for per-verifier credit amounts.
+
+## Access grant
+
+Create a signed capability for private-proof sharing:
+
+```http
+POST https://api.proofable.me/api/v1/verification/access/grant
+```
+
+Base cost: 2 credits. No per-hour surcharge.
+
+## Settlement
+
+| Property | Current production requirement |
+|---|---|
+| Scheme | `exact` |
+| Network | Base mainnet (`eip155:8453`) |
+| Asset | USDC on Base |
+
+Pricing is exact and sub-cent. A 1-credit gate check settles at its unit cost, not a rounded-up minimum. No settlement cap; pay for exactly the credits used. Per-credit price: see [Pricing](./pricing).
+
+Always enforce a client-side maximum before signing. Treat the decoded `PAYMENT-REQUIRED` header as the source of truth for the current amount, asset, recipient, and timeout.
+
+After payment, validate all of the following before accepting the result:
+
+- HTTP status is `200`
+- `PAYMENT-RESPONSE` is present and decodes successfully
+- settlement reports success on the selected network
+- the payer and transaction are present
+- the response body reports a completed operation
+
+## Discovery
+
+The payment challenge includes the x402 v2 Bazaar extension with the HTTP input, JSON output example, and JSON Schema. After the facilitator completes a successful settlement, the resource can be indexed for agent and marketplace search.
+
+There is no separate Bazaar registration step. See [x402 Bazaar discovery](https://docs.cdp.coinbase.com/x402/bazaar).
+
+## Agent spending limits
+
+Pair x402 with an agent permission proof to limit autonomous spending.
+
+- Grant `agent-delegation` with `scope: "payments:x402"` and a `maxSpend` cap.
+- `maxSpend` is a whole-number string in token base units. For USDC, 25 USDC is `"25000000"`.
+- Use `toAgentDelegationMaxSpend('25', 6)` from `@proofable/sdk` when constructing the cap.
+- The calling application should also enforce a per-request maximum before signing any payment.
+
+Details: [Agent permissions](../agents/agent-delegation).
+
+## Next
+
+<CardGroup cols={3}>
+  <Card title="Proof API" icon="shield-check" href="../api/overview">
+    Request and interpret a reusable trust decision.
+  </Card>
+  <Card title="Billing" icon="credit-card" href="./billing">
+    Credits, sponsorship, and who pays.
+  </Card>
+  <Card title="Agent delegation" icon="key" href="../agents/agent-delegation">
+    Scope actions and spending for autonomous agents.
+  </Card>
+</CardGroup>

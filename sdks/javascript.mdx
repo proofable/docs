@@ -1,0 +1,245 @@
+---
+title: JavaScript SDK
+description: Hosted URLs, gates, polling, and optional in-browser signing.
+icon: code
+---
+
+Use `@proofable/sdk` for `api.proofable.me` so headers and paths stay correct.
+
+## Browser vs server
+
+| Layer | Use |
+|-------|-----|
+| Browser | **`getHostedCheckoutUrl`**, **`VerifyGate`**, polling. Default hosted sign-in on **Proofable** ([Hosted sign-in](../cookbook/auth-hosted-verify)) |
+| Server | **`gateCheck`** with `gateId`; advanced: **`verifyFromApp`**, access keys |
+
+Do not put **`npk_*`** or other secrets in browser bundles. If you need calls the SDK does not expose from the client, **proxy through your backend**. [API overview](../api/overview).
+
+## Install
+
+```bash
+npm install @proofable/sdk
+```
+
+## Hosted URL (browser default)
+
+```javascript
+import { getHostedCheckoutUrl } from '@proofable/sdk';
+
+window.location.assign(
+  getHostedCheckoutUrl({
+    gateId: 'gate_your-app-name',
+    returnUrl: 'https://myapp.com/callback',
+  }),
+);
+```
+
+`getHostedCheckoutUrl` supports login, a published gate, or direct verifier checks. These are separate recipes: `intent: 'login'` removes checkout parameters, and `gateId` owns the gate policy instead of mixing with `verifiers` or `preset`. Shared handoff options are `returnUrl`, `mode`, `origin`, and `oauthProvider`; advanced sponsor options are `appId` and `billingWallet`.
+
+For agent identity + delegation, use `getHostedAgentCreateUrl` so dedicated-wallet identity and controller approval stay in the correct order. [Agent create](../mcp/agent-create) and [Hosted Verify](../cookbook/auth-hosted-verify).
+
+React: [Widgets](../widgets/overview).
+
+## Client configuration
+
+```javascript
+const client = new ProofableClient({
+  // Optional: API base URL (default: https://api.proofable.me)
+  apiUrl: 'https://api.proofable.me',
+  // Optional: request timeout (ms)
+  timeout: 30000,
+});
+```
+
+Other options (advanced): `apiKey` (server key, sent as `Authorization: Bearer`), `appId`, `billingWallet`, `appLinkQHash`, `paymentSignature`, `extraHeaders`, `hubChainId`, `enableLogging`. Keep `apiKey` and any secret server-side only.
+
+## App attribution (`appId`)
+
+Set `appId` only for advanced server/app attribution flows. It is public, not a secret, and it is not required for published gate checkout or `gateCheck({ gateId })`.
+
+```javascript
+const client = new ProofableClient({
+  apiUrl: 'https://api.proofable.me',
+  appId: 'acme-web',
+});
+```
+
+## Verification options
+
+Pass these under `options` on `client.verify(...)`:
+
+| Option | When to use |
+|--------|-------------|
+| `privacyLevel: 'public' \| 'unlisted' \| 'private'` | Control who can read the proof |
+| `enableIpfs: true` | Pin proof data to IPFS |
+| `storeOriginalContent: true` | Keep the original content with the proof |
+| `targetChains: [...]` | Anchor/publish to specific chains |
+| `publishToHub: true` | Record the proof on the hub chain. Offchain by default. Does not change who can see the proof. |
+| `publicDisplay: true` | Allow public display of the proof |
+| `meta`, `verifierOptions` | App metadata and per-verifier options |
+
+Reuse-vs-create is a **widget** concern: the `strategy` prop (`reuse-or-create` default, `fresh`, `reuse`) lives on [`VerifyGate`](../widgets/verifygate), not on `client.verify()`. [Verification patterns](./verifications) for privacy and widget options.
+
+## Optional: `client.verify()` (signs in the browser)
+
+Use only when you intentionally keep signing in **your** page (wallet extension or injected provider):
+
+```javascript
+import { ProofableClient } from '@proofable/sdk';
+
+const client = new ProofableClient({ apiUrl: 'https://api.proofable.me' });
+const provider = window.ethereum; // EVM injected provider
+
+const res = await client.verify({
+  verifier: 'ownership-basic',
+  content: 'Hello Proofable',
+  wallet: provider,
+});
+
+const qHash = res.qHash;
+const record = await client.getProof(qHash);
+```
+
+## Advanced: manual signing (full control)
+
+When you assemble `verifierIds` / `data` yourself, then sign the standardized string. The example below is EVM. For non-EVM, pass the provider explicitly and include `chain` as a CAIP-2 value. See [CAIP-380 Portable Proof](../learn/standards/caip-380).
+
+```javascript
+import { ProofableClient, standardizeVerificationRequest, signMessage } from '@proofable/sdk';
+
+const provider = window.ethereum; // EVM injected provider
+const client = new ProofableClient({ apiUrl: 'https://api.proofable.me' });
+const [walletAddress] = await provider.request({ method: 'eth_requestAccounts' });
+const signedTimestamp = Date.now();
+const body = {
+  verifierIds: ['ownership-basic'],
+  data: {
+    owner: walletAddress,
+    content: 'Hello Proofable',
+    reference: { type: 'url', id: 'https://example.com' }
+  },
+  walletAddress,
+  signedTimestamp,
+};
+
+const standardized = await standardizeVerificationRequest(body, {
+  apiUrl: 'https://api.proofable.me',
+});
+
+const signature = await signMessage({
+  provider,
+  walletAddress,
+  message: standardized.signerString
+});
+
+const res = await client.verify({
+  ...body,
+  signature,
+  options: { privacyLevel: 'private' }
+});
+```
+
+Live verifier list: `GET /api/v1/verification/verifiers`.
+
+## Gate checks: `gateCheck` vs `checkGate`
+
+| Method | Use when |
+|--------|----------|
+| **`gateCheck()`** | **Allow/deny** via `GET /api/v1/proofs/check` (server-enforced). |
+| **`checkGate()`** | Preview against proofs you already loaded. Not a substitute for **`gateCheck()`** where trust matters. |
+
+## Wallet-link: hosted first
+
+For typical UX, use Hosted Verify so wallet selection and secondary signing stay on Proofable. Direct mode is for integrations that already control the secondary wallet and provider.
+
+```javascript
+const walletLinkData = await client.createWalletLinkData({
+  primaryWalletAddress: '0x0000000000000000000000000000000000000001',
+  secondaryWalletAddress: '0x0000000000000000000000000000000000000002',
+  wallet: window.ethereum, // EVM provider; pass explicit provider + chain for non-EVM
+  relationshipType: 'linked',
+  label: 'my-wallet'
+});
+
+const res = await client.verify({
+  verifier: 'wallet-link',
+  data: walletLinkData
+});
+```
+
+## Gate checks from your servers
+
+```javascript
+const res = await client.gateCheck({
+  gateId: 'gate_your-app-name',
+  address: 'YOUR_WALLET_OR_DID',
+  since: Date.now() - 60 * 60 * 1000
+});
+
+if (res.data?.gate?.allRequiredSatisfied !== true) {
+  throw new Error('Access denied');
+}
+```
+
+<Warning>
+**`gateCheck`** uses **public** and **unlisted** proofs by default. **Private** proofs count when that user is **signed in**. For strict live checks, create a fresh proof and wait for **verified** status.
+</Warning>
+
+The gate stores verifier requirements, billing owner, sponsor/x402 policy, and attribution. Direct `verifierIds` checks are advanced protocol calls; do not use them as the normal product checkout path.
+
+## Polling
+
+`pollProofStatus()` backs off on `429` and transient errors.
+
+## Advanced: private proof operations
+
+```javascript
+// EVM examples. For non-EVM, pass an explicit wallet/provider and CAIP-2 chain options.
+
+// Private proof by qHash
+const privateData = await client.getPrivateProof(qHash, window.ethereum);
+
+// Private proofs by wallet/DID (requires owner signature)
+const privateProofs = await client.getPrivateProofsByWallet(
+  'YOUR_WALLET_OR_DID',
+  { limit: 50, offset: 0 },
+  window.ethereum
+);
+
+// Revoke your proof
+await client.revokeOwnProof(qHash, window.ethereum);
+```
+
+## Catalog and health
+
+List the live verifier ids or fetch the full catalog with metadata and access levels.
+
+```javascript
+const ids = await client.getVerifiers();        // ['ownership-basic', 'token-holding', ...]
+const catalog = await client.getVerifierCatalog(); // full metadata + access levels
+const ok = await client.isHealthy();             // true / false
+```
+
+For private-proof gate access, create a signed private auth payload, then pass it to `gateCheck`:
+
+```javascript
+const privateAuth = await client.createGatePrivateAuth({
+  address: 'YOUR_WALLET',
+  wallet: window.ethereum,
+});
+const res = await client.gateCheck({ gateId: 'gate_your-app-name', privateAuth });
+```
+
+## Public proofs by wallet
+
+```javascript
+const proofs = await client.getProofsByWallet('0x...', { limit: 50 });
+```
+
+## React widgets
+
+[Widgets overview](../widgets/overview).
+
+```javascript
+import { VerifyGate, ProofBadge } from '@proofable/sdk/widgets';
+```

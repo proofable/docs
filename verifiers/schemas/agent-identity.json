@@ -1,0 +1,196 @@
+{
+  "$id": "https://proofable.me/schemas/agent-identity.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "description": "Record an agent identity signed by the agent account. Add permissions separately.",
+  "properties": {
+    "agentAccountId": {
+      "description": "Optional CAIP-10 account identifier for agentWallet. May be injected when inputs are normalized from wallet + chain context.",
+      "format": "caip10-account",
+      "type": "string"
+    },
+    "agentChainRef": {
+      "description": "CAIP-2 network reference for agentWallet (for example eip155:8453). Supply in data or on the verification request as chain (CAIP-2) or chainId (EVM).",
+      "format": "caip2-chain",
+      "type": "string"
+    },
+    "agentId": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "agentLabel": {
+      "maxLength": 128,
+      "type": "string"
+    },
+    "agentType": {
+      "enum": [
+        "ai",
+        "bot",
+        "service",
+        "automation",
+        "agent"
+      ],
+      "type": "string"
+    },
+    "agentWallet": {
+      "format": "universal-address",
+      "type": "string"
+    },
+    "avatar": {
+      "description": "Public agent avatar/logo URL or ipfs:// URI.",
+      "maxLength": 512,
+      "type": "string"
+    },
+    "capabilities": {
+      "additionalProperties": false,
+      "description": "Agent capabilities as boolean flags",
+      "properties": {
+        "browser": {
+          "type": "boolean"
+        },
+        "delegation": {
+          "type": "boolean"
+        },
+        "mcp": {
+          "type": "boolean"
+        },
+        "proofs": {
+          "type": "boolean"
+        },
+        "publishing": {
+          "type": "boolean"
+        },
+        "receipts": {
+          "type": "boolean"
+        },
+        "search": {
+          "type": "boolean"
+        },
+        "signing": {
+          "type": "boolean"
+        },
+        "spending": {
+          "type": "boolean"
+        },
+        "wallet": {
+          "type": "boolean"
+        },
+        "webhooks": {
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "defaultRuntime": {
+      "additionalProperties": false,
+      "description": "Default runtime display hints, NOT security-authoritative; delegation runtimePolicy overrides these. These are convenience metadata for UI and tooling, not proof of which model/provider the agent actually uses.",
+      "properties": {
+        "mode": {
+          "description": "Default inference mode (e.g., \"openai-chat\", \"openai-responses\").",
+          "maxLength": 64,
+          "type": "string"
+        },
+        "model": {
+          "description": "Default inference model label (e.g., \"kimi-k2.6\", \"gpt-5.4\").",
+          "maxLength": 128,
+          "type": "string"
+        },
+        "provider": {
+          "description": "Default inference provider label (e.g., \"ollama\", \"openai\").",
+          "maxLength": 64,
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "description": {
+      "maxLength": 500,
+      "type": "string"
+    },
+    "instructions": {
+      "maxLength": 16000,
+      "type": "string"
+    },
+    "services": {
+      "items": {
+        "properties": {
+          "endpoint": {
+            "format": "uri",
+            "maxLength": 256,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "version": {
+            "maxLength": 32,
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "endpoint"
+        ],
+        "type": "object"
+      },
+      "maxItems": 16,
+      "type": "array"
+    },
+    "skills": {
+      "description": "Agent skills as structured objects",
+      "items": {
+        "properties": {
+          "configId": {
+            "description": "Optional opaque integration or provider configuration reference. Not a secret, not an OAuth token, not credential material.",
+            "maxLength": 128,
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "id": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "native",
+              "integration",
+              "plugin",
+              "mcp",
+              "toolkit"
+            ],
+            "type": "string"
+          },
+          "label": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "provider": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "version": {
+            "maxLength": 32,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "maxItems": 48,
+      "type": "array"
+    }
+  },
+  "required": [
+    "agentId",
+    "agentWallet",
+    "agentChainRef"
+  ],
+  "title": "agent-identity",
+  "type": "object"
+}

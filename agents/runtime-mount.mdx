@@ -1,0 +1,64 @@
+---
+title: Connect agent context
+sidebarTitle: Connect context
+description: Optional. Load this agent into Cursor, Claude Code, or Codex after MCP Connect.
+icon: layer-group
+---
+
+This is optional. First-run is [MCP setup](../mcp/setup): add the endpoint, click **Connect**, then call `proofable_context`.
+
+To load the same agent into an editor project:
+
+```bash
+npx -y -p @proofable/sdk proofable setup
+npx -y -p @proofable/sdk proofable mount my-agent --apply cursor
+```
+
+Same command for `claude` or `codex`. VS Code uses `--apply cursor`. This writes `.proofable/mount.json` and the host adapter. Start a new session so the project picks it up.
+
+The editor runs the tools. Proofable supplies identity, limits, and proofs. Cursor Cloud Agents can use the hosted MCP endpoint the same way. Proofable does not spawn those VMs for you.
+
+## From the agent card
+
+**Connect in** copies:
+
+```bash
+npx -y -p @proofable/sdk proofable mount <agentId> --apply <host>
+```
+
+Valid `--apply` values are `cursor`, `claude`, or `codex`. VS Code uses `--apply cursor`. Run it in the project. If the host is not connected yet, run `proofable setup` first. The browser never downloads a static rules file.
+
+## Assistant tool
+
+When signed in, call **`proofable_agent_mount`** with `agentId`. You can also use `agentWallet` or the identity proof ID in `identityQHash`.
+
+Suggested order:
+
+1. `proofable_context`
+2. `proofable_agent_mount` when acting as a specific agent
+3. `proofable_proofs_check` for yes/no eligibility, then `proofable_verify_or_guide` before sensitive actions
+
+## SDK
+
+```javascript
+import { resolveRuntimeBundleFromMcp } from '@proofable/sdk/runtime-mount';
+import { applyRuntimeBundle } from '@proofable/sdk/runtime-adapters';
+```
+
+Use `resolveRuntimeBundleFromMcp` with your MCP transport, then `applyRuntimeBundle(host, bundle, cwd)` for project files. The same bundle shape is returned by the `proofable_agent_mount` MCP tool and the `proofable mount` CLI.
+
+## Where permissions are enforced
+
+| Surface | What Proofable provides |
+|--------|----------------------|
+| **Proofable agent tab** | Enforces permissions, tool access, and proof checks |
+| **MCP clients** | Loads project rules and trust context; start a new session after connecting |
+| **Workers and backends** | Returns the bundle for your application to enforce in its own tool loop |
+
+Your client controls its own tools. Proofable supplies verified context and permissions; your host remains responsible for enforcement.
+
+## Related
+
+- [Agent identity](./agent-identity)
+- [Agent delegation](./agent-delegation)
+- [Connect Proofable](../mcp/setup)

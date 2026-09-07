@@ -1,0 +1,249 @@
+{
+  "schemaVersion": "1.0.0",
+  "verifiers": [
+    {
+      "api": {
+        "gateCheck": true,
+        "verificationRequest": true
+      },
+      "description": "Record content authorship, source, and optional source history",
+      "expiry": "permanent",
+      "flow": "instant",
+      "id": "ownership-basic",
+      "inputSchemaPath": "docs/verifiers/schemas/ownership-basic.json",
+      "interaction": "signature",
+      "sdk": {
+        "autoVerify": true,
+        "verifyGateWidget": true
+      },
+      "tier": "public"
+    },
+    {
+      "api": {
+        "gateCheck": true,
+        "verificationRequest": false
+      },
+      "description": "Confirm a unique person without publishing identity details",
+      "expiry": "expiring",
+      "flow": "interactive",
+      "id": "proof-of-human",
+      "inputSchemaPath": "docs/verifiers/schemas/proof-of-human.json",
+      "interaction": "hosted",
+      "sdk": {
+        "autoVerify": false,
+        "verifyGateWidget": true
+      },
+      "tier": "public"
+    },
+    {
+      "api": {
+        "gateCheck": true,
+        "verificationRequest": false
+      },
+      "description": "Confirm control of a supported social account through sign-in",
+      "expiry": "permanent",
+      "flow": "interactive",
+      "id": "ownership-social",
+      "inputSchemaPath": "docs/verifiers/schemas/ownership-social.json",
+      "interaction": "hosted",
+      "sdk": {
+        "autoVerify": false,
+        "verifyGateWidget": true
+      },
+      "tier": "public"
+    },
+    {
+      "api": {
+        "gateCheck": true,
+        "verificationRequest": true
+      },
+      "description": "Associate an available .neus username with a wallet",
+      "expiry": "expiring",
+      "flow": "instant",
+      "id": "ownership-pseudonym",
+      "inputSchemaPath": "docs/verifiers/schemas/ownership-pseudonym.json",
+      "interaction": "signature",
+      "sdk": {
+        "autoVerify": true,
+        "verifyGateWidget": true
+      },
+      "tier": "public"
+    },
+    {
+      "api": {
+        "gateCheck": true,
+        "verificationRequest": true
+      },
+      "description": "Confirm control of a domain with a DNS TXT record",
+      "expiry": "point_in_time",
+      "flow": "external_lookup",
+      "id": "ownership-dns-txt",
+      "inputSchemaPath": "docs/verifiers/schemas/ownership-dns-txt.json",
+      "interaction": "passive",
+      "recommendedMaxAgeMs": 3600000,
+      "sdk": {
+        "autoVerify": true,
+        "verifyGateWidget": true
+      },
+      "tier": "public"
+    },
+    {
+      "api": {
+        "gateCheck": true,
+        "verificationRequest": false
+      },
+      "description": "Confirm a work or organization account through sign-in",
+      "expiry": "permanent",
+      "flow": "interactive",
+      "id": "ownership-org-oauth",
+      "inputSchemaPath": "docs/verifiers/schemas/ownership-org-oauth.json",
+      "interaction": "hosted",
+      "sdk": {
+        "autoVerify": false,
+        "verifyGateWidget": true
+      },
+      "tier": "public"
+    },
+    {
+      "api": {
+        "gateCheck": true,
+        "verificationRequest": true
+      },
+      "description": "Check whether an EVM or Solana wallet owns an NFT",
+      "expiry": "point_in_time",
+      "flow": "external_lookup",
+      "id": "nft-ownership",
+      "inputSchemaPath": "docs/verifiers/schemas/nft-ownership.json",
+      "interaction": "passive",
+      "recommendedMaxAgeMs": 3600000,
+      "sdk": {
+        "autoVerify": true,
+        "verifyGateWidget": true
+      },
+      "tier": "public"
+    },
+    {
+      "api": {
+        "gateCheck": true,
+        "verificationRequest": true
+      },
+      "description": "Check whether an EVM or Solana wallet meets a token balance requirement",
+      "expiry": "point_in_time",
+      "flow": "external_lookup",
+      "id": "token-holding",
+      "inputSchemaPath": "docs/verifiers/schemas/token-holding.json",
+      "interaction": "passive",
+      "recommendedMaxAgeMs": 3600000,
+      "sdk": {
+        "autoVerify": true,
+        "verifyGateWidget": true
+      },
+      "tier": "public"
+    },
+    {
+      "api": {
+        "gateCheck": true,
+        "verificationRequest": true
+      },
+      "description": "Check a wallet for risk signals before allowing an action",
+      "expiry": "point_in_time",
+      "flow": "external_lookup",
+      "id": "wallet-risk",
+      "inputSchemaPath": "docs/verifiers/schemas/wallet-risk.json",
+      "interaction": "passive",
+      "recommendedMaxAgeMs": 3600000,
+      "sdk": {
+        "autoVerify": true,
+        "verifyGateWidget": true
+      },
+      "tier": "public"
+    },
+    {
+      "api": {
+        "gateCheck": true,
+        "verificationRequest": true
+      },
+      "description": "Associate a second wallet by signing from that wallet",
+      "expiry": "permanent",
+      "flow": "instant",
+      "id": "wallet-link",
+      "inputSchemaPath": "docs/verifiers/schemas/wallet-link.json",
+      "interaction": "signature",
+      "sdk": {
+        "autoVerify": true,
+        "verifyGateWidget": true
+      },
+      "tier": "public"
+    },
+    {
+      "api": {
+        "gateCheck": true,
+        "verificationRequest": true
+      },
+      "description": "Confirm an owner or administrator role on an EVM smart contract",
+      "expiry": "point_in_time",
+      "flow": "external_lookup",
+      "id": "contract-ownership",
+      "inputSchemaPath": "docs/verifiers/schemas/contract-ownership.json",
+      "interaction": "passive",
+      "recommendedMaxAgeMs": 3600000,
+      "sdk": {
+        "autoVerify": true,
+        "verifyGateWidget": true
+      },
+      "tier": "public"
+    },
+    {
+      "api": {
+        "gateCheck": true,
+        "verificationRequest": true
+      },
+      "description": "Record that content passed the configured safety check",
+      "expiry": "permanent",
+      "flow": "external_lookup",
+      "id": "ai-content-moderation",
+      "inputSchemaPath": "docs/verifiers/schemas/ai-content-moderation.json",
+      "interaction": "passive",
+      "sdk": {
+        "autoVerify": true,
+        "verifyGateWidget": true
+      },
+      "tier": "public"
+    },
+    {
+      "api": {
+        "gateCheck": true,
+        "verificationRequest": true
+      },
+      "description": "Record an agent identity signed by the agent account. Add permissions separately.",
+      "expiry": "permanent",
+      "flow": "instant",
+      "id": "agent-identity",
+      "inputSchemaPath": "docs/verifiers/schemas/agent-identity.json",
+      "interaction": "signature",
+      "sdk": {
+        "autoVerify": true,
+        "verifyGateWidget": true
+      },
+      "tier": "public"
+    },
+    {
+      "api": {
+        "gateCheck": true,
+        "verificationRequest": true
+      },
+      "description": "Grant an agent specific actions, limits, and an optional expiration date",
+      "expiry": "expiring",
+      "flow": "instant",
+      "id": "agent-delegation",
+      "inputSchemaPath": "docs/verifiers/schemas/agent-delegation.json",
+      "interaction": "signature",
+      "recommendedMaxAgeMs": 604800000,
+      "sdk": {
+        "autoVerify": true,
+        "verifyGateWidget": true
+      },
+      "tier": "public"
+    }
+  ]
+}

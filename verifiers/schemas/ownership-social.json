@@ -1,0 +1,35 @@
+{
+  "$id": "https://proofable.me/schemas/ownership-social.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Confirm control of a supported social account through sign-in",
+  "properties": {
+    "internalSocialToken": {
+      "description": "Opaque token from the hosted link session after the user authorizes; not your app API key.",
+      "type": "string"
+    },
+    "provider": {
+      "description": "OAuth provider to verify against.",
+      "enum": [
+        "discord",
+        "github",
+        "facebook",
+        "x",
+        "linkedin",
+        "telegram",
+        "coinbase"
+      ],
+      "type": "string"
+    },
+    "walletAddress": {
+      "description": "Wallet bound to the social account when applicable.",
+      "format": "universal-address",
+      "type": "string"
+    }
+  },
+  "required": [
+    "provider",
+    "internalSocialToken"
+  ],
+  "title": "ownership-social",
+  "type": "object"
+}

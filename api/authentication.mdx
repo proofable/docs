@@ -1,0 +1,61 @@
+---
+title: Authentication
+description: How servers and apps authenticate to the Proofable API.
+icon: fingerprint
+---
+
+Pick the path that matches your caller. Most products use Hosted Verify for people and a profile access key for servers.
+
+Credits apply to checks and saved results, not to hosted session sign-in. See [Trust stack](../platform/trust-stack) and [Pricing](../platform/pricing).
+
+| Need | Mechanism | Wallet code in your app |
+|------|-----------|---------------------------|
+| Sign-in for your app | Hosted Verify + `intent=login` + `returnUrl` | No |
+| Access or checkout (default) | `VerifyGate` / Hosted Verify + `gateId` | No |
+| MCP client sign-in | OAuth 2.0 + PKCE | No |
+| Server automation as your profile | Bearer `npk_*` access key | No |
+| Server creates proofs for an approved user | App link + `verifyFromApp` | No |
+| Sign inside your page | SDK `verify` + `wallet` | Yes. Rare |
+
+Server integration: [Integrations](../cookbook/integrations).
+
+## Hosted Verify (default)
+
+`https://proofable.me/verify` for [Hosted Verify](../cookbook/auth-hosted-verify).
+
+Send users to your checkout with `gateId`; the enforcement policy bills your Hub credits.
+
+## MCP OAuth
+
+MCP clients authenticate via **OAuth 2.0 Authorization Code with PKCE**. Register `https://mcp.proofable.me/mcp` and click **Connect** in the host. Official CLI: `npx -y -p @proofable/sdk proofable`.
+
+Request only the scopes you need:
+
+| Scope | What it unlocks |
+|-------|-----------------|
+| `neus:core` | Public protocol tools |
+| `neus:profile` | Signed-in profile context |
+| `neus:secrets` | Portable encrypted secrets |
+| `offline_access` | Refresh token |
+
+Profile access keys (`npk_*`) are a full-profile server credential.
+
+See [Connect Proofable](../mcp/setup) and [MCP OAuth](../mcp/oauth).
+
+## Profile access keys
+
+[Access keys](https://proofable.me/profile?tab=account) for servers, CI, and MCP automation. Never in browser bundles.
+
+## Backend proofs
+
+For backend-created proofs after a user approves your product once, see [Integrations](../cookbook/integrations). Separate from creating a **listing** under profile → **Listings**, which bills hosted verification to your account.
+
+## Signing inside your app
+
+[Signing format](../verification/signing-format) and `signMessage` from `@proofable/sdk`
+
+## Raw HTTP
+
+`POST /api/v1/verification/standardize` → sign `signerString` → `POST /api/v1/verification`. [Signing format](../verification/signing-format).
+
+[MCP Auth](../mcp/auth) and [SDK Authentication](../sdks/authentication)

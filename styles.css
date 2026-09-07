@@ -1,0 +1,1250 @@
+/* Proofable Mintlify skin , tokens colocated in docs/ (Mintlify CDN does not resolve ../examples imports). */
+@import url('./proofable-tokens.css');
+
+/* Docs cards use the Proofable app-card surface (sheen + glass gradient). */
+
+/*
+  Marketing page wash (--proofable-page-bg).
+  Paint on html + fixed #background-color; docs.json dark hex is grad base only.
+*/
+html {
+  min-height: 100%;
+  min-height: 100dvh;
+  background-color: var(--proofable-page-grad-base) !important;
+  background-image: var(--proofable-page-bg) !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 100dvh !important;
+  background-position: center top !important;
+  background-attachment: fixed !important;
+}
+
+#background-color {
+  /* Mintlify already applies fixed inset-0 -z-10; only override the paint, not layout. */
+  z-index: -10 !important;
+  pointer-events: none !important;
+  background-color: var(--proofable-page-grad-base) !important;
+  background-image: var(--proofable-page-bg) !important;
+  background-repeat: no-repeat !important;
+  background-size: 100% 100dvh !important;
+  background-position: center top !important;
+  background-attachment: fixed !important;
+}
+
+/*
+  Mintlify decorative overlays only , never match [class*="shadow"] (breaks sidebar links
+  with Tailwind text-shadow utilities) or broad gradient/backdrop selectors on <a>.
+  Mintlify moved from bg-gradient-to-* to bg-linear-to-* (Tailwind v4); match both.
+*/
+main > span.absolute.inset-0.overflow-hidden.pointer-events-none:not(#background-color),
+#sidebar div[class*="bg-gradient-to-b"].pointer-events-none,
+#sidebar div[class*="bg-gradient-to-t"].pointer-events-none,
+#sidebar div[class*="bg-linear-to-b"].pointer-events-none,
+#sidebar div[class*="bg-linear-to-t"].pointer-events-none,
+#sidebar-content > div.sticky.pointer-events-none.h-8,
+#navigation-items > div.sticky.pointer-events-none.h-8 {
+  display: none !important;
+  pointer-events: none !important;
+  background: none !important;
+  background-image: none !important;
+}
+
+#sidebar,
+#navigation-items,
+.nav-tabs {
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/*
+  Frosted docs header , use Mintlify #navbar-transition as the glass plate (do not hide it).
+  Interactive chrome stays above the plate; no extra drop shadows on the shell.
+*/
+#navbar {
+  background: transparent !important;
+  box-shadow: none !important;
+  isolation: isolate;
+}
+
+#navbar-transition {
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+  background: var(--proofable-shell-glass-fill) !important;
+  background-color: transparent !important;
+  -webkit-backdrop-filter: var(--proofable-shell-glass-blur) !important;
+  backdrop-filter: var(--proofable-shell-glass-blur) !important;
+  border-bottom: 1px solid var(--proofable-shell-glass-border) !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  z-index: 0;
+}
+
+#navbar > .max-w-8xl,
+#navbar .max-w-8xl {
+  position: relative;
+  z-index: 1;
+}
+
+#navbar a,
+#navbar button {
+  text-shadow: none !important;
+}
+
+#navbar a.flex.items-center,
+#navbar a[href*="github.com"],
+#navbar a[href*="discussions"] {
+  color: var(--proofable-text-secondary) !important;
+}
+
+#navbar a.flex.items-center:hover,
+#navbar a[href*="github.com"]:hover,
+#navbar a[href*="discussions"]:hover {
+  color: var(--proofable-text-primary) !important;
+}
+
+/*
+  Header logo , primary mark only (full particle depth).
+  Mintlify h-7 (28px) makes the ring/particles sub-pixel mush.
+  docs.json serves a trim-cropped supersampled primary PNG; display at 48px.
+*/
+#navbar a.select-none {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+  min-width: 0;
+  line-height: 0 !important;
+}
+
+#navbar img.nav-logo {
+  height: 3rem !important;
+  width: 3rem !important;
+  max-width: 3rem !important;
+  max-height: 3rem !important;
+  min-width: 3rem !important;
+  object-fit: contain !important;
+  flex-shrink: 0 !important;
+  image-rendering: auto !important;
+  /* Hairline halo so fine particles read on the glass bar , does not alter geometry. */
+  filter: drop-shadow(0 0 0.6px rgb(152 192 239 / 0.85)) !important;
+  transform: translateZ(0);
+}
+
+html.dark #navbar img.nav-logo[alt="dark logo"] {
+  display: block !important;
+}
+
+html.dark #navbar img.nav-logo[alt="light logo"] {
+  display: none !important;
+}
+
+@media (min-width: 1024px) {
+  /*
+    Mintlify row 1: one flex-1 wrapper containing logo | search | actions.
+    Target direct children only , the wrapper also has flex-1 + gap-x-4 and must stay full width.
+  */
+  #navbar .flex.items-center.lg\:px-12.h-16 > .h-full.relative.flex-1 {
+    display: flex !important;
+    align-items: center !important;
+    flex: 1 1 0% !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0 !important;
+    gap: 0.75rem 1rem !important;
+  }
+
+  #navbar .flex.items-center.lg\:px-12.h-16 > .h-full.relative.flex-1 > .flex-1.flex.items-center.gap-x-4:first-child {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    max-width: 4rem;
+    min-width: 3rem;
+  }
+
+  #navbar .flex.items-center.lg\:px-12.h-16 > .h-full.relative.flex-1 > .relative.hidden.lg\:flex.items-center.flex-1.z-20.justify-center {
+    flex: 1 1 0% !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: 10rem !important;
+    justify-content: stretch !important;
+    padding-left: 0.25rem;
+    padding-right: 0.25rem;
+  }
+
+  #navbar button[class*="group/search"] {
+    width: 100% !important;
+    max-width: none !important;
+    background: rgb(12 14 18 / 0.55) !important;
+    border: 1px solid var(--proofable-border-faint) !important;
+    box-shadow: inset 0 1px 0 rgb(90 90 90 / 0.08) !important;
+    color: var(--proofable-text-primary) !important;
+  }
+
+  #navbar .flex.items-center.lg\:px-12.h-16 > .h-full.relative.flex-1 > .flex-1.relative.hidden.lg\:flex.items-center.ml-auto.justify-end {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    flex-shrink: 0 !important;
+    white-space: nowrap;
+  }
+
+  /* Tab strip , no full-width rule (design: spacing only, never section dividers). */
+  #navbar .hidden.lg\:flex.px-12.h-12 {
+    width: 100% !important;
+    border-top: none !important;
+    align-items: center !important;
+  }
+
+  #navbar .nav-tabs {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex-wrap: nowrap;
+    row-gap: 0;
+    align-items: center !important;
+    gap: 0.25rem !important;
+  }
+
+  /* Kill Mintlify hairline underlines , selected state is fill + accent text. */
+  #navbar .nav-tabs a.nav-tabs-item > div.absolute.bottom-0,
+  #navbar .nav-tabs a.nav-tabs-item > div.h-\[1\.5px\] {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    background: transparent !important;
+    pointer-events: none !important;
+  }
+
+  #navbar .nav-tabs a.nav-tabs-item {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    align-self: center !important;
+    width: auto !important;
+    flex: 0 0 auto !important;
+    /* Kill Mintlify h-full , full-row height makes any rim read as an underline. */
+    height: 2rem !important;
+    max-height: 2rem !important;
+    min-height: 2rem !important;
+    padding: 0 0.75rem !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0.5rem !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    color: var(--proofable-text-secondary) !important;
+    font-size: var(--proofable-text-body-sm) !important;
+    font-weight: var(--proofable-weight-label) !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    text-shadow: none !important;
+    transition: color 120ms ease, background-color 120ms ease;
+  }
+
+  #navbar .nav-tabs a.nav-tabs-item:focus-visible {
+    box-shadow: 0 0 0 2px rgb(var(--proofable-rgb-accent-primary)) !important;
+  }
+
+  #navbar .nav-tabs a.nav-tabs-item:hover {
+    color: var(--proofable-text-primary) !important;
+    background: rgb(255 255 255 / 0.05) !important;
+  }
+
+  /*
+    Selected tab , graphite fill + white text. No blue wash (Linear/Cursor).
+  */
+  #navbar .nav-tabs a.nav-tabs-item[aria-current],
+  #navbar .nav-tabs a.nav-tabs-item[data-active="true"],
+  #navbar .nav-tabs a.nav-tabs-item.text-primary,
+  #navbar .nav-tabs a.nav-tabs-item.dark\:text-gray-200 {
+    color: var(--proofable-text-primary) !important;
+    font-weight: var(--proofable-weight-heading) !important;
+    background: rgb(255 255 255 / 0.08) !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  #navbar .nav-tabs a.nav-tabs-item[aria-current]:hover,
+  #navbar .nav-tabs a.nav-tabs-item[data-active="true"]:hover,
+  #navbar .nav-tabs a.nav-tabs-item.text-primary:hover {
+    color: var(--proofable-text-primary) !important;
+    background: rgb(255 255 255 / 0.1) !important;
+  }
+}
+
+#navigation-items a,
+#navigation-items button {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  color: var(--proofable-text-secondary) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-radius: 0.5rem !important;
+}
+
+#navigation-items a svg,
+#navigation-items a i,
+#navigation-items a [class*="icon"],
+#navigation-items a .text-primary,
+#navigation-items a [class*="text-primary"] {
+  color: var(--proofable-text-secondary) !important;
+  fill: currentColor !important;
+}
+
+#navigation-items a:hover {
+  color: var(--proofable-text-primary) !important;
+  background: rgb(255 255 255 / 0.04) !important;
+}
+
+/*
+  Active sidebar item , Linear/Cursor style: quiet graphite fill, no accent blue.
+  Match app selected-row soft fill without primary wash.
+*/
+#navigation-items a[aria-current="page"],
+#navigation-items a[aria-current="true"],
+#navigation-items a[data-active="true"],
+#navigation-items a[data-state="active"],
+#sidebar a[aria-current="page"],
+#sidebar a[aria-current="true"],
+#sidebar a[data-active="true"] {
+  color: var(--proofable-text-primary) !important;
+  background: rgb(255 255 255 / 0.07) !important;
+  box-shadow: none !important;
+  font-weight: var(--proofable-weight-label) !important;
+}
+
+#navigation-items a[aria-current="page"] svg,
+#navigation-items a[aria-current="true"] svg,
+#navigation-items a[data-active="true"] svg,
+#navigation-items a[aria-current="page"] .text-primary,
+#navigation-items a[aria-current="true"] .text-primary,
+#navigation-items a[data-active="true"] .text-primary,
+#navigation-items a[aria-current="page"] [class*="text-primary"],
+#navigation-items a[aria-current="true"] [class*="text-primary"],
+#navigation-items a[data-active="true"] [class*="text-primary"],
+#sidebar a[aria-current="page"] svg,
+#sidebar a[aria-current="true"] svg,
+#sidebar a[data-active="true"] svg {
+  color: var(--proofable-text-secondary) !important;
+  fill: currentColor !important;
+}
+
+body {
+  font-family: var(--proofable-font-sans);
+  font-size: var(--proofable-text-body);
+  font-weight: var(--proofable-weight-body);
+  line-height: var(--proofable-leading-body);
+  font-feature-settings: "ss01" on, "cv01" on;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: transparent !important;
+  background-image: none !important;
+  color: var(--proofable-text-primary);
+}
+
+/* Mintlify shell wrappers must stay transparent so the wash is visible. */
+#body-content,
+#content-area,
+#content {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/*
+  Layout , Mintlify ships flex-col on #content-area without display:flex, which
+  collapses the column to ~243px and breaks card grids + three-column balance.
+*/
+#content-container > .flex.flex-row-reverse {
+  align-items: flex-start !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding-top: 2.5rem !important;
+  gap: 2rem 3rem !important;
+}
+
+#content-area {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  flex: 1 1 0% !important;
+  min-width: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+#content-side-layout {
+  flex: 0 0 17rem !important;
+  width: 17rem !important;
+  max-width: 17rem !important;
+}
+
+#content-area > #header,
+#content-area > #content,
+#content-area > #pagination,
+#content-area > footer,
+#content-area > div {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+}
+
+.mdx-content {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Mintlify prose grays , lift to Proofable tokens */
+.prose.mdx-content,
+.mdx-content.prose {
+  --tw-prose-body: var(--proofable-text-primary);
+  --tw-prose-headings: var(--proofable-text-primary);
+  --tw-prose-bold: var(--proofable-text-primary);
+  --tw-prose-links: var(--proofable-accent);
+  --tw-prose-counters: var(--proofable-text-muted);
+  --tw-prose-bullets: var(--proofable-text-muted);
+  max-width: none !important;
+}
+
+/* Mintlify auto-injects llms.txt index for agents; keep /llms.txt, hide in-page duplicate. */
+.mdx-content blockquote:has(a[href*="llms.txt"]),
+blockquote[data-agent-docs-index],
+blockquote.sr-only:has(a[href*="llms.txt"]),
+blockquote.sr-only:has(a[href*="llms.txt"]) * {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+/*
+  Text selection , scoped to readable content only (do not fight nav/sidebar chrome).
+  Mintlify sets -webkit-user-select: none globally; beat it inside MDX/prose only.
+*/
+#body-content,
+#content-area,
+#content,
+.mdx-content,
+.mdx-content p,
+.mdx-content li,
+.mdx-content td,
+.mdx-content th,
+.mdx-content blockquote,
+.mdx-content figcaption,
+.mdx-content h1,
+.mdx-content h2,
+.mdx-content h3,
+.mdx-content h4,
+.mdx-content h5,
+.mdx-content h6,
+.mdx-content pre,
+.mdx-content pre code,
+.mdx-content :not(pre) > code,
+.mdx-content .select-none {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+}
+
+button,
+[role="button"],
+[type="button"],
+[type="submit"],
+[type="reset"],
+#page-context-menu-button,
+#search-input {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+
+/*
+  Typography, aligned to the Proofable design token scale; 16px body / 600 headings; no Mintlify gray-400 prose.
+*/
+#content-area,
+#content,
+.mdx-content {
+  font-family: var(--proofable-font-sans) !important;
+  font-size: var(--proofable-text-body) !important;
+  font-weight: var(--proofable-weight-body) !important;
+  line-height: var(--proofable-leading-body) !important;
+  color: var(--proofable-text-primary) !important;
+}
+
+.mdx-content p,
+.mdx-content li,
+.mdx-content td,
+.mdx-content blockquote,
+.mdx-content figcaption {
+  font-size: var(--proofable-text-body) !important;
+  font-weight: var(--proofable-weight-body) !important;
+  line-height: var(--proofable-leading-body) !important;
+  color: var(--proofable-text-primary) !important;
+}
+
+#page-title {
+  font-size: var(--proofable-text-display-md) !important;
+  font-weight: var(--proofable-weight-heading) !important;
+  line-height: var(--proofable-leading-heading) !important;
+  letter-spacing: -0.015em !important;
+  color: var(--proofable-text-primary) !important;
+}
+
+.mdx-content h1 {
+  font-size: var(--proofable-text-display-md) !important;
+  font-weight: var(--proofable-weight-heading) !important;
+  line-height: var(--proofable-leading-heading) !important;
+  letter-spacing: -0.015em !important;
+  color: var(--proofable-text-primary) !important;
+}
+
+.mdx-content h2 {
+  font-size: var(--proofable-text-display-sm) !important;
+  font-weight: var(--proofable-weight-heading) !important;
+  line-height: var(--proofable-leading-tight) !important;
+  letter-spacing: -0.01em !important;
+  color: var(--proofable-text-primary) !important;
+}
+
+.mdx-content h3 {
+  font-size: var(--proofable-text-title-md) !important;
+  font-weight: var(--proofable-weight-heading) !important;
+  line-height: 1.4 !important;
+  color: var(--proofable-text-primary) !important;
+}
+
+.mdx-content h4,
+.mdx-content h5,
+.mdx-content h6 {
+  font-size: var(--proofable-text-title-sm) !important;
+  font-weight: var(--proofable-weight-heading) !important;
+  line-height: 1.4 !important;
+  color: var(--proofable-text-primary) !important;
+}
+
+.mdx-content th {
+  font-size: var(--proofable-text-label) !important;
+  font-weight: var(--proofable-weight-heading) !important;
+  color: var(--proofable-text-primary) !important;
+}
+
+.mdx-content strong,
+.mdx-content b {
+  font-weight: var(--proofable-weight-heading) !important;
+  color: var(--proofable-text-primary) !important;
+}
+
+.mdx-content a:not([class*="button"]) {
+  color: var(--proofable-accent) !important;
+}
+
+.mdx-content a:not([class*="button"]):hover {
+  color: var(--proofable-accent-dim) !important;
+}
+
+.mdx-content code:not(pre code) {
+  color: var(--proofable-text-primary) !important;
+  background: rgb(var(--proofable-rgb-surface-card) / 0.72) !important;
+  border: 1px solid var(--proofable-border-faint);
+  border-radius: 0.375rem;
+  padding: 0.1rem 0.35rem;
+}
+
+.mdx-content table th,
+.mdx-content table td {
+  border-color: transparent !important;
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+  vertical-align: top !important;
+}
+
+.mdx-content table,
+.mdx-content thead,
+.mdx-content tbody tr {
+  border-color: transparent !important;
+}
+
+/* No section <hr>; the Proofable component contract keeps structural table chrome quiet. */
+.mdx-content hr {
+  display: none !important;
+}
+
+.mdx-content li::marker {
+  color: var(--proofable-text-muted) !important;
+}
+
+/* No zebra rows , flat spacing only (match app lists). */
+.mdx-content tbody tr:nth-child(even) {
+  background: transparent !important;
+}
+
+.mdx-content thead th {
+  font-size: var(--proofable-text-label) !important;
+  font-weight: var(--proofable-weight-heading) !important;
+  color: var(--proofable-text-muted) !important;
+  letter-spacing: 0.02em;
+}
+
+.mdx-content a:not([class*="button"]):focus-visible,
+#navbar a:focus-visible,
+#navbar button:focus-visible,
+#navigation-items a:focus-visible,
+#navigation-items button:focus-visible,
+#table-of-contents-content a:focus-visible,
+#header a:focus-visible,
+#footer a:focus-visible,
+.card:focus-visible,
+a.card:focus-visible {
+  border-radius: 0.25rem;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgb(var(--proofable-rgb-accent-primary)) !important;
+}
+
+#header a:not([href*="/hub"]):not([class*="button"]),
+#table-of-contents-content a {
+  color: var(--proofable-text-secondary) !important;
+}
+
+#footer a[href*="mintlify"],
+#footer a[href*="mintlify"] span,
+footer a[href*="mintlify"],
+footer a[href*="mintlify"] span {
+  color: var(--proofable-text-secondary) !important;
+}
+
+#table-of-contents-content a:hover,
+#table-of-contents-content a.text-primary,
+#table-of-contents-content a[aria-current="true"] {
+  color: var(--proofable-text-primary) !important;
+}
+
+#page-title ~ div [id="page-context-menu-button"],
+#page-title [id="page-context-menu-button"] {
+  display: none !important;
+}
+
+/*
+  Shell , transparent wash-through on content column only.
+  Left tabs + sidebar: no Proofable overrides (Mintlify defaults). Do not set position on #sidebar/#navbar.
+*/
+#header,
+#header-content,
+#content-area,
+#content-container,
+#body-content,
+#table-of-contents,
+#table-of-contents-content,
+#table-of-contents-content .toc,
+#table-of-contents-content .toc > div,
+#pagination,
+footer {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/*
+  Left nav: space between tab row (navbar) and first sidebar section label.
+  Mintlify’s top fade scrim was removed , replace with intentional padding (20px desktop).
+*/
+@media (min-width: 1024px) {
+  #navigation-items {
+    padding-top: 1.25rem !important;
+  }
+
+  #navbar .nav-tabs {
+    padding-bottom: 0 !important;
+    height: auto !important;
+    min-height: 100%;
+  }
+}
+
+#table-of-contents-content {
+  border-left: 1px solid var(--proofable-border-faint);
+  padding-left: 1rem;
+}
+
+#table-of-contents-content .toc,
+#table-of-contents-content .toc > div {
+  background: transparent;
+}
+
+#page-title {
+  background: transparent;
+}
+
+#page-title svg,
+#page-title img,
+#page-title [class*="icon"],
+#page-title [class*="Icon"] {
+  display: none !important;
+}
+
+#page-title,
+#page-title > div,
+#page-title > span {
+  gap: 0 !important;
+}
+
+#page-context-menu-button {
+  background: transparent;
+  border: 1px solid var(--proofable-border-faint);
+}
+
+#search-input,
+#navbar button[class*="group/search"] {
+  background: rgb(12 14 18 / 0.72);
+  border: 1px solid var(--proofable-border-faint);
+  box-shadow: inset 0 1px 0 rgb(90 90 90 / 0.08);
+  color: var(--proofable-text-primary) !important;
+}
+
+#search-input:focus,
+#navbar button[class*="group/search"]:focus-visible {
+  border-color: rgb(var(--proofable-rgb-accent-primary) / 0.28);
+  box-shadow:
+    0 0 0 4px rgb(var(--proofable-rgb-accent-primary) / 0.1),
+    inset 0 1px 0 rgba(90, 90, 90, 0.08);
+}
+
+#topbar-cta-button,
+a#topbar-cta-button,
+[data-testid="navbar-primary-button"],
+[data-testid="topbar-primary-button"],
+.navbar-primary-button,
+.navbar-button-primary,
+#header a[href="https://proofable.me/hub"],
+#header a[href*="proofable.me/hub"],
+#header a[href$="/hub"] {
+  background: var(--proofable-accent) !important;
+  background-color: var(--proofable-accent) !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  border: none !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  color: var(--proofable-on-accent) !important;
+  display: inline-flex !important;
+  font-weight: 600 !important;
+  gap: 0.5rem !important;
+  height: 40px !important;
+  isolation: isolate !important;
+  line-height: 1 !important;
+  min-height: 40px !important;
+  min-width: auto !important;
+  overflow: hidden !important;
+  padding: 0 18px !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  width: auto !important;
+}
+
+#topbar-cta-button:hover,
+a#topbar-cta-button:hover,
+[data-testid="navbar-primary-button"]:hover,
+[data-testid="topbar-primary-button"]:hover,
+.navbar-primary-button:hover,
+.navbar-button-primary:hover,
+#header a[href="https://proofable.me/hub"]:hover,
+#header a[href*="proofable.me/hub"]:hover,
+#header a[href$="/hub"]:hover {
+  background: var(--proofable-accent-dim) !important;
+  background-color: var(--proofable-accent-dim) !important;
+  background-image: none !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+#topbar-cta-button-wrapper,
+.navbar-primary-wrapper,
+.navbar-button-wrapper,
+#header div:has(> a[href="https://proofable.me/hub"]),
+#header div:has(> a[href*="proofable.me/hub"]),
+#header div:has(> a[href$="/hub"]),
+#header li:has(> a[href="https://proofable.me/hub"]),
+#header li:has(> a[href*="proofable.me/hub"]),
+#header li:has(> a[href$="/hub"]),
+#header span:has(> a[href="https://proofable.me/hub"]),
+#header span:has(> a[href*="proofable.me/hub"]),
+#header span:has(> a[href$="/hub"]),
+#header [class*="button"]:has(a[href*="proofable.me/hub"]),
+#header [class*="Button"]:has(a[href*="proofable.me/hub"]),
+#header [class*="primary"]:has(a[href*="proofable.me/hub"]) {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#topbar-cta-button::before,
+#topbar-cta-button::after,
+a#topbar-cta-button::before,
+a#topbar-cta-button::after,
+[data-testid="navbar-primary-button"]::before,
+[data-testid="navbar-primary-button"]::after,
+[data-testid="topbar-primary-button"]::before,
+[data-testid="topbar-primary-button"]::after,
+.navbar-primary-button::before,
+.navbar-primary-button::after,
+.navbar-button-primary::before,
+.navbar-button-primary::after,
+#topbar-cta-button-wrapper::before,
+#topbar-cta-button-wrapper::after,
+.navbar-primary-wrapper::before,
+.navbar-primary-wrapper::after,
+.navbar-button-wrapper::before,
+.navbar-button-wrapper::after {
+  background: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+#topbar-cta-button *,
+a#topbar-cta-button *,
+[data-testid="navbar-primary-button"] *,
+[data-testid="topbar-primary-button"] *,
+.navbar-primary-button *,
+.navbar-button-primary *,
+#header a[href="https://proofable.me/hub"] *,
+#header a[href*="proofable.me/hub"] *,
+#header a[href$="/hub"] * {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: inherit !important;
+}
+
+#topbar-cta-button:focus-visible,
+a#topbar-cta-button:focus-visible,
+[data-testid="navbar-primary-button"]:focus-visible,
+[data-testid="topbar-primary-button"]:focus-visible,
+#header a[href="https://proofable.me/hub"]:focus-visible,
+#header a[href*="proofable.me/hub"]:focus-visible,
+#header a[href$="/hub"]:focus-visible {
+  outline: 2px solid rgb(191 219 254 / 0.6) !important;
+  outline-offset: 2px !important;
+}
+
+.card-group {
+  width: 100% !important;
+  max-width: 100% !important;
+  gap: 1rem !important;
+}
+
+@media (min-width: 640px) {
+  .card-group {
+    grid-template-columns: repeat(var(--cols, 1), minmax(0, 1fr)) !important;
+  }
+}
+
+/*
+  Mintlify .card → Proofable app-card treatment:
+  canonical graphite pane: flat tonal separation, faint neutral hairline, no sheen, no glint.
+*/
+.card,
+.card-group .card {
+  position: relative !important;
+  isolation: isolate !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 8.5rem !important;
+  height: auto !important;
+  overflow: hidden !important;
+  padding: 1.25rem 1.25rem !important;
+  border: none !important;
+  border-radius: var(--proofable-radius-card) !important;
+  background: var(--proofable-surface-glass) !important;
+  box-shadow: var(--proofable-shadow-glass) !important;
+  transition: background 300ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.card::before,
+.card-group .card::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  opacity: 0.42 !important;
+  background:
+    linear-gradient(
+      135deg,
+      var(--proofable-glass-sheen-1) 0%,
+      transparent 30%,
+      var(--proofable-glass-sheen-2) 60%,
+      transparent 100%
+    ),
+    radial-gradient(90% 80% at 20% 0%, rgba(90, 90, 90, 0.18) 0%, transparent 72%) !important;
+}
+
+/* Hover highlight, gray only (Proofable color contract: Arctic is scarce; no accent wash on cards). */
+.card::after,
+.card-group .card::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  opacity: 0 !important;
+  background: linear-gradient(
+    135deg,
+    rgba(90, 90, 90, 0.14) 0%,
+    transparent 38%,
+    rgba(90, 90, 90, 0.06) 100%
+  ) !important;
+  transition: opacity 300ms ease !important;
+}
+
+.card > *,
+.card-group .card > * {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+/*
+  Mintlify paints card icons with theme --primary (blue).
+  Force muted graphite on every SVG/path/icon layer.
+*/
+.card svg,
+.card-group .card svg,
+.card svg *,
+.card-group .card svg *,
+.card i,
+.card-group .card i,
+.card [class*="icon"],
+.card-group .card [class*="icon"],
+.card .text-primary,
+.card-group .card .text-primary,
+.card [class*="text-primary"],
+.card-group .card [class*="text-primary"],
+.card [style*="color"],
+.card-group .card [style*="color"] {
+  color: var(--proofable-text-muted) !important;
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+.card:hover svg,
+.card-group .card:hover svg,
+.card:hover svg *,
+.card-group .card:hover svg *,
+.card:hover i,
+.card-group .card:hover i,
+.card:hover [class*="icon"],
+.card-group .card:hover [class*="icon"] {
+  color: var(--proofable-text-secondary) !important;
+}
+
+.card code,
+.card-group .card code {
+  color: var(--proofable-text-secondary) !important;
+  background: rgb(var(--proofable-rgb-surface-card-hover) / 0.8) !important;
+  border-color: var(--proofable-border-faint) !important;
+}
+
+.card h2,
+.card h3,
+.card p,
+.card-group .card h2,
+.card-group .card h3,
+.card-group .card p {
+  overflow: visible !important;
+  white-space: normal !important;
+  word-break: normal !important;
+}
+
+.card,
+.card-group .card,
+a.card,
+a.card:hover {
+  color: var(--proofable-text-primary) !important;
+  text-decoration: none !important;
+}
+
+.card h2,
+.card h3,
+.card-group .card h2,
+.card-group .card h3,
+.card a,
+.card-group .card a {
+  font-size: var(--proofable-text-title-sm) !important;
+  font-weight: var(--proofable-weight-heading) !important;
+  line-height: 1.35 !important;
+  color: var(--proofable-text-primary) !important;
+  text-decoration: none !important;
+}
+
+.card p,
+.card [data-as="p"],
+.card [data-component-part="card-content"],
+.card [data-component-part="card-content"] *,
+.card-group .card p,
+.card-group .card [data-as="p"],
+.card-group .card [data-component-part="card-content"],
+.card-group .card [data-component-part="card-content"] * {
+  font-size: var(--proofable-text-body-sm) !important;
+  line-height: 1.5 !important;
+  color: var(--proofable-text-secondary) !important;
+}
+
+.card:hover,
+.card-group .card:hover {
+  background: linear-gradient(
+    180deg,
+    rgb(var(--proofable-rgb-surface-rail) / 0.86) 0%,
+    rgb(var(--proofable-rgb-surface-card) / 0.48) 42%,
+    rgb(var(--proofable-rgb-surface-rail) / 0.64) 100%
+  ) !important;
+  border: none !important;
+  box-shadow: var(--proofable-shadow-glass) !important;
+}
+
+.card:hover::after,
+.card-group .card:hover::after {
+  opacity: 0.4 !important;
+}
+
+.card-group.cols-2 > div:only-child,
+.card-group[data-cols="2"] > div:only-child,
+.card-group.grid-cols-2 > div:only-child {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 639px) {
+  .card-group {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/*
+  Mobile docs shell (NEU-262).
+  Mintlify keeps a fixed two-row header (logo row + hamburger/title chip).
+  The chip duplicated the H1 and overflowed; the drawer used a 3rem negative
+  bleed that clipped nav labels. Keep one readable header, a full-height
+  overlay drawer, and contain tables/code so they cannot escape the viewport.
+*/
+@media (max-width: 1023px) {
+  html {
+    overflow-x: clip;
+  }
+
+  #navbar img.nav-logo {
+    height: 2rem !important;
+    width: 2rem !important;
+    min-width: 2rem !important;
+    max-width: 2rem !important;
+    max-height: 2rem !important;
+  }
+
+  #navbar .flex.items-center.lg\:px-12.h-16,
+  #navbar .flex.items-center.h-16 {
+    height: 3rem !important;
+    min-height: 3rem !important;
+    max-height: 3rem !important;
+  }
+
+  #navbar .flex.items-center.h-16 .border-b,
+  #navbar .h-16 [class*="border-b"] {
+    border-bottom-width: 0 !important;
+  }
+
+  #navbar button.h-14.lg\:hidden,
+  #navbar button.flex.items-center.h-14 {
+    height: 2.75rem !important;
+    min-height: 2.75rem !important;
+    max-height: 2.75rem !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-width: 0 !important;
+  }
+
+  #navbar button.h-14 .ml-4 {
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* Keep the current tab name; hide the duplicated page title that truncated over the H1. */
+  #navbar button.h-14 .ml-4 > :first-child {
+    min-width: 0 !important;
+    max-width: calc(100vw - 7.5rem) !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  #navbar button.h-14 .ml-4 > :not(:first-child) {
+    display: none !important;
+  }
+
+  #navbar button.h-14 .ml-4 svg {
+    display: none !important;
+  }
+
+  #content-container > .flex.flex-row-reverse {
+    padding-top: 6.25rem !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  #content-area,
+  #content,
+  .mdx-content,
+  #header,
+  #header-content {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  #page-title,
+  .mdx-content h1 {
+    font-size: var(--proofable-text-display-sm) !important;
+    line-height: 1.25 !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+    max-width: 100% !important;
+  }
+
+  .mdx-content h2 {
+    font-size: var(--proofable-text-title-md) !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .mdx-content pre,
+  .mdx-content pre code,
+  .mdx-content .code-block {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+  }
+
+  .mdx-content table {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #header,
+  #header-content,
+  nav[aria-label="breadcrumb"] {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .mdx-content img,
+  .mdx-content video,
+  .mdx-content iframe {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  #mobile-nav {
+    left: 0 !important;
+    right: auto !important;
+    inset-inline-start: 0 !important;
+    margin-left: 0 !important;
+    transform: none !important;
+    width: min(20rem, calc(100vw - 3.5rem)) !important;
+    max-width: min(20rem, calc(100vw - 3.5rem)) !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    padding-top: env(safe-area-inset-top, 0px) !important;
+    background: rgb(5 5 5 / 0.98) !important;
+    border-right: 1px solid var(--proofable-border-faint) !important;
+    box-sizing: border-box !important;
+  }
+
+  #mobile-nav [aria-label="Close navigation"] {
+    position: absolute !important;
+    left: auto !important;
+    right: 0.75rem !important;
+    top: calc(0.75rem + env(safe-area-inset-top, 0px)) !important;
+    margin: 0 !important;
+  }
+
+  #mobile-nav a,
+  #mobile-nav button {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow-wrap: anywhere !important;
+    white-space: normal !important;
+  }
+}
+
+::selection {
+  background: rgb(var(--proofable-rgb-accent-primary) / 0.32);
+  color: var(--proofable-text-primary);
+}
+
+html {
+  scrollbar-color: rgba(152, 192, 239, 0.16) transparent;
+  scrollbar-width: thin;
+}
+
+@media (min-width: 1280px) {
+  #content-area {
+    flex: 1 1 auto !important;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    180deg,
+    rgba(152, 192, 239, 0.18) 0%,
+    rgba(152, 192, 239, 0.1) 100%
+  );
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(152, 192, 239, 0.28) 0%,
+    rgba(152, 192, 239, 0.16) 100%
+  );
+}
+
+
+img.proofable-how-it-works-diagram {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+img.proofable-docs-flow-diagram {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 16px;
+}

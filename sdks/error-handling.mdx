@@ -1,0 +1,61 @@
+---
+title: SDK error handling
+sidebarTitle: Error handling
+description: Retry and recovery for polling, private reads, hosted flows, and failed checks.
+icon: triangle-exclamation
+---
+
+## When things fail
+
+| Class | Fix |
+|-------|-----|
+| Validation | Fix request shape |
+| Interactive | Hosted `/verify` or VerifyGate |
+| Async | Poll with backoff |
+| Private read | Owner auth, retry |
+| Transient | Backoff; `Retry-After` |
+
+## Error classes
+
+All SDK errors extend `SDKError` and carry a `.code` and `.details`. Import them from `@proofable/sdk`:
+
+| Class | `isRetryable` | Use it for |
+|-------|---------------|------------|
+| `ApiError` | `true` on 5xx / 429 | HTTP failures. Also has `.statusCode`, `.isClientError`, `.isServerError`, `.response` |
+| `ValidationError` | `false` | Bad request shape. Has `.field`, `.value` |
+| `NetworkError` | `true` | Transport / DNS / timeout |
+| `ConfigurationError` | `false` | Missing/invalid client config. Has `.configKey` |
+| `VerificationError` | `true` | Verifier failure. Has `.verifierId` |
+| `AuthenticationError` | `false` | Owner/session/key not allowed |
+
+```javascript
+import { ApiError } from '@proofable/sdk';
+
+try {
+  await client.gateCheck({ gateId: 'gate_your-app-name', address });
+} catch (error) {
+  if (error instanceof ApiError && error.isRetryable) {
+    // back off and retry (5xx / 429)
+  } else if (error.code === 'VALIDATION_ERROR') {
+    // fix the request and do not retry
+  }
+}
+```
+
+## Polling Example
+
+```javascript
+const final = await client.pollProofStatus(qHash, {
+  interval: 3000,
+  timeout: 60000
+});
+```
+
+## Private Proof Read Example
+
+```javascript
+const privateData = await client.getPrivateProof(qHash, window.ethereum);
+```
+
+- Don't loop-create on ambiguous errors. Keep stored qHashes for resume.
+- Say when a hosted step is required. Avoid generic "error" only.

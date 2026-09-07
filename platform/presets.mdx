@@ -1,0 +1,79 @@
+---
+title: Presets
+description: "Hosted-verify shortcuts: pick one verifier, several verifiers, or a ready-made bundle."
+icon: layer-group
+---
+
+Hosted Verify accepts the verifiers you want directly in the URL. Three ways, simplest first.
+
+## One verifier
+
+Use `?verifiers=<id>` (or `?preset=<id>` for the same result with a single verifier). Prefer account and hosted verification for most products:
+
+```text
+https://proofable.me/verify?verifiers=ownership-social&returnUrl=https://myapp.com/callback
+```
+
+Other high-value single verifiers: `ownership-org-oauth` (work account), `proof-of-human`, `ownership-dns-txt`, `agent-identity`. Wallet-bound verifiers (`ownership-basic`, `nft-ownership`, `token-holding`, `wallet-risk`, …) remain available when your listing needs them. Full list: [Verifiers](../verification/verifiers).
+
+## Several verifiers
+
+Combine verifiers with a comma. This is the recommended way to run more than one:
+
+```text
+https://proofable.me/verify?verifiers=ownership-social,proof-of-human
+```
+
+Agent delegation example:
+
+```text
+https://proofable.me/verify?verifiers=agent-identity,agent-delegation
+```
+
+## Ready-made bundles
+
+A few named bundles resolve for convenience and older links:
+
+| Bundle | Verifiers |
+|--------|--------|
+| `agent-pack` | `agent-identity`, `agent-delegation`, `wallet-risk` |
+| `workspace-pack` | `ownership-social`, `ownership-basic`, `agent-identity`, `wallet-link` |
+| `project-pack` | `contract-ownership`, `ownership-dns-txt` |
+| `creator-pack` | `ownership-basic`, `ai-content-moderation` |
+
+```text
+https://proofable.me/verify?preset=agent-pack&returnUrl=https://myapp.com/callback
+```
+
+For any other combination, use `?verifiers=` with the ids you need.
+
+Add `returnUrl`, `mode=popup`, or `origin` as needed. Do not combine a preset with `gateId`; a published gate owns its verifier policy.
+
+## SDK
+
+```javascript
+import { getHostedCheckoutUrl } from '@proofable/sdk';
+
+// Account / hosted verification (typical apps)
+getHostedCheckoutUrl({ verifiers: ['ownership-social'], returnUrl: 'https://myapp.com/callback' });
+
+// Agent permissions
+getHostedCheckoutUrl({ verifiers: ['agent-identity', 'agent-delegation'], returnUrl: 'https://myapp.com/callback' });
+
+// Named bundle
+getHostedCheckoutUrl({ preset: 'agent-pack', returnUrl: 'https://myapp.com/callback' });
+```
+
+## Related
+
+<CardGroup cols={2}>
+ <Card title="Hosted Verify" icon="key" href="../cookbook/auth-hosted-verify">
+ Params + popup.
+ </Card>
+ <Card title="Verifiers" icon="list-tree" href="../verification/verifiers">
+ Every verifier you can run.
+ </Card>
+ <Card title="Sell access" icon="building" href="../quickstart">
+  Set verifiers and price once, embed one link.
+ </Card>
+</CardGroup>

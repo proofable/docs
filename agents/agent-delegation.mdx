@@ -1,0 +1,176 @@
+---
+title: Agent authority
+sidebarTitle: Authority
+description: Grant an agent specific actions, a spend cap, and an expiration.
+icon: handshake
+---
+
+Set spend and action limits for an agent. A signed-in-profile agent can act after identity is on file. A separate spend account also needs this permission record.
+
+The record shows who approved the agent, what it may do, how much it may spend, and when access expires.
+
+**Verifier ID:** `agent-delegation`
+
+**`controllerWallet`** is the approving account, the address that signs this step. See [Agent concepts](./concepts).
+
+## Setup
+
+<Steps>
+  <Step title="Check">
+    **`proofable_context`** → **`proofable_agent_link`**
+  </Step>
+  <Step title="Create">
+    **`proofable_agent_create`**. Leave out **`controllerWallet`** when the signed-in profile account should approve.
+  </Step>
+  <Step title="Confirm">
+    **`proofable_agent_link`** until **`linked: true`**
+  </Step>
+</Steps>
+
+Or finish on Proofable via [hosted verify](../cookbook/auth-hosted-verify).
+
+## SDK
+
+```javascript
+await client.verify({
+  verifier: 'agent-delegation',
+  data: {
+    controllerWallet: '0x...',
+    controllerChainRef: 'eip155:8453',
+    agentWallet: '0x...',
+    agentChainRef: 'eip155:8453',
+    scope: 'global',
+    allowedActions: ['read_proofs'],
+  },
+  walletAddress: '0x...',
+});
+```
+
+Both accounts need a CAIP-2 network reference (`controllerChainRef`, `agentChainRef`) unless the request already includes `chain` or `chainId`.
+
+## App link
+
+One-time user approval lets your backend create proofs without asking for a signature on every request. This is different from creating a **listing** in your profile for hosted verification. See [Integrations](../cookbook/integrations).
+
+1. User signs in on Proofable
+2. User approves the permissions once
+3. Your app stores the proof ID in **`qHash`**
+4. Your backend calls verification with **`x-neus-app`**. No per-request signature
+
+```javascript
+await client.verify({
+  verifier: 'agent-delegation',
+  data: {
+    controllerWallet: userWallet,
+    agentWallet: userWallet,
+    scope: 'app-link',
+    permissions: [
+      'app:your-app-id',
+      'origin:https://yourapp.com',
+    ],
+    expiresAt: Date.now() + 90 * 24 * 60 * 60 * 1000,
+  },
+  walletAddress: userWallet,
+});
+```
+
+**Permissions:**
+- `app:<appId>`: matches your `x-neus-app` header
+- `origin:<url>`: restrict to your domain
+- `origin:*`: any origin
+
+Send `x-neus-app: your-app-id` and matching site origin on verification requests. On Node, set `appOrigin: 'https://yourapp.com'` on `ProofableClient` (or pass `Origin` via `extraHeaders`).
+
+## Payment limits
+
+`maxSpend` is a whole-number string in token base units. For USDC (6 decimals), 25 USDC = `"25000000"`. Use `toAgentDelegationMaxSpend('25', 6)` from `@proofable/sdk`.
+
+When `scope: "payments:x402"` and `allowedPaymentTypes: ["x402"]` are set, the agent can settle metered API calls via x402 without a Proofable account. The calling application enforces the `maxSpend` cap client-side before signing each payment. The protocol does not decrement `maxSpend` server-side. When the cap is exhausted, the application stops signing payments and the agent is refused. See [x402 pay-per-call](../platform/x402) for the full settlement flow.
+
+```javascript
+import { toAgentDelegationMaxSpend } from '@proofable/sdk';
+
+await client.verify({
+  verifier: 'agent-delegation',
+  data: {
+    controllerWallet: '0x...',
+    agentWallet: '0x...',
+    scope: 'payments:x402',
+    allowedActions: ['execute_payments', 'read_proofs'],
+    maxSpend: toAgentDelegationMaxSpend('100.50', 6),
+    allowedPaymentTypes: ['x402'],
+    receiptDisclosure: 'summary',
+    expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000,
+  },
+  walletAddress: '0x...',
+});
+```
+
+## Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `controllerWallet` | Yes | Approving account (must match signer) |
+| `controllerChainRef` | Yes* | CAIP-2 chain for the controller wallet. *Optional if the request supplies `chain` or `chainId` |
+| `agentWallet` | Yes | Agent address |
+| `agentChainRef` | Yes* | CAIP-2 chain for the agent wallet. *Optional if the request supplies `chain` or `chainId` |
+| `agentId` | No | Linked identity id |
+| `scope` | No | Permission scope (default: `global`) |
+| `permissions` | No | App-link scope tags (e.g. `app:<id>`, `origin:<url>`). For action allow/deny lists, use `allowedActions`/`deniedActions` instead. |
+| `allowedActions` | No | Explicit action allowlist |
+| `deniedActions` | No | Explicit action denylist |
+| `maxSpend` | No | Spend cap in token base units |
+| `allowedPaymentTypes` | No | Payment rails (e.g. `x402`) |
+| `receiptDisclosure` | No | `summary`, `full`, or `none` |
+| `expiresAt` | No | Expiration (Unix ms) |
+| `instructions` | No | Policy text (16000 chars) |
+| `skills` | No | Up to 48 skill objects |
+| `runtimePolicy` | No | Provider/model limits and human-approval requirement |
+| `approvalPolicy` | No | Approval requirements for new claims or content |
+
+The protocol accepts bounded action strings in **`allowedActions`** and **`deniedActions`**. `deniedActions` always wins over `allowedActions`. Use **`permissions`** only for app-link scope tags (`app:<id>`, `origin:<url>`).
+
+## Human approval pattern
+
+Your application enforces the limits recorded in the permission proof:
+
+```javascript
+const permissions = {
+  controllerWallet,
+  agentWallet,
+  agentId: 'data-analyst',
+  scope: 'global',
+  allowedActions: ['read_data', 'draft_report'],
+  deniedActions: ['send_message', 'approve_payment'],
+  runtimePolicy: {
+    requiresHumanApproval: true,
+  },
+  approvalPolicy: {
+    humanApprovalRequiredForNewClaims: true,
+    preApprovedContentOnly: true,
+  },
+  maxSpend: '15000000',
+  expiresAt: Date.now() + 30 * 24 * 60 * 60 * 1000,
+};
+```
+
+At runtime:
+
+1. Check the current permission proof before the tool call.
+2. Apply **`deniedActions`** first.
+3. Pause when the policy requires human approval.
+4. Continue only after approval is confirmed.
+
+Schema: [`agent-delegation.json`](https://github.com/proofable/network/blob/main/docs/verifiers/schemas/agent-delegation.json).
+
+## Result
+
+A proof ID returned in **`qHash`**. Read that exact record with **`proofable_proofs_get`**. Use **`proofable_proofs_check`** only when you need a yes/no eligibility decision before an action.
+
+## Revoke
+
+```javascript
+await client.revokeOwnProof(qHash, walletAddress);
+```
+
+Set **`expiresAt`** and **`maxSpend`** when money or high-risk actions are in scope.

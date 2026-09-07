@@ -1,0 +1,108 @@
+---
+title: Agent identity
+sidebarTitle: Identity
+description: Give an agent a name on your profile. Identity alone grants no extra spend power.
+icon: id-card
+---
+
+Create or import an agent identity linked to your profile.
+
+**Verifier ID:** `agent-identity`
+
+Listed `skills` are metadata only. They do not install MCP servers.
+
+## Setup
+
+<Steps>
+  <Step title="Check">
+    Call **`proofable_context`**, then **`proofable_agent_link`** with **`agentId`** and the agent account. If **`linked: true`**, you are done.
+  </Step>
+  <Step title="Create or import">
+    Call **`proofable_agent_create`** with a stable **`agentId`**. Omit **`agentWallet`** to use your profile, or set it to **`"generate"`** for a dedicated key. Follow the returned **`next_action`**.
+  </Step>
+  <Step title="Confirm">
+    Call **`proofable_agent_link`** again until **`linked: true`**.
+  </Step>
+</Steps>
+
+```json
+{ "agentId": "my-assistant" }
+```
+
+**`agentWallet: "generate"`** returns the dedicated key once. Store it in Vault or your key manager. Proofable does not keep it.
+
+[Agent create](../mcp/agent-create) and [Agent verification flow](./agent-verification-flow)
+
+## SDK
+
+For server-side or custom signing:
+
+```javascript
+import { ProofableClient } from '@proofable/sdk';
+
+const client = new ProofableClient({ apiUrl: 'https://api.proofable.me' });
+
+await client.verify({
+  verifier: 'agent-identity',
+  data: {
+    agentId: 'my-assistant',
+    agentWallet: '0x...',
+    agentChainRef: 'eip155:8453',
+    agentType: 'ai',
+    description: 'My AI assistant',
+  },
+  walletAddress: '0x...',
+});
+```
+
+The agent wallet signs this proof, so `agentChainRef` (CAIP-2, e.g. `eip155:8453`) is required unless your request already carries `chain` or `chainId`.
+
+With optional metadata:
+
+```javascript
+await client.verify({
+  verifier: 'agent-identity',
+  data: {
+    agentId: 'my-agent',
+    agentWallet: '0x...',
+    agentType: 'ai',
+    description: 'My AI assistant',
+    capabilities: { search: true, mcp: true },
+    instructions: 'Operating instructions (max 16000 chars)',
+    skills: [{ id: 'web-search', kind: 'mcp' }],
+    services: [{ name: 'metrics', endpoint: 'https://metrics.example.com/v1', version: '1.0' }],
+  },
+  walletAddress: '0x...',
+});
+```
+
+Or use [hosted verify](../cookbook/auth-hosted-verify).
+
+## Fields
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `agentId` | Yes | Unique id (1–128 chars) |
+| `agentWallet` | Yes | Agent wallet address in that chain's native format |
+| `agentChainRef` | Yes* | CAIP-2 chain for the agent wallet (e.g. `eip155:8453`). *Optional if the request supplies `chain` or `chainId` |
+| `agentLabel` | No | Display name |
+| `agentType` | No | `ai`, `bot`, `service`, `automation`, or `agent` |
+| `description` | No | Short description (500 chars) |
+| `capabilities` | No | Feature flags. See schema |
+| `instructions` | No | System prompt and policy (16000 chars) |
+| `skills` | No | Up to 48 skill objects (`id` required) |
+| `services` | No | Up to 16 endpoints (`name` + `endpoint`) |
+
+Full schema: [`agent-identity.json`](https://github.com/proofable/network/blob/main/docs/verifiers/schemas/agent-identity.json).
+
+## Result
+
+You get a proof **`qHash`**, signed by the agent address. This registers identity only. Add [`agent-delegation`](./agent-delegation) for permissions.
+
+## Check status
+
+```bash
+GET /api/v1/proofs/check?verifierIds=agent-identity&address=0x...
+```
+
+In MCP: use **`proofable_agent_link`** to confirm the linked agent, or **`proofable_proofs_get`** to read a known identity proof. **`proofable_proofs_check`** is only for yes/no eligibility.

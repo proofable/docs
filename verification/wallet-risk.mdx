@@ -1,0 +1,37 @@
+---
+title: Wallet risk
+sidebarTitle: Wallet risk
+description: Screen a wallet before payments, access, or high-value actions.
+icon: chart-line
+---
+
+**Verifier ID:** `wallet-risk`
+
+## Use cases
+
+- Payment flows
+- Fraud checks
+- High-risk onboarding
+
+## Flow type
+
+Lookup. Proofable checks wallet risk through an external provider.
+
+## Required Fields
+
+| Field | Required | Notes |
+|------|----------|-------|
+| `walletAddress` | Yes | Wallet to assess |
+| `provider` | No | Example: `webacy` |
+| `chain` or `chainId` | No | Chain context: `eth`, `base`, `bsc`, `pol`, `opt`, `arb`, `sol`, `ton`, `sei`, `sui`, `btc`, `stellar` |
+
+## Example
+
+```json
+{
+  "walletAddress": "0x...",
+  "chain": "base"
+}
+```
+
+Full schema: [`wallet-risk.json`](https://github.com/proofable/network/blob/main/docs/verifiers/schemas/wallet-risk.json).

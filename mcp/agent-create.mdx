@@ -1,0 +1,130 @@
+---
+title: Agent Create (`proofable_agent_create`)
+description: Create or import an agent on your profile. Optional separate spend account and controls.
+icon: robot
+---
+
+Create or import an agent linked to your Proofable profile. Default is your signed-in account. Add a separate spend account and limits only when you need them.
+
+Fastest dedicated key: set **`agentWallet`** to **`"generate"`**. Store the returned key once. Proofable does not keep it.
+
+| Step | Action |
+|------|--------|
+| 1 | **`proofable_agent_link`** with **`agentId`** and **`agentWallet`** (use the signed-in account from **`proofable_context`** unless you already have a dedicated key) |
+| 2 | **`proofable_agent_create`** with the same stable identifiers |
+| 3 | Follow the returned **`next_action`** exactly |
+| 4 | **`proofable_agent_link`** until **`linked: true`** |
+
+Leave out **`controllerWallet`** when the signed-in account from **`proofable_context`** should own the agent.
+
+Ask:
+
+> Create or import an agent on my Proofable profile. Use generate if I need a separate spend account. Set spend and action limits. Then confirm it is ready.
+
+[Agent concepts](../agents/concepts)
+
+## Account options
+
+### Signed-in profile (default)
+
+Omit **`agentWallet`**. The agent lives on your signed-in account. Identity is enough. Several agents on one account need **`agentId`** on every link and mount call.
+
+### Dedicated key (`generate`)
+
+**`agentWallet: "generate"`** creates a separate spend account and returns the private key once. Store it in Vault (`proofable_secret_create`) or your own key manager before you continue.
+
+```json
+{
+  "agentId": "data-analyst",
+  "agentWallet": "generate",
+  "delegationAllowedActions": ["read_context", "read_proofs"],
+  "delegationDeniedActions": ["send_message"],
+  "delegationRuntimePolicy": { "requiresHumanApproval": true },
+  "maxSpend": "15000000"
+}
+```
+
+Use this when you want independent spend, revocation, or offboarding without bringing a key of your own.
+
+### Bring your own account
+
+Pass an existing **`agentWallet`**. The agent account signs identity. The approving profile signs spend and action limits.
+
+```json
+{
+  "agentId": "data-analyst",
+  "agentWallet": "0xAgent...",
+  "delegationAllowedActions": ["read_context", "read_proofs"],
+  "delegationDeniedActions": ["send_message"],
+  "delegationRuntimePolicy": { "requiresHumanApproval": true },
+  "maxSpend": "15000000",
+  "expiresAt": 1798761600000,
+  "returnUrl": "https://app.example.com/agents/callback"
+}
+```
+
+When the signed-in account does not control that key:
+
+1. Sign and submit the returned identity step with the agent key.
+2. Repeat **`proofable_agent_create`** unchanged.
+3. The approving account completes permissions in-session or through the returned hosted URL.
+
+A controller session cannot self-attest for a different agent account, so identity always comes first.
+
+## What each result means
+
+Every non-validation result includes **`path`** and **`next_action`**.
+
+| `path` | Meaning | `next_action` |
+|--------|---------|---------------|
+| `already_linked` | Identity and the permissions this account needs already exist | `ready` |
+| `session_auto_complete` | Signed-in session completed the missing step(s) | `call_proofable_agent_link` |
+| `signatures_required` | A signature is still required | `submit_remaining_signatures` |
+| `hosted_required` | Browser handoff is required | `open_hosted_verify` |
+| `payment_required` | The account paying for the current step needs more credits | `complete_billing_then_retry` |
+
+**`sessionProgress.identityComplete`**, **`delegationRequired`**, and **`delegationComplete`** show which step is required and already saved. On **`payment_required`**, add credits and retry the same request. This is an account billing requirement, not a signature failure.
+
+## Hosted callback
+
+Use the SDK helper instead of assembling query strings:
+
+```javascript
+import { getHostedAgentCreateUrl } from '@proofable/sdk';
+
+const url = getHostedAgentCreateUrl({
+  agentId: 'data-analyst',
+  agentWallet,
+  controllerWallet,
+  identityQHash, // required here because the accounts differ
+  allowedActions: ['read_context', 'read_proofs'],
+  deniedActions: ['send_message'],
+  runtimePolicy: { requiresHumanApproval: true },
+  returnUrl: 'https://app.example.com/agents/callback',
+});
+```
+
+With **`identityQHash`**, Hosted Verify requests only permissions. The callback receives the new permission **`qHash`**, **`agentId`**, and **`agentWallet`**. Keep the identity **`qHash`** from step 1.
+
+Do not combine agent creation with **`gateId`** or **`intent=login`** on one URL:
+
+- Login: **`intent=login&returnUrl=...`**
+- Gate checkout: **`gateId=...&returnUrl=...`**
+- Agent setup: **`getHostedAgentCreateUrl(...)`**
+
+## Billing
+
+Billing follows the signer for each proof unless a validated sponsor or pay-per-call proof overrides it:
+
+- Agent identity: the **agent account** pays.
+- Permissions (separate spend account only): the **approving profile** pays.
+- Hosted completion: the signed-in account pays for the step it signs.
+- Sponsor grant or pay-per-call: the validated sponsor/caller pays.
+
+Hosted sign-in itself is free. See [Billing](../platform/billing).
+
+Optional fields include **`instructions`**, **`skills`**, **`services`**, scope, expiry, spend cap, runtime policy, approval policy, and allowed/denied actions. See [Agent identity](../agents/agent-identity) and [Agent delegation](../agents/agent-delegation).
+
+## Related
+
+[Auth](./auth), [Agent link](./agent-link), [Overview](./overview), [Agent setup](../agents/agent-verification-flow)

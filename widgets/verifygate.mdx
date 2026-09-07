@@ -1,0 +1,91 @@
+---
+title: VerifyGate
+sidebarTitle: VerifyGate
+description: Drop-in checkout for a published Proofable gate.
+icon: object-group
+---
+
+`VerifyGate` checks eligibility, opens **Hosted Verify** when a new check is needed, then renders your protected content. The default path is a **published gate**, not a manual check list.
+
+## Quickstart
+
+1. In [your profile → Listings](https://proofable.me/profile?tab=portals), create a listing and choose the checks visitors must pass.
+2. Publish the gate and copy your **checkout link** or **embed snippet**.
+3. Paste the embed in your app, or send users to the hosted link.
+4. Optionally run `gateCheck` on your server before granting access.
+
+```jsx
+import { VerifyGate } from '@proofable/sdk/widgets';
+
+export function Page() {
+  return (
+    <VerifyGate gateId="gate_your-app-name">
+      <div>Unlocked</div>
+    </VerifyGate>
+  );
+}
+```
+
+```js
+import { getHostedCheckoutUrl } from '@proofable/sdk';
+
+const url = getHostedCheckoutUrl({
+  gateId: 'gate_your-app-name',
+  returnUrl: 'https://yourapp.com/continue',
+});
+```
+
+```js
+import { ProofableClient } from '@proofable/sdk';
+
+const client = new ProofableClient();
+const result = await client.gateCheck({
+  gateId: 'gate_your-app-name',
+  address: user.walletAddress,
+});
+```
+
+Billing and check policy come from the gate. You do not register an app or pass `billingWallet` for this path.
+
+## Key props
+
+| Prop | What it does |
+|------|--------------|
+| `gateId` | Published gate handle (default) |
+| `strategy` | Reuse, reuse-or-create, or fresh proofs |
+| `mode` | Create vs access behavior |
+| `qHash` | Existing proof for access mode |
+| `hostedCheckoutUrl` | Override hosted verify base URL |
+| `oauthProvider` | Pre-select social or org sign-in on hosted verify |
+| `wallet` | Optional signer for private proof reuse or access mode |
+
+## Default create behavior
+
+Create mode opens **Hosted Verify**. The published gate owns verifier inputs, pricing, and checkout policy.
+
+## Hosted OAuth
+
+Social, organization, and human checks use **[Hosted Verify](../cookbook/auth-hosted-verify)**. Set `oauthProvider` when the user already picked a provider in your app.
+
+Allowed values:
+
+- **Social:** `x`, `twitter`, `github`, `discord`, `facebook`, `linkedin`, `telegram`
+- **Org:** `google`, `microsoft`
+
+## Advanced server proofs
+
+For backend-created proofs after a one-time user approval, use the server-side `verifyFromApp` flow in [Integrations](../cookbook/integrations). Keep browser checkout on `gateId`.
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Gate checkout" icon="door-open" href="../platform/hosted-gate-checkout">
+    Server eligibility and paid gate checkout.
+  </Card>
+  <Card title="Start" icon="bolt" href="/">
+    Browser, server, and assistant paths.
+  </Card>
+  <Card title="SDK verifications" icon="list-check" href="../sdks/verifications">
+    Create and poll proofs from code.
+  </Card>
+</CardGroup>

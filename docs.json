@@ -1,0 +1,692 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "name": "Proofable",
+  "theme": "mint",
+  "logo": {
+    "light": "/images/proofable-mark-256.png",
+    "dark": "/images/proofable-mark-256.png",
+    "href": "https://proofable.me"
+  },
+  "favicon": "/images/proofable-mark.svg",
+  "colors": {
+    "primary": "#98C0EF",
+    "light": "#98C0EF",
+    "dark": "#98C0EF"
+  },
+  "appearance": {
+    "default": "dark",
+    "strict": true
+  },
+  "background": {
+    "color": {
+      "dark": "#050505"
+    }
+  },
+  "styling": {
+    "custom": "styles.css",
+    "eyebrows": "breadcrumbs",
+    "codeblocks": "dark"
+  },
+  "metadata": {
+    "timestamp": true
+  },
+  "icons": {
+    "library": "fontawesome"
+  },
+  "fonts": {
+    "body": {
+      "family": "Geist",
+      "weight": 400
+    },
+    "heading": {
+      "family": "Geist",
+      "weight": 600
+    }
+  },
+  "seo": {
+    "metatags": {
+      "theme-color": "#050505",
+      "color-scheme": "dark",
+      "description": "Build portable identity, proof, access, payments, and trusted agent workflows with Proofable SDK, MCP, API, and hosted verification.",
+      "og:title": "Proofable Docs | Portable Trust Infrastructure",
+      "og:description": "Build with Proofable SDK, MCP, API, hosted verification, reusable proofs, access rules, payments, and trusted agent workflows.",
+      "og:image": "https://docs.proofable.me/images/og-default.png",
+      "og:image:width": "1200",
+      "og:image:height": "630",
+      "og:type": "website",
+      "og:site_name": "Proofable Docs",
+      "twitter:card": "summary_large_image",
+      "twitter:title": "Proofable Docs | Portable Trust Infrastructure",
+      "twitter:description": "Build with Proofable SDK, MCP, API, hosted verification, reusable proofs, access rules, payments, and trusted agent workflows.",
+      "twitter:image": "https://docs.proofable.me/images/og-default.png"
+    }
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "GitHub",
+        "href": "https://github.com/proofable/docs"
+      },
+      {
+        "label": "Support",
+        "href": "https://github.com/proofable/docs/issues"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Start free",
+      "href": "https://proofable.me"
+    }
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Start",
+        "groups": [
+          {
+            "group": "Start",
+            "pages": [
+              "index",
+              "mcp/setup",
+              "agents/overview",
+              "cookbook/private-cloud-agents",
+              "quickstart"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Build",
+        "groups": [
+          {
+            "group": "Agents",
+            "pages": [
+              "agents/overview",
+              "cookbook/private-cloud-agents",
+              "agents/concepts",
+              "agents/team-agents",
+              "agents/agent-identity",
+              "agents/agent-delegation",
+              "agents/runtime-mount",
+              "agents/agent-verification-flow",
+              "agents/named-agent-card"
+            ]
+          },
+          {
+            "group": "Recipes",
+            "pages": [
+              "mcp/guarded-action",
+              "cookbook/overview",
+              "cookbook/integrations",
+              "cookbook/domain-verification",
+              "cookbook/nft-gating",
+              "cookbook/sybil-resistance",
+              "cookbook/verifiable-agents",
+              "cookbook/verified-handles",
+              "widgets/overview",
+              "widgets/verifygate"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Concepts",
+        "groups": [
+          {
+            "group": "Trust",
+            "pages": [
+              "verification/overview",
+              "verification/how-it-works",
+              "verification/lifecycle",
+              "verification/signing-format",
+              "learn/standards/index",
+              "learn/standards/caip-380",
+              "learn/proof-links",
+              "verification/verifiers",
+              "verification/propose-a-verifier",
+              {
+                "group": "Catalog",
+                "pages": [
+                  "verification/ownership-basic",
+                  "verification/ownership-social",
+                  "verification/ownership-dns-txt",
+                  "verification/ownership-org-oauth",
+                  "verification/ownership-pseudonym",
+                  "verification/wallet-link",
+                  "verification/nft-ownership",
+                  "verification/token-holding",
+                  "verification/contract-ownership",
+                  "verification/proof-of-human",
+                  "verification/wallet-risk",
+                  "verification/ai-content-moderation"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Reference",
+        "groups": [
+          {
+            "group": "MCP",
+            "pages": [
+              "mcp/overview",
+              "mcp/tools",
+              "mcp/oauth",
+              "mcp/auth",
+              "mcp/endpoints",
+              "platform/llm-docs",
+              "mcp/context",
+              "mcp/verifiers-catalog",
+              "mcp/proofs-check",
+              "mcp/verify",
+              "mcp/verify-or-guide",
+              "mcp/proofs-get",
+              "mcp/agent-link",
+              "mcp/agent-create",
+              "mcp/secrets"
+            ]
+          },
+          {
+            "group": "SDK",
+            "pages": [
+              "sdks/overview",
+              "sdks/cli",
+              "sdks/authentication",
+              "sdks/verifications",
+              "sdks/error-handling",
+              "sdks/security"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Platform",
+        "groups": [
+          {
+            "group": "Ecosystem",
+            "pages": [
+              "platform/overview",
+              "platform/proofs",
+              "cookbook/connector-integrations",
+              "platform/security-and-trust",
+              "whitepaper"
+            ]
+          },
+          {
+            "group": "Pricing & billing",
+            "pages": [
+              "platform/pricing",
+              "platform/billing",
+              "platform/hosted-gate-checkout",
+              "platform/x402",
+              "platform/rate-limits-and-retries"
+            ]
+          },
+          {
+            "group": "Legal",
+            "pages": [
+              "learn/legal/index",
+              "learn/legal/privacy-policy",
+              "learn/legal/terms-of-use",
+              "learn/legal/security-disclosure",
+              "learn/legal/dmca"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API",
+        "openapi": "openapi/public-api.json"
+      }
+    ]
+  },
+  "redirects": [
+    {
+      "source": "/integration",
+      "destination": "/cookbook/integrations"
+    },
+    {
+      "source": "/agents/a2a",
+      "destination": "/agents/named-agent-card"
+    },
+    {
+      "source": "/mcp/claude-code-marketplace",
+      "destination": "/mcp/setup"
+    },
+    {
+      "source": "/integrations",
+      "destination": "/"
+    },
+    {
+      "source": "/integrations/:path*",
+      "destination": "/"
+    },
+    {
+      "source": "/choose-an-integration-path",
+      "destination": "/"
+    },
+    {
+      "source": "/onboarding",
+      "destination": "/"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/learn/legal/privacy-policy"
+    },
+    {
+      "source": "/terms",
+      "destination": "/learn/legal/terms-of-use"
+    },
+    {
+      "source": "/legal",
+      "destination": "/learn/legal"
+    },
+    {
+      "source": "/learn/legal/nft-sale-terms",
+      "destination": "/learn/legal"
+    },
+    {
+      "source": "/mcp",
+      "destination": "/mcp/overview"
+    },
+    {
+      "source": "/mcp/default-instructions",
+      "destination": "/mcp/overview"
+    },
+    {
+      "source": "/mcp/authentication",
+      "destination": "/mcp/auth"
+    },
+    {
+      "source": "/learn/standards-and-eips",
+      "destination": "/learn/standards"
+    },
+    {
+      "source": "/standards",
+      "destination": "/learn/standards"
+    },
+    {
+      "source": "/verifiers",
+      "destination": "/verification/verifiers"
+    },
+    {
+      "source": "/verifiers/:path*",
+      "destination": "/verification/verifiers"
+    },
+    {
+      "source": "/overview",
+      "destination": "/"
+    },
+    {
+      "source": "/content/get-started/overview",
+      "destination": "/"
+    },
+    {
+      "source": "/content/get-started/quickstart",
+      "destination": "/quickstart"
+    },
+    {
+      "source": "/content/get-started/choose-an-integration-path",
+      "destination": "/"
+    },
+    {
+      "source": "/content/get-started/integration",
+      "destination": "/cookbook/integrations"
+    },
+    {
+      "source": "/content/get-started/brand-kit",
+      "destination": "https://proofable.me/brand"
+    },
+    {
+      "source": "/get-started/overview",
+      "destination": "/"
+    },
+    {
+      "source": "/get-started/quickstart",
+      "destination": "/quickstart"
+    },
+    {
+      "source": "/get-started/choose-an-integration-path",
+      "destination": "/"
+    },
+    {
+      "source": "/get-started/integration",
+      "destination": "/cookbook/integrations"
+    },
+    {
+      "source": "/get-started/brand-kit",
+      "destination": "https://proofable.me/brand"
+    },
+    {
+      "source": "/brand-kit",
+      "destination": "https://proofable.me/brand"
+    },
+    {
+      "source": "/get-started/examples",
+      "destination": "/"
+    },
+    {
+      "source": "/content/get-started/examples",
+      "destination": "/"
+    },
+    {
+      "source": "/http-api",
+      "destination": "/api/overview"
+    },
+    {
+      "source": "/http-api/overview",
+      "destination": "/api/overview"
+    },
+    {
+      "source": "/http-api/authentication",
+      "destination": "/api/authentication"
+    },
+    {
+      "source": "/http-api/errors",
+      "destination": "/api/errors"
+    },
+    {
+      "source": "/content/platform/overview",
+      "destination": "/platform/overview"
+    },
+    {
+      "source": "/content/platform/receipts-and-results",
+      "destination": "/platform/proofs"
+    },
+    {
+      "source": "/platform/hub",
+      "destination": "/quickstart"
+    },
+    {
+      "source": "/content/platform/hub",
+      "destination": "/quickstart"
+    },
+    {
+      "source": "/cookbook/hub-integrator",
+      "destination": "/quickstart"
+    },
+    {
+      "source": "/content/cookbook/hub-integrator",
+      "destination": "/quickstart"
+    },
+    {
+      "source": "/platform/setup",
+      "destination": "/quickstart"
+    },
+    {
+      "source": "/content/platform/billing",
+      "destination": "/platform/billing"
+    },
+    {
+      "source": "/content/platform/environments",
+      "destination": "/platform/overview"
+    },
+    {
+      "source": "/platform/environments",
+      "destination": "/platform/overview"
+    },
+    {
+      "source": "/content/platform/rate-limits-and-retries",
+      "destination": "/platform/rate-limits-and-retries"
+    },
+    {
+      "source": "/content/platform/security-and-trust",
+      "destination": "/platform/security-and-trust"
+    },
+    {
+      "source": "/content/sdks/overview",
+      "destination": "/sdks/overview"
+    },
+    {
+      "source": "/content/sdks/javascript",
+      "destination": "/sdks/javascript"
+    },
+    {
+      "source": "/content/sdks/authentication",
+      "destination": "/sdks/authentication"
+    },
+    {
+      "source": "/content/sdks/verifications",
+      "destination": "/sdks/verifications"
+    },
+    {
+      "source": "/content/sdks/error-handling",
+      "destination": "/sdks/error-handling"
+    },
+    {
+      "source": "/content/sdks/security",
+      "destination": "/sdks/security"
+    },
+    {
+      "source": "/content/widgets/overview",
+      "destination": "/widgets/overview"
+    },
+    {
+      "source": "/content/widgets/verifygate",
+      "destination": "/widgets/verifygate"
+    },
+    {
+      "source": "/content/agents/overview",
+      "destination": "/agents/overview"
+    },
+    {
+      "source": "/content/agents/concepts",
+      "destination": "/agents/concepts"
+    },
+    {
+      "source": "/content/agents/agent-identity",
+      "destination": "/agents/agent-identity"
+    },
+    {
+      "source": "/content/agents/agent-delegation",
+      "destination": "/agents/agent-delegation"
+    },
+    {
+      "source": "/content/agents/agent-verification-flow",
+      "destination": "/agents/agent-verification-flow"
+    },
+    {
+      "source": "/agents/proof-backed-artifacts",
+      "destination": "/cookbook/verifiable-agents"
+    },
+    {
+      "source": "/agents/runtime-standard",
+      "destination": "/mcp/overview"
+    },
+    {
+      "source": "/content/cookbook/overview",
+      "destination": "/cookbook/overview"
+    },
+    {
+      "source": "/content/cookbook/auth-hosted-verify",
+      "destination": "/cookbook/auth-hosted-verify"
+    },
+    {
+      "source": "/content/cookbook/domain-verification",
+      "destination": "/cookbook/domain-verification"
+    },
+    {
+      "source": "/content/cookbook/nft-gating",
+      "destination": "/cookbook/nft-gating"
+    },
+    {
+      "source": "/content/cookbook/sybil-resistance",
+      "destination": "/cookbook/sybil-resistance"
+    },
+    {
+      "source": "/content/cookbook/verifiable-agents",
+      "destination": "/cookbook/verifiable-agents"
+    },
+    {
+      "source": "/content/api/overview",
+      "destination": "/api/overview"
+    },
+    {
+      "source": "/content/api/authentication",
+      "destination": "/api/authentication"
+    },
+    {
+      "source": "/content/api/errors",
+      "destination": "/api/errors"
+    },
+    {
+      "source": "/content/ecosystems/overview",
+      "destination": "/"
+    },
+    {
+      "source": "/ecosystems/overview",
+      "destination": "/"
+    },
+    {
+      "source": "/ecosystems/verifiers",
+      "destination": "/verification/verifiers"
+    },
+    {
+      "source": "/content/ecosystems/verifiers",
+      "destination": "/verification/verifiers"
+    },
+    {
+      "source": "/cookbook/mcp",
+      "destination": "/mcp/overview"
+    },
+    {
+      "source": "/platform/how-verification-works",
+      "destination": "/verification/how-it-works"
+    },
+    {
+      "source": "/platform/verification-lifecycle",
+      "destination": "/verification/lifecycle"
+    },
+    {
+      "source": "/platform/signing-format",
+      "destination": "/verification/signing-format"
+    },
+    {
+      "source": "/platform/verifiers",
+      "destination": "/verification/verifiers"
+    },
+    {
+      "source": "/content/learn/legal/nft-sale-terms",
+      "destination": "/learn/legal"
+    },
+    {
+      "source": "/signing-format",
+      "destination": "/verification/signing-format"
+    },
+    {
+      "source": "/x402",
+      "destination": "/platform/x402"
+    },
+    {
+      "source": "/pricing",
+      "destination": "/platform/pricing"
+    },
+    {
+      "source": "/mcp/catalog",
+      "destination": "/mcp/verifiers-catalog"
+    },
+    {
+      "source": "/mcp/check",
+      "destination": "/mcp/proofs-check"
+    },
+    {
+      "source": "/mcp/proofs",
+      "destination": "/mcp/proofs-get"
+    },
+    {
+      "source": "/mcp/proofs-index",
+      "destination": "/mcp/proofs-get"
+    },
+    {
+      "source": "/mcp/proof-content",
+      "destination": "/mcp/proofs-get"
+    },
+    {
+      "source": "/learn-more",
+      "destination": "/"
+    },
+    {
+      "source": "/learn/manifesto",
+      "destination": "/"
+    },
+    {
+      "source": "/learn/support-and-contact",
+      "destination": "/"
+    },
+    {
+      "source": "/how-to-prove-whats-real",
+      "destination": "/verification/how-it-works"
+    },
+    {
+      "source": "/cookbook/server-advanced",
+      "destination": "/cookbook/integrations"
+    },
+    {
+      "source": "/install",
+      "destination": "/mcp/setup"
+    },
+    {
+      "source": "/mcp/ide-plugin",
+      "destination": "/mcp/setup"
+    },
+    {
+      "source": "/mcp/journeys",
+      "destination": "/mcp/guarded-action"
+    },
+    {
+      "source": "/get-started",
+      "destination": "/"
+    },
+    {
+      "source": "/examples",
+      "destination": "/"
+    },
+    {
+      "source": "/platform/status",
+      "destination": "/platform/overview"
+    },
+    {
+      "source": "/platform/receipts-and-results",
+      "destination": "/platform/proofs"
+    },
+    {
+      "source": "/cookbook/phala-dstack",
+      "destination": "/cookbook/private-cloud-agents"
+    },
+    {
+      "source": "/cookbook/confidential-agents",
+      "destination": "/cookbook/private-cloud-agents"
+    },
+    {
+      "source": "/learn/receipts-as-knowledge",
+      "destination": "/learn/proof-links"
+    }
+  ],
+  "contextual": {
+    "display": "toc",
+    "options": [
+      {
+        "title": "Connect Proofable",
+        "description": "One connection for chat, IDEs, listings, and proofs.",
+        "icon": "plug",
+        "href": "/mcp/setup"
+      },
+      {
+        "title": "Sell access",
+        "description": "Set checks and price, embed one link",
+        "icon": "rocket",
+        "iconType": "solid",
+        "href": "/quickstart"
+      },
+      "view"
+    ]
+  },
+  "footer": {
+    "socials": {
+      "x": "https://x.com/neusnetwork",
+      "github": "https://github.com/proofable"
+    }
+  }
+}

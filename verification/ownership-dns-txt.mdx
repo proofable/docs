@@ -1,0 +1,64 @@
+---
+title: Domain ownership
+sidebarTitle: Domain ownership
+description: Confirm domain control with a DNS TXT record on the account you control.
+icon: globe
+---
+
+**Verifier ID:** `ownership-dns-txt`
+
+## Use cases
+
+- verified website on your profile
+- team workspace and branded handles
+- public trust pages for domains
+
+## Flow Type
+
+Lookup. Proofable resolves DNS TXT at `_neus.<domain>` and compares it to the **account address** used for this verification (see below).
+
+## DNS record (what builders publish)
+
+Create a **TXT** record:
+
+- **Name / host:** `_neus` (effective lookup: `_neus.<your-domain>`, e.g. `_neus.example.com` if the apex is `example.com`).
+- **Value:** a single line starting with `wallet=` followed by the **same wallet or account address** Proofable uses when it runs this check.
+
+Supported shapes today:
+
+| Format | When it matches |
+|--------|------------------|
+| `wallet=<address>` | Default. `<address>` must match the wallet or account address Proofable uses for this proof. For **Ethereum**, use **lowercase** `0x` plus 40 hex digits in DNS. |
+| `wallet=eip155:<chainId>:<address>` | Only if the verification run supplies a numeric **`chainId`** in verifier options so this form is generated for the check. |
+
+Other prefixes (for example `neus=`) are **not** read by this verifier. Use **`wallet=`** only.
+
+**Other networks:** Use the address format for that network. Copy the value exactly as Proofable shows it. Some networks are case-sensitive. Do not retype the address.
+
+## Request `data` (API / SDK)
+
+| Field | In JSON Schema | What to know |
+|------|------------------|------------------------------|
+| `domain` | **Required** | Hostname to verify (apex or eTLD+1 style you control in DNS). |
+| `walletAddress` | **Optional** in `data` | **Still needed for a passing check:** the TXT line must match the **wallet or account address Proofable uses for this proof**. You may **omit** `walletAddress` inside `data` when the proof request already includes a verified **`walletAddress` at the request level** (signed flow); the service fills in the signer wallet before the DNS check. If you omit it **and** the request has no signer wallet, verification fails. If you **set** `walletAddress` in `data`, it must match the wallet that signs the proof (or follow your product's allowed delegation rules). Do not use someone else's address. |
+
+## Example
+
+Minimal `data` when the proof request carries the signer wallet (typical browser / server signing):
+
+```json
+{
+  "domain": "example.com"
+}
+```
+
+Explicit `data` (custom clients, tests, or when you want the payload self-describing):
+
+```json
+{
+  "domain": "example.com",
+  "walletAddress": "0x..."
+}
+```
+
+See also: [Domain verification cookbook](../cookbook/domain-verification), [JSON Schema](https://github.com/proofable/network/blob/main/docs/verifiers/schemas/ownership-dns-txt.json).

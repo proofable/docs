@@ -1,0 +1,215 @@
+{
+  "$id": "https://proofable.me/schemas/agent-delegation.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "description": "Grant an agent specific actions, limits, and an optional expiration date",
+  "properties": {
+    "agentAccountId": {
+      "description": "Optional CAIP-10 account identifier for agentWallet. May be injected when inputs are normalized from wallet + chain context.",
+      "format": "caip10-account",
+      "type": "string"
+    },
+    "agentChainRef": {
+      "description": "CAIP-2 network reference for agentWallet. Supply in data or on the verification request as chain (CAIP-2) or chainId (EVM).",
+      "format": "caip2-chain",
+      "type": "string"
+    },
+    "agentId": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "agentWallet": {
+      "format": "universal-address",
+      "type": "string"
+    },
+    "allowedActions": {
+      "description": "Explicit allowlist of canonical actions the agent may perform (e.g., [\"read_context\", \"read_proofs\", \"execute_jobs\"]). Owner-view-only: not included in public proof responses.",
+      "items": {
+        "maxLength": 128,
+        "type": "string"
+      },
+      "maxItems": 32,
+      "type": "array"
+    },
+    "allowedPaymentTypes": {
+      "items": {
+        "maxLength": 32,
+        "type": "string"
+      },
+      "maxItems": 8,
+      "type": "array"
+    },
+    "approvalPolicy": {
+      "additionalProperties": false,
+      "description": "Approval requirements for the delegated agent. Owner-view-only: not included in public proof responses.",
+      "properties": {
+        "humanApprovalRequiredForNewClaims": {
+          "description": "Whether the agent must get human approval before creating new proof claims on behalf of the controller.",
+          "type": "boolean"
+        },
+        "preApprovedContentOnly": {
+          "description": "Whether the agent may only publish content pre-approved by the controller.",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "controllerAccountId": {
+      "description": "Optional CAIP-10 account identifier for controllerWallet. May be injected when inputs are normalized from wallet + chain context.",
+      "format": "caip10-account",
+      "type": "string"
+    },
+    "controllerChainRef": {
+      "description": "CAIP-2 network reference for controllerWallet. Supply in data or on the verification request as chain (CAIP-2) or chainId (EVM).",
+      "format": "caip2-chain",
+      "type": "string"
+    },
+    "controllerWallet": {
+      "format": "universal-address",
+      "type": "string"
+    },
+    "deniedActions": {
+      "description": "Explicit denylist of action types the agent may NOT perform. Takes precedence over allowedActions and permissions. Owner-view-only: not included in public proof responses.",
+      "items": {
+        "maxLength": 128,
+        "type": "string"
+      },
+      "maxItems": 32,
+      "type": "array"
+    },
+    "expiresAt": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "instructions": {
+      "maxLength": 16000,
+      "type": "string"
+    },
+    "maxSpend": {
+      "description": "Maximum amount for one proposed payment, encoded as a whole-number string in token base units. This field is not a cumulative balance. USDC uses six decimal places.",
+      "pattern": "^[0-9]{1,78}$",
+      "type": "string"
+    },
+    "model": {
+      "description": "Preferred inference model label (backward compat; prefer runtimePolicy.allowedModelClasses for structured policy). Owner-view-only: not included in public proof responses.",
+      "maxLength": 128,
+      "type": "string"
+    },
+    "permissions": {
+      "items": {
+        "maxLength": 64,
+        "type": "string"
+      },
+      "maxItems": 32,
+      "type": "array"
+    },
+    "provider": {
+      "description": "Preferred inference provider label (backward compat; prefer runtimePolicy.allowedProviders for structured policy). Owner-view-only: not included in public proof responses.",
+      "maxLength": 64,
+      "type": "string"
+    },
+    "receiptDisclosure": {
+      "enum": [
+        "none",
+        "summary",
+        "full"
+      ],
+      "type": "string"
+    },
+    "runtimePolicy": {
+      "additionalProperties": false,
+      "description": "Runtime execution policy, security-authoritative, overrides identity defaultRuntime. Owner-view-only: not included in public proof responses. Only include when model/provider constraints affect the permission boundary.",
+      "properties": {
+        "allowedModelClasses": {
+          "description": "Allowed model class patterns (e.g., [\"gpt-4.1-*\", \"approved-public-content-models\"]).",
+          "items": {
+            "maxLength": 128,
+            "type": "string"
+          },
+          "maxItems": 8,
+          "type": "array"
+        },
+        "allowedProviders": {
+          "description": "Allowed inference provider labels (e.g., [\"ollama\", \"openai\"]).",
+          "items": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "maxItems": 8,
+          "type": "array"
+        },
+        "requiresHumanApproval": {
+          "description": "Whether the agent must pause for explicit human approval before irreversible actions.",
+          "type": "boolean"
+        },
+        "secretsExposedToReceipt": {
+          "description": "Whether the delegation policy allows secrets to appear in action proofs (default false).",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    },
+    "scope": {
+      "default": "global",
+      "description": "Delegation scope. Defaults to \"global\" (all permissions) when omitted.",
+      "maxLength": 128,
+      "type": "string"
+    },
+    "skills": {
+      "description": "Agent skills as structured objects",
+      "items": {
+        "properties": {
+          "configId": {
+            "description": "Optional opaque integration or provider configuration reference. Not a secret, not an OAuth token, not credential material.",
+            "maxLength": 128,
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "id": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "native",
+              "integration",
+              "plugin",
+              "mcp",
+              "toolkit"
+            ],
+            "type": "string"
+          },
+          "label": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "provider": {
+            "maxLength": 64,
+            "type": "string"
+          },
+          "version": {
+            "maxLength": 32,
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "type": "object"
+      },
+      "maxItems": 48,
+      "type": "array"
+    }
+  },
+  "required": [
+    "controllerWallet",
+    "controllerChainRef",
+    "agentWallet",
+    "agentChainRef"
+  ],
+  "title": "agent-delegation",
+  "type": "object"
+}

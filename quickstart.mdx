@@ -1,0 +1,97 @@
+---
+title: Sell access with one gate
+sidebarTitle: Sell access
+description: Publish a free or paid access rule, add one component, and confirm the result on your server.
+icon: rocket
+"og:image": "/images/og-quickstart.png"
+"twitter:image": "/images/og-quickstart.png"
+---
+
+<Info>
+  This is the app-embed recipe. To connect Proofable in any chat or IDE, or to list on proofable.me, use [Connect Proofable](./mcp/setup). Adding sign-in to an app? [Use hosted sign-in](./cookbook/auth-hosted-verify).
+</Info>
+
+Publish once. One listing owns the verifiers, price, and hosted sign-in. Your app adds the listing and confirms the result; it never recreates the verify logic. Visitors never need an API key.
+
+## Build it
+
+<Steps>
+  <Step title="Publish a listing">
+    Sign in at [proofable.me](https://proofable.me) → **Listings**. Choose what to verify, set pricing, **Publish**. Copy your `gateId`.
+  </Step>
+  <Step title="Add VerifyGate">
+    ```jsx
+    import { VerifyGate } from '@proofable/sdk/widgets';
+
+    <VerifyGate gateId="gate_your-app-name">
+      <ProtectedContent />
+    </VerifyGate>;
+    ```
+    `VerifyGate` reuses a saved proof or opens hosted sign-in on Proofable when a new one is needed. Wallet, passkey, and OAuth all happen on Proofable, not inside your app.
+  </Step>
+  <Step title="Confirm on your server">
+    Pass the visitor's **account address** (from Proofable sign-in or the saved result; passkey and OAuth included):
+    ```js
+    import { ProofableClient } from '@proofable/sdk';
+
+    const client = new ProofableClient();
+    const result = await client.gateCheck({
+      gateId: 'gate_your-app-name',
+      address: user.accountAddress, // from hosted sign-in / stored proof subject
+    });
+
+    if (!result.data?.gate?.allRequiredSatisfied) {
+      // send the user back to VerifyGate or Proofable sign-in
+    }
+    ```
+  </Step>
+</Steps>
+
+The visitor’s proof is theirs. If they return or visit another listing that needs the same Proofs, they can reuse it.
+
+You choose who pays. Use your Proofable credits for free access, or turn on visitor checkout and set a price. See [Billing](./platform/billing) for card, USDC, and metered API options.
+
+## Optional: show proof status
+
+```jsx
+import { ProofBadge } from '@proofable/sdk/widgets';
+
+<ProofBadge qHash={proof.qHash} />;
+```
+
+Pass `showChains` only when on-chain status matters in your interface.
+
+## Not using React? Send users to Proofable for sign-in
+
+```js
+import { getHostedCheckoutUrl } from '@proofable/sdk';
+
+window.location.assign(
+  getHostedCheckoutUrl({
+    gateId: 'gate_your-app-name',
+    returnUrl: 'https://myapp.com/auth/callback',
+  }),
+);
+```
+
+Read the **proof ID** (`qHash`) from the callback URL or popup message, then store it. Details: [Hosted sign-in](./cookbook/auth-hosted-verify).
+
+## Connect Proofable instead?
+
+[Connect Proofable](./mcp/setup) is the one path for chat, IDEs, jobs, and listings. After Connect, ask: **"Before I take a sensitive action, use Proofable. Reuse what I already have."**
+
+## Next
+
+<CardGroup cols={3}>
+  <Card title="VerifyGate" icon="square-check" href="./widgets/verifygate">
+    Props, modes, and OAuth.
+  </Card>
+  <Card title="Hosted sign-in" icon="key" href="./cookbook/auth-hosted-verify">
+    The browser flow on Proofable.
+  </Card>
+  <Card title="Start" icon="bolt" href="/">
+    Connect Proofable. Hosted sign-in for apps.
+  </Card>
+</CardGroup>
+
+Backend-created proofs after a one-time approval: [Integrations](./cookbook/integrations).

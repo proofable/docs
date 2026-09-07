@@ -1,0 +1,41 @@
+---
+title: Content safety
+sidebarTitle: Content safety
+description: Screen text or images before you publish or grant access.
+icon: wand-magic-sparkles
+---
+
+**Verifier ID:** `ai-content-moderation`
+
+Screen text or images for safety, then reuse the result before you publish.
+
+## Use cases
+
+- User-generated content
+- AI-generated output
+- Moderation and publishing workflows
+
+## Flow type
+
+External lookup. Proofable screens the content with a moderation provider and records the outcome.
+
+## Fields
+
+| Field | Required | Notes |
+|------|----------|-------|
+| `content` | Yes | Raw text, base64, or an `ipfs://` / CID reference |
+| `contentType` | Yes | MIME type. See supported types below |
+| `provider` | No | Defaults by content: text → `google-perspective`, images → `google-vision` |
+
+**Supported `contentType` values:** `text/plain`, `text/markdown`, `text/x-markdown`, `application/json`, `application/xml`, `image/jpeg`, `image/png`, `image/gif`, `image/webp`.
+
+## Example
+
+```json
+{
+  "content": "Text to screen, or a base64/ipfs:// reference",
+  "contentType": "text/plain"
+}
+```
+
+Full schema: [`ai-content-moderation.json`](https://github.com/proofable/network/blob/main/docs/verifiers/schemas/ai-content-moderation.json).

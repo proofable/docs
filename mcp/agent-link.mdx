@@ -1,0 +1,28 @@
+---
+title: Agent readiness (`proofable_agent_link`)
+description: Confirm the agent is linked to your profile with the identity and permissions it needs.
+icon: robot
+---
+
+Checks the agent on your profile before agent work. Pass the signed-in account from **`proofable_context`**, or the dedicated spend account if you created one.
+
+**`linked: true`** means the agent is on your profile. A signed-in-profile agent needs verified identity. A separate spend account also needs signed limits. If a required step is missing, you get **`link_required`**, **`missingVerifiers`**, and a hosted URL for only that step.
+
+| State | Meaning |
+|-------|---------|
+| **`linked: true`** | Identity and required permissions are on file. Continue. |
+| **`link_required`** | Open **`hostedVerifyUrl`** or follow **`nextSteps`** |
+
+**`agentId`** is optional only when the account identifies one agent unambiguously. Pass it whenever one account hosts several agents. Optional **`principal`** hints the **owner** account (not the agent account). [Agent concepts](../agents/concepts)
+
+When you need to create or import first, see [Agent create](./agent-create).
+
+## Input
+
+```json
+{ "agentWallet": "0x…", "agentId": "data-analyst" }
+```
+
+## Related
+
+[Agent create](./agent-create) and [Agent verification flow](../agents/agent-verification-flow)

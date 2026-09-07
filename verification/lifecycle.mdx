@@ -1,0 +1,57 @@
+---
+title: Lifecycle
+sidebarTitle: Lifecycle
+description: Create, wait, reuse, or revoke a result.
+icon: rotate
+---
+
+## Stages
+
+| Stage | Meaning |
+|-------|---------|
+| Start | Hosted, SDK, or API |
+| Accepted | Request in flight |
+| Processing | Async check |
+| Complete | Proof ID ready |
+| Reused | Checks / gates / MCP |
+| Stale / revoked | Policy or user revoke |
+
+## Strategies
+
+| Strategy | Use |
+|----------|-----|
+| `reuse-or-create` | Default. Reuse if valid |
+| `reuse` | Read-only checks |
+| `fresh` | Force a new result |
+
+## Freshness
+
+- Point-in-time checks (balance, risk): respect recency.
+- Prefer cheap checks + `since` / `sinceDays`. Run a new check only when policy needs it.
+
+## Revoke (owner)
+
+```http
+POST /api/v1/proofs/revoke-self/{qHash}
+```
+
+```javascript
+await client.revokeOwnProof(qHash, wallet);
+```
+
+## Related
+
+<CardGroup cols={2}>
+ <Card title="How it works" icon="shield-check" href="./how-it-works">
+ Flow.
+ </Card>
+ <Card title="Proofs" icon="file-check" href="../platform/proofs">
+ qHash.
+ </Card>
+ <Card title="Signing" icon="file-signature" href="./signing-format">
+ Messages.
+ </Card>
+ <Card title="Verifiers" icon="list-tree" href="./verifiers">
+ Catalog.
+ </Card>
+</CardGroup>

@@ -1,0 +1,67 @@
+---
+title: Trust
+sidebarTitle: Trust
+description: Verify identity, ownership, permissions, and safety before an action.
+icon: file-signature
+"og:image": "/images/og-verification.png"
+"twitter:image": "/images/og-verification.png"
+---
+
+Verify identity, ownership, permission, or safety. Save a proof. Reuse it before access, payment, or an agent action.
+
+## Outcomes
+
+| | Examples |
+|--|----------|
+| Identity | Login, social, team |
+| Ownership | Content, files, authorship |
+| Access | NFT, token thresholds |
+| Abuse | Human, wallet safety |
+| Agents | Identity, permissions |
+
+Agent proofs record who an agent is and what it may do.
+
+## How you verify
+
+| Type | How | Examples |
+|------|-----|----------|
+| Interactive | Hosted steps on Proofable (passkey, OAuth, human) | ownership-social, ownership-org-oauth, proof-of-human |
+| Instant | Account signs in-session | ownership-basic, agent-identity |
+| Lookup | Live state | NFT, balance, wallet-risk |
+
+Most product gates start with **Interactive**. Instant and Lookup are available when your threat model needs them.
+
+## Terms
+
+| Term | Meaning |
+|------|---------|
+| Proof ID (`qHash`) | Saved proof reference. [Proofs](../platform/proofs) |
+| Verify | You verify. The result is a proof (the receipt). Schema field: `verifier` |
+| Account / subject | The Proofable account the result is about |
+| Signing string | Message the account signs when verify needs it |
+| Hosted Verify | Browser flow at `proofable.me/verify`. [Hosted Verify](../cookbook/auth-hosted-verify) |
+
+Visibility: [Privacy](../platform/security-and-trust)
+
+## Response
+
+- `qHash`
+- `status`: verified, processing, failed
+- Page: `https://proofable.me/proof/[qHash]`
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Verifiers" icon="list-tree" href="./verifiers">
+    Catalog of checks.
+  </Card>
+  <Card title="How it works" icon="shield-check" href="./how-it-works">
+    End-to-end flow.
+  </Card>
+  <Card title="Signing" icon="file-signature" href="./signing-format">
+    Message format.
+  </Card>
+  <Card title="Lifecycle" icon="rotate" href="./lifecycle">
+    Poll and revoke.
+  </Card>
+</CardGroup>

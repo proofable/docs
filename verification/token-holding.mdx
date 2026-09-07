@@ -1,0 +1,40 @@
+---
+title: Token balance
+sidebarTitle: Token
+description: Gate access when a wallet holds a minimum balance.
+icon: coins
+---
+
+**Verifier ID:** `token-holding`
+
+## Use cases
+
+- Balance-based access
+- Governance or membership tiers
+- Token utility products
+
+## Flow type
+
+Lookup. Proofable checks current token balances.
+
+## Required Fields
+
+| Field | Required | Notes |
+|------|----------|-------|
+| `contractAddress` | Yes | Token contract or mint |
+| `minBalance` | Yes | Human-readable token amount, e.g. `"10.5"`. Converted with the token's on-chain decimals, not base units |
+| `chainId` or `chain` | Yes | Chain id or CAIP-2 chain |
+| `ownerAddress` | No | Wallet to check; defaults to the signer |
+| `blockNumber` | No | Check the balance at a specific block |
+
+## Example
+
+```json
+{
+  "contractAddress": "0x...",
+  "minBalance": "100",
+  "chainId": 8453
+}
+```
+
+Full schema: [`token-holding.json`](https://github.com/proofable/network/blob/main/docs/verifiers/schemas/token-holding.json).

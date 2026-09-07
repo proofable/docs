@@ -1,0 +1,43 @@
+---
+title: Team and organization
+sidebarTitle: Org / team
+description: Confirm Google or Microsoft org membership before you grant access.
+icon: building
+---
+
+**Verifier ID:** `ownership-org-oauth`
+
+Confirm a person belongs to a Google Workspace or Microsoft 365 organization, then gate member-only apps, agents, and content. OAuth runs on Proofable. Use Hosted Verify or `VerifyGate`. Never build a custom OAuth UI.
+
+## Use cases
+
+- Gating to members of a Google Workspace or Microsoft 365 organization
+- Org-scoped agents and apps
+- Member-only tools and partner portals
+
+## Flow type
+
+Interactive, hosted-only. This verifier cannot be submitted directly from your backend, and it cannot be combined with other checks in one request.
+
+## The simplest path
+
+```text
+https://proofable.me/verify?verifiers=ownership-org-oauth&returnUrl=https://app.example.com/verified
+```
+
+You get a proof ID in the `qHash` field. Store and reuse it.
+
+## Fields
+
+| Field | Required | Notes |
+|------|----------|-------|
+| `provider` | Yes | `google` or `microsoft` |
+| `internalSocialToken` | Yes (direct submit) | Short-lived token issued by the hosted OAuth step |
+| `expectedOrgDomain` | No | Restrict the proof to one company domain such as `acme.com` |
+| `walletAddress` | No | Subject override to bind membership to a wallet |
+
+<Tip>
+Set `expectedOrgDomain` only when a single company domain should pass; omit it if any Workspace / M365 tenant is acceptable.
+</Tip>
+
+Full schema: [`ownership-org-oauth.json`](https://github.com/proofable/network/blob/main/docs/verifiers/schemas/ownership-org-oauth.json).
