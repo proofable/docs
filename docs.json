@@ -45,6 +45,7 @@
   },
   "seo": {
     "metatags": {
+      "canonical": "https://docs.proofable.me",
       "theme-color": "#050505",
       "color-scheme": "dark",
       "description": "Build portable identity, proof, access, payments, and trusted agent workflows with Proofable SDK, MCP, API, and hosted verification.",
