@@ -118,6 +118,7 @@
             "pages": [
               "mcp/guarded-action",
               "cookbook/overview",
+              "cookbook/auth-hosted-verify",
               "cookbook/integrations",
               "cookbook/domain-verification",
               "cookbook/nft-gating",
@@ -193,11 +194,20 @@
             "group": "SDK",
             "pages": [
               "sdks/overview",
+              "sdks/javascript",
               "sdks/cli",
               "sdks/authentication",
               "sdks/verifications",
               "sdks/error-handling",
               "sdks/security"
+            ]
+          },
+          {
+            "group": "HTTP API",
+            "pages": [
+              "api/overview",
+              "api/authentication",
+              "api/errors"
             ]
           }
         ]
@@ -209,6 +219,7 @@
             "group": "Ecosystem",
             "pages": [
               "platform/overview",
+              "platform/trust-stack",
               "platform/proofs",
               "cookbook/connector-integrations",
               "platform/security-and-trust",
@@ -219,6 +230,7 @@
             "group": "Pricing & billing",
             "pages": [
               "platform/pricing",
+              "platform/presets",
               "platform/billing",
               "platform/hosted-gate-checkout",
               "platform/x402",
