@@ -605,7 +605,7 @@ a.card:focus-visible {
   box-shadow: 0 0 0 2px rgb(var(--proofable-rgb-accent-primary)) !important;
 }
 
-#header a:not([href*="/hub"]):not([class*="button"]),
+#header a:not([href*="/install"]):not([class*="button"]),
 #table-of-contents-content a {
   color: var(--proofable-text-secondary) !important;
 }
@@ -720,9 +720,9 @@ a#topbar-cta-button,
 [data-testid="topbar-primary-button"],
 .navbar-primary-button,
 .navbar-button-primary,
-#header a[href="https://proofable.me/hub"],
-#header a[href*="proofable.me/hub"],
-#header a[href$="/hub"] {
+#header a[href="https://proofable.me/install"],
+#header a[href*="proofable.me/install"],
+#header a[href$="/install"] {
   background: var(--proofable-accent) !important;
   background-color: var(--proofable-accent) !important;
   background-image: none !important;
@@ -752,9 +752,9 @@ a#topbar-cta-button:hover,
 [data-testid="topbar-primary-button"]:hover,
 .navbar-primary-button:hover,
 .navbar-button-primary:hover,
-#header a[href="https://proofable.me/hub"]:hover,
-#header a[href*="proofable.me/hub"]:hover,
-#header a[href$="/hub"]:hover {
+#header a[href="https://proofable.me/install"]:hover,
+#header a[href*="proofable.me/install"]:hover,
+#header a[href$="/install"]:hover {
   background: var(--proofable-accent-dim) !important;
   background-color: var(--proofable-accent-dim) !important;
   background-image: none !important;
@@ -765,18 +765,18 @@ a#topbar-cta-button:hover,
 #topbar-cta-button-wrapper,
 .navbar-primary-wrapper,
 .navbar-button-wrapper,
-#header div:has(> a[href="https://proofable.me/hub"]),
-#header div:has(> a[href*="proofable.me/hub"]),
-#header div:has(> a[href$="/hub"]),
-#header li:has(> a[href="https://proofable.me/hub"]),
-#header li:has(> a[href*="proofable.me/hub"]),
-#header li:has(> a[href$="/hub"]),
-#header span:has(> a[href="https://proofable.me/hub"]),
-#header span:has(> a[href*="proofable.me/hub"]),
-#header span:has(> a[href$="/hub"]),
-#header [class*="button"]:has(a[href*="proofable.me/hub"]),
-#header [class*="Button"]:has(a[href*="proofable.me/hub"]),
-#header [class*="primary"]:has(a[href*="proofable.me/hub"]) {
+#header div:has(> a[href="https://proofable.me/install"]),
+#header div:has(> a[href*="proofable.me/install"]),
+#header div:has(> a[href$="/install"]),
+#header li:has(> a[href="https://proofable.me/install"]),
+#header li:has(> a[href*="proofable.me/install"]),
+#header li:has(> a[href$="/install"]),
+#header span:has(> a[href="https://proofable.me/install"]),
+#header span:has(> a[href*="proofable.me/install"]),
+#header span:has(> a[href$="/install"]),
+#header [class*="button"]:has(a[href*="proofable.me/install"]),
+#header [class*="Button"]:has(a[href*="proofable.me/install"]),
+#header [class*="primary"]:has(a[href*="proofable.me/install"]) {
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
@@ -819,9 +819,9 @@ a#topbar-cta-button *,
 [data-testid="topbar-primary-button"] *,
 .navbar-primary-button *,
 .navbar-button-primary *,
-#header a[href="https://proofable.me/hub"] *,
-#header a[href*="proofable.me/hub"] *,
-#header a[href$="/hub"] * {
+#header a[href="https://proofable.me/install"] *,
+#header a[href*="proofable.me/install"] *,
+#header a[href$="/install"] * {
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
@@ -834,9 +834,9 @@ a#topbar-cta-button *,
 a#topbar-cta-button:focus-visible,
 [data-testid="navbar-primary-button"]:focus-visible,
 [data-testid="topbar-primary-button"]:focus-visible,
-#header a[href="https://proofable.me/hub"]:focus-visible,
-#header a[href*="proofable.me/hub"]:focus-visible,
-#header a[href$="/hub"]:focus-visible {
+#header a[href="https://proofable.me/install"]:focus-visible,
+#header a[href*="proofable.me/install"]:focus-visible,
+#header a[href$="/install"]:focus-visible {
   outline: 2px solid rgb(191 219 254 / 0.6) !important;
   outline-offset: 2px !important;
 }

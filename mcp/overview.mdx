@@ -1,21 +1,21 @@
 ---
 title: "Proofable MCP"
 sidebarTitle: "MCP"
-description: "Connect once. Carry agents, tools, skills, context, permissions, and proofs across supported AI clients."
+description: "Connect once, then let Cursor, Claude, Codex, and other supported clients read your profile, agent limits, private context, and current proof."
 icon: plug
 "og:image": "/images/og-mcp.png"
 "twitter:image": "/images/og-mcp.png"
 ---
 
-Connect Proofable once. Carry your agents, tools, skills, connected apps, selected context, permissions, jobs, and proofs across supported AI clients.
+Connect Proofable once. Supported AI clients can then read your profile, agents, approved tools, selected context, permissions, jobs, and current proofs, and check who controls an agent and what it may do before sensitive work.
 
 Register the hosted remote, then click **Connect**:
 
 `https://mcp.proofable.me/mcp`
 
-Use a marketplace plugin or registry listing when the host offers one. `npx -y -p @proofable/sdk proofable setup` writes the same URL from a terminal.
+Use a marketplace plugin or registry listing when the host offers one. `npx -y @proofable/sdk setup` writes the same URL from a terminal.
 
-Then ask the new client to load what you already built:
+Then ask the new client to check what it needs:
 
 > Show my Proofable profile, agents, approved tools, and current proofs.
 
@@ -64,7 +64,7 @@ Field names and per-tool pages: [MCP tools](./tools).
 
 Proofable returns the result and the proof. It does not return the private data used to complete it. Proofs are private by default. The client or runtime must enforce that result.
 
-What you can carry across supported clients:
+What supported clients can read when authorized:
 
 - Your profile, agents, and current permissions
 - Approved tools, skills, and selected context

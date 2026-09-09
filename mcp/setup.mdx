@@ -93,7 +93,7 @@ Open **Connections** on [proofable.me](https://proofable.me) to link apps. [Conn
 Cursor, Claude Code, Codex, Hermes, and Grok use the same endpoint. Optional project mount:
 
 ```bash
-npx -y -p @proofable/sdk proofable mount <agentId> --apply cursor
+npx -y @proofable/sdk mount <agentId> --apply cursor
 ```
 
 Valid `--apply` values: `cursor`, `claude`, `codex`. See [Connect agent context](../agents/runtime-mount).
@@ -121,7 +121,7 @@ proofable setup
 If you use npm and do not have the CLI on your PATH:
 
 ```bash
-npx -y -p @proofable/sdk proofable setup
+npx -y @proofable/sdk setup
 ```
 
 If a Proofable plugin is already installed, setup skips a second `proofable` entry.

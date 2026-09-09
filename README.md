@@ -1,6 +1,6 @@
 # Proofable docs
 
-Public documentation for Proofable portable trust infrastructure: identity, context, authority, proof, access, payments, and trusted agent workflows.
+The portable trust harness for AI agents across models, tools, and runtimes.
 
 - Product: [proofable.me](https://proofable.me)
 - Docs: [docs.proofable.me](https://docs.proofable.me)

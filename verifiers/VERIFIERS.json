@@ -10,7 +10,7 @@
       "expiry": "permanent",
       "flow": "instant",
       "id": "ownership-basic",
-      "inputSchemaPath": "docs/verifiers/schemas/ownership-basic.json",
+      "inputSchemaPath": "verifiers/schemas/ownership-basic.json",
       "interaction": "signature",
       "sdk": {
         "autoVerify": true,
@@ -27,7 +27,7 @@
       "expiry": "expiring",
       "flow": "interactive",
       "id": "proof-of-human",
-      "inputSchemaPath": "docs/verifiers/schemas/proof-of-human.json",
+      "inputSchemaPath": "verifiers/schemas/proof-of-human.json",
       "interaction": "hosted",
       "sdk": {
         "autoVerify": false,
@@ -44,7 +44,7 @@
       "expiry": "permanent",
       "flow": "interactive",
       "id": "ownership-social",
-      "inputSchemaPath": "docs/verifiers/schemas/ownership-social.json",
+      "inputSchemaPath": "verifiers/schemas/ownership-social.json",
       "interaction": "hosted",
       "sdk": {
         "autoVerify": false,
@@ -61,7 +61,7 @@
       "expiry": "expiring",
       "flow": "instant",
       "id": "ownership-pseudonym",
-      "inputSchemaPath": "docs/verifiers/schemas/ownership-pseudonym.json",
+      "inputSchemaPath": "verifiers/schemas/ownership-pseudonym.json",
       "interaction": "signature",
       "sdk": {
         "autoVerify": true,
@@ -78,7 +78,7 @@
       "expiry": "point_in_time",
       "flow": "external_lookup",
       "id": "ownership-dns-txt",
-      "inputSchemaPath": "docs/verifiers/schemas/ownership-dns-txt.json",
+      "inputSchemaPath": "verifiers/schemas/ownership-dns-txt.json",
       "interaction": "passive",
       "recommendedMaxAgeMs": 3600000,
       "sdk": {
@@ -96,7 +96,7 @@
       "expiry": "permanent",
       "flow": "interactive",
       "id": "ownership-org-oauth",
-      "inputSchemaPath": "docs/verifiers/schemas/ownership-org-oauth.json",
+      "inputSchemaPath": "verifiers/schemas/ownership-org-oauth.json",
       "interaction": "hosted",
       "sdk": {
         "autoVerify": false,
@@ -113,7 +113,7 @@
       "expiry": "point_in_time",
       "flow": "external_lookup",
       "id": "nft-ownership",
-      "inputSchemaPath": "docs/verifiers/schemas/nft-ownership.json",
+      "inputSchemaPath": "verifiers/schemas/nft-ownership.json",
       "interaction": "passive",
       "recommendedMaxAgeMs": 3600000,
       "sdk": {
@@ -131,7 +131,7 @@
       "expiry": "point_in_time",
       "flow": "external_lookup",
       "id": "token-holding",
-      "inputSchemaPath": "docs/verifiers/schemas/token-holding.json",
+      "inputSchemaPath": "verifiers/schemas/token-holding.json",
       "interaction": "passive",
       "recommendedMaxAgeMs": 3600000,
       "sdk": {
@@ -149,7 +149,7 @@
       "expiry": "point_in_time",
       "flow": "external_lookup",
       "id": "wallet-risk",
-      "inputSchemaPath": "docs/verifiers/schemas/wallet-risk.json",
+      "inputSchemaPath": "verifiers/schemas/wallet-risk.json",
       "interaction": "passive",
       "recommendedMaxAgeMs": 3600000,
       "sdk": {
@@ -167,7 +167,7 @@
       "expiry": "permanent",
       "flow": "instant",
       "id": "wallet-link",
-      "inputSchemaPath": "docs/verifiers/schemas/wallet-link.json",
+      "inputSchemaPath": "verifiers/schemas/wallet-link.json",
       "interaction": "signature",
       "sdk": {
         "autoVerify": true,
@@ -184,7 +184,7 @@
       "expiry": "point_in_time",
       "flow": "external_lookup",
       "id": "contract-ownership",
-      "inputSchemaPath": "docs/verifiers/schemas/contract-ownership.json",
+      "inputSchemaPath": "verifiers/schemas/contract-ownership.json",
       "interaction": "passive",
       "recommendedMaxAgeMs": 3600000,
       "sdk": {
@@ -202,7 +202,7 @@
       "expiry": "permanent",
       "flow": "external_lookup",
       "id": "ai-content-moderation",
-      "inputSchemaPath": "docs/verifiers/schemas/ai-content-moderation.json",
+      "inputSchemaPath": "verifiers/schemas/ai-content-moderation.json",
       "interaction": "passive",
       "sdk": {
         "autoVerify": true,
@@ -219,7 +219,7 @@
       "expiry": "permanent",
       "flow": "instant",
       "id": "agent-identity",
-      "inputSchemaPath": "docs/verifiers/schemas/agent-identity.json",
+      "inputSchemaPath": "verifiers/schemas/agent-identity.json",
       "interaction": "signature",
       "sdk": {
         "autoVerify": true,
@@ -236,7 +236,7 @@
       "expiry": "expiring",
       "flow": "instant",
       "id": "agent-delegation",
-      "inputSchemaPath": "docs/verifiers/schemas/agent-delegation.json",
+      "inputSchemaPath": "verifiers/schemas/agent-delegation.json",
       "interaction": "signature",
       "recommendedMaxAgeMs": 604800000,
       "sdk": {

@@ -10,8 +10,8 @@ This is optional. First-run is [MCP setup](../mcp/setup): add the endpoint, clic
 To load the same agent into an editor project:
 
 ```bash
-npx -y -p @proofable/sdk proofable setup
-npx -y -p @proofable/sdk proofable mount my-agent --apply cursor
+npx -y @proofable/sdk setup
+npx -y @proofable/sdk mount my-agent --apply cursor
 ```
 
 Same command for `claude` or `codex`. VS Code uses `--apply cursor`. This writes `.proofable/mount.json` and the host adapter. Start a new session so the project picks it up.
@@ -23,7 +23,7 @@ The editor runs the tools. Proofable supplies identity, limits, and proofs. Curs
 **Connect in** copies:
 
 ```bash
-npx -y -p @proofable/sdk proofable mount <agentId> --apply <host>
+npx -y @proofable/sdk mount <agentId> --apply <host>
 ```
 
 Valid `--apply` values are `cursor`, `claude`, or `codex`. VS Code uses `--apply cursor`. Run it in the project. If the host is not connected yet, run `proofable setup` first. The browser never downloads a static rules file.

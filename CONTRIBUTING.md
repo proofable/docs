@@ -5,30 +5,33 @@
 | Need | Where |
 | --- | --- |
 | Product documentation | [docs.proofable.me](https://docs.proofable.me) |
-| Possible bugs | [Issues](https://github.com/proofable/proofable/issues) |
-| Ideas and questions | [Discussions](https://github.com/proofable/proofable/discussions) |
+| Possible bugs | [Issues](https://github.com/proofable/docs/issues) |
+| Ideas and questions | [Discussions](https://github.com/proofable/docs/discussions) |
 | Security reports | [dev@proofable.me](mailto:dev@proofable.me) (do not post publicly) |
 | Release notes | [CHANGELOG.md](./CHANGELOG.md) |
 
+## What lives here
+
+The published documentation at [docs.proofable.me](https://docs.proofable.me), the OpenAPI description, and the public verifier catalog. Client code lives in [proofable/sdk](https://github.com/proofable/sdk); MCP discovery metadata lives in [proofable/mcp](https://github.com/proofable/mcp).
+
 ## What helps
 
-- Bug reports with clear steps to reproduce and no secrets in the thread.
-- Verifier proposals that spell out the user-visible outcome you want. Open a [Discussion](https://github.com/proofable/proofable/discussions) first; a PR should include the spec, schema, and docs together.
-- Updates to the SDK, examples, or documentation that match what the live product does today.
-- Tests or examples when you change behavior that builders rely on.
+- Corrections where a page no longer matches what the live product does.
+- Verifier proposals that spell out the user-visible outcome you want.
+- Runnable examples, and the errors a builder will actually hit.
 
 **Do not** share keys, tokens, bearer secrets, or private proof content in public issues or change descriptions.
 
 ## Verifier proposals
 
-The public verifier catalog and input schemas live in **this repo**: JSON Schemas under [`docs/verifiers/schemas/`](./docs/verifiers/schemas) and the machine index at [`spec/VERIFIERS.json`](./spec/VERIFIERS.json). A contributor opens a PR here to add a new check; once merged, it propagates to the protocol verifier registry. See [Propose a verifier](https://docs.proofable.me/verification/propose-a-verifier) for the full flow.
+The public verifier catalog lives in **this repo**: JSON Schemas under [`verifiers/schemas/`](./verifiers/schemas) and the machine index at [`verifiers/VERIFIERS.json`](./verifiers/VERIFIERS.json). Open a [Discussion](https://github.com/proofable/docs/discussions) first, then a PR with the spec, the schema, and the docs page together. Once merged, it propagates to the protocol verifier registry. See [Propose a verifier](https://docs.proofable.me/verification/propose-a-verifier) for the full flow.
 
 ## Do not commit
 
 These paths are local-only or generated elsewhere (see `.gitignore`):
 
 - `.env`, `.npmrc`, secrets, and key material
-- `sdk/cjs/` and other build artifacts
+- Generated OpenAPI output and build artifacts
 
 ## Describing your change
 

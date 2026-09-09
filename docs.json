@@ -48,17 +48,17 @@
       "canonical": "https://docs.proofable.me",
       "theme-color": "#050505",
       "color-scheme": "dark",
-      "description": "Build portable identity, proof, access, payments, and trusted agent workflows with Proofable SDK, MCP, API, and hosted verification.",
-      "og:title": "Proofable Docs | Portable Trust Infrastructure",
-      "og:description": "Build with Proofable SDK, MCP, API, hosted verification, reusable proofs, access rules, payments, and trusted agent workflows.",
+      "description": "The portable trust harness for AI agents across models, tools, and runtimes. Connect through MCP, SDK, or API.",
+      "og:title": "Proofable Docs | The Portable Trust Harness",
+      "og:description": "Keep agent identity, authority, context, connections, limits, and current proof across models and runtimes.",
       "og:image": "https://docs.proofable.me/images/og-default.png",
       "og:image:width": "1200",
       "og:image:height": "630",
       "og:type": "website",
       "og:site_name": "Proofable Docs",
       "twitter:card": "summary_large_image",
-      "twitter:title": "Proofable Docs | Portable Trust Infrastructure",
-      "twitter:description": "Build with Proofable SDK, MCP, API, hosted verification, reusable proofs, access rules, payments, and trusted agent workflows.",
+      "twitter:title": "Proofable Docs | The Portable Trust Harness",
+      "twitter:description": "Keep agent identity, authority, context, connections, limits, and current proof across models and runtimes.",
       "twitter:image": "https://docs.proofable.me/images/og-default.png"
     }
   },
@@ -75,8 +75,8 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Start free",
-      "href": "https://proofable.me"
+      "label": "Connect Proofable",
+      "href": "https://proofable.me/install"
     }
   },
   "navigation": {

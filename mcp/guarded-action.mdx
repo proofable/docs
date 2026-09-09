@@ -20,7 +20,7 @@ The assistant uses `proofable_agent_create` and returns the one required setup s
 Run this in the project where the host will enforce the decision:
 
 ```bash
-npx -y -p @proofable/sdk proofable mount guarded-demo --apply <host>
+npx -y @proofable/sdk mount guarded-demo --apply <host>
 ```
 
 `<host>` is `cursor`, `claude`, or `codex`. The command writes the current `proofable.runtime-mount.v1` bundle to `.proofable/mount.json`.
@@ -68,4 +68,4 @@ For the permission above, `send_message` returns:
 
 The SDK evaluates one action. The host still owns the tool call and must stop when `allowed` is `false`.
 
-Runnable source: [`examples/guarded-agent-action`](https://github.com/proofable/network/tree/main/examples/guarded-agent-action).
+Runnable source: [`examples/guarded-agent-action`](https://github.com/proofable/mcp/tree/main/examples/guarded-agent-action).

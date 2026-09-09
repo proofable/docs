@@ -1,13 +1,13 @@
 ---
 title: Agents
 sidebarTitle: Agents
-description: Connect an agent and its approved stack once. Carry tools, skills, context, permissions, jobs, and proofs across supported runtimes.
+description: Bring the agent you already use. Give it a known owner, the context and tools it needs, and limits that supported runtimes can check.
 icon: robot
 "og:image": "/images/og-agents.png"
 "twitter:image": "/images/og-agents.png"
 ---
 
-Connect an agent once. Carry its tools, skills, connected apps, selected context, permissions, jobs, and proofs into every supported runtime.
+Bring the agent you already use. Give it a known owner, the tools and context it needs, and clear limits: allowed actions, spend, expiry, and revocation. Supported runtimes can check that authority before a protected action.
 
 Install Proofable, click **Connect**, then ask:
 
@@ -22,7 +22,7 @@ Call `proofable_context`, then create or import an agent. Open **Connections** o
 Cursor, Claude Code, Codex, Hermes, and Grok use the same endpoint. Optional project mount:
 
 ```bash
-npx -y -p @proofable/sdk proofable mount <agentId> --apply cursor
+npx -y @proofable/sdk mount <agentId> --apply cursor
 ```
 
 Valid `--apply` values: `cursor`, `claude`, `codex`. See [Connect agent context](./runtime-mount).
@@ -39,7 +39,7 @@ Valid `--apply` values: `cursor`, `claude`, `codex`. See [Connect agent context]
 | Background or scheduled work | **New job**. Included with Pro |
 | List it elsewhere | Public agent card. Other marketplaces can list the same agent. |
 
-Keep your model, runtime, Okta, or enterprise sign-in. Proofable keeps the agent and its approved stack portable between supported clients.
+Keep your model, runtime, Okta, or enterprise sign-in. Proofable keeps the agent identity, approved stack, current authority, and proofs available to supported clients.
 
 ## Set it up
 
