@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "name": "Proofable",
+  "name": "Proofable Docs",
   "theme": "mint",
   "logo": {
     "light": "/images/proofable-mark-256.png",
@@ -45,20 +45,14 @@
   },
   "seo": {
     "metatags": {
-      "canonical": "https://docs.proofable.me",
       "theme-color": "#050505",
       "color-scheme": "dark",
-      "description": "Add verification, reusable proof, and agent permissions to apps and AI clients with MCP, JavaScript, or HTTP.",
-      "og:title": "Proofable Docs | Verification and Agent Permissions",
-      "og:description": "Connect an AI client, add Proofable to a JavaScript app, or start from a working integration.",
       "og:image": "https://docs.proofable.me/images/og-default.png",
       "og:image:width": "1200",
       "og:image:height": "630",
       "og:type": "website",
       "og:site_name": "Proofable Docs",
       "twitter:card": "summary_large_image",
-      "twitter:title": "Proofable Docs | Verification and Agent Permissions",
-      "twitter:description": "Connect an AI client, add Proofable to a JavaScript app, or start from a working integration.",
       "twitter:image": "https://docs.proofable.me/images/og-default.png"
     }
   },
@@ -94,7 +88,7 @@
         "groups": [
           {
             "group": "Start",
-            "pages": ["index", "quickstart", "mcp/setup", "cookbook/overview", "changelog", "migrate"]
+            "pages": ["index", "mcp/setup", "quickstart", "cookbook/overview", "changelog", "migrate"]
           }
         ]
       },

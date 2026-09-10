@@ -11,7 +11,7 @@ Hosted Verify accepts the verifiers you want directly in the URL. Three ways, si
 Use `?verifiers=<id>` (or `?preset=<id>` for the same result with a single verifier). Prefer account and hosted verification for most products:
 
 ```text
-https://proofable.me/verify?verifiers=ownership-social&returnUrl=https://myapp.com/callback
+https://proofable.me/verify?verifiers=ownership-social&returnUrl=https://app.example.com/callback
 ```
 
 Other high-value single verifiers: `ownership-org-oauth` (work account), `proof-of-human`, `ownership-dns-txt`, `agent-identity`. Wallet-bound verifiers (`ownership-basic`, `nft-ownership`, `token-holding`, `wallet-risk`, …) remain available when your listing needs them. Full list: [Verifiers](../verification/verifiers).
@@ -42,7 +42,7 @@ A few named bundles resolve for convenience and older links:
 | `creator-pack` | `ownership-basic`, `ai-content-moderation` |
 
 ```text
-https://proofable.me/verify?preset=agent-pack&returnUrl=https://myapp.com/callback
+https://proofable.me/verify?preset=agent-pack&returnUrl=https://app.example.com/callback
 ```
 
 For any other combination, use `?verifiers=` with the ids you need.
@@ -55,13 +55,13 @@ Add `returnUrl`, `mode=popup`, or `origin` as needed. Do not combine a preset wi
 import { getHostedCheckoutUrl } from '@proofable/sdk';
 
 // Account / hosted verification (typical apps)
-getHostedCheckoutUrl({ verifiers: ['ownership-social'], returnUrl: 'https://myapp.com/callback' });
+getHostedCheckoutUrl({ verifiers: ['ownership-social'], returnUrl: 'https://app.example.com/callback' });
 
 // Agent permissions
-getHostedCheckoutUrl({ verifiers: ['agent-identity', 'agent-delegation'], returnUrl: 'https://myapp.com/callback' });
+getHostedCheckoutUrl({ verifiers: ['agent-identity', 'agent-delegation'], returnUrl: 'https://app.example.com/callback' });
 
 // Named bundle
-getHostedCheckoutUrl({ preset: 'agent-pack', returnUrl: 'https://myapp.com/callback' });
+getHostedCheckoutUrl({ preset: 'agent-pack', returnUrl: 'https://app.example.com/callback' });
 ```
 
 ## Related

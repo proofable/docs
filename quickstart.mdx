@@ -47,7 +47,7 @@ Publish once. One listing owns the verifiers, price, and hosted sign-in. Your ap
   </Step>
 </Steps>
 
-The visitor’s proof is theirs. If they return or visit another listing that needs the same Proofs, they can reuse it.
+The visitor’s proof is theirs. If they return or visit another listing that needs the same proofs, they can reuse it.
 
 You choose who pays. Use your Proofable credits for free access, or turn on visitor checkout and set a price. See [Billing](./platform/billing) for card, USDC, and metered API options.
 
@@ -69,7 +69,7 @@ import { getHostedCheckoutUrl } from '@proofable/sdk';
 window.location.assign(
   getHostedCheckoutUrl({
     gateId: 'gate_your-app-name',
-    returnUrl: 'https://myapp.com/auth/callback',
+    returnUrl: 'https://app.example.com/auth/callback',
   }),
 );
 ```

@@ -35,7 +35,7 @@ import { getHostedCheckoutUrl } from '@proofable/sdk';
 
 const url = getHostedCheckoutUrl({
   gateId: 'gate_your-app-name',
-  returnUrl: 'https://yourapp.com/auth/callback',
+  returnUrl: 'https://app.example.com/auth/callback',
 });
 ```
 
@@ -44,7 +44,7 @@ const url = getHostedCheckoutUrl({
 ```javascript
 const loginUrl = getHostedCheckoutUrl({
   intent: 'login',
-  returnUrl: 'https://yourapp.com/auth/callback',
+  returnUrl: 'https://app.example.com/auth/callback',
 });
 ```
 
@@ -91,7 +91,7 @@ After one-time user approval ([app link](../agents/agent-delegation)), your back
 ```javascript
 const client = new ProofableClient({
   appId: 'acme-web',
-  appOrigin: 'https://yourapp.com',
+  appOrigin: 'https://app.example.com',
   apiKey: process.env.PROOFABLE_ACCESS_KEY, // optional. Your builder profile
 });
 

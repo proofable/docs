@@ -31,7 +31,7 @@ import { getHostedCheckoutUrl } from '@proofable/sdk';
 window.location.assign(
   getHostedCheckoutUrl({
     gateId: 'gate_your-app-name',
-    returnUrl: 'https://myapp.com/callback',
+    returnUrl: 'https://app.example.com/callback',
   }),
 );
 ```
@@ -150,7 +150,7 @@ Live verifier list: `GET /api/v1/verification/verifiers`.
 | **`gateCheck()`** | **Allow/deny** via `GET /api/v1/proofs/check` (server-enforced). |
 | **`checkGate()`** | Preview against proofs you already loaded. Not a substitute for **`gateCheck()`** where trust matters. |
 
-## Wallet-link: hosted first
+## Link a wallet with Hosted Verify
 
 For typical UX, use Hosted Verify so wallet selection and secondary signing stay on Proofable. Direct mode is for integrations that already control the secondary wallet and provider.
 

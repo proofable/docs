@@ -25,7 +25,7 @@ import { ProofableClient } from "@proofable/sdk";
 const client = new ProofableClient({
   appId: process.env.PROOFABLE_APP_ID,
   // Must match the origin the user approved (or use origin:* on the approval)
-  appOrigin: process.env.PROOFABLE_APP_ORIGIN, // e.g. https://yourapp.com
+  appOrigin: process.env.PROOFABLE_APP_ORIGIN, // e.g. https://app.example.com
   // Optional: bills/automates as your builder profile
   apiKey: process.env.PROOFABLE_ACCESS_KEY,
 });

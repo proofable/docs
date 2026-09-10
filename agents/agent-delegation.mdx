@@ -66,7 +66,7 @@ await client.verify({
     scope: 'app-link',
     permissions: [
       'app:your-app-id',
-      'origin:https://yourapp.com',
+      'origin:https://app.example.com',
     ],
     expiresAt: Date.now() + 90 * 24 * 60 * 60 * 1000,
   },
@@ -79,7 +79,7 @@ await client.verify({
 - `origin:<url>`: restrict to your domain
 - `origin:*`: any origin
 
-Send `x-neus-app: your-app-id` and matching site origin on verification requests. On Node, set `appOrigin: 'https://yourapp.com'` on `ProofableClient` (or pass `Origin` via `extraHeaders`).
+Send `x-neus-app: your-app-id` and matching site origin on verification requests. On Node, set `appOrigin: 'https://app.example.com'` on `ProofableClient` (or pass `Origin` via `extraHeaders`).
 
 ## Payment limits
 
