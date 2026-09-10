@@ -688,7 +688,7 @@
       },
       {
         "title": "Sell access",
-        "description": "Set checks and price, embed one link",
+        "description": "Set the checks and the price, then embed one link.",
         "icon": "rocket",
         "iconType": "solid",
         "href": "/quickstart"
