@@ -88,12 +88,12 @@ GET https://proofable.me/.well-known/oauth-authorization-server
 
 ## Authorization
 
-The example below shows the **Proofable SDK CLI** loopback flow (`proofable auth --oauth`). Host MCP clients use the same endpoint with the `client_id` issued to them by DCR and their own loopback `redirect_uri`. Never use `neus-cli` for host clients.
+The example below shows the **Proofable SDK CLI** loopback flow (`proofable auth --oauth`), which identifies as `proofable-cli`. Host MCP clients use the same endpoint with the `client_id` issued to them by DCR and their own loopback `redirect_uri`. Never use `proofable-cli` for host clients.
 
 ```http
 GET https://proofable.me/oauth/authorize
   ?response_type=code
-  &client_id=neus-cli
+  &client_id=proofable-cli
   &redirect_uri=http://127.0.0.1:PORT/callback
   &code_challenge=BASE64URL(SHA256(code_verifier))
   &code_challenge_method=S256
@@ -123,7 +123,7 @@ Content-Type: application/x-www-form-urlencoded
 grant_type=authorization_code
 code=AUTH_CODE
 redirect_uri=http://127.0.0.1:PORT/callback
-client_id=neus-cli
+client_id=proofable-cli
 code_verifier=ORIGINAL_CODE_VERIFIER
 resource=https://mcp.proofable.me/mcp
 ```
@@ -148,7 +148,7 @@ Content-Type: application/x-www-form-urlencoded
 
 grant_type=refresh_token
 refresh_token=rt_...
-client_id=neus-cli
+client_id=proofable-cli
 resource=https://mcp.proofable.me/mcp
 ```
 
@@ -191,7 +191,7 @@ Content-Type: application/x-www-form-urlencoded
 
 token=eyJ...
 token_type_hint=access_token
-client_id=neus-cli
+client_id=proofable-cli
 ```
 
 Revoking an access token also invalidates all associated refresh tokens.
@@ -200,12 +200,12 @@ Revoking an access token also invalidates all associated refresh tokens.
 
 | `client_id` | Use |
 |-------------|-----|
-| `neus-cli` | Proofable SDK CLI (`proofable auth --oauth`): loopback redirect on `127.0.0.1` only |
+| `proofable-cli` | Proofable SDK CLI (`proofable auth --oauth`): loopback redirect on `127.0.0.1` only |
 | `neus-mcp-host` | Host MCP clients: issued by DCR for non-loopback flows |
 
-Hosted MCP clients use a **URL-only** MCP config. The host discovers OAuth metadata via `/.well-known/oauth-protected-resource`, runs its own Dynamic Client Registration (DCR) against `/oauth/register`, and owns its PKCE + silent-refresh lifecycle. DCR returns `neus-cli` only for the CLI loopback `http://127.0.0.1:<port>/callback`. Every other redirect URI receives `neus-mcp-host`. Do not pin `neus-cli` for host-owned OAuth.
+Hosted MCP clients use a **URL-only** MCP config. The host discovers OAuth metadata via `/.well-known/oauth-protected-resource`, runs its own Dynamic Client Registration (DCR) against `/oauth/register`, and owns its PKCE + silent-refresh lifecycle. DCR issues `neus-mcp-host` for non-loopback redirect URIs. Do not pin `proofable-cli` for host-owned OAuth.
 
-The OAuth examples above show `client_id=neus-cli` because they document the CLI loopback path (`proofable auth --oauth`). Host clients receive their own `client_id` from DCR and send that instead, plus the same `resource=https://mcp.proofable.me/mcp`.
+The OAuth examples above show `client_id=proofable-cli` because they document the CLI loopback path (`proofable auth --oauth`). Host clients receive their own `client_id` from DCR and send that instead, plus the same `resource=https://mcp.proofable.me/mcp`.
 
 ## Security properties
 
