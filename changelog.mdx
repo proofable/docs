@@ -1,0 +1,48 @@
+---
+title: Changelog
+sidebarTitle: Changelog
+description: "New Proofable releases and what changed across MCP, SDK, and docs, with upgrade steps for each."
+icon: memo
+"og:image": "/images/og-default.png"
+"twitter:image": "/images/og-default.png"
+rss: true
+---
+
+Proofable releases as one product. Each entry below bundles the changes that shipped together across MCP, the SDK, and these docs, with the upgrade steps that matter for that release.
+
+Repo-level release records: [`proofable/sdk`](https://github.com/proofable/sdk/blob/main/CHANGELOG.md), [`proofable/mcp`](https://github.com/proofable/mcp/blob/main/CHANGELOG.md), and [`proofable/docs`](https://github.com/proofable/docs/blob/main/CHANGELOG.md).
+
+<Note>
+Proofable is under active development. Published APIs and verifier schemas may change between minor versions. Breaking changes are listed in each entry and in the repo changelogs.
+</Note>
+
+<Update
+  label="September 6, 2026"
+  description="v0.1.0"
+  tags={["MCP", "SDK", "Docs", "Agents"]}
+  rss={{
+    title: "Proofable v0.1.0",
+    description: "One product for identity, permissions, and portable proof across AI clients and apps."
+  }}
+>
+## Proofable is live
+
+One connection carries agent identity, permissions, selected context, and current proof across your AI clients and apps. Your existing framework runs the work; Proofable carries the trust state the next tool needs.
+
+- Connect your AI client in one line, with hosted sign-in for Cursor, Claude Code, Codex, and VS Code.
+- Verify once, reuse the proof. Another app can check its current status without repeating the work.
+- Give each agent an identity, a spend limit, and permissions you can revoke.
+- Store secrets encrypted, and sell verified access with one link.
+- Require current proof before access, payment, or a protected action.
+
+If you are upgrading from the earlier `@neus` packages, see the [migration guide](/migrate). Nothing else in your setup changes.
+
+### Breaking changes
+
+- `@neus/sdk` is now `@proofable/sdk`. `@neus/mcp-server` is now `@proofable/mcp`.
+- The CLI binary is `proofable` (was `neus`). Run `npx -y @proofable/sdk setup`.
+- MCP tools are named `proofable_*`. `tools/list` advertises only these names.
+- The MCP config key is `proofable`. The token store moved from `~/.neus/` to `~/.proofable/`, so sign in once.
+
+Full rename mapping and fix steps: [Migration guide](/migrate).
+</Update>

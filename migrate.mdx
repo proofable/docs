@@ -1,0 +1,50 @@
+---
+title: Migrate from @neus
+sidebarTitle: Migrate from @neus
+description: "Move an earlier @neus setup to Proofable in one path."
+icon: arrows-rotate
+"og:image": "/images/og-default.png"
+"twitter:image": "/images/og-default.png"
+---
+
+Proofable is the current name for the service formerly published as `@neus`. Your existing profile, proofs, agents, listings, and secrets stay with the same account. There is no data export or database migration.
+
+## Rename map
+
+| Before | Now |
+|--------|-----|
+| `@neus/sdk` | `@proofable/sdk` |
+| `@neus/mcp-server` | `@proofable/mcp` |
+| `neus` CLI | `proofable` CLI |
+| Earlier NEUS MCP connection | Proofable MCP connection |
+| `neus_*` MCP tools | `proofable_*` MCP tools |
+| `NEUS_ACCESS_KEY` | `PROOFABLE_ACCESS_KEY` |
+
+The old package releases and signed records remain available as history.
+
+## Upgrade
+
+```bash
+npm install @proofable/sdk
+npx -y @proofable/sdk setup
+npx -y @proofable/sdk doctor --live
+```
+
+1. Replace `@neus/sdk` with `@proofable/sdk`.
+2. Run setup to register the Proofable MCP connection.
+3. Click **Connect** once, then confirm with `doctor --live` if you use the CLI.
+4. Rename `NEUS_ACCESS_KEY` to `PROOFABLE_ACCESS_KEY` in servers or CI.
+
+If your application imports SDK names directly, use `ProofableClient` and `buildMcpHttpConfig` in place of their `Neus*` predecessors.
+
+## If the old setup is still visible
+
+A `neus` entry may still point the client at the old server. Remove only that old entry, then run setup again. Do not keep both entries: one client would show two servers and could use the old workflow.
+
+If sign-in fails after the swap, do not delete stored data. Sign out, click **Connect**, and sign in again. From a terminal, run `npx -y @proofable/sdk auth`.
+
+If a project still uses the old agent mount, run `proofable mount` again. Keep one Proofable connection and one current workflow skill installed.
+
+<Tip>
+The migration is complete when the host shows one Proofable connection and `proofable_context` returns your profile.
+</Tip>

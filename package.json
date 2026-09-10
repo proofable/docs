@@ -1,7 +1,7 @@
 {
   "name": "@proofable/docs",
   "private": true,
-  "description": "Documentation for the portable trust harness: AI agents, authority, access, and proof.",
+  "description": "Documentation for Proofable verification, reusable proof, and agent permissions.",
   "license": "Apache-2.0",
   "type": "module",
   "engines": {

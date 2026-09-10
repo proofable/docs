@@ -1,33 +1,31 @@
 ---
-title: "Make it Proofable."
+title: "Proofable"
 sidebarTitle: "Home"
-description: "Keep identity, authority, context, connections, limits, and current proof together across supported apps and AI runtimes."
+description: "Add reusable verification and agent permissions to apps and AI clients."
 icon: house
 "og:image": "/images/og-default.png"
 "twitter:image": "/images/og-default.png"
 ---
 
-The portable trust harness.
-
-Proofable keeps agent identity, authority, context, connections, limits, and current proof together across models and runtimes. Your existing framework runs the work. Proofable carries the trust state the next tool needs.
+Use Proofable to verify a result once, reuse the proof, and set agent permissions.
 
 <CardGroup cols={3}>
   <Card title="Connect an AI client" icon="plug" href="./mcp/setup">
     Add the hosted MCP server to Cursor, Claude, Codex, or another supported client.
   </Card>
-  <Card title="Set agent authority" icon="id-card" href="./agents/overview">
-    Connect an agent to its owner, then set allowed actions, spend, expiry, and revocation.
+  <Card title="JavaScript app" icon="code" href="./quickstart">
+    Install the SDK and check a proof from server code.
   </Card>
-  <Card title="Add Proofable to a product" icon="code" href="./quickstart">
-    Use hosted verification, the SDK, widgets, or API without replacing your sign-in or payment stack.
+  <Card title="Working examples" icon="book-open" href="./cookbook/overview">
+    Start from an integration for verification, access, or agent permissions.
   </Card>
 </CardGroup>
 
-## Get started
+## Connect an AI client
 
 Add `https://mcp.proofable.me/mcp` to your AI client, click **Connect**, then ask:
 
-> Show my Proofable profile and current proofs.
+> Show my Proofable profile and proofs.
 
 Use the [one-click installer](https://proofable.me/install) or follow the [MCP setup guide](./mcp/setup).
 
@@ -38,35 +36,16 @@ Use the [one-click installer](https://proofable.me/install) or follow the [MCP s
   />
 </Frame>
 
-## What the harness carries
+## Build with your agent
 
-<CardGroup cols={2}>
-  <Card title="Identity and authority" icon="user-shield" href="./agents/agent-identity">
-    Keep the agent, its owner, allowed actions, spend limit, expiry, and revocation together.
-  </Card>
-  <Card title="Context and connections" icon="link" href="./mcp/context">
-    Make approved private context, skills, apps, and MCP connections available to supported runtimes.
-  </Card>
-  <Card title="Current proof" icon="shield-check" href="./platform/proofs">
-    Save verified results as portable proof another accepted system can check before it acts.
-  </Card>
-  <Card title="Protected access" icon="lock" href="./platform/hosted-gate-checkout">
-    Require current proof before access, payment, or a protected action.
-  </Card>
-</CardGroup>
+Copy this into your coding agent:
 
-## Choose your path
+> Add Proofable to this project using the official quickstart. Use the existing authentication stack. Verify the integration before changing anything else.
 
-<CardGroup cols={3}>
-  <Card title="AI agents" icon="robot" href="./agents/overview">
-    Identity, context, connections, limits, jobs, and proof across runtimes.
-  </Card>
-  <Card title="MCP clients" icon="plug" href="./mcp/setup">
-    One hosted endpoint with OAuth for interactive clients.
-  </Card>
-  <Card title="Apps and services" icon="code" href="./sdks/overview">
-    SDK, API, and widgets for verification, proof, and protected access.
-  </Card>
-</CardGroup>
+## What Proofable does
+
+- **Verify:** Run a supported identity, ownership, risk, or permission check.
+- **Reuse:** Save the result as proof instead of repeating the check.
+- **Enforce:** Require proof before access, payment, or an agent action.
 
 Builder reference: [OpenAPI](https://api.proofable.me/openapi.json), [JavaScript SDK](./sdks/javascript), [MCP tools](./mcp/tools)

@@ -1,6 +1,6 @@
 # Proofable docs
 
-The portable trust harness for AI agents across models, tools, and runtimes.
+Verification, reusable proof, and agent permissions for apps and AI clients.
 
 - Product: [proofable.me](https://proofable.me)
 - Docs: [docs.proofable.me](https://docs.proofable.me)

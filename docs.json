@@ -48,22 +48,30 @@
       "canonical": "https://docs.proofable.me",
       "theme-color": "#050505",
       "color-scheme": "dark",
-      "description": "The portable trust harness for AI agents across models, tools, and runtimes. Connect through MCP, SDK, or API.",
-      "og:title": "Proofable Docs | The Portable Trust Harness",
-      "og:description": "Keep agent identity, authority, context, connections, limits, and current proof across models and runtimes.",
+      "description": "Add verification, reusable proof, and agent permissions to apps and AI clients with MCP, JavaScript, or HTTP.",
+      "og:title": "Proofable Docs | Verification and Agent Permissions",
+      "og:description": "Connect an AI client, add Proofable to a JavaScript app, or start from a working integration.",
       "og:image": "https://docs.proofable.me/images/og-default.png",
       "og:image:width": "1200",
       "og:image:height": "630",
       "og:type": "website",
       "og:site_name": "Proofable Docs",
       "twitter:card": "summary_large_image",
-      "twitter:title": "Proofable Docs | The Portable Trust Harness",
-      "twitter:description": "Keep agent identity, authority, context, connections, limits, and current proof across models and runtimes.",
+      "twitter:title": "Proofable Docs | Verification and Agent Permissions",
+      "twitter:description": "Connect an AI client, add Proofable to a JavaScript app, or start from a working integration.",
       "twitter:image": "https://docs.proofable.me/images/og-default.png"
     }
   },
+  "banner": {
+    "content": "Updating from an earlier NEUS setup? See the [migration guide](/migrate).",
+    "dismissible": true
+  },
   "navbar": {
     "links": [
+      {
+        "label": "Changelog",
+        "href": "/changelog"
+      },
       {
         "label": "GitHub",
         "href": "https://github.com/proofable/docs"
@@ -86,84 +94,24 @@
         "groups": [
           {
             "group": "Start",
-            "pages": [
-              "index",
-              "mcp/setup",
-              "agents/overview",
-              "cookbook/private-cloud-agents",
-              "quickstart"
-            ]
+            "pages": ["index", "quickstart", "mcp/setup", "cookbook/overview", "changelog", "migrate"]
           }
         ]
       },
       {
-        "tab": "Build",
+        "tab": "Guides",
         "groups": [
           {
             "group": "Agents",
-            "pages": [
-              "agents/overview",
-              "cookbook/private-cloud-agents",
-              "agents/concepts",
-              "agents/team-agents",
-              "agents/agent-identity",
-              "agents/agent-delegation",
-              "agents/runtime-mount",
-              "agents/agent-verification-flow",
-              "agents/named-agent-card"
-            ]
+            "pages": ["agents/overview", "agents/team-agents", "agents/agent-identity", "agents/agent-delegation", "agents/runtime-mount", "agents/agent-verification-flow"]
           },
           {
-            "group": "Recipes",
-            "pages": [
-              "mcp/guarded-action",
-              "cookbook/overview",
-              "cookbook/auth-hosted-verify",
-              "cookbook/integrations",
-              "cookbook/domain-verification",
-              "cookbook/nft-gating",
-              "cookbook/sybil-resistance",
-              "cookbook/verifiable-agents",
-              "cookbook/verified-handles",
-              "widgets/overview",
-              "widgets/verifygate"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Concepts",
-        "groups": [
+            "group": "Verify and reuse",
+            "pages": ["verification/overview", "verification/how-it-works", "verification/lifecycle", "verification/verifiers", "cookbook/auth-hosted-verify", "cookbook/domain-verification", "cookbook/verifiable-agents"]
+          },
           {
-            "group": "Trust",
-            "pages": [
-              "verification/overview",
-              "verification/how-it-works",
-              "verification/lifecycle",
-              "verification/signing-format",
-              "learn/standards/index",
-              "learn/standards/caip-380",
-              "learn/proof-links",
-              "verification/verifiers",
-              "verification/propose-a-verifier",
-              {
-                "group": "Catalog",
-                "pages": [
-                  "verification/ownership-basic",
-                  "verification/ownership-social",
-                  "verification/ownership-dns-txt",
-                  "verification/ownership-org-oauth",
-                  "verification/ownership-pseudonym",
-                  "verification/wallet-link",
-                  "verification/nft-ownership",
-                  "verification/token-holding",
-                  "verification/contract-ownership",
-                  "verification/proof-of-human",
-                  "verification/wallet-risk",
-                  "verification/ai-content-moderation"
-                ]
-              }
-            ]
+            "group": "Access and payments",
+            "pages": ["platform/proofs", "platform/hosted-gate-checkout", "platform/x402", "platform/pricing", "platform/billing", "cookbook/connector-integrations"]
           }
         ]
       },
@@ -172,86 +120,21 @@
         "groups": [
           {
             "group": "MCP",
-            "pages": [
-              "mcp/overview",
-              "mcp/tools",
-              "mcp/oauth",
-              "mcp/auth",
-              "mcp/endpoints",
-              "platform/llm-docs",
-              "mcp/context",
-              "mcp/verifiers-catalog",
-              "mcp/proofs-check",
-              "mcp/verify",
-              "mcp/verify-or-guide",
-              "mcp/proofs-get",
-              "mcp/agent-link",
-              "mcp/agent-create",
-              "mcp/secrets"
-            ]
+            "pages": ["mcp/overview", "mcp/tools", "mcp/oauth", "mcp/auth", "mcp/endpoints", "mcp/context", "mcp/verifiers-catalog", "mcp/proofs-check", "mcp/verify", "mcp/verify-or-guide", "mcp/proofs-get", "mcp/agent-link", "mcp/agent-create", "mcp/secrets"]
           },
           {
-            "group": "SDK",
-            "pages": [
-              "sdks/overview",
-              "sdks/javascript",
-              "sdks/cli",
-              "sdks/authentication",
-              "sdks/verifications",
-              "sdks/error-handling",
-              "sdks/security"
-            ]
+            "group": "JavaScript SDK",
+            "pages": ["sdks/overview", "sdks/javascript", "sdks/cli", "sdks/authentication", "sdks/verifications", "sdks/error-handling", "sdks/security", "widgets/overview", "widgets/verifygate"]
           },
           {
             "group": "HTTP API",
-            "pages": [
-              "api/overview",
-              "api/authentication",
-              "api/errors"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Platform",
-        "groups": [
-          {
-            "group": "Ecosystem",
-            "pages": [
-              "platform/overview",
-              "platform/trust-stack",
-              "platform/proofs",
-              "cookbook/connector-integrations",
-              "platform/security-and-trust",
-              "whitepaper"
-            ]
+            "pages": ["api/overview", "api/authentication", "api/errors", "platform/rate-limits-and-retries"]
           },
           {
-            "group": "Pricing & billing",
-            "pages": [
-              "platform/pricing",
-              "platform/presets",
-              "platform/billing",
-              "platform/hosted-gate-checkout",
-              "platform/x402",
-              "platform/rate-limits-and-retries"
-            ]
-          },
-          {
-            "group": "Legal",
-            "pages": [
-              "learn/legal/index",
-              "learn/legal/privacy-policy",
-              "learn/legal/terms-of-use",
-              "learn/legal/security-disclosure",
-              "learn/legal/dmca"
-            ]
+            "group": "Standards and policies",
+            "pages": ["verification/signing-format", "learn/standards/index", "learn/standards/caip-380", "learn/proof-links", "platform/security-and-trust", "learn/legal/index", "learn/legal/privacy-policy", "learn/legal/terms-of-use", "learn/legal/security-disclosure"]
           }
         ]
-      },
-      {
-        "tab": "API",
-        "openapi": "openapi/public-api.json"
       }
     ]
   },
@@ -658,7 +541,7 @@
     },
     {
       "source": "/platform/status",
-      "destination": "/platform/overview"
+      "destination": "/changelog"
     },
     {
       "source": "/platform/receipts-and-results",
