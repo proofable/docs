@@ -1,0 +1,93 @@
+---
+title: "Build a platform"
+description: "Add Proofable sign-in, verification, agent permissions, and proof to your own product without building identity or checkout yourself."
+icon: layer-group
+---
+
+Your users sign in and verify on Proofable, then return to your product with a proof ID. You never build passkey, OAuth, or wallet screens.
+
+<Tabs>
+  <Tab title="Hosted flow">
+    Send people to Proofable for sign-in, a check, or checkout, then back to your app.
+
+    ```js
+    import { getHostedCheckoutUrl } from '@proofable/sdk';
+
+    // Sign in only
+    window.location.assign(
+      getHostedCheckoutUrl({ intent: 'login', returnUrl: 'https://app.example.com/after-login' }),
+    );
+
+    // Or require the checks on a published gate
+    window.location.assign(
+      getHostedCheckoutUrl({ gateId: 'gate_your-app-name', returnUrl: 'https://app.example.com/callback' }),
+    );
+    ```
+
+    Read the proof ID from `qHash` on the return URL. Pass `mode: 'popup'` and `origin` to keep people on your page. [Hosted verification](/verification/hosted)
+  </Tab>
+  <Tab title="SDK">
+    ```bash
+    npm install @proofable/sdk
+    ```
+
+    | Job | Method |
+    |---|---|
+    | Protect a page | `VerifyGate` |
+    | Check access on your server | `gateCheck` |
+    | Create proofs for a user who approved your app | `verifyFromApp` |
+    | Create agents for your users | `getHostedAgentCreateUrl` |
+    | Read a proof | `getProof` |
+
+    [JavaScript SDK](/sdks/javascript)
+  </Tab>
+  <Tab title="API">
+    Call `https://api.proofable.me` from any language.
+
+    | Need | Endpoint |
+    |---|---|
+    | Check access | `GET /api/v1/proofs/check` |
+    | Create a proof | `POST /api/v1/verification` |
+    | Read a proof | `GET /api/v1/proofs/{qHash}` |
+    | Load a gate | `GET /api/v1/profile/gates/{gateId}` |
+
+    [HTTP API](/api/overview) and [OpenAPI](https://api.proofable.me/openapi.json)
+  </Tab>
+</Tabs>
+
+## What your users get
+
+| Your product needs | Proofable provides |
+|---|---|
+| Sign-in | Hosted passkey, wallet, and Google or Microsoft sign-in |
+| Verified users | Checks that save reusable proofs |
+| Agents for your users | An owner, identity, and permission proof for each agent |
+| Access control | Gates enforced in the browser and on your server |
+| Payments | Visitor checkout and pay per call |
+
+Users keep their proofs. When they reach another product that accepts them, they don't start over.
+
+## Who pays
+
+Published gates bill the gate owner by default. When your server creates proofs with `verifyFromApp`, pass your access key to bill your builder profile. Agent setup bills whoever signs each step. [Pricing](/pricing)
+
+## Keep credentials on the server
+
+Access keys and other secrets never belong in browser code. Call Proofable from your backend when you need more than the SDK exposes in the browser.
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Server integrations" icon="server" href="/integrations/server">
+    Create proofs from your backend.
+  </Card>
+  <Card title="Hosted verification" icon="key" href="/verification/hosted">
+    Every parameter for the hosted flow.
+  </Card>
+  <Card title="Agents in the SDK" icon="robot" href="/sdks/agents">
+    Create agents for your users with owner approval.
+  </Card>
+  <Card title="HTTP API" icon="terminal" href="/api/overview">
+    Endpoints, paging, and raw requests.
+  </Card>
+</CardGroup>

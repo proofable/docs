@@ -1,82 +1,66 @@
 ---
-title: Agents
-sidebarTitle: Agents
-description: Bring the agent you already use. Give it a known owner, the context and tools it needs, and limits that supported runtimes can check.
+title: "Agents"
+sidebarTitle: "Agents"
+description: "Give every agent an owner and limits. Keep its identity, permissions, approved tools, spend limits, expiry, and proof history available across supported runtimes."
 icon: robot
 "og:image": "/images/og-agents.png"
 "twitter:image": "/images/og-agents.png"
 ---
 
-Bring the agent you already use. Give it a known owner, the tools and context it needs, and clear limits: allowed actions, spend, expiry, and revocation. Supported runtimes can check that authority before a protected action.
+Bring the agent you already use. Proofable keeps who owns it and what it may do, and supported runtimes check that before a protected action.
 
-Install Proofable, click **Connect**, then ask:
+## What an agent gets
 
-> Create or import an agent on my Proofable profile. Use generate if I need a separate spend account. Set spend and action limits. Then confirm it is ready.
+| Part | What it holds |
+|---|---|
+| Owner | The profile that approved the agent |
+| Identity | A proof that names the agent and its account |
+| Permissions | Allowed and denied actions, human approval, and scope |
+| Spend limit | A cap on what the agent can pay |
+| Expiry and revoke | Permission ends on a date, or the moment you revoke it |
+| Tools and context | Connected apps, skills, and the context you select |
+| Proof history | Permissions, checks, and job receipts in one place |
 
-That call uses **`proofable_agent_create`**. Default is your signed-in account. Use **`generate`** only for a dedicated spend key. Confirm with **`proofable_agent_link`**.
+## Create an agent
 
-## Bring the whole agent
+[Connect Proofable](/#using-proofable), then ask:
 
-Call `proofable_context`, then create or import an agent. Open **Connections** on [proofable.me](https://proofable.me) to link apps and custom MCP servers once. Add skills and selected context to the agent. Chat now, or use **New job** (Pro) for background and scheduled work.
-
-Cursor, Claude Code, Codex, Hermes, and Grok use the same endpoint. Optional project mount:
-
-```bash
-npx -y @proofable/sdk mount <agentId> --apply cursor
+```text
+Create or import an agent on my Proofable profile. Set spend and action limits. Then confirm it is ready.
 ```
 
-Valid `--apply` values: `cursor`, `claude`, `codex`. See [Connect agent context](./runtime-mount).
+The agent lives on your signed-in profile by default. Ask for a dedicated spend account only when the agent should pay from its own account. [`proofable_agent_create`](/mcp/agent-create) covers every option.
 
-**Private cloud.** Point the runtime at the same URL. [Run Proofable in a private cloud](../cookbook/private-cloud-agents).
+## Use it where you work
 
-| Need | Do this |
-|------|---------|
-| First run | Install Proofable. Click Connect. Optional: `proofable setup` |
-| Create or import | Ask Proofable, or `proofable_agent_create` on your signed-in profile |
-| Dedicated spend key | `agentWallet: "generate"` |
-| Ready? | `proofable_agent_link` until `linked: true` |
-| Connections | Open **Connections** on [proofable.me](https://proofable.me). Link apps. [Guide](../cookbook/connector-integrations) |
-| Background or scheduled work | **New job**. Included with Pro |
-| List it elsewhere | Public agent card. Other marketplaces can list the same agent. |
+- **Chat and jobs on Proofable.** Chat now, or start a [job](/jobs) for background and scheduled work.
+- **Your editor.** Cursor, Claude Code, and Codex load the same agent with `npx -y @proofable/sdk mount <agentId> --apply cursor`.
+- **Your servers.** Point the runtime at the same endpoint with an [access key](/deployment/access-keys), or deploy to a [private cloud](/deployment/private-cloud).
+- **Other apps and marketplaces.** Each agent has a public card that others can check. [Verify an agent](/agents/named-agent-card)
 
-Keep your model, runtime, Okta, or enterprise sign-in. Proofable keeps the agent identity, approved stack, current authority, and proofs available to supported clients.
+Keep your model, runtime, and enterprise sign-in such as Okta. Proofable keeps the agent's identity, approved tools, current permissions, and proofs available to supported clients.
 
-## Set it up
+## Where permissions are enforced
 
-<Steps>
-  <Step title="Connect">
-    Add `https://mcp.proofable.me/mcp`, then click **Connect**. Optional: `proofable setup`.
-  </Step>
-  <Step title="Create or import">
-    Omit **`agentWallet`** to use your profile. Use **`"generate"`** for a dedicated spend key.
-  </Step>
-  <Step title="Connections">
-    Open **Connections** on [proofable.me](https://proofable.me). Link the apps the work needs. [Connections](../cookbook/connector-integrations)
-  </Step>
-  <Step title="Work">
-    Chat now, or start a Pro job. Limits, expiry, and revoke live on the agent. [Permissions](./agent-delegation).
-  </Step>
-</Steps>
+| Where the agent runs | What Proofable provides |
+|---|---|
+| Chat and jobs on Proofable | Enforces permissions, tool access, and proof checks |
+| MCP clients | Loads the agent's rules and context. Start a new session after you mount. |
+| Your workers and backends | Returns the permission bundle for your code to enforce |
 
-## Next
+## Guides
 
 <CardGroup cols={2}>
-  <Card title="MCP setup" icon="plug" href="../mcp/setup">
-    Install Proofable and click Connect.
+  <Card title="Guard an agent action" icon="shield-check" href="/mcp/guarded-action">
+    Stop a tool call the agent is not allowed to make.
   </Card>
-  <Card title="Create an agent" icon="robot" href="../mcp/agent-create">
-    proofable_agent_create. Optional dedicated spend key.
+  <Card title="Agent permissions" icon="handshake" href="/agents/agent-delegation">
+    Actions, spend caps, expiry, and revoke.
   </Card>
-  <Card title="Connections" icon="grid-2" href="../cookbook/connector-integrations">
-    Link apps in Connections.
-  </Card>
-  <Card title="Team agents" icon="user-group" href="./team-agents">
+  <Card title="Team agents" icon="user-group" href="/agents/team-agents">
     Several agents on one profile.
   </Card>
-  <Card title="Private cloud agents" icon="cloud" href="../cookbook/private-cloud-agents">
-    Same agent on a laptop, server, or confidential VM.
-  </Card>
-  <Card title="Discover agents" icon="address-card" href="./named-agent-card">
-    Public card. Same agent can be listed elsewhere.
+  <Card title="Verify an agent" icon="address-card" href="/agents/named-agent-card">
+    Check who owns an agent before you trust it.
   </Card>
 </CardGroup>

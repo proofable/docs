@@ -1,12 +1,12 @@
 ---
 title: MCP auth
-description: Host Connect for interactive MCP clients, access key fallback, and token security.
+description: Host Connect for interactive clients, Profile access keys for servers and automation, and token security.
 icon: lock
 ---
 
 Interactive MCP clients sign in through the host. Register `https://mcp.proofable.me/mcp`, click **Connect**, and finish browser sign-in. The host runs OAuth 2.0 with PKCE and can refresh the session for up to 30 days.
 
-For servers, CI, and environments that cannot open a browser, use a durable profile access key instead.
+For servers, CI, and environments that cannot open a browser, use a durable profile access key instead. Both paths hit the same endpoint and the same Proofable profile.
 
 ## Sign in
 
@@ -38,13 +38,34 @@ GET https://proofable.me/.well-known/oauth-authorization-server
 
 For full OAuth mechanics, see [MCP OAuth](./oauth).
 
-## Access key (fallback)
+## Access key (servers and automation)
 
-Use a **profile access key** from [Access Keys](https://proofable.me/profile?tab=account) when browser OAuth is not available: servers, CI, and automation.
+Use a **profile access key** from [Access Keys](https://proofable.me/profile?tab=account) when browser OAuth is not available: servers, CI, cron, containers, cloud agents, and gateways.
+
+Set the canonical environment variable and let the CLI write the config:
 
 ```bash
-proofable setup --access-key <npk_...>
+export PROOFABLE_ACCESS_KEY=npk_...
+proofable setup --access-key $PROOFABLE_ACCESS_KEY
 ```
+
+Or paste the block into any client's MCP settings:
+
+```json
+{
+  "mcpServers": {
+    "proofable": {
+      "type": "http",
+      "url": "https://mcp.proofable.me/mcp",
+      "headers": {
+        "Authorization": "Bearer ${PROOFABLE_ACCESS_KEY}"
+      }
+    }
+  }
+}
+```
+
+Marketplace gateways that reserve `Authorization` for their own OAuth (such as Smithery) forward the same key as `x-proofable-access-key`; the hosted MCP maps it onto the same Bearer principal. That is a transport alias, not a second credential: same `npk_*` key, same profile, same revocation path. Leave the gateway's key field empty to Connect with OAuth instead.
 
 ## Choose an auth mode
 
@@ -88,7 +109,7 @@ Hosts that support MCP OAuth follow that metadata and open Connect. Stateless st
 
 ## Interactive verification flows
 
-[Hosted Verify](../cookbook/auth-hosted-verify): passkey, wallet, OAuth, and social verification steps run **on Proofable**. If a tool returns **`hostedVerifyUrl`**, open it once, then continue in MCP.
+[Hosted Verify](../verification/hosted): passkey, wallet, OAuth, and social verification steps run **on Proofable**. If a tool returns **`hostedVerifyUrl`**, open it once, then continue in MCP.
 
 ## Security
 
@@ -104,5 +125,5 @@ Hosts that support MCP OAuth follow that metadata and open Connect. Stateless st
 <CardGroup cols={3}>
   <Card title="MCP OAuth" icon="shield-check" href="./oauth" />
   <Card title="Setup" icon="code" href="./setup" />
-  <Card title="Hosted Verify" icon="key" href="../cookbook/auth-hosted-verify" />
+  <Card title="Hosted Verify" icon="key" href="../verification/hosted" />
 </CardGroup>

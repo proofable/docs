@@ -57,7 +57,9 @@ for (const pageId of pageIds) {
   }
 }
 
-const mdxFiles = walkFiles(docsRoot).filter(file => file.endsWith('.mdx'));
+const mdxFiles = walkFiles(docsRoot).filter(
+  file => file.endsWith('.mdx') && !file.startsWith(path.join(docsRoot, 'snippets', path.sep)),
+);
 for (const file of mdxFiles) {
   const relative = path.relative(docsRoot, file).replaceAll(path.sep, '/').replace(/\.mdx$/, '');
   routes.add(pageRoute(relative));
@@ -125,10 +127,21 @@ for (const redirect of redirects) {
 }
 
 const installRedirect = redirects.find(row => row.source === '/install');
-if (installRedirect?.destination !== '/mcp/setup') {
-  errors.push('/install must redirect to /mcp/setup');
+if (installRedirect?.destination !== '/') {
+  errors.push('/install must redirect to Getting started');
 }
-for (const removedPage of ['mcp/ide-plugin', 'mcp/journeys', 'brand-kit', 'agents/a2a', 'platform/environments']) {
+for (const removedPage of [
+  'mcp/ide-plugin',
+  'mcp/journeys',
+  'brand-kit',
+  'agents/a2a',
+  'platform/environments',
+  'quickstart',
+  'cookbook/overview',
+  'agents/overview',
+  'verification/overview',
+  'sdks/overview',
+]) {
   if (pageIds.includes(removedPage)) errors.push(`Removed page remains in navigation: ${removedPage}`);
 }
 
@@ -165,6 +178,25 @@ for (const option of config.contextual?.options || []) {
   if (href.startsWith('/') && !routes.has(href) && !redirectSources.has(href)) {
     errors.push(`Contextual link is missing: ${href}`);
   }
+}
+
+if (config.appearance?.default !== 'light') {
+  errors.push('appearance.default must be light to match the product color-scheme default');
+}
+if (config.appearance?.strict === true) {
+  errors.push('appearance.strict must be false so docs can toggle light/dark like the app');
+}
+if (config.background?.color?.light !== '#F5F4F1') {
+  errors.push('background.color.light must be Bone #F5F4F1');
+}
+if (config.background?.color?.dark !== '#050505') {
+  errors.push('background.color.dark must stay #050505');
+}
+if (config.styling?.codeblocks !== 'system') {
+  errors.push('styling.codeblocks must be system so code follows the site theme');
+}
+if (config.seo?.metatags?.['color-scheme'] !== 'light dark') {
+  errors.push('seo.metatags.color-scheme must advertise both light and dark');
 }
 
 if (errors.length > 0) {

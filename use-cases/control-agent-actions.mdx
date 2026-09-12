@@ -1,0 +1,96 @@
+---
+title: "Control agent actions"
+description: "Decide what an agent can access, spend, or change before it acts, and stop the tool calls it is not allowed to make."
+icon: shield-halved
+---
+
+Give each agent an owner and explicit limits. Before a sensitive tool call, the agent's current permission decides whether the call runs, waits for approval, or stops.
+
+```text
+Agent          research-agent
+Action         Send email
+Authority      Draft  ✓
+               Send   ✕
+Decision       Blocked
+```
+
+## What you can limit
+
+| Limit | What happens |
+|---|---|
+| Allowed actions | Only the listed actions can run. |
+| Denied actions | Always blocked. A denial wins over an allowance. |
+| Human approval | Irreversible actions wait until a person approves. |
+| Spend cap | Caps how much the agent can pay. |
+| Expiry | Permission ends on the date you set. |
+| Revoke | Permission ends the moment you revoke it. |
+
+A missing, expired, or revoked permission fails closed.
+
+## Set it up
+
+<Steps>
+  <Step title="Give the agent limits">
+    [Connect Proofable](/#using-proofable), then ask your assistant:
+
+    ```text
+    Create or import an agent named research-agent. Allow draft_email, deny send_email, and require human approval for irreversible actions.
+    ```
+  </Step>
+  <Step title="Load its permission where the tool runs">
+    ```bash
+    npx -y @proofable/sdk mount research-agent --apply cursor
+    ```
+
+    This writes the agent's current permission to `.proofable/mount.json`. Use `claude` or `codex` in place of `cursor` for those hosts. If the CLI asks for a credential, run `npx -y @proofable/sdk auth --oauth` first.
+  </Step>
+  <Step title="Check before the tool call">
+    ```ts
+    import fs from 'node:fs';
+    import { evaluateRuntimeAction } from '@proofable/sdk/runtime-mount';
+
+    const bundle = JSON.parse(fs.readFileSync('.proofable/mount.json', 'utf8'));
+    const decision = evaluateRuntimeAction(bundle, 'send_email', { irreversible: true });
+
+    if (!decision.allowed) {
+      throw new Error(`${decision.code}: ${decision.message}`); // ACTION_DENIED
+    }
+    ```
+  </Step>
+</Steps>
+
+[Guard an agent action](/mcp/guarded-action) walks through the same flow with every decision code.
+
+## Where the check runs
+
+| Where the agent runs | What enforces the decision |
+|---|---|
+| Chat and jobs on Proofable | Proofable checks permissions, tool access, and proofs before each action. |
+| Cursor, Claude Code, and Codex | The host loads the agent's rules. Start a new session after you mount. |
+| Your own workers and backends | Your code calls `evaluateRuntimeAction` and stops when `allowed` is `false`. |
+
+Proofable supplies the decision. The system that owns the tool call must honor it.
+
+## Built-in guardrails
+
+- **Connected apps.** Only the capabilities you enable can run. Sends, creates, and deletes still pass through agent permissions. [Connections](/connections)
+- **Secrets.** Stored encrypted and never returned in plaintext through MCP. Connected tools run without handing credentials to the model. [Security](/security)
+- **Payments.** Set `maxSpend` with the `payments:x402` scope. Your application checks the cap before it signs each payment. [Pay per call](/gates/pay-per-call)
+- **Jobs.** A run that needs approval waits for you. Approve to continue, or deny to stop it. [Jobs](/jobs)
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Guard an agent action" icon="shield-check" href="/mcp/guarded-action">
+    Run one allow or deny decision end to end.
+  </Card>
+  <Card title="Agent permissions" icon="handshake" href="/agents/agent-delegation">
+    Every permission field, with examples.
+  </Card>
+  <Card title="Prove what happened" icon="receipt" href="/use-cases/prove-what-happened">
+    Keep a record of each decision and result.
+  </Card>
+  <Card title="Agents" icon="robot" href="/agents">
+    Owners, limits, and proof history for every agent.
+  </Card>
+</CardGroup>

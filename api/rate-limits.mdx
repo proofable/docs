@@ -40,12 +40,12 @@ CORS exposes `Retry-After`, `RateLimit`, and `RateLimit-Policy` so browsers and 
 
 ## Tips
 
-- **Reuse proofs.** A gate check (1 credit) reads an existing proof. Creating a new one (4–73 credits) is heavier and counts against the verification window. Cache the proof ID and check it instead.
+- **Reuse proofs.** A gate check (1 credit) reads an existing proof. Creating a new one (4 to 73 credits) is heavier and counts against the verification window. Cache the proof ID and check it instead.
 - **Gate checks, not raw verification.** Use `gateCheck` with your `gateId` for access decisions. It reads saved results first and only creates a new proof when needed.
-- **Need higher limits?** Pro raises API throughput 4×. Enterprise raises it 10× with SLAs and custom packages. See [Pricing](./pricing).
+- **Need higher limits?** Pro raises API throughput four times. Enterprise raises it ten times, with service levels and custom packages. See [Pricing](/pricing).
 
 ## 402 and credits
 
-When credits run out, billable calls return **402 Payment Required** with a quote, not 429. Pay per call with [Pay per call](./x402) (no account needed) or top up credits and retry.
+When credits run out, billable calls return **402 Payment Required** with a quote, not 429. Pay for the call with [x402](/gates/pay-per-call), no account needed, or add credits and retry.
 
-**Next:** [SDK errors](../sdks/error-handling) and [Pricing](./pricing)
+**Next:** [SDK errors](../sdks/error-handling) and [Pricing](/pricing)

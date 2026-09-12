@@ -1,156 +1,99 @@
 ---
-title: Trust Center
-sidebarTitle: Trust Center
-description: Zero-trust execution, private by default, minimum disclosure, server-side credentials, auditable actions, optional anchoring.
-icon: shield-check
+title: "Security"
+description: "How Proofable protects people, agents, and data: no implicit authority, private by default, minimum disclosure, server-side credentials, and auditable decisions."
+icon: lock
 ---
 
-Verify what is required. Expose only what is necessary. Authorize every action. Record the decision, not the sensitive data.
+Proofable checks what is required, shares only what a decision needs, and records the decision instead of the sensitive data behind it.
 
-Proofable does not add compliance. It proves the architecture is operating according to its trust model.
+## How Proofable is built
 
-## Architecture
+### No implicit authority
 
-### Zero-trust execution
-
-Every action is authorized against identity, proof, policy, and delegated authority. Identity, ownership, login, or possession never automatically implies authority. Authority is checked against current policy and delegation at execution time.
+Every action is checked against identity, proof, policy, and the permission an owner granted, at the moment it runs. Signing in, owning an account, or holding a key never grants authority by itself.
 
 ### Private by default
 
-Proofs and receipts remain private unless explicitly shared. Public exposure, public indexing, IPFS, and chain anchoring are explicit choices. Off-chain is the default.
+Proofs and receipts stay private and offchain unless you share them. Public pages, public indexing, IPFS, and blockchain records are explicit choices.
 
 ### Minimum disclosure
 
-A check returns the minimum claim or result required for the decision. The proof proves the decision without reproducing the underlying evidence. Apps and agents receive the result they need, not the sensitive source material.
+A check returns the smallest claim the decision needs. Apps and agents get the result, not the source material.
 
 ### Server-side credentials
 
-Agents use connected tools without receiving the user's secrets. Credentials are resolved and injected inside trusted server execution. They are never intentionally handed to the model, exposed in a tool schema, proof, browser response, or public record.
+Connected tools run without handing credentials to the model. Credentials are resolved inside trusted server execution and never placed in a tool schema, proof, browser response, or public record.
 
-### Auditable actions
+### Auditable decisions
 
-Critical decisions produce proofs that can be inspected, verified, and revoked without publicly exposing the underlying data. Store enough to reconstruct who authorized what, under which policy, against which proof, and what outcome occurred.
-
-### Optional anchoring
-
-Off-chain is the default. Public or blockchain publication requires explicit intent.
+Important decisions produce proofs you can inspect, verify, and revoke without exposing the data behind them.
 
 ## Invariants
 
-These are Proofable invariants. Deviation from any of them is a bug.
+These hold everywhere in Proofable. A deviation from any of them is a bug.
 
-- **No implicit authority.** Identity, ownership, login, or possession never automatically implies authority to perform an action. Authority is checked against current policy and delegation at execution time.
-- **Minimum disclosure.** A check returns the minimum claim or result required for the decision. The proof proves the decision without unnecessarily reproducing the underlying evidence.
-- **Private and off-chain by default.** Public exposure, public indexing, IPFS, and chain anchoring are explicit choices.
-- **Secrets never become agent context.** Credentials are resolved and injected inside trusted server execution. They are never intentionally handed to the LLM, exposed in a tool schema, proof, browser response, or public proof.
-- **Evidence is not public proof.** Private evidence can exist when it is necessary to make a proof auditable, but public consumers get the claim, status, or proof rather than the sensitive source material.
-- **Every privileged action has a policy decision.** Subject plus resource plus action plus policy plus context produces allow, deny, or approval. The proof records the decision and relevant non-sensitive metadata.
-- **Delegation is narrower than ownership.** Agents operate only inside explicitly delegated authority. Spend, secrets, tool access, and high-risk actions remain bounded.
-- **Auditability without surveillance.** Store enough to reconstruct who authorized what, under which policy, against which proof, and what outcome occurred. Do not interpret "audit log" as permission to retain arbitrary request bodies, prompts, OAuth payloads, or provider responses.
+- **No implicit authority.** Identity, ownership, sign-in, or possession never grants authority by itself.
+- **Minimum disclosure.** A check returns the minimum claim or result the decision requires.
+- **Private and offchain by default.** Public exposure, indexing, IPFS, and chain anchoring are explicit choices.
+- **Secrets never become agent context.** Credentials stay inside trusted server execution.
+- **Evidence is not public proof.** Private evidence can exist to keep a proof auditable. Public readers get the claim, status, or proof, not the source material.
+- **Every privileged action has a policy decision.** Subject, resource, action, policy, and context produce allow, deny, or approval. The proof records the decision.
+- **Permission is narrower than ownership.** Agents act only inside the permission they were given. Spend, secrets, tool access, and high-risk actions stay bounded.
+- **Auditability without surveillance.** Records show who authorized what, under which policy, against which proof, and what happened. They are not a store for request bodies, prompts, OAuth payloads, or provider responses.
 
-Proofable provides evidence of control, not evidence about the person.
+## One model for every decision
 
-That is stronger than calling it "privacy-first."
+Sign-in, connected apps, payments, agents, and jobs all follow the same path:
 
-## A distinction that matters
-
-Zero trust is not zero data.
-
-You sometimes legitimately need private state, encrypted secrets, session state, private evidence, or proofs to provide the product. The standard is purpose-bound, least-privilege, minimum necessary, protected, auditable, and deletable where applicable. Not "the server may never possess data."
-
-For blockchain specifically, the EDPB's final July 2026 guidance makes the off-chain-first and optional-anchor direction especially valuable.
-
-## One data model
-
-Every feature (OAuth, Gmail, Drive, GitHub, payments, identity, ZK proofs, agents, MCP, API keys, AI inference, social connections, jobs) fits into one existing model.
-
+```text
 Evidence → Proof → Policy → Authority → Action → Receipt
+```
 
-Not a Google system, an AI safety system, a wallet system, a GDPR system, an agent approval system, and an audit system. That fragmentation would destroy the advantage already built.
+1. Sensitive evidence is examined inside a trusted boundary.
+2. It is reduced to a claim or proof.
+3. The claim is checked against policy and the permission an owner granted.
+4. The action is allowed, denied, or sent for approval.
+5. A proof records what was decided.
+6. The evidence stays protected, or is deleted according to its retention rule.
 
-The complete flow:
+Zero trust is not zero data. Some features need private state, encrypted secrets, or private evidence. Proofable keeps that data purpose-bound, least-privilege, protected, auditable, and deletable where applicable.
 
-1. Sensitive evidence is examined inside the appropriate trusted boundary.
-2. It is minimized into a claim or proof.
-3. It is checked against policy and delegated authority.
-4. The action is allowed, denied, or approved.
-5. The proof records what was decided.
-6. Sensitive evidence remains protected or disappears according to its retention requirement.
+## Proof visibility
 
-## Privacy controls
-
-Use this section only to choose visibility. Most builders should stay private.
-
-### Boundaries
-
-- Proof issuance runs in **Proofable**.
-- Return **only** what your product needs from checks.
-- **Private** reads need the owner signed in (or your sharing rules).
-
-### Modes
-
-| Mode | `privacyLevel` | `publicDisplay` | Use |
-|------|----------------|-----------------|-----|
-| Private | `private` | `false` | Default. Owner-only reads. |
-| Unlisted public | `public` | `false` | Public by link or id, not listed. |
-| Listed public | `public` | `true` | Discoverable public proof. |
-
-Saved **proof IDs** follow the visibility you chose.
-
-`privacyLevel` decides private vs public. `publicDisplay` only matters for public proofs. Unlisted public still works for anyone with the id.
-
-### Defaults
-
-| Surface | Create default |
-|---------|----------------|
-| `client.verify()` | `private` |
-| `VerifyGate` | Hosted gate policy |
-
-For browser checkout, publish a gate and pass `gateId`. Visibility overrides belong in advanced `client.verify()` flows.
-
-### Never ship publicly
-
-Raw signatures, owner-only payloads, private proof enumeration.
+Proofs are private unless you choose otherwise. Visibility modes and defaults are in [Proofs](/proofs#visibility).
 
 ## Smart contract audit
 
-Proofable smart contracts were audited by [SafeStack AI](https://safestackai.com) in March 2026. The audit completed with no critical, high, medium, or low severity findings.
+SafeStack AI audited the Proofable smart contracts in March 2026. The audit found no critical, high, medium, or low severity issues.
 
-Scope: `ProofableVerifierRegistry.sol`, `ProofableVoucherHub.sol`, `ProofableVoucherSpoke.sol`, `ProofableToken.sol`.
+Scope: `ProofableVerifierRegistry.sol`, `ProofableVoucherHub.sol`, `ProofableVoucherSpoke.sol`, and `ProofableToken.sol`. Status is listed on the [Trust Center](https://proofable.me/trust-center#smart-contract-audit). Email [dev@proofable.me](mailto:dev@proofable.me) for the full report.
 
-Public status is listed on the [Trust Center](https://proofable.me/trust-center#smart-contract-audit). Contact [dev@proofable.me](mailto:dev@proofable.me) for the full report.
+## Integration checklist
 
-## Diligence material
+- Decide access with a server-side gate check, not a browser flag.
+- Respect each check's freshness window.
+- Run interactive checks through Hosted Verify at `/verify`.
+- Read the verifier list from the live catalog.
+- Keep proofs private unless your product needs them public.
+- Keep access keys and other secrets on servers.
 
-<CardGroup cols={3}>
-  <Card title="Privacy Policy" icon="file-text" href="../learn/legal/privacy-policy">
-    What Proofable processes and why.
-  </Card>
-  <Card title="Terms of Use" icon="scale" href="../learn/legal/terms-of-use">
-    Service terms.
-  </Card>
-  <Card title="Security disclosure" icon="shield-check" href="../learn/legal/security-disclosure">
-    Report a vulnerability.
-  </Card>
-</CardGroup>
+## Report a vulnerability
 
-## Checklist
+Email [dev@proofable.me](mailto:dev@proofable.me) and do not post it publicly. The full policy is in [Security disclosure](/learn/legal/security-disclosure).
 
-<Checklist>
- <Item>Decide access with gate checks.</Item>
- <Item>Respect verifier time windows.</Item>
- <Item>Interactive flows via `/verify`.</Item>
- <Item>Verifier list from live API catalog.</Item>
- <Item>Keep proofs private unless your product explicitly needs public visibility.</Item>
-</Checklist>
-
-## Next
+## Policies
 
 <CardGroup cols={2}>
-  <Card title="Proofs" icon="shield-check" href="./proofs">
-    Proof status, scope, and sharing.
+  <Card title="Privacy Policy" icon="file-lines" href="/learn/legal/privacy-policy">
+    What Proofable processes and why.
   </Card>
-  <Card title="Start" icon="bolt" href="/">
-    Where checks run in your stack.
+  <Card title="Terms of Use" icon="scale-balanced" href="/learn/legal/terms-of-use">
+    The terms for using Proofable.
+  </Card>
+  <Card title="Security disclosure" icon="shield-check" href="/learn/legal/security-disclosure">
+    How to report a vulnerability.
+  </Card>
+  <Card title="DMCA" icon="copyright" href="/learn/legal/dmca">
+    Copyright notices and takedowns.
   </Card>
 </CardGroup>

@@ -137,6 +137,8 @@ Payments are bound to one `gateId` + `qHash` pair and cannot be reused for anoth
 
 `fulfillment.delivery` is one of `access_granted`, `redirect`, `download`, or `reveal`. The secret value appears only here, after verification (and payment) succeeded for the caller's wallet.
 
+When the listing unlocks an existing proof, fulfill copies a stored body into the buyer wallet if one exists. A title-only proof (an agent identity, a handle) skips that copy and returns `rewardProof` pointing at the source with `accessGranted: true`. The buyer grant is written either way.
+
 ## Campaign windows
 
 Gates may carry a `schedule` (`startsAt` / `endsAt`). Outside the window, gate checks report the closed state and verification/fulfillment are refused server-side (`GATE_NOT_STARTED`, `GATE_ENDED`). Treat the window as enforced. It is not a UI-only hint.
@@ -147,11 +149,11 @@ Gates may carry a `schedule` (`startsAt` / `endsAt`). Outside the window, gate c
   <Card title="VerifyGate widget" icon="object-group" href="../widgets/verifygate">
     Drop-in checkout for published gates
   </Card>
-  <Card title="Pricing" icon="tags" href="./pricing">
-    Plans and credits
+  <Card title="Pricing" icon="tags" href="/pricing">
+    Plans, credits, and who pays
   </Card>
-  <Card title="Billing" icon="credit-card" href="./billing">
-    How verification and checkout charges work
+  <Card title="Gates in the SDK" icon="code" href="/sdks/gates">
+    getGate, gateCheck, and fulfillGate
   </Card>
   <Card title="API overview" icon="code" href="../api/overview">
     Full HTTP API surface

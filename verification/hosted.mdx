@@ -1,12 +1,13 @@
 ---
-title: Hosted sign-in and verify
+title: Hosted sign-in and verification
+sidebarTitle: Hosted verification
 description: Use Proofable for passkey, OAuth, and listing checkout without building sign-in UI in your app.
 icon: key
 ---
 
 Send users to `https://proofable.me/verify` for sign-in, proof of human, social links, or listing checkout. You never embed passkey, OAuth, or wallet UI.
 
-Wallet steps appear only when a published gate requires them. Sign-in and gate checkout share one surface. See [How Proofable fits](../platform/trust-stack).
+Wallet steps appear only when a published gate requires them. Sign-in and gate checkout share one surface.
 
 ## What runs here
 
@@ -20,7 +21,7 @@ Wallet steps appear only when a published gate requires them. Sign-in and gate c
 
 | Topic | `intent=login` | Gate checkout (`gateId`, no login-only intent) |
 |--|----------------|---------------------------------------------------------------------|
-| Purpose | Proofable **session** (Hub, profile, later proofs) | **Proof** / listing outcome |
+| Purpose | Proofable **session** (profile and later proofs) | **Proof** / listing outcome |
 | Screen | Dedicated login shell | Composer |
 
 ## Parameters
@@ -81,4 +82,4 @@ Open with `mode: 'popup'` and `origin: window.location.origin`.
 
 ## No browser handoff
 
-Server-created proofs and access keys: [Integrations](../cookbook/integrations).
+Server-created proofs and access keys: [Server integrations](/integrations/server).

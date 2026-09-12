@@ -21,15 +21,15 @@ A signed CAIP-380 request proves who signed and that the request was not changed
 | CAIP-380 Portable Proof | A wallet-signed request format with a stable proof ID | Wallet-signed Proofable checks use this format. Other signed-in checks still create Proofable proofs | Draft | [CAIP-380 spec](https://standards.chainagnostic.org/CAIPs/caip-380), [Portable proofs](/learn/standards/caip-380), [Examples](https://github.com/proofable/sdk/tree/main/examples/caip-380) |
 | MCP | Tools and context for any MCP client | Hosted MCP carries profile, proofs, listings, permissions, and checks before sensitive tools run | Available | [MCP setup](/mcp/setup) |
 | OAuth / OIDC | Sign-in for people and MCP clients | Hosted MCP and app Connect | Available | [MCP setup](/mcp/setup) |
-| ACP | Client to a coding harness | Optional self-hosted job pin (OpenCode, Hermes, Claude ACP). Hosted jobs use the Operator engine. Proofable does not spawn ACP on Azure | Works with | [Private cloud agents](/cookbook/private-cloud-agents) |
-| Enterprise Agent SSO | App access for agents with an active user | Keep Okta or your IdP. Proofable records agent limits and runs background jobs those systems do not cover | Works with | [Agents](/agents/overview) |
+| ACP | Client to a coding harness | Optional self-hosted job pin (OpenCode, Hermes, Claude ACP). Hosted jobs use the Operator engine. Proofable does not spawn ACP on Azure | Works with | [Private cloud agents](/deployment/private-cloud) |
+| Enterprise Agent SSO | App access for agents with an active user | Keep Okta or your IdP. Proofable records agent limits and runs background jobs those systems do not cover | Works with | [Agents](/agents) |
 | A2A | Agent discovery cards | Public cards show who the agent is and who approved it | Available | [Platform A2A card](https://proofable.me/.well-known/a2a/agent-card.json), [Discover agents](/agents/named-agent-card) |
 | AuthZEN | A standard way to ask whether an action is allowed | A Proofable proof can be the evidence that decision uses | Works with | [First guarded action](/mcp/guarded-action), [Whitepaper](/whitepaper#standards-and-interoperability) |
-| AARM | Runtime checks before an agent acts | Proofable checks identity, limits, and current permission before an action, then records the result | Works with | [Agent setup](/agents/agent-verification-flow) |
-| ATF | Identity, behavior, access limits, and how to stop or revoke | Proofable covers those with identity, permission checks, deny, and revoke | Works with | [Agent setup](/agents/agent-verification-flow), [Proof lifecycle](/verification/lifecycle) |
+| AARM | Runtime checks before an agent acts | Proofable checks identity, limits, and current permission before an action, then records the result | Works with | [First guarded action](/mcp/guarded-action) |
+| ATF | Identity, behavior, access limits, and how to stop or revoke | Proofable covers those with identity, permission checks, deny, and revoke | Works with | [Agent permissions](/agents/agent-delegation), [Proof lifecycle](/verification/lifecycle) |
 | ERC-8004 | Public agent discovery | Proofable publishes compatible discovery cards and keeps its own proof and permission model | Available | [Platform agent card](https://proofable.me/.well-known/agent-card.json), [Discover agents](/agents/named-agent-card) |
-| x402 | Pay for a single HTTP call | Payment settles the call. Proofable can still require a current proof before the call proceeds | Available | [Pay per call](/platform/x402) |
-| Phala | Confidential compute | Hosted AI can run in a Phala-backed confidential environment. The same proofs work on a private deploy | Available | [Private cloud agents](/cookbook/private-cloud-agents) |
+| x402 | Pay for a single HTTP call | Payment settles the call. Proofable can still require a current proof before the call proceeds | Available | [Pay per call](/gates/pay-per-call) |
+| Phala | Confidential compute | Hosted AI can run in a Phala-backed confidential environment. The same proofs work on a private deploy | Available | [Private cloud agents](/deployment/private-cloud) |
 
 Proofable uses these standards. It does not replace them. [CAIP-380](https://standards.chainagnostic.org/CAIPs/caip-380) remains the open specification for the signed request format.
 

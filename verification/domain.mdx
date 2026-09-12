@@ -1,42 +1,40 @@
 ---
-title: Verify a domain
-sidebarTitle: Domain recipe
-description: "Prove domain control with a DNS TXT record to claim a verified site, business listing, or service identity that visitors can trust."
+title: "Verify a domain"
+sidebarTitle: "Domain ownership"
+description: "Prove you control a domain with a DNS TXT record, then reuse the proof for a verified site, business profile, or service identity."
 icon: globe
 ---
 
-Check: [`ownership-dns-txt`](../verification/ownership-dns-txt). Optional. Not required to [sell access](../quickstart) or run VerifyGate.
+Publish one DNS record, run the check, and keep the proof. This guide uses the [`ownership-dns-txt`](/verification/ownership-dns-txt) check.
 
-## Steps
+<Steps>
+  <Step title="Add a TXT record">
+    At your DNS host, create a TXT record named `_neus` on the domain. The check reads `_neus.<your-domain>`.
 
-1. **TXT** at `_neus.<yourdomain>` (DNS host/name is often `_neus` when the zone is your apex or subdomain).
+    ```text
+    wallet=<your-account-address>
+    ```
 
-   ```text
-   wallet=<your-wallet-or-account-address>
-   ```
+    Use the same account address Proofable uses for the check. Write Ethereum addresses in lowercase. Only the `wallet=` prefix is read.
+  </Step>
+  <Step title="Run the check">
+    ```js
+    const proof = await client.verify({
+      verifier: 'ownership-dns-txt',
+      data: { domain: 'example.com' },
+      walletAddress: '0x...',
+    });
+    ```
 
-   Example for Ethereum (use **lowercase** hex so it matches what Proofable expects):
+    A signed request fills in the account address. Add `walletAddress` inside `data` only when it must be explicit, and it must match the signer.
+  </Step>
+  <Step title="Check it later">
+    ```bash
+    curl "https://api.proofable.me/api/v1/proofs/check?verifierIds=ownership-dns-txt&address=0x..."
+    ```
+  </Step>
+</Steps>
 
-   ```text
-   wallet=0x...
-   ```
+DNS changes can take minutes to propagate, and longer with some providers.
 
-   The check reads **`wallet=`** only (not `neus=` or other prefixes).
-
-2. **Request:** include at least `domain` in `data`. You may omit `data.walletAddress` when the same request carries a verified **top-level** `walletAddress` (typical signed flow); the service fills in that signer address before the DNS check. The TXT line must use the same wallet or account address Proofable uses for the check.
-
-   ```javascript
-   const proof = await client.verify({
-     verifier: 'ownership-dns-txt',
-     data: { domain: 'example.com', walletAddress: '0x...' },
-     walletAddress: '0x...',
-   });
-   ```
-
-3. **Check**
-
-   ```bash
-   GET /api/v1/proofs/check?verifierIds=ownership-dns-txt&address=0x...
-   ```
-
-DNS can take minutes to propagate (sometimes longer per provider).
+Record formats for other networks, and every field, are in [`ownership-dns-txt`](/verification/ownership-dns-txt).

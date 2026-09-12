@@ -1,26 +1,31 @@
 ---
-title: NFT gating
-description: "Require NFT ownership before content, rewards, or access unlock. Verify the holder once, then reuse the proof at every gate."
+title: "NFT and token gating"
+sidebarTitle: "NFT and token gating"
+description: "Require NFT ownership or a minimum token balance before content, rewards, or access unlock, then reuse the holder's proof at every gate."
 icon: image
 ---
 
-Use the [NFT ownership](../verification/nft-ownership) check. Ownership is point-in-time. Set the contract, token policy, and recency in your published gate.
+Require a holder before access. Holdings change, so ownership is checked at a point in time. Set the contract, the token rule, and how recent the check must be in your published gate.
 
-## Widget
+| Require | Check |
+|---|---|
+| An NFT from a collection | [`nft-ownership`](/verification/nft-ownership) |
+| A minimum token balance | [`token-holding`](/verification/token-holding) |
+
+## Add the gate
 
 ```jsx
 import { VerifyGate } from '@proofable/sdk/widgets';
 
-export function NFTGatedContent() {
+export function HolderContent() {
   return (
-    <VerifyGate gateId="gate_your-nft-gate">
+    <VerifyGate gateId="gate_your-holder-gate">
       <ProtectedContent />
     </VerifyGate>
   );
 }
 ```
 
-## Next
+Confirm on your server with `gateCheck` before you grant access. Set a recency window on the gate so a holder who sold does not keep access through an old proof.
 
-- [Sell access](../quickstart)
-- [NFT ownership check](../verification/nft-ownership)
+[Sell access with one gate](/gates/sell-access) walks through publishing and server checks.

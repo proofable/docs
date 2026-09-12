@@ -1,0 +1,81 @@
+---
+title: "Prove what happened"
+description: "Keep evidence of each agent action, the permission it ran under, and the result, in a record anyone you choose can check."
+icon: receipt
+---
+
+Permissions, checks, and completed actions each become a proof. Share one and the reader sees who acted, what they were allowed to do, and what happened, without seeing the private data behind it.
+
+```text
+Agent          revenue-agent
+Authorized by  Owner
+Action         Create draft
+Result         Completed
+Proof          0x...
+```
+
+## What the record shows
+
+| Question | Answered by |
+|---|---|
+| Who acted | The agent's identity proof |
+| Who approved it | The owner who signed the agent's permission |
+| What it was allowed to do | The permission proof: allowed and denied actions, spend cap, and expiry |
+| What happened | The receipt for the completed action or job run |
+| Whether it still holds | Current status: active, expired, or revoked |
+
+## How records are created
+
+- **Jobs.** Completed runs keep a receipt. Open it from the run on the agent's page.
+- **Connected apps.** Every action taken through [Connections](/connections) is saved as a result you can review.
+- **Your own runtime.** Record the outcome and link it to the permission it ran under.
+
+From an MCP client, ask the agent to record the result, or call `proofable_verify` directly:
+
+```json
+{
+  "verifierIds": ["ownership-basic"],
+  "data": {
+    "content": "Created draft invoice INV-2041 for Acme",
+    "reference": { "type": "qhash", "id": "<permission proof ID>", "title": "Agent permission" }
+  }
+}
+```
+
+A signed-in session fills in the owner. The `reference` links the new proof to the permission proof. [Link and version proofs](/learn/proof-links) covers typed links and version chains.
+
+## Inspect and share
+
+| Where | How |
+|---|---|
+| Browser | `https://proofable.me/proof/{qHash}` |
+| API | `GET https://api.proofable.me/api/v1/proofs/{qHash}` |
+| MCP | `proofable_proofs_get` with the proof ID |
+| React | `<ProofBadge qHash={qHash} />` |
+
+Proofs are private by default. Keep one private, make it public, or share it with a signed access grant. [Proof visibility](/proofs#visibility)
+
+## What stays private
+
+Proofable records the decision, not the sensitive data. A record holds enough to show who authorized what, under which permission, against which proof, and what happened. It is not a copy of prompts, OAuth payloads, or provider responses.
+
+## Check it outside Proofable
+
+Wallet-signed requests also produce a portable envelope that another system can check offline with `verifyPortableProofEnvelope`. The envelope proves who signed the request. Current status still comes from Proofable. [Portable Proof](/learn/standards/caip-380)
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Proofs" icon="shield-check" href="/proofs">
+    Read, share, reuse, and revoke proofs.
+  </Card>
+  <Card title="Proof lifecycle" icon="rotate" href="/verification/lifecycle">
+    Status, freshness, and revocation.
+  </Card>
+  <Card title="Control agent actions" icon="shield-halved" href="/use-cases/control-agent-actions">
+    Check permission before the action runs.
+  </Card>
+  <Card title="Security" icon="lock" href="/security">
+    What Proofable keeps and what it never exposes.
+  </Card>
+</CardGroup>

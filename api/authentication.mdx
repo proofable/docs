@@ -6,7 +6,7 @@ icon: fingerprint
 
 Pick the path that matches your caller. Most products use Hosted Verify for people and a profile access key for servers.
 
-Credits apply to checks and saved results, not to hosted session sign-in. See [How Proofable fits](../platform/trust-stack) and [Pricing](../platform/pricing).
+Credits apply to checks and saved results, not to hosted session sign-in. See [Getting started](..) and [Pricing](../pricing).
 
 | Need | Mechanism | Wallet code in your app |
 |------|-----------|---------------------------|
@@ -17,11 +17,11 @@ Credits apply to checks and saved results, not to hosted session sign-in. See [H
 | Server creates proofs for an approved user | App link + `verifyFromApp` | No |
 | Sign inside your page | SDK `verify` + `wallet` | Yes. Rare |
 
-Server integration: [Integrations](../cookbook/integrations).
+Server integration: [Server integrations](../integrations/server).
 
 ## Hosted Verify (default)
 
-`https://proofable.me/verify` for [Hosted Verify](../cookbook/auth-hosted-verify).
+`https://proofable.me/verify` for [Hosted Verify](../verification/hosted).
 
 Send users to your checkout with `gateId`; the enforcement policy bills your Hub credits.
 
@@ -48,7 +48,7 @@ See [Connect Proofable](../mcp/setup) and [MCP OAuth](../mcp/oauth).
 
 ## Backend proofs
 
-For backend-created proofs after a user approves your product once, see [Integrations](../cookbook/integrations). Separate from creating a **listing** under profile → **Listings**, which bills hosted verification to your account.
+For backend-created proofs after a user approves your product once, see [Server integrations](../integrations/server). Separate from creating a **listing** under profile → **Listings**, which bills hosted verification to your account.
 
 ## Signing inside your app
 

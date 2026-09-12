@@ -1,0 +1,63 @@
+---
+title: "Gates"
+description: "Require proof before something happens. Protect access, payment, checkout, APIs, or sensitive agent actions with required checks."
+icon: door-open
+---
+
+A gate lists the checks someone must pass before they continue. Publish it once as a listing, then enforce it anywhere with its `gateId`.
+
+## What a gate holds
+
+| Part | What it sets |
+|---|---|
+| Checks | What must be verified, with optional rules such as a minimum balance or a company domain |
+| Price | Free, or a price paid by card or USDC |
+| Schedule | Optional start and end times, enforced on the server |
+| Reward | What people receive after they pass: access, a redirect, a download, or a revealed value |
+
+## Enforce it
+
+| Where | How |
+|---|---|
+| A React page | `VerifyGate` with the `gateId` |
+| Any page | A hosted checkout link from `getHostedCheckoutUrl` |
+| Your server | `gateCheck`. Only `allRequiredSatisfied === true` means ready. |
+| An API | [Pay per call](/gates/pay-per-call) with a proof check |
+| An agent action | The agent's permission check before the tool runs. [Control agent actions](/use-cases/control-agent-actions) |
+
+```jsx
+import { VerifyGate } from '@proofable/sdk/widgets';
+
+<VerifyGate gateId="gate_your-app-name">
+  <ProtectedContent />
+</VerifyGate>;
+```
+
+## How checkout runs
+
+1. **Load the gate.** Requirements, price, and schedule. The reward stays hidden.
+2. **Check existing proofs.** Proofs the person already holds cover what they can.
+3. **Verify what's missing.** Only the checks that are not yet covered.
+4. **Pay.** For priced gates, after verification.
+5. **Deliver.** Proofable releases the reward and records the result.
+
+## Who pays
+
+Your credits pay for checks through your gate by default. Turn on visitor checkout to charge a price instead. [Pricing](/pricing)
+
+## Guides
+
+<CardGroup cols={2}>
+  <Card title="Sell access with one gate" icon="rocket" href="/gates/sell-access">
+    Publish, embed, and confirm in three steps.
+  </Card>
+  <Card title="Gate checkout" icon="door-open" href="/gates/checkout">
+    Drive the full checkout from your own backend.
+  </Card>
+  <Card title="NFT and token gating" icon="image" href="/gates/nft-gating">
+    Require a holder or a minimum balance.
+  </Card>
+  <Card title="Pay per call" icon="coins" href="/gates/pay-per-call">
+    Charge per API request with x402.
+  </Card>
+</CardGroup>

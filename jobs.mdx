@@ -1,0 +1,72 @@
+---
+title: "Jobs"
+description: "Run agent work in the background or on a schedule. Use the same agent identity, permissions, connections, limits, and proof when work continues outside the chat."
+icon: clock
+---
+
+A job is agent work that keeps running after you leave. It runs as the same agent, under the same permissions, with the same connected apps.
+
+Jobs are included with [Pro](/pricing).
+
+## Start a job
+
+<Steps>
+  <Step title="Open an agent">
+    Sign in at [proofable.me](https://proofable.me) and open the agent that should do the work.
+  </Step>
+  <Step title="Describe the work">
+    Choose **New job** and write what the agent should do.
+  </Step>
+  <Step title="Pick when it runs">
+    Run it once now, or put it on a schedule.
+  </Step>
+</Steps>
+
+| Timing | Runs |
+|---|---|
+| Now | Once, right away |
+| Daily, weekly, or monthly | At the time you choose, in your time zone |
+| Every | On an interval of minutes, hours, or days, at least one minute apart |
+| Custom | On a cron schedule |
+
+## What a job uses
+
+- The agent's identity and current permissions
+- Apps linked in [Connections](/connections)
+- The agent's skills and selected context
+- The agent's spend and action limits
+
+Before a job starts, Proofable flags setup it is likely to need, such as a missing key or connection.
+
+## Approvals
+
+When a run reaches an action that needs approval, it waits. Approve to continue, or deny to stop the run.
+
+## Receipts
+
+Completed runs keep a receipt: a proof of what the job did. Open it from the run.
+
+## Manage runs
+
+Cancel a run, stop a recurring schedule, or queue a run again from the job.
+
+## Sell a job
+
+List an AI service built on a job. Placeholders in the job become buyer inputs, and buyers connect their own apps at checkout. [Create a listing](https://proofable.me/profile/portals/new)
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Agents" icon="robot" href="/agents">
+    The identity and limits every job runs under.
+  </Card>
+  <Card title="Connections" icon="plug" href="/connections">
+    Link the apps a job needs.
+  </Card>
+  <Card title="Control agent actions" icon="shield-halved" href="/use-cases/control-agent-actions">
+    Decide what a job's agent may do.
+  </Card>
+  <Card title="Prove what happened" icon="receipt" href="/use-cases/prove-what-happened">
+    Inspect and share job receipts.
+  </Card>
+</CardGroup>

@@ -1,32 +1,61 @@
 ---
-title: Pricing
-description: "Proofable pricing: a free tier to start, Pro credits for scale, or charge visitors at your own gate and keep the revenue."
+title: "Pricing"
+description: "Start free with 500 credits a month. Pro adds 10,000 credits, agent jobs, and higher API limits. Enterprise is priced by agreement."
 icon: tags
 ---
 
-Credits pay for checks and saved results. Sign-in is always free. Credits apply when a check runs or a result is saved.
+Credits pay for checks and saved proofs. Sign-in is always free.
 
 ## Plans
 
-| Plan | Price | Credits / mo | API throughput | Start |
-|------|-------|--------------|-----------------|-------|
-| **Basic** | Free | 500 | 60 / min burst | [Start free](https://proofable.me/verify?intent=login) |
-| **Pro** | $19.99 / mo, $199.90 / yr | 10,000 | 240 / min burst | [Start Pro](https://proofable.me/profile?tab=credits) |
-| **Enterprise** | Custom | 500,000+ | 600 / min burst + SLAs | [Contact sales](https://proofable.me/contact?topic=Enterprise) |
+| Plan | Price | Credits per month | API throughput | Start |
+|---|---|---|---|---|
+| **Free** | Free | 500 | 60 per minute | [Start free](https://proofable.me/verify?intent=login) |
+| **Pro** | $19.99 a month, or $199.90 a year | 10,000 | 240 per minute | [Start Pro](https://proofable.me/profile?tab=credits) |
+| **Enterprise** | Custom | 500,000+ by agreement | 600 per minute, with service levels | [Contact sales](https://proofable.me/contact?topic=Enterprise) |
 
-**Pro adds:** hosted jobs in the background or on a schedule with connected apps, the agent workspace, advanced hosted models, more monthly credits, and priority support. Published listings can collect payment after required checks pass. Enterprise adds custom credit packages, rollout support, security review, and flexible billing.
+**Pro adds** the agent workspace, background and scheduled [jobs](/jobs), connected apps for hosted jobs, hosted AI with advanced models at twice the credit rate, permission proofs before agent actions, and four times the API throughput.
 
-Full per-tier limits: [Rate limits](./rate-limits-and-retries).
+**Enterprise adds** contracted throughput and service levels, custom credit packages and volume pricing, security and procurement review, and invoice terms where agreed. [Enterprise](/enterprise)
 
-## How credits map to cost
+## What checks cost
 
-One credit has a list price of **$0.0025**. Each action uses a different number of credits:
+One credit lists at $0.0025.
 
-- **Check an existing proof (gate check):** 1 credit. **$0.0025** per check.
-- **Create and save a new result:** 4–73 credits (**$0.01 to $0.18**) depending on the check type.
+| Action | Credits | Price |
+|---|---|---|
+| Sign in | 0 | Free |
+| Check an existing proof | 1 | $0.0025 |
+| Create and save a new proof | 4 to 73 | $0.01 to $0.18 |
 
-Live estimator: **[proofable.me/pricing](https://proofable.me/pricing)**. Heavier checks (human, agent authority, wallet risk) use more credits than a simple ownership check.
+Heavier checks, such as proof of human, agent permissions, and wallet risk, use more credits than a simple ownership check. The live estimator is at [proofable.me/pricing](https://proofable.me/pricing).
 
-How credits apply to gates, visitors, and APIs: [Billing](./billing).
+## Who pays
 
-**Next:** [Sell access](../quickstart)
+| Option | Who pays | Use it for |
+|---|---|---|
+| Your gate | Your credits | The default. Checks through your published gate bill your account. |
+| Visitor checkout | The visitor | Paid content and member access, by card or USDC. |
+| Pay per call | The caller | Metered APIs and agents that pay for each request with [x402](/gates/pay-per-call). |
+
+### Charge visitors
+
+Turn on visitor checkout in the gate's pricing step. For card payments, connect a payout account once under [Payouts](https://proofable.me/profile?tab=treasury). Until payouts are connected, paid gates accept USDC only. Payment runs after verification by default. [Gate checkout](/gates/checkout)
+
+### Agent setup
+
+Agent setup creates two separately signed proofs. Each is billed to its signer unless a validated sponsor or pay-per-call proof applies.
+
+| Step | Default payer |
+|---|---|
+| The agent signs `agent-identity` | The agent's account |
+| The owner signs `agent-delegation` | The approving account |
+| Your server signs with its own profile | Your builder profile |
+| A valid sponsor grant | The sponsoring organization |
+| A valid pay-per-call proof | The caller that paid |
+
+## When credits run out
+
+Billable calls return `402` with a quote. Add credits, or pay for the call with [x402](/gates/pay-per-call) and retry with the `PAYMENT-SIGNATURE` header.
+
+Per-plan request limits are in [Rate limits](/api/rate-limits).

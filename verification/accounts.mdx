@@ -1,35 +1,46 @@
 ---
-title: Verified creator handles
-description: Bind a pseudonymous handle to a wallet, display a verified badge, and gate creator actions with proofs.
-icon: badge-check
+title: "Verify account ownership"
+sidebarTitle: "Account ownership"
+description: "Confirm control of social and work accounts, bind a portable handle to a wallet, and show a verified badge your app can check."
+icon: at
 ---
 
-Use Proofable to make creator handles portable and verifiable. A user claims a handle, Proofable binds it to their wallet with the `ownership-pseudonym` verifier, and your app gets a reusable proof ID it can badge, link, and gate.
+Confirm that a person controls an account, then reuse the proof across your apps. OAuth runs on Proofable, so you never handle provider tokens.
 
-## When to use this
+| Prove | Check | Runs |
+|---|---|---|
+| A social account | [`ownership-social`](/verification/ownership-social) | Hosted |
+| A Google Workspace or Microsoft 365 account | [`ownership-org-oauth`](/verification/ownership-org-oauth) | Hosted |
+| A handle bound to a wallet | [`ownership-pseudonym`](/verification/ownership-pseudonym) | Signed in your app, or hosted |
 
-- Creator platforms, media networks, or launchpads that need handle ownership proof.
-- Pseudonymous identity without legal identity exposure.
-- Gating drops, founders tables, or premium calls behind a verified handle.
+## Linked accounts
 
-## What you need
+Send the person to Hosted Verify and read the proof ID back:
 
-- A published Proofable gate with `ownership-pseudonym` enabled (or use direct verification with in-app signing).
-- The user's wallet address.
-- A `namespace` to isolate your handles from the default `neus` namespace.
+```text
+https://proofable.me/verify?verifiers=ownership-social&returnUrl=https://app.example.com/verified
+```
 
-## Flow
+Use `ownership-org-oauth` for work accounts. Its `expectedOrgDomain` field limits the proof to one company domain.
 
-1. User claims a handle in your app.
-2. Your app asks Proofable to bind `handle` + `namespace` + `walletAddress`.
+Store the proof ID from the `qHash` field and reuse it. Don't re-run the flow on every visit.
+
+## Verified handles
+
+Bind a handle to a wallet with `ownership-pseudonym`, then badge, link, and gate on the proof. It suits creator platforms, media networks, and launchpads that need handle ownership without legal identity.
+
+### Flow
+
+1. The user claims a handle in your app.
+2. Your app asks Proofable to bind the handle, a `namespace`, and the wallet.
 3. Proofable returns a proof ID in `qHash` and a proof URL.
 4. Your app stores the proof ID with the user record.
-5. Surface a verified badge that links to the public proof page.
-6. Before any privileged action, check the proof on your server.
+5. Your app shows a verified badge that links to the proof page.
+6. Before any privileged action, your server checks the proof.
 
-## Direct verification (in-app signing)
+### Sign in your app
 
-Use `ProofableClient.verify()` when your app already handles wallet signatures.
+Use `client.verify()` when your app already handles wallet signatures:
 
 ```js
 import { ProofableClient } from '@proofable/sdk';
@@ -39,40 +50,36 @@ const client = new ProofableClient();
 const proof = await client.verify({
   verifier: 'ownership-pseudonym',
   data: {
-    pseudonymId: 'alice123',     // 3-64 lowercase chars
-    namespace: 'acme',         // isolate from default neus namespace
+    pseudonymId: 'alice123', // 3 to 32 lowercase characters
+    namespace: 'acme', // keeps your handles separate from the default namespace
     displayName: 'Alice',
-    metadata: { platform: 'acme' }
+    metadata: { platform: 'acme' },
   },
-  wallet: window.ethereum        // EVM provider
+  wallet: window.ethereum,
 });
 
-// Store proof.qHash with the user record
-// proof.proofUrl === https://proofable.me/proof/{qHash}
+// Store proof.qHash with the user record.
+// proof.proofUrl is https://proofable.me/proof/{qHash}
 ```
 
-`pseudonymId` must match `^[a-z0-9._-]{3,64}$` (3–64 lowercase chars).
+`pseudonymId` must match `^[a-z0-9][a-z0-9._-]{1,30}[a-z0-9]$`. Handle proofs expire, so re-verify before `expiresAt`.
 
-## Hosted Verify (no in-app signing)
-
-Send the user to Proofable and get the proof ID back on return.
+### Or verify on Proofable
 
 ```js
 import { getHostedCheckoutUrl } from '@proofable/sdk';
 
-const url = getHostedCheckoutUrl({
-  gateId: 'gate_acme-handles',
-  returnUrl: 'https://acme.network/handle/callback',
-});
-
-window.location.assign(url);
+window.location.assign(
+  getHostedCheckoutUrl({
+    gateId: 'gate_acme-handles',
+    returnUrl: 'https://acme.network/handle/callback',
+  }),
+);
 ```
 
-Read the proof ID from the `qHash` field in the callback URL or popup message and store it.
+Read the proof ID from the `qHash` field in the callback URL or popup message, and store it.
 
-## Show the badge
-
-Drop the SDK widget next to the handle.
+### Show the badge
 
 ```jsx
 import { ProofBadge } from '@proofable/sdk/widgets';
@@ -81,26 +88,20 @@ export function CreatorHandle({ handle, qHash }) {
   return (
     <div className="handle-row">
       <span>@{handle}</span>
-      <ProofBadge qHash={qHash} showChains />
+      <ProofBadge qHash={qHash} />
     </div>
   );
 }
 ```
 
-The badge links to `https://proofable.me/proof/{qHash}` and shows live proof status.
+The badge links to `https://proofable.me/proof/{qHash}` and shows live status.
 
-## Gate creator actions on the server
-
-Always check the proof server-side before allowing privileged actions.
+### Check on your server
 
 ```js
-import { ProofableClient } from '@proofable/sdk';
-
-const client = new ProofableClient();
-
 const result = await client.gateCheck({
   gateId: 'gate_acme-handles',
-  address: walletAddress
+  address: walletAddress,
 });
 
 if (result.data?.gate?.allRequiredSatisfied !== true) {
@@ -108,40 +109,14 @@ if (result.data?.gate?.allRequiredSatisfied !== true) {
 }
 ```
 
-Or call the HTTP API directly:
+Or call the HTTP API:
 
 ```bash
 curl "https://api.proofable.me/api/v1/proofs/check?gateId=gate_acme-handles&address=0x...&namespace=acme"
 ```
 
-## Namespace policy
+### Namespaces
 
-Namespaces other than `neus` require the namespace owner to confirm DNS control with `ownership-dns-txt`, or Proofable admin approval. Contact Proofable to reserve a production namespace for your platform.
+Namespaces other than the default require the namespace owner to confirm DNS control with [`ownership-dns-txt`](/verification/ownership-dns-txt), or approval from Proofable. Contact Proofable to reserve a production namespace.
 
-## Optional: link social accounts
-
-Layer `ownership-social` to also confirm a linked X, Discord, Telegram, GitHub, or other social account. Social checks are interactive and hosted-only, so they usually run through `VerifyGate` or Hosted Verify rather than direct signing.
-
-```jsx
-import { VerifyGate } from '@proofable/sdk/widgets';
-
-<VerifyGate
-  gateId="gate_acme-social"
-  onVerified={result => {
-    console.log(result.qHash || result.qHashes);
-  }}
->
-  <button>Verify social account</button>
-</VerifyGate>
-```
-
-## Full example
-
-See the [verified-handle-react example](https://github.com/proofable/sdk/tree/main/examples/verified-handle-react) for a complete React + Vite app.
-
-## Next
-
-- [Username](../verification/ownership-pseudonym)
-- [SDK Quickstart](../quickstart)
-- [Hosted Verify](./auth-hosted-verify)
-- [API: GET /proofs/check](../api/overview)
+A complete React and Vite app is in the [verified-handle-react example](https://github.com/proofable/sdk/tree/main/examples/verified-handle-react).

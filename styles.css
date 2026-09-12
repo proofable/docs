@@ -1,33 +1,19 @@
 /* Proofable Mintlify skin — tokens colocated in docs/ (Mintlify CDN does not resolve ../examples imports). */
 @import url('./proofable-tokens.css');
 
-/* Docs cards use the Proofable app-card surface (sheen + glass gradient). */
-
-/*
-  Marketing page wash (--proofable-page-bg).
-  Paint on html + fixed #background-color; docs.json dark hex is grad base only.
-*/
+/* Docs stay quiet so task content, code, and navigation carry the hierarchy. */
 html {
   min-height: 100%;
   min-height: 100dvh;
   background-color: var(--proofable-page-grad-base) !important;
-  background-image: var(--proofable-page-bg) !important;
-  background-repeat: no-repeat !important;
-  background-size: 100% 100dvh !important;
-  background-position: center top !important;
-  background-attachment: fixed !important;
+  background-image: none !important;
 }
 
 #background-color {
-  /* Mintlify already applies fixed inset-0 -z-10; only override the paint, not layout. */
   z-index: -10 !important;
   pointer-events: none !important;
   background-color: var(--proofable-page-grad-base) !important;
-  background-image: var(--proofable-page-bg) !important;
-  background-repeat: no-repeat !important;
-  background-size: 100% 100dvh !important;
-  background-position: center top !important;
-  background-attachment: fixed !important;
+  background-image: none !important;
 }
 
 /*
@@ -49,11 +35,14 @@ main > span.absolute.inset-0.overflow-hidden.pointer-events-none:not(#background
 }
 
 #sidebar,
+#sidebar-content,
 #navigation-items,
 .nav-tabs {
   box-shadow: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+  background-color: transparent !important;
+  background-image: none !important;
 }
 
 /*
@@ -94,16 +83,37 @@ main > span.absolute.inset-0.overflow-hidden.pointer-events-none:not(#background
   text-shadow: none !important;
 }
 
-#navbar a.flex.items-center,
+#navbar a.flex.items-center:not([href*="proofable.me/verify"]),
 #navbar a[href*="github.com"],
 #navbar a[href*="discussions"] {
   color: var(--proofable-text-secondary) !important;
 }
 
-#navbar a.flex.items-center:hover,
+#navbar a.flex.items-center:not([href*="proofable.me/verify"]):hover,
 #navbar a[href*="github.com"]:hover,
 #navbar a[href*="discussions"]:hover {
   color: var(--proofable-text-primary) !important;
+}
+
+#navbar .theme-preference-menu-trigger,
+#navbar button[aria-label*="theme" i],
+#navbar button[aria-label*="dark mode" i],
+#navbar button[aria-label*="light mode" i],
+#navbar button[aria-label*="appearance" i],
+#navbar button[aria-label*="color mode" i] {
+  color: var(--proofable-text-secondary) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+#navbar .theme-preference-menu-trigger:hover,
+#navbar button[aria-label*="theme" i]:hover,
+#navbar button[aria-label*="dark mode" i]:hover,
+#navbar button[aria-label*="light mode" i]:hover,
+#navbar button[aria-label*="appearance" i]:hover,
+#navbar button[aria-label*="color mode" i]:hover {
+  color: var(--proofable-text-primary) !important;
+  background: var(--proofable-hover-fill) !important;
 }
 
 /*
@@ -129,8 +139,8 @@ main > span.absolute.inset-0.overflow-hidden.pointer-events-none:not(#background
   object-fit: contain !important;
   flex-shrink: 0 !important;
   image-rendering: auto !important;
-  /* Hairline halo so fine particles read on the glass bar — does not alter geometry. */
-  filter: drop-shadow(0 0 0.6px rgb(152 192 239 / 0.85)) !important;
+  /* Hairline halo on dark only — light bone already reads the Arctic mark. */
+  filter: var(--proofable-logo-halo) !important;
   transform: translateZ(0);
 }
 
@@ -177,9 +187,9 @@ html.dark #navbar img.nav-logo[alt="light logo"] {
   #navbar button[class*="group/search"] {
     width: 100% !important;
     max-width: none !important;
-    background: rgb(12 14 18 / 0.55) !important;
+    background: var(--proofable-search-fill) !important;
     border: 1px solid var(--proofable-border-faint) !important;
-    box-shadow: inset 0 1px 0 rgb(90 90 90 / 0.08) !important;
+    box-shadow: inset 0 1px 0 var(--proofable-search-inset) !important;
     color: var(--proofable-text-primary) !important;
   }
 
@@ -250,11 +260,11 @@ html.dark #navbar img.nav-logo[alt="light logo"] {
 
   #navbar .nav-tabs a.nav-tabs-item:hover {
     color: var(--proofable-text-primary) !important;
-    background: rgb(255 255 255 / 0.05) !important;
+    background: var(--proofable-hover-fill) !important;
   }
 
   /*
-    Selected tab — graphite fill + white text. No blue wash (Linear/Cursor).
+    Selected tab — quiet plate fill + theme ink. No blue wash (Linear/Cursor).
   */
   #navbar .nav-tabs a.nav-tabs-item[aria-current],
   #navbar .nav-tabs a.nav-tabs-item[data-active="true"],
@@ -262,7 +272,7 @@ html.dark #navbar img.nav-logo[alt="light logo"] {
   #navbar .nav-tabs a.nav-tabs-item.dark\:text-gray-200 {
     color: var(--proofable-text-primary) !important;
     font-weight: var(--proofable-weight-heading) !important;
-    background: rgb(255 255 255 / 0.08) !important;
+    background: var(--proofable-active-fill) !important;
     border: none !important;
     box-shadow: none !important;
   }
@@ -271,7 +281,7 @@ html.dark #navbar img.nav-logo[alt="light logo"] {
   #navbar .nav-tabs a.nav-tabs-item[data-active="true"]:hover,
   #navbar .nav-tabs a.nav-tabs-item.text-primary:hover {
     color: var(--proofable-text-primary) !important;
-    background: rgb(255 255 255 / 0.1) !important;
+    background: var(--proofable-active-fill-strong) !important;
   }
 }
 
@@ -297,13 +307,18 @@ html.dark #navbar img.nav-logo[alt="light logo"] {
   fill: currentColor !important;
 }
 
+#navigation-items a svg[class*="bg-primary"],
+#sidebar a svg[class*="bg-primary"] {
+  background-color: var(--proofable-text-secondary) !important;
+}
+
 #navigation-items a:hover {
   color: var(--proofable-text-primary) !important;
-  background: rgb(255 255 255 / 0.04) !important;
+  background: var(--proofable-hover-fill) !important;
 }
 
 /*
-  Active sidebar item — Linear/Cursor style: quiet graphite fill, no accent blue.
+  Active sidebar item — Linear/Cursor style: quiet plate fill, no accent blue.
   Match app selected-row soft fill without primary wash.
 */
 #navigation-items a[aria-current="page"],
@@ -314,7 +329,7 @@ html.dark #navbar img.nav-logo[alt="light logo"] {
 #sidebar a[aria-current="true"],
 #sidebar a[data-active="true"] {
   color: var(--proofable-text-primary) !important;
-  background: rgb(255 255 255 / 0.07) !important;
+  background: var(--proofable-active-fill) !important;
   box-shadow: none !important;
   font-weight: var(--proofable-weight-label) !important;
 }
@@ -333,6 +348,11 @@ html.dark #navbar img.nav-logo[alt="light logo"] {
 #sidebar a[data-active="true"] svg {
   color: var(--proofable-text-secondary) !important;
   fill: currentColor !important;
+}
+
+#navigation-items a[aria-current] svg[class*="bg-primary"],
+#sidebar a[aria-current] svg[class*="bg-primary"] {
+  background-color: var(--proofable-text-secondary) !important;
 }
 
 body {
@@ -405,7 +425,7 @@ body {
   --tw-prose-body: var(--proofable-text-primary);
   --tw-prose-headings: var(--proofable-text-primary);
   --tw-prose-bold: var(--proofable-text-primary);
-  --tw-prose-links: var(--proofable-accent);
+  --tw-prose-links: var(--proofable-accent-ink);
   --tw-prose-counters: var(--proofable-text-muted);
   --tw-prose-bullets: var(--proofable-text-muted);
   max-width: none !important;
@@ -540,16 +560,16 @@ button,
 }
 
 .mdx-content a:not([class*="button"]) {
-  color: var(--proofable-accent) !important;
+  color: var(--proofable-accent-ink) !important;
 }
 
 .mdx-content a:not([class*="button"]):hover {
-  color: var(--proofable-accent-dim) !important;
+  color: var(--proofable-accent-ink-hover) !important;
 }
 
 .mdx-content code:not(pre code) {
   color: var(--proofable-text-primary) !important;
-  background: rgb(var(--proofable-rgb-surface-card) / 0.72) !important;
+  background: var(--proofable-inline-code-fill) !important;
   border: 1px solid var(--proofable-border-faint);
   border-radius: 0.375rem;
   padding: 0.1rem 0.35rem;
@@ -605,7 +625,7 @@ a.card:focus-visible {
   box-shadow: 0 0 0 2px rgb(var(--proofable-rgb-accent-primary)) !important;
 }
 
-#header a:not([href*="/install"]):not([class*="button"]),
+#header a:not([href*="proofable.me/verify"]):not([class*="button"]),
 #table-of-contents-content a {
   color: var(--proofable-text-secondary) !important;
 }
@@ -700,18 +720,18 @@ footer {
 
 #search-input,
 #navbar button[class*="group/search"] {
-  background: rgb(12 14 18 / 0.72);
+  background: var(--proofable-search-fill);
   border: 1px solid var(--proofable-border-faint);
-  box-shadow: inset 0 1px 0 rgb(90 90 90 / 0.08);
+  box-shadow: inset 0 1px 0 var(--proofable-search-inset);
   color: var(--proofable-text-primary) !important;
 }
 
 #search-input:focus,
 #navbar button[class*="group/search"]:focus-visible {
-  border-color: rgb(var(--proofable-rgb-accent-primary) / 0.28);
+  border-color: rgb(var(--proofable-rgb-accent-ink) / 0.28);
   box-shadow:
-    0 0 0 4px rgb(var(--proofable-rgb-accent-primary) / 0.1),
-    inset 0 1px 0 rgba(90, 90, 90, 0.08);
+    0 0 0 4px rgb(var(--proofable-rgb-accent-ink) / 0.1),
+    inset 0 1px 0 var(--proofable-search-inset);
 }
 
 #topbar-cta-button,
@@ -720,9 +740,8 @@ a#topbar-cta-button,
 [data-testid="topbar-primary-button"],
 .navbar-primary-button,
 .navbar-button-primary,
-#header a[href="https://proofable.me/install"],
-#header a[href*="proofable.me/install"],
-#header a[href$="/install"] {
+#navbar a[href*="proofable.me/verify"],
+#header a[href*="proofable.me/verify"] {
   background: var(--proofable-accent) !important;
   background-color: var(--proofable-accent) !important;
   background-image: none !important;
@@ -752,9 +771,8 @@ a#topbar-cta-button:hover,
 [data-testid="topbar-primary-button"]:hover,
 .navbar-primary-button:hover,
 .navbar-button-primary:hover,
-#header a[href="https://proofable.me/install"]:hover,
-#header a[href*="proofable.me/install"]:hover,
-#header a[href$="/install"]:hover {
+#navbar a[href*="proofable.me/verify"]:hover,
+#header a[href*="proofable.me/verify"]:hover {
   background: var(--proofable-accent-dim) !important;
   background-color: var(--proofable-accent-dim) !important;
   background-image: none !important;
@@ -765,18 +783,14 @@ a#topbar-cta-button:hover,
 #topbar-cta-button-wrapper,
 .navbar-primary-wrapper,
 .navbar-button-wrapper,
-#header div:has(> a[href="https://proofable.me/install"]),
-#header div:has(> a[href*="proofable.me/install"]),
-#header div:has(> a[href$="/install"]),
-#header li:has(> a[href="https://proofable.me/install"]),
-#header li:has(> a[href*="proofable.me/install"]),
-#header li:has(> a[href$="/install"]),
-#header span:has(> a[href="https://proofable.me/install"]),
-#header span:has(> a[href*="proofable.me/install"]),
-#header span:has(> a[href$="/install"]),
-#header [class*="button"]:has(a[href*="proofable.me/install"]),
-#header [class*="Button"]:has(a[href*="proofable.me/install"]),
-#header [class*="primary"]:has(a[href*="proofable.me/install"]) {
+#navbar div:has(> a[href*="proofable.me/verify"]),
+#navbar li:has(> a[href*="proofable.me/verify"]),
+#header div:has(> a[href*="proofable.me/verify"]),
+#header li:has(> a[href*="proofable.me/verify"]),
+#header span:has(> a[href*="proofable.me/verify"]),
+#header [class*="button"]:has(a[href*="proofable.me/verify"]),
+#header [class*="Button"]:has(a[href*="proofable.me/verify"]),
+#header [class*="primary"]:has(a[href*="proofable.me/verify"]) {
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
@@ -819,9 +833,8 @@ a#topbar-cta-button *,
 [data-testid="topbar-primary-button"] *,
 .navbar-primary-button *,
 .navbar-button-primary *,
-#header a[href="https://proofable.me/install"] *,
-#header a[href*="proofable.me/install"] *,
-#header a[href$="/install"] * {
+#navbar a[href*="proofable.me/verify"] *,
+#header a[href*="proofable.me/verify"] * {
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
@@ -834,10 +847,9 @@ a#topbar-cta-button *,
 a#topbar-cta-button:focus-visible,
 [data-testid="navbar-primary-button"]:focus-visible,
 [data-testid="topbar-primary-button"]:focus-visible,
-#header a[href="https://proofable.me/install"]:focus-visible,
-#header a[href*="proofable.me/install"]:focus-visible,
-#header a[href$="/install"]:focus-visible {
-  outline: 2px solid rgb(191 219 254 / 0.6) !important;
+#navbar a[href*="proofable.me/verify"]:focus-visible,
+#header a[href*="proofable.me/verify"]:focus-visible {
+  outline: 2px solid var(--proofable-cta-focus) !important;
   outline-offset: 2px !important;
 }
 
@@ -853,10 +865,7 @@ a#topbar-cta-button:focus-visible,
   }
 }
 
-/*
-  Mintlify .card → Proofable app-card treatment:
-  canonical graphite pane: flat tonal separation, faint neutral hairline, no sheen, no glint.
-*/
+/* One flat card surface. The six use-case cards are the page's only visual event. */
 .card,
 .card-group .card {
   position: relative !important;
@@ -867,50 +876,18 @@ a#topbar-cta-button:focus-visible,
   height: auto !important;
   overflow: hidden !important;
   padding: 1.25rem 1.25rem !important;
-  border: none !important;
+  border: 1px solid var(--proofable-border-faint) !important;
   border-radius: var(--proofable-radius-card) !important;
-  background: var(--proofable-surface-glass) !important;
-  box-shadow: var(--proofable-shadow-glass) !important;
-  transition: background 300ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+  background: var(--proofable-card-fill) !important;
+  box-shadow: var(--proofable-card-shadow) !important;
+  transition: background 160ms ease, border-color 160ms ease !important;
 }
 
 .card::before,
-.card-group .card::before {
-  content: '' !important;
-  position: absolute !important;
-  inset: 0 !important;
-  border-radius: inherit !important;
-  pointer-events: none !important;
-  z-index: 1 !important;
-  opacity: 0.42 !important;
-  background:
-    linear-gradient(
-      135deg,
-      var(--proofable-glass-sheen-1) 0%,
-      transparent 30%,
-      var(--proofable-glass-sheen-2) 60%,
-      transparent 100%
-    ),
-    radial-gradient(90% 80% at 20% 0%, rgba(90, 90, 90, 0.18) 0%, transparent 72%) !important;
-}
-
-/* Hover highlight, gray only (Proofable color contract: Arctic is scarce; no accent wash on cards). */
+.card-group .card::before,
 .card::after,
 .card-group .card::after {
-  content: '' !important;
-  position: absolute !important;
-  inset: 0 !important;
-  border-radius: inherit !important;
-  pointer-events: none !important;
-  z-index: 1 !important;
-  opacity: 0 !important;
-  background: linear-gradient(
-    135deg,
-    rgba(90, 90, 90, 0.14) 0%,
-    transparent 38%,
-    rgba(90, 90, 90, 0.06) 100%
-  ) !important;
-  transition: opacity 300ms ease !important;
+  content: none !important;
 }
 
 .card > *,
@@ -942,6 +919,14 @@ a#topbar-cta-button:focus-visible,
   stroke: currentColor !important;
 }
 
+/* Mintlify paints FA/mask icons with bg-primary, not stroke/fill. */
+.card svg[class*="bg-primary"],
+.card-group .card svg[class*="bg-primary"],
+.card [class*="bg-primary"],
+.card-group .card [class*="bg-primary"] {
+  background-color: var(--proofable-text-muted) !important;
+}
+
 .card:hover svg,
 .card-group .card:hover svg,
 .card:hover svg *,
@@ -953,10 +938,17 @@ a#topbar-cta-button:focus-visible,
   color: var(--proofable-text-secondary) !important;
 }
 
+.card:hover svg[class*="bg-primary"],
+.card-group .card:hover svg[class*="bg-primary"],
+.card:hover [class*="bg-primary"],
+.card-group .card:hover [class*="bg-primary"] {
+  background-color: var(--proofable-text-secondary) !important;
+}
+
 .card code,
 .card-group .card code {
   color: var(--proofable-text-secondary) !important;
-  background: rgb(var(--proofable-rgb-surface-card-hover) / 0.8) !important;
+  background: var(--proofable-inline-code-fill) !important;
   border-color: var(--proofable-border-faint) !important;
 }
 
@@ -1007,19 +999,9 @@ a.card:hover {
 
 .card:hover,
 .card-group .card:hover {
-  background: linear-gradient(
-    180deg,
-    rgb(var(--proofable-rgb-surface-rail) / 0.86) 0%,
-    rgb(var(--proofable-rgb-surface-card) / 0.48) 42%,
-    rgb(var(--proofable-rgb-surface-rail) / 0.64) 100%
-  ) !important;
-  border: none !important;
-  box-shadow: var(--proofable-shadow-glass) !important;
-}
-
-.card:hover::after,
-.card-group .card:hover::after {
-  opacity: 0.4 !important;
+  background: var(--proofable-card-hover-fill) !important;
+  border-color: var(--proofable-border) !important;
+  box-shadow: var(--proofable-card-shadow) !important;
 }
 
 .card-group.cols-2 > div:only-child,
@@ -1171,7 +1153,7 @@ a.card:hover {
     overflow-y: auto !important;
     overscroll-behavior: contain !important;
     padding-top: env(safe-area-inset-top, 0px) !important;
-    background: rgb(5 5 5 / 0.98) !important;
+    background: var(--proofable-mobile-nav-bg) !important;
     border-right: 1px solid var(--proofable-border-faint) !important;
     box-sizing: border-box !important;
   }
@@ -1199,7 +1181,7 @@ a.card:hover {
 }
 
 html {
-  scrollbar-color: rgba(152, 192, 239, 0.16) transparent;
+  scrollbar-color: var(--proofable-scrollbar-thumb) transparent;
   scrollbar-width: thin;
 }
 
@@ -1219,20 +1201,12 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(
-    180deg,
-    rgba(152, 192, 239, 0.18) 0%,
-    rgba(152, 192, 239, 0.1) 100%
-  );
+  background: var(--proofable-scrollbar-thumb);
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(
-    180deg,
-    rgba(152, 192, 239, 0.28) 0%,
-    rgba(152, 192, 239, 0.16) 100%
-  );
+  background: var(--proofable-scrollbar-thumb-hover);
 }
 
 

@@ -1,77 +1,51 @@
 ---
-title: LLM and agent docs
-description: Machine-readable entry points, MCP setup, and the shortest reading order.
-icon: sparkles
+title: "API reference"
+sidebarTitle: "Overview"
+description: "Every way to build with Proofable: the hosted MCP server, the JavaScript SDK and CLI, and the HTTP API, with endpoints, sign-in, and machine-readable exports."
+icon: book
 ---
 
-Start with the smallest source that answers the task. Use the text export for model context and the linked reference page for exact fields.
+Pick the surface that matches the caller. Every surface uses the same profile, proofs, and permissions.
 
-## Read first
+| Surface | Use it for | Endpoint or package | Signs in with |
+|---|---|---|---|
+| [MCP](/mcp/overview) | AI assistants and agent runtimes | `https://mcp.proofable.me/mcp` | OAuth, or an access key |
+| [JavaScript SDK](/sdks/javascript) | Apps, backends, and React | `@proofable/sdk` | Hosted sign-in, or an access key on servers |
+| [CLI](/sdks/cli) | Editor setup and agent context | `npx -y @proofable/sdk` | OAuth, or an access key |
+| [HTTP API](/api/overview) | Any language or backend | `https://api.proofable.me` | Signed requests, a session, or an access key |
 
-1. [Home](/): hosted MCP endpoint, then Connect
-2. [Connect Proofable](../mcp/setup): chat, IDEs, jobs, listings, and proofs
-3. [Agent setup](../agents/agent-verification-flow) to set identity and permissions
-4. [MCP tools](../mcp/tools) for exact tool behavior
-5. [Trust](../verification/overview) for checks and reusable proofs
-6. [Standards & interoperability](../learn/standards) for how Proofable uses existing protocols
+## Rules for every integration
 
-## MCP
+- **Browsers** use the SDK or [Hosted Verify](/verification/hosted). Never put secrets or hand-built auth headers in browser code. Proxy through your server instead.
+- **Servers** run gate checks, raw HTTP, and anything that needs a credential.
+- **Access keys** (`npk_*`) belong on servers and in CI only. Never use a wallet private key as an MCP credential. [Access keys](/deployment/access-keys)
+- **`402` responses** carry a quote. Pay per call with [x402](/gates/pay-per-call), or add credits and retry.
+- **Proof IDs and URLs** come from responses. Never construct or guess one.
 
-**Product server:** `https://mcp.proofable.me/mcp` for profile, proofs, listings, permissions, agents, and private context.
-**Not the product:** `https://docs.proofable.me/mcp` for documentation search only (Mintlify).
+## Machine-readable exports
 
-1. Register `https://mcp.proofable.me/mcp` in the host (marketplace, registry, or URL-only config).
-2. Click **Connect** in the host.
-3. Follow [Connect Proofable](../mcp/setup) and the [MCP workflow](../mcp/overview). Reuse proofs before you verify again.
+| Resource | URL |
+|---|---|
+| OpenAPI | `https://api.proofable.me/openapi.json` |
+| Page index | `https://docs.proofable.me/llms.txt` |
+| Full docs | `https://docs.proofable.me/llms-full.txt` |
+| MCP discovery | `https://mcp.proofable.me/.well-known/mcp.json` |
 
-Profile access keys (`npk_*`) are for servers and CI only.
+This docs site also serves a search-only MCP endpoint at `https://docs.proofable.me/mcp`. It searches these pages. Your profile, proofs, and agents live at `https://mcp.proofable.me/mcp`.
 
-## Rules
+## Sections
 
-- **Browser → Proofable:** SDK (`ProofableClient`, widgets) or **Hosted Verify**. Do not call `api.proofable.me` from the browser with secrets or ad-hoc headers; use a **server proxy** when you need custom server-side calls.
-- **Server → Proofable:** `gateCheck`, eligibility, secrets, raw HTTP. [API overview](../api/overview)
-- Profiles, agents, listings, gates, and proofs: [Ecosystem](../platform/overview)
-- Default hosted sign-in: [Hosted Verify](../cookbook/auth-hosted-verify). Optional in-app signing: [Signing format](../verification/signing-format)
-- Do not use wallet **private keys** as MCP credentials. Sign in with **OAuth** or use **Profile access keys** (`npk_*`) for Bearer in MCP or server config only.
-- **402:** use the x402 retry pattern
-- Agents: [Overview](../agents/overview), [Agent setup](../agents/agent-verification-flow), [Discover agents](../agents/named-agent-card)
-- Use returned proof URLs or qHashes only when the API/tool response provides them.
-
-## Exports
-
-```bash
-# Page index for discovery
-curl https://docs.proofable.me/llms.txt
-
-# Full documentation context
-curl https://docs.proofable.me/llms-full.txt
-```
-
-## MCP JSON
-
-Hosts that omit the spec `type` field (including Cursor) use a URL-only entry inside `mcpServers` and discover OAuth from the server's 401 challenge:
-
-```json
-{
-  "mcpServers": {
-    "proofable": {
-      "url": "https://mcp.proofable.me/mcp"
-    }
-  }
-}
-```
-
-Hosts that require the spec `type` field use `type: "http"`:
-
-```json
-{
-  "mcpServers": {
-    "proofable": {
-      "type": "http",
-      "url": "https://mcp.proofable.me/mcp"
-    }
-  }
-}
-```
-
-Jump to [MCP overview](../mcp/overview), [MCP setup](../mcp/setup), or the [HTTP API](../api/overview) when you need detail beyond this reading order.
+<CardGroup cols={2}>
+  <Card title="MCP" icon="plug" href="/mcp/overview">
+    Tools, sign-in, and discovery.
+  </Card>
+  <Card title="JavaScript SDK" icon="code" href="/sdks/javascript">
+    Client, gates, agents, widgets, and CLI.
+  </Card>
+  <Card title="HTTP API" icon="terminal" href="/api/overview">
+    Endpoints, authentication, errors, and limits.
+  </Card>
+  <Card title="Verifier catalog" icon="list-tree" href="/verification/verifiers">
+    Every check and its inputs.
+  </Card>
+</CardGroup>

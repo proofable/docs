@@ -1,0 +1,120 @@
+---
+title: "Access keys"
+description: "Connect servers, CI, scheduled jobs, containers, and headless agents to Proofable with a profile access key instead of browser sign-in."
+icon: key
+---
+
+Interactive clients sign in with OAuth. Anything that cannot open a browser uses a profile access key instead. Both reach the same endpoint and the same Proofable profile.
+
+| Sign in with | Use it for |
+|---|---|
+| OAuth | Chats, editors, and other clients a person signs into |
+| Access key | Servers, CI, cron and scheduled jobs, containers, cloud agents, and gateways |
+
+## Create a key
+
+<Steps>
+  <Step title="Create it">
+    Open [Access keys](https://proofable.me/profile?tab=account) in your profile and create a key. Keys start with `npk_`.
+  </Step>
+  <Step title="Store it">
+    Save it in your secret manager or CI secrets as `PROOFABLE_ACCESS_KEY`.
+
+    ```bash
+    export PROOFABLE_ACCESS_KEY=npk_...
+    ```
+  </Step>
+</Steps>
+
+<Warning>
+An access key acts as your whole profile. Keep it on servers. Never put it in browser code, chat, or a repository.
+</Warning>
+
+## Use it
+
+<Tabs>
+  <Tab title="MCP">
+    ```json
+    {
+      "mcpServers": {
+        "proofable": {
+          "type": "http",
+          "url": "https://mcp.proofable.me/mcp",
+          "headers": {
+            "Authorization": "Bearer ${PROOFABLE_ACCESS_KEY}"
+          }
+        }
+      }
+    }
+    ```
+
+    Or let the CLI write it for your editors:
+
+    ```bash
+    npx -y @proofable/sdk setup --access-key $PROOFABLE_ACCESS_KEY
+    ```
+  </Tab>
+  <Tab title="SDK">
+    ```js
+    import { ProofableClient } from '@proofable/sdk';
+
+    const client = new ProofableClient({ apiKey: process.env.PROOFABLE_ACCESS_KEY });
+    ```
+
+    The SDK sends the key as `Authorization: Bearer npk_...`.
+  </Tab>
+  <Tab title="HTTP">
+    Send the key on every request:
+
+    ```http
+    Authorization: Bearer npk_...
+    ```
+  </Tab>
+  <Tab title="Containers">
+    ```yaml
+    services:
+      agent:
+        image: your-agent-image:latest
+        environment:
+          - PROOFABLE_MCP_URL=https://mcp.proofable.me/mcp
+          - PROOFABLE_ACCESS_KEY=${PROOFABLE_ACCESS_KEY}
+    ```
+
+    [Private cloud](/deployment/private-cloud) covers moving the same agent between environments.
+  </Tab>
+</Tabs>
+
+Gateways that reserve the `Authorization` header for their own sign-in, such as Smithery, send the same key as `x-proofable-access-key`. [MCP authentication](/mcp/auth)
+
+## What a key can do
+
+- It acts as your full profile for MCP tools, the SDK, and the HTTP API.
+- It does not expire. Revoke it when you no longer need it.
+- It does not replace a user's approval. To create proofs for your users, use [server integrations](/integrations/server).
+
+## Rotate or revoke
+
+Create a new key, update the secret, then revoke the old key under [Access keys](https://proofable.me/profile?tab=account). To revoke a key and remove it from local MCP config in one step:
+
+```bash
+npx -y @proofable/sdk disconnect --access-key $PROOFABLE_ACCESS_KEY
+```
+
+If a key is exposed, revoke it right away and issue a new one.
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Private cloud" icon="cloud" href="/deployment/private-cloud">
+    Run the same agent on your own infrastructure.
+  </Card>
+  <Card title="Server integrations" icon="server" href="/integrations/server">
+    Create proofs for your users from your backend.
+  </Card>
+  <Card title="MCP authentication" icon="lock" href="/mcp/auth">
+    OAuth, access keys, and token security.
+  </Card>
+  <Card title="Connect an AI client" icon="plug" href="/mcp/setup">
+    Setup for every supported client.
+  </Card>
+</CardGroup>

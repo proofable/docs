@@ -13,6 +13,8 @@ Register the hosted remote, then click **Connect**:
 
 `https://mcp.proofable.me/mcp`
 
+Interactive hosts use OAuth. For servers, CI, and headless agents, send a Profile access key as a Bearer token instead — see [Connect Proofable](./setup).
+
 Use a marketplace plugin or registry listing when the host offers one. `npx -y @proofable/sdk setup` writes the same URL from a terminal.
 
 Then ask the new client to check what it needs:
@@ -27,7 +29,7 @@ Call `proofable_context`. Create or import an agent, or publish a listing.
 
 > Create or import an agent on my Proofable profile. Use generate if I need a separate spend account. Set spend and action limits. Then confirm it is ready.
 
-Open **Connections** on [proofable.me](https://proofable.me) to link apps. [Connections](../cookbook/connector-integrations)
+Open **Connections** on [proofable.me](https://proofable.me) to link apps. [Connections](../connections)
 
 To sell: set payouts, then publish a listing. Full steps: [Connect Proofable](./setup).
 
@@ -35,7 +37,7 @@ Chat now. Pro jobs run in the background or on a schedule.
 
 Cursor, Claude Code, Codex, Hermes, and Grok can connect to this endpoint.
 
-**Private cloud.** Point the runtime at the same URL. [Run Proofable in a private cloud](../cookbook/private-cloud-agents).
+**Private cloud.** Point the runtime at the same URL. [Run Proofable in a private cloud](../deployment/private-cloud).
 
 Same install block: [Connect Proofable](./setup).
 
@@ -74,4 +76,4 @@ What supported clients can read when authorized:
 - Proofs another connected product can confirm
 - Vault context when you allow it
 
-To load an agent into a project, see [Connect agent context](../agents/runtime-mount). For a laptop, server, or confidential VM, see [Run Proofable in a private cloud](../cookbook/private-cloud-agents).
+To load an agent into a project, see [Connect agent context](../agents/runtime-mount). For a laptop, server, or confidential VM, see [Run Proofable in a private cloud](../deployment/private-cloud).

@@ -1,0 +1,120 @@
+---
+title: "Gates in the SDK"
+sidebarTitle: "Gates"
+description: "Send visitors through a published gate and confirm the result on your server with getHostedCheckoutUrl, VerifyGate, gateCheck, getGate, and fulfillGate."
+icon: door-open
+---
+
+A published gate owns the checks, price, and billing. Your code passes its `gateId`.
+
+## Send people through the gate
+
+### Hosted checkout link
+
+```js
+import { getHostedCheckoutUrl } from '@proofable/sdk';
+
+window.location.assign(
+  getHostedCheckoutUrl({
+    gateId: 'gate_your-app-name',
+    returnUrl: 'https://app.example.com/callback',
+  }),
+);
+```
+
+`getHostedCheckoutUrl` builds three separate recipes: `gateId` for a published gate, `intent: 'login'` for sign-in only, or `verifiers` (or `preset`) for direct checks. Use one per URL. Shared options are `returnUrl`, `mode`, `origin`, and `oauthProvider`. `appId` and `billingWallet` are advanced sponsor options; omit them with `gateId`.
+
+### React
+
+```jsx
+import { VerifyGate } from '@proofable/sdk/widgets';
+
+<VerifyGate gateId="gate_your-app-name" strategy="reuse-or-create">
+  <ProtectedContent />
+</VerifyGate>;
+```
+
+| `strategy` | Behavior |
+|---|---|
+| `reuse-or-create` | Default. Reuse a saved proof, or open Hosted Verify for a new one. |
+| `reuse` | Accept only an existing proof. |
+| `fresh` | Always create a new proof. Use it for high-stakes actions. |
+
+Every prop is in [VerifyGate](/widgets/verifygate).
+
+## Check access on your server
+
+```js
+import { ProofableClient } from '@proofable/sdk';
+
+const client = new ProofableClient();
+const result = await client.gateCheck({
+  gateId: 'gate_your-app-name',
+  address: user.accountAddress,
+  since: Date.now() - 60 * 60 * 1000, // optional recency window
+});
+
+if (result.data?.gate?.allRequiredSatisfied !== true) {
+  throw new Error('Access denied');
+}
+```
+
+With a `gateId`, the response carries a per-requirement `data.gate` block. Only `gate.allRequiredSatisfied === true` means the visitor is ready. Top-level `eligible` covers criteria-only checks and is not gate readiness.
+
+| Field | Meaning |
+|---|---|
+| `allRequiredSatisfied` | Every requirement is covered |
+| `satisfiedVerifierIds`, `missingVerifierIds` | Which requirements existing proofs cover |
+| `reusedVerifierProofs` | Verifier ID to proof ID, when you pass `includeQHashes: true` |
+
+<Warning>
+`gateCheck` reads public and unlisted proofs by default. Private proofs count when that user is signed in. For a strict live check, create a fresh proof and wait for `verified`.
+</Warning>
+
+### Private proofs
+
+```js
+const privateAuth = await client.createGatePrivateAuth({
+  address: user.accountAddress,
+  wallet: window.ethereum,
+});
+
+const result = await client.gateCheck({
+  gateId: 'gate_your-app-name',
+  address: user.accountAddress,
+  includePrivate: true,
+  privateAuth,
+});
+```
+
+### `gateCheck` or `checkGate`
+
+| Method | Use when |
+|---|---|
+| `gateCheck()` | You need an allow or deny decision. It calls `GET /api/v1/proofs/check` on the server. |
+| `checkGate()` | You want a preview against proofs you already loaded. Never use it where trust matters. |
+
+## Drive checkout yourself
+
+Most apps never need this. Use it to mirror hosted checkout from your own backend.
+
+```js
+const gate = await client.getGate('gate_your-app-name'); // requirements, price, schedule
+
+const reward = await client.fulfillGate({
+  gateId: 'gate_your-app-name',
+  qHash: verifiedQHash,
+  walletAddress: visitorWallet,
+  paymentCheckoutSessionId, // card payments on paid gates
+});
+```
+
+| `fulfillGate` field | When |
+|---|---|
+| `gateId`, `qHash` | Always |
+| `walletAddress` | Without a signed-in session |
+| `paymentCheckoutSessionId` | Card payment |
+| `paymentTxHash` | USDC payment |
+| `accessGrant` | When the gate requests access to the buyer's connected account |
+
+A payment is bound to one gate and proof and cannot be reused (`409 PAYMENT_ALREADY_USED`). The full sequence is in [Gate checkout](/gates/checkout).

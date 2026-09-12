@@ -1,53 +1,122 @@
 ---
-title: "Proofable"
-sidebarTitle: "Home"
-description: "Add identity, permissions, and reusable proof to the agents and apps you already use."
-"og:title": "Proofable Docs | API, SDK and MCP"
-"twitter:title": "Proofable Docs | API, SDK and MCP"
-icon: house
+title: "Getting started"
+description: "Explore common use cases and start using Proofable immediately."
+"og:title": "Getting started with Proofable"
+"twitter:title": "Getting started with Proofable"
+icon: rocket
 "og:image": "/images/og-default.png"
 "twitter:image": "/images/og-default.png"
 ---
 
-Use Proofable to verify a result once, reuse the proof, and set agent permissions.
+import ConnectHosts from '/snippets/connect-hosts.mdx';
 
-<CardGroup cols={3}>
-  <Card title="Connect an AI client" icon="plug" href="./mcp/setup">
-    Add the hosted MCP server to Cursor, Claude, Codex, or another supported client.
+## Common use cases
+
+<CardGroup cols={2}>
+  <Card title="Control agent actions" icon="shield-halved" href="/use-cases/control-agent-actions">
+    Require permission before an agent uses sensitive tools, spends, publishes, or accesses secrets.
   </Card>
-  <Card title="JavaScript app" icon="code" href="./quickstart">
-    Install the SDK and check a proof from server code.
+  <Card title="Prove what happened" icon="receipt" href="/use-cases/prove-what-happened">
+    Keep an inspectable record of who acted, what they were allowed to do, and the result.
   </Card>
-  <Card title="Working examples" icon="book-open" href="./cookbook/overview">
-    Start from an integration for verification, access, or agent permissions.
+  <Card title="Verify identity & ownership" icon="id-card" href="/use-cases/verify-identity-and-ownership">
+    Verify people, organizations, domains, wallets, agents, and accounts.
+  </Card>
+  <Card title="Reuse verification" icon="rotate" href="/use-cases/reuse-verification">
+    Use a completed check again instead of starting verification from zero.
+  </Card>
+  <Card title="Gate access" icon="door-closed" href="/use-cases/gate-access">
+    Require proof before access, payment, or a protected action.
+  </Card>
+  <Card title="Build a platform" icon="layer-group" href="/use-cases/build-a-platform">
+    Add Proofable identity, authority, verification, and proof to your own product.
   </Card>
 </CardGroup>
 
-## Connect an AI client
+## Using Proofable
 
-Add `https://mcp.proofable.me/mcp` to your AI client, click **Connect**, then ask:
+<Steps>
+  <Step title="Sign in">
+    Sign in at [proofable.me](https://proofable.me/verify?intent=login). Your profile holds your agents, proofs, permissions, and connections.
 
-> Show my Proofable profile and proofs.
+    **Free to start · Pro $19.99/mo · Enterprise custom**
 
-Use the [one-click installer](https://proofable.me/install) or follow the [MCP setup guide](./mcp/setup).
+    [View pricing →](/pricing)
+  </Step>
+  <Step title="Connect an agent to Proofable">
+    If an AI assistant or agent uses Proofable for you, connect it to the hosted MCP server at `https://mcp.proofable.me/mcp`.
 
-<Frame>
-  <img
-    src="/images/how-it-works.png"
-    alt="A connected AI client reads agent identity, authority, context, limits, and current proof from Proofable."
-  />
-</Frame>
+    <ConnectHosts />
 
-## Build with your agent
+  </Step>
+  <Step title="Or build with Proofable">
+    Add Proofable to an app, backend, agent runtime, or automation.
 
-Copy this into your coding agent:
+    <Tabs>
+      <Tab title="TypeScript">
+        ```bash
+        npm install @proofable/sdk
+        ```
 
-> Add Proofable to this project using the official quickstart. Use the existing authentication stack. Verify the integration before changing anything else.
+        Check an agent's permission before a tool runs:
 
-## What Proofable does
+        ```ts
+        import fs from 'node:fs';
+        import { evaluateRuntimeAction } from '@proofable/sdk/runtime-mount';
 
-- **Verify:** Run a supported identity, ownership, risk, or permission check.
-- **Reuse:** Save the result as proof instead of repeating the check.
-- **Enforce:** Require proof before access, payment, or an agent action.
+        // Written by: npx -y @proofable/sdk mount <agentId> --apply <host>
+        const bundle = JSON.parse(fs.readFileSync('.proofable/mount.json', 'utf8'));
+        const decision = evaluateRuntimeAction(bundle, 'send_message', { irreversible: true });
 
-Builder reference: [OpenAPI](https://api.proofable.me/openapi.json), [JavaScript SDK](./sdks/javascript), [MCP tools](./mcp/tools)
+        if (!decision.allowed) {
+          throw new Error(`${decision.code}: ${decision.message}`);
+        }
+        ```
+
+        Check a proof before access:
+
+        ```ts
+        import { ProofableClient } from '@proofable/sdk';
+
+        const client = new ProofableClient();
+        const result = await client.gateCheck({
+          gateId: 'gate_your-app-name',
+          address: user.accountAddress,
+        });
+
+        if (result.data?.gate?.allRequiredSatisfied !== true) {
+          // Send the user to verify first
+        }
+        ```
+
+        [JavaScript SDK reference](/sdks/javascript)
+      </Tab>
+      <Tab title="REST API">
+        Use the HTTP API from any language or backend.
+
+        ```text
+        https://api.proofable.me
+        ```
+
+        ```bash
+        curl "https://api.proofable.me/api/v1/proofs/check?gateId=gate_your-app-name&address=0x..."
+        ```
+
+        `data.gate.allRequiredSatisfied` is `true` when the visitor's proofs meet every requirement. [HTTP API reference](/api/overview)
+      </Tab>
+      <Tab title="CLI">
+        ```bash
+        npx -y @proofable/sdk setup
+        ```
+
+        Writes the Proofable MCP entry for Cursor, Claude Code, Codex, and VS Code. Then confirm the live connection:
+
+        ```bash
+        npx -y @proofable/sdk doctor --live
+        ```
+
+        [CLI reference](/sdks/cli)
+      </Tab>
+    </Tabs>
+  </Step>
+</Steps>

@@ -1,30 +1,31 @@
 ---
-title: Presets
-description: "Hosted-verify shortcuts: pick one verifier, several verifiers, or a ready-made bundle."
+title: "Verification presets"
+sidebarTitle: "Presets"
+description: "Run one check, several checks, or a ready-made bundle straight from a Hosted Verify URL."
 icon: layer-group
 ---
 
-Hosted Verify accepts the verifiers you want directly in the URL. Three ways, simplest first.
+Hosted Verify accepts the checks you want directly in the URL. There are three ways, simplest first.
 
-## One verifier
+## One check
 
-Use `?verifiers=<id>` (or `?preset=<id>` for the same result with a single verifier). Prefer account and hosted verification for most products:
+Use `?verifiers=<id>`, or `?preset=<id>` for the same result with one check. Account and hosted checks fit most products:
 
 ```text
 https://proofable.me/verify?verifiers=ownership-social&returnUrl=https://app.example.com/callback
 ```
 
-Other high-value single verifiers: `ownership-org-oauth` (work account), `proof-of-human`, `ownership-dns-txt`, `agent-identity`. Wallet-bound verifiers (`ownership-basic`, `nft-ownership`, `token-holding`, `wallet-risk`, …) remain available when your listing needs them. Full list: [Verifiers](../verification/verifiers).
+Other useful single checks are `ownership-org-oauth` for work accounts, `proof-of-human`, `ownership-dns-txt`, and `agent-identity`. Wallet-bound checks such as `ownership-basic`, `nft-ownership`, `token-holding`, and `wallet-risk` stay available when your listing needs them. The full list is in the [verifier catalog](/verification/verifiers).
 
-## Several verifiers
+## Several checks
 
-Combine verifiers with a comma. This is the recommended way to run more than one:
+Separate check IDs with a comma. This is the recommended way to run more than one:
 
 ```text
 https://proofable.me/verify?verifiers=ownership-social,proof-of-human
 ```
 
-Agent delegation example:
+Agent setup:
 
 ```text
 https://proofable.me/verify?verifiers=agent-identity,agent-delegation
@@ -34,8 +35,8 @@ https://proofable.me/verify?verifiers=agent-identity,agent-delegation
 
 A few named bundles resolve for convenience and older links:
 
-| Bundle | Verifiers |
-|--------|--------|
+| Bundle | Checks |
+|---|---|
 | `agent-pack` | `agent-identity`, `agent-delegation`, `wallet-risk` |
 | `workspace-pack` | `ownership-social`, `ownership-basic`, `agent-identity`, `wallet-link` |
 | `project-pack` | `contract-ownership`, `ownership-dns-txt` |
@@ -45,16 +46,16 @@ A few named bundles resolve for convenience and older links:
 https://proofable.me/verify?preset=agent-pack&returnUrl=https://app.example.com/callback
 ```
 
-For any other combination, use `?verifiers=` with the ids you need.
+For any other combination, use `?verifiers=` with the IDs you need.
 
-Add `returnUrl`, `mode=popup`, or `origin` as needed. Do not combine a preset with `gateId`; a published gate owns its verifier policy.
+Add `returnUrl`, `mode=popup`, or `origin` as needed. Do not combine a preset with `gateId`, because a published gate owns its own checks.
 
 ## SDK
 
 ```javascript
 import { getHostedCheckoutUrl } from '@proofable/sdk';
 
-// Account / hosted verification (typical apps)
+// Account checks for typical apps
 getHostedCheckoutUrl({ verifiers: ['ownership-social'], returnUrl: 'https://app.example.com/callback' });
 
 // Agent permissions
@@ -64,16 +65,13 @@ getHostedCheckoutUrl({ verifiers: ['agent-identity', 'agent-delegation'], return
 getHostedCheckoutUrl({ preset: 'agent-pack', returnUrl: 'https://app.example.com/callback' });
 ```
 
-## Related
+## Next
 
 <CardGroup cols={2}>
- <Card title="Hosted Verify" icon="key" href="../cookbook/auth-hosted-verify">
- Params + popup.
- </Card>
- <Card title="Verifiers" icon="list-tree" href="../verification/verifiers">
- Every verifier you can run.
- </Card>
- <Card title="Sell access" icon="building" href="../quickstart">
-  Set verifiers and price once, embed one link.
- </Card>
+  <Card title="Hosted verification" icon="key" href="/verification/hosted">
+    Parameters, popups, and callbacks.
+  </Card>
+  <Card title="Verifier catalog" icon="list-tree" href="/verification/verifiers">
+    Every check you can run.
+  </Card>
 </CardGroup>

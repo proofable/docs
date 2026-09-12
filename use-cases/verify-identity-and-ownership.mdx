@@ -1,0 +1,83 @@
+---
+title: "Verify identity & ownership"
+description: "Verify who's behind the account, domain, wallet, organization, or agent, and keep the result as a proof you can check again."
+icon: id-card
+---
+
+Run a check once. Proofable saves the result as a proof that your product, and any app you share it with, can check instead of asking again.
+
+## What you can verify
+
+| Subject | Check | How it runs |
+|---|---|---|
+| A real person | [Proof of human](/verification/proof-of-human) | Interactive |
+| Social accounts | [Linked social accounts](/verification/ownership-social) | Interactive |
+| Work accounts | [Team and organization](/verification/ownership-org-oauth) | Interactive |
+| Domains | [Domain ownership](/verification/ownership-dns-txt) | Lookup |
+| Handles | [Username](/verification/ownership-pseudonym) | Instant |
+| Wallets | [Linked wallets](/verification/wallet-link) and [wallet risk](/verification/wallet-risk) | Instant and lookup |
+| Assets | [NFT holder](/verification/nft-ownership), [token balance](/verification/token-holding), and [contract control](/verification/contract-ownership) | Lookup |
+| Content | [Content ownership](/verification/ownership-basic) | Instant |
+| Agents | [Agent identity](/agents/agent-identity) and [agent permissions](/agents/agent-delegation) | Instant |
+
+**Interactive** checks run on Proofable: passkey, OAuth, or a personhood step. **Instant** checks finish when the account signs. **Lookup** checks read live state, such as a DNS record or a token balance.
+
+Social accounts include X, GitHub, Discord, LinkedIn, Telegram, Facebook, and Coinbase. Work accounts include Google Workspace and Microsoft 365.
+
+## Start a check
+
+<Tabs>
+  <Tab title="Hosted">
+    Send people to Proofable. They complete the check there and return with a proof ID.
+
+    ```text
+    https://proofable.me/verify?verifiers=ownership-org-oauth&returnUrl=https://app.example.com/verified
+    ```
+
+    Read the proof ID from the `qHash` field on your return URL.
+  </Tab>
+  <Tab title="SDK">
+    ```js
+    import { getHostedCheckoutUrl } from '@proofable/sdk';
+
+    window.location.assign(
+      getHostedCheckoutUrl({
+        verifiers: ['ownership-social'],
+        returnUrl: 'https://app.example.com/verified',
+      }),
+    );
+    ```
+  </Tab>
+  <Tab title="MCP">
+    ```text
+    Verify my GitHub account with Proofable. Reuse a current proof if I already have one.
+    ```
+
+    The assistant reuses a current proof first, or returns the one hosted step you need to finish.
+  </Tab>
+</Tabs>
+
+## Require it before access
+
+Add the checks to a published listing, then protect a page with `VerifyGate` or check on your server. [Gate access](/use-cases/gate-access)
+
+## Share only what's needed
+
+Proofs are private by default, and each check returns the smallest claim the decision needs. Proof of human, for example, returns results such as `personhood_verified` instead of the documents behind them.
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Verify" icon="badge-check" href="/verification">
+    Every way to start a check and read the result.
+  </Card>
+  <Card title="Hosted verification" icon="key" href="/verification/hosted">
+    Sign-in and checks without building UI.
+  </Card>
+  <Card title="Account ownership" icon="at" href="/verification/accounts">
+    Verified handles and linked accounts.
+  </Card>
+  <Card title="Domain ownership" icon="globe" href="/verification/domain">
+    Prove control of a domain with DNS.
+  </Card>
+</CardGroup>

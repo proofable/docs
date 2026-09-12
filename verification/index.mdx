@@ -1,67 +1,74 @@
 ---
-title: Trust
-sidebarTitle: Trust
-description: "Verify identity, ownership, permissions, and safety before an action, then reuse the saved proof everywhere. Build trust once."
-icon: file-signature
+title: "Verify"
+description: "Check what needs to be true. Verify identity, ownership, human status, account control, risk, agent identity, authority, and other supported claims."
+icon: badge-check
 "og:image": "/images/og-verification.png"
 "twitter:image": "/images/og-verification.png"
 ---
 
-Verify identity, ownership, permission, or safety. Save a proof. Reuse it before access, payment, or an agent action.
+Verify once and keep the result as a proof. Your product, and any app you share it with, checks the proof instead of running the check again.
 
-## Outcomes
+## What you can verify
 
-| | Examples |
-|--|----------|
-| Identity | Login, social, team |
-| Ownership | Content, files, authorship |
-| Access | NFT, token thresholds |
-| Abuse | Human, wallet safety |
-| Agents | Identity, permissions |
+| Need | Check | Type |
+|---|---|---|
+| A real person | [`proof-of-human`](/verification/proof-of-human) | Interactive |
+| A social account | [`ownership-social`](/verification/ownership-social) | Interactive |
+| Organization membership | [`ownership-org-oauth`](/verification/ownership-org-oauth) | Interactive |
+| A domain | [`ownership-dns-txt`](/verification/ownership-dns-txt) | Lookup |
+| A handle | [`ownership-pseudonym`](/verification/ownership-pseudonym) | Instant |
+| Linked wallets | [`wallet-link`](/verification/wallet-link) | Instant |
+| Wallet risk | [`wallet-risk`](/verification/wallet-risk) | Lookup |
+| An NFT or token balance | [`nft-ownership`](/verification/nft-ownership) and [`token-holding`](/verification/token-holding) | Lookup |
+| Contract control | [`contract-ownership`](/verification/contract-ownership) | Lookup |
+| Content ownership | [`ownership-basic`](/verification/ownership-basic) | Instant |
+| Content safety | [`ai-content-moderation`](/verification/ai-content-moderation) | Lookup |
+| Agent identity and permissions | [`agent-identity`](/agents/agent-identity) and [`agent-delegation`](/agents/agent-delegation) | Instant |
 
-Agent proofs record who an agent is and what it may do.
+The [verifier catalog](/verification/verifiers) lists every check and its inputs.
 
-## How you verify
+## How checks run
 
-| Type | How | Examples |
-|------|-----|----------|
-| Interactive | Hosted steps on Proofable (passkey, OAuth, human) | ownership-social, ownership-org-oauth, proof-of-human |
-| Instant | Account signs in-session | ownership-basic, agent-identity |
-| Lookup | Live state | NFT, balance, wallet-risk |
+| Type | What happens | Examples |
+|---|---|---|
+| Interactive | The person completes a hosted step on Proofable: passkey, OAuth, or personhood. | `ownership-social`, `proof-of-human` |
+| Instant | The account signs during the session. | `ownership-basic`, `agent-identity` |
+| Lookup | Proofable reads live state. | `nft-ownership`, `wallet-risk` |
 
-Most product gates start with **Interactive**. Instant and Lookup are available when your threat model needs them.
+Most product gates start with interactive checks. Use instant and lookup checks when your rule needs them.
 
-## Terms
+## Start a check
 
-| Term | Meaning |
-|------|---------|
-| Proof ID (`qHash`) | Saved proof reference. [Proofs](../platform/proofs) |
-| Verify | You verify. The result is a proof (the receipt). Schema field: `verifier` |
-| Account / subject | The Proofable account the result is about |
-| Signing string | Message the account signs when verify needs it |
-| Hosted Verify | Browser flow at `proofable.me/verify`. [Hosted Verify](../cookbook/auth-hosted-verify) |
+| From | Use |
+|---|---|
+| A browser | [Hosted Verify](/verification/hosted) at `proofable.me/verify` |
+| A React app | [VerifyGate](/widgets/verifygate) |
+| Your server | The [SDK](/sdks/verifications) or the [HTTP API](/api/overview) |
+| An AI assistant | `proofable_verify_or_guide` over [MCP](/mcp/overview) |
+| A machine without an account | [Pay per call](/gates/pay-per-call) |
 
-Visibility: [Privacy](../platform/security-and-trust)
+## What you get back
 
-## Response
+- A proof ID in `qHash`
+- A `status` of `verified`, `processing`, or `failed`
+- A proof page at `https://proofable.me/proof/{qHash}`
+- A hosted link, only when the person must finish a step in the browser
 
-- `qHash`
-- `status`: verified, processing, failed
-- Page: `https://proofable.me/proof/[qHash]`
+When the status is `processing`, poll with `pollProofStatus` until it finishes.
 
-## Next
+## Guides
 
 <CardGroup cols={2}>
-  <Card title="Verifiers" icon="list-tree" href="./verifiers">
-    Catalog of checks.
+  <Card title="Hosted verification" icon="key" href="/verification/hosted">
+    Sign-in and checks without building UI.
   </Card>
-  <Card title="How it works" icon="shield-check" href="./how-it-works">
-    End-to-end flow.
+  <Card title="Presets" icon="layer-group" href="/verification/presets">
+    Run one check, several, or a bundle from a URL.
   </Card>
-  <Card title="Signing" icon="file-signature" href="./signing-format">
-    Message format.
+  <Card title="Account ownership" icon="at" href="/verification/accounts">
+    Verified handles and linked accounts.
   </Card>
-  <Card title="Lifecycle" icon="rotate" href="./lifecycle">
-    Poll and revoke.
+  <Card title="Layered verification" icon="shield-halved" href="/verification/layered">
+    Combine signals for stronger assurance.
   </Card>
 </CardGroup>

@@ -1,133 +1,85 @@
 ---
-title: Run Proofable in a private cloud
-sidebarTitle: Private cloud agents
-description: Connect an agent to Proofable from a laptop, server, private cloud, or confidential VM.
+title: "Run Proofable in a private cloud"
+sidebarTitle: "Private cloud"
+description: "Run the same agent on a laptop, VPS, private cloud, or confidential VM with one identity, one set of limits, and one proof history."
 icon: cloud
 ---
 
-Same agent, wherever it runs.
+Hosted jobs run on Proofable. To run an agent on infrastructure you control, deploy it anywhere and point it at the same endpoint. The agent keeps one identity, one set of limits, and one proof history across environments.
 
-**Do the work**
+## Deploy an agent
 
-1. Add `https://mcp.proofable.me/mcp`, click **Connect**.
-2. Create or import the agent (`proofable_agent_create`).
-3. Open **Connections** if the work needs an app.
-4. Chat now, or start a Pro job.
+<Steps>
+  <Step title="Package the agent">
+    Describe your agent as a Docker Compose file with its system prompt, model settings, tools, and environment.
 
-On Proofable, hosted jobs use the Operator engine. For an isolated coding computer (OpenCode, Hermes, Claude ACP), pin that harness on a machine you control. Proofable does not spawn that computer on shared Azure. For Cursor Cloud Agents, connect Proofable MCP inside that client. Proofable does not launch those VMs.
+    ```yaml
+    # docker-compose.yml
+    services:
+      agent:
+        image: your-agent-image:latest
+        environment:
+          - PROOFABLE_MCP_URL=https://mcp.proofable.me/mcp
+          - PROOFABLE_ACCESS_KEY=${PROOFABLE_ACCESS_KEY}
+    ```
 
-For a laptop, VPS, or confidential VM, deploy below.
+    `PROOFABLE_ACCESS_KEY` is a profile [access key](/deployment/access-keys). Interactive agents sign in with OAuth instead.
+  </Step>
+  <Step title="Run it anywhere">
+    Run the file on a laptop, a VPS, on-prem, or a production cluster. The agent connects to `https://mcp.proofable.me/mcp`, and Proofable loads its identity, permissions, and saved proofs. Before a sensitive action, the agent checks its permission and reuses existing proofs.
+  </Step>
+  <Step title="Move it without losing state">
+    Redeploy the same file on AWS, GCP, Azure, Phala Cloud, or bare metal. Identity, permissions, and proofs stay the same.
+  </Step>
+</Steps>
 
-The agent keeps one identity, one set of limits, and one history across environments.
+The agent can call any Proofable MCP tool, including `proofable_context`, `proofable_proofs_check`, `proofable_verify`, `proofable_agent_mount`, and the secret tools.
 
-## Deploy a private cloud agent with Proofable
+## Confirm the chain of trust
 
-### 1. Write your agent runtime definition
+- **Proofable** holds the agent's identity and permission proofs. Read them with `proofable_proofs_get` or `GET /api/v1/proofs/{qHash}`.
+- **The access key** ties the deployed agent to your profile, which owns its identity, permissions, and proof history.
+- **The environment** can prove it is genuine with confidential compute.
 
-Package your agent as a Docker Compose file. Include the system prompt, model config, tool list, and environment variables.
+## Confidential compute
 
-```yaml
-# docker-compose.yml
-services:
-  agent:
-    image: your-agent-image:latest
-    environment:
-      - PROOFABLE_MCP_URL=https://mcp.proofable.me/mcp
-      - PROOFABLE_ACCESS_KEY=${PROOFABLE_ACCESS_KEY}
-```
+To prove the environment is genuine before it receives keys, run the agent in a confidential VM with hardware attestation. The attestation covers the full app: system prompt, model, tools, and environment. Keys are sealed to that app and released only after attestation passes, so no host process sees them in plaintext.
 
-`PROOFABLE_ACCESS_KEY` is a profile access key from your Proofable Profile. Use it for agents in headless environments. For interactive agents, use OAuth.
-
-### 2. Deploy anywhere
-
-Run the compose file on a laptop, a VPS, on-prem, or a production cluster. The agent connects to `https://mcp.proofable.me/mcp` from wherever it runs. Proofable loads the agent's identity, permissions, and saved proofs. Before any sensitive action, Proofable checks authority and reuses existing proofs.
-
-The agent can call any Proofable MCP tool: `proofable_context`, `proofable_proofs_check`, `proofable_verify`, `proofable_agent_mount`, `proofable_secret_create`, `proofable_secret_list`, `proofable_secret_revoke`.
-
-### 3. Move the agent, keep the trust state
-
-Redeploy the same compose file on a different backend. AWS, GCP, Azure, Phala Cloud, bare metal. The trust state stays the same across all of them.
-
-### 4. Verify the trust chain
-
-- **Proofable** provides the agent identity and permission proofs. Verify with `proofable_proofs_get` or `GET /api/v1/proofs/{qHash}` (proof ID).
-- **The access key** ties the deployed agent to a Proofable Profile. The profile owns the identity, permissions, and proof history.
-- **The environment** can optionally prove it is genuine (see confidential compute below).
-
-## Optional: confidential compute
-
-If you need to prove the environment itself is genuine before it receives keys, run the agent inside a TEE-attested confidential VM. The hardware quote covers the full app hash: system prompt, model digest, tool list, and environment. Keys are sealed against that hash and released only after attestation passes. No host process sees plaintext keys.
-
-The trust state still lives in Proofable and travels with the agent. Confidential compute adds a proof that the environment matches what you expect.
+The agent's permissions and proofs still live in Proofable. Confidential compute adds proof that the environment matches what you expect.
 
 ### Phala dstack
 
-[dstack](https://phala.com/dstack) boots a Docker Compose app inside an Intel TDX confidential VM. The TDX quote covers the full compose hash. Keys are sealed against that hash and released only after attestation passes. Proofable already uses Phala-backed TEE inference for hosted AI.
+[dstack](https://phala.com/dstack) runs a Docker Compose app inside an Intel TDX confidential VM. The TDX quote covers the full compose hash, and keys are released only after attestation passes. Proofable already uses Phala-backed confidential inference for hosted AI.
 
 ```bash
 npx phala deploy
 ```
 
-Verify the TDX quote with `@phala/dcap-qvl` against the Phala PCCS. Proves the compose hash and hardware.
+Check the TDX quote with `@phala/dcap-qvl` against the Phala PCCS. It proves the compose hash and the hardware.
 
-### Other confidential compute runtimes
+### Other runtimes
 
-If your runtime supports Intel TDX, AMD SEV-SNP, or an equivalent TEE with remote attestation over the app image, point the agent at the Proofable MCP endpoint. The trust chain is the same: hardware quote over the app hash, sealed keys, Proofable identity and authority checked before action.
+Any runtime with Intel TDX, AMD SEV-SNP, or equivalent remote attestation over the app image works the same way. Point the agent at the Proofable endpoint.
 
-## Agent framework examples
+## Agent frameworks
 
-### Hermes
+Any agent that speaks MCP can connect, including Hermes and OpenClaw. Package it the same way, set `PROOFABLE_ACCESS_KEY`, and point it at `https://mcp.proofable.me/mcp`. The framework handles planning and memory. Proofable handles identity, permissions, and proof before sensitive actions.
 
-Hermes ships six terminal backends. Docker is one of them.
+For Cursor Cloud Agents, connect Proofable MCP inside Cursor. Proofable does not launch those VMs.
 
-```yaml
-# docker-compose.yml
-services:
-  hermes:
-    image: nousresearch/hermes-agent:latest
-    environment:
-      - PROOFABLE_MCP_URL=https://mcp.proofable.me/mcp
-      - PROOFABLE_ACCESS_KEY=${PROOFABLE_ACCESS_KEY}
-      - HERMES_MODEL=deepseek/deepseek-v4-flash-0731
-```
-
-Hermes handles planning, memory, and skill creation. Proofable handles identity, permissions, and proof verification before sensitive actions.
-
-### OpenClaw
-
-```yaml
-# docker-compose.yml
-services:
-  openclaw:
-    image: openclaw/runtime:latest
-    environment:
-      - PROOFABLE_MCP_URL=https://mcp.proofable.me/mcp
-      - PROOFABLE_ACCESS_KEY=${PROOFABLE_ACCESS_KEY}
-```
-
-OpenClaw orchestrates channels and subagents. Proofable keeps the agent's owner, selected context, connections, secrets, capabilities, limits, jobs, and proof of work portable across supported environments.
-
-### Custom agent
-
-Any agent that speaks MCP can connect. Package it as a Docker Compose, deploy anywhere, point it at the Proofable endpoint.
-
-## Portability
-
-Move the same agent from a laptop to a VPS or production cluster. The trust state stays the same. Confidential compute can attest each environment.
-
-## Related
+## Next
 
 <CardGroup cols={2}>
-  <Card title="MCP overview" icon="plug" href="../mcp/overview">
-    Connect supported AI clients to Proofable.
+  <Card title="Access keys" icon="key" href="/deployment/access-keys">
+    Credentials for servers and headless agents.
   </Card>
-  <Card title="MCP setup" icon="code" href="../mcp/setup">
-    Install Proofable and click Connect.
+  <Card title="Agents" icon="robot" href="/agents">
+    Owners, limits, and proof history.
   </Card>
-  <Card title="Agent setup" icon="robot" href="./verifiable-agents">
-    Agent identity and authority.
+  <Card title="Proofable and Phala" icon="arrow-up-right-from-square" href="https://phala.com/posts/neusphalabuildagenttrustlayer">
+    The confidential runtime integration.
   </Card>
-  <Card title="Proofable × Phala" icon="external-link" href="https://phala.com/posts/neusphalabuildagenttrustlayer">
-    See the confidential runtime integration.
+  <Card title="MCP overview" icon="plug" href="/mcp/overview">
+    Tools and session flow.
   </Card>
 </CardGroup>

@@ -65,7 +65,7 @@ Create mode opens **Hosted Verify**. The published gate owns verifier inputs, pr
 
 ## Hosted OAuth
 
-Social, organization, and human checks use **[Hosted Verify](../cookbook/auth-hosted-verify)**. Set `oauthProvider` when the user already picked a provider in your app.
+Social, organization, and human checks use **[Hosted Verify](../verification/hosted)**. Set `oauthProvider` when the user already picked a provider in your app.
 
 Allowed values:
 
@@ -74,12 +74,12 @@ Allowed values:
 
 ## Advanced server proofs
 
-For backend-created proofs after a one-time user approval, use the server-side `verifyFromApp` flow in [Integrations](../cookbook/integrations). Keep browser checkout on `gateId`.
+For backend-created proofs after a one-time user approval, use the server-side `verifyFromApp` flow in [Server integrations](../integrations/server). Keep browser checkout on `gateId`.
 
 ## Next
 
 <CardGroup cols={2}>
-  <Card title="Gate checkout" icon="door-open" href="../platform/hosted-gate-checkout">
+  <Card title="Gate checkout" icon="door-open" href="../gates/checkout">
     Server eligibility and paid gate checkout.
   </Card>
   <Card title="Start" icon="bolt" href="/">

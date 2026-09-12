@@ -17,7 +17,7 @@ Release notes, policy text, agent outputs, licensing claims, bounty submissions,
 2. Attach **`content`** (full text, up to 50,000 characters) and/or **`reference`** (`{ type, id }`).
 3. Proofable saves a durable result for check, link, and reuse.
 
-Visibility: private vault, link-only, or public. [Privacy](../platform/security-and-trust).
+Visibility: private, unlisted, or public. [Security](../security).
 
 ## Content and storage
 
@@ -48,7 +48,7 @@ A hosted gate can evaluate current JSON returned by a visitor-supplied HTTPS URL
 
 The visitor supplies only the URL. Resolver rules and expected output remain server-controlled. Ordinary URL references without `resolved.*` gate matches are not fetched.
 
-To store the exact string on the proof, set **`storeOriginalContent: true`** when you need to override defaults. Read back with **`proof.publicContent.content`**. [Privacy](../platform/security-and-trust) covers defaults.
+To store the exact string on the proof, set **`storeOriginalContent: true`** when you need to override defaults. Read back with **`proof.publicContent.content`**. [Security](../security) covers defaults.
 
 **Pre-hash:** Do not paste a generic SHA256 as `contentHash`. Send `content`, verify, and use the returned verifier hash from Proofable.
 

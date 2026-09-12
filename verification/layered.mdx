@@ -1,47 +1,49 @@
 ---
-title: Abuse and layered access
-description: Layer account, social, and proof of human for stronger assurance than a single signal.
+title: "Layered verification"
+sidebarTitle: "Layered verification"
+description: "Combine account, social, and proof of human checks in one gate for stronger assurance than any single signal."
 icon: shield-halved
 ---
 
-One weak signal is easy to game. Publish a listing that **layers** hosted account signals so visitors must pass more than one requirement.
+One weak signal is easy to game. Publish a listing that layers checks, so visitors must pass more than one.
 
-| Layer | Verifier ID | When |
-|-------|----------|------|
-| Social / work account | `ownership-social` or `ownership-org-oauth` | Linked identity most products need first |
-| Human | `proof-of-human` | Anti-bot and fair access |
-| Account uniqueness | `ownership-basic` | Baseline uniqueness when you also need a signed account check |
+| Layer | Check | When |
+|---|---|---|
+| Social or work account | `ownership-social` or `ownership-org-oauth` | The linked identity most products need first |
+| Human | `proof-of-human` | Bot resistance and fair access |
+| Signed account | `ownership-basic` | A signed account check alongside the others |
+| Wallet risk | `wallet-risk` | Payment flows and high-value access |
 
-Prefer social + human for consumer apps. Add `ownership-basic` or `wallet-risk` only when your threat model needs them.
+For consumer apps, start with a social account plus proof of human. Add `ownership-basic` or `wallet-risk` only when your threat model needs them.
 
 ## Publish the layered gate
 
-In **Profile → Listings**, require the verifiers above, set pricing, and publish. Visitors never see your API key. They only need your `gateId`.
+Open **Listings** in your profile, require the checks above, set pricing, and publish. Visitors only need your `gateId`.
 
-## VerifyGate
+## Add it to your app
 
 ```jsx
 <VerifyGate
   gateId="gate_layered"
   onVerified={(result) => {
-    // persist result.qHash for replay protection
+    // Store result.qHash to prevent replay
   }}
 >
   <button>Verify to continue</button>
 </VerifyGate>
 ```
 
-## Server eligibility
+## Check on your server
 
 ```javascript
 const layered = await client.gateCheck({
   gateId: 'gate_layered',
-  address: user.accountAddress, // from Hosted Verify / proof subject
+  address: user.accountAddress,
 });
 ```
 
 <Warning>
-Configure recency on the gate for point-in-time checks. Store proof IDs (`qHash`) where replay matters.
+Set recency on the gate for point-in-time checks, and store proof IDs where replay matters.
 </Warning>
 
-**Next:** [Sell access](../quickstart), [Hosted Verify](./auth-hosted-verify), [Pricing](../platform/pricing)
+[Sell access with one gate](/gates/sell-access) covers publishing. [Hosted verification](/verification/hosted) covers the browser flow.

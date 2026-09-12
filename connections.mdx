@@ -1,67 +1,72 @@
 ---
-title: Connections
-sidebarTitle: Connections
-description: Connect apps and custom MCP servers once, then use the same approved tools across supported agents and runtimes.
+title: "Connections"
+description: "Give agents access to the apps they need. Connect apps and custom MCP servers, choose allowed capabilities, and reuse the same approved connections across supported agents and jobs."
 icon: plug
 ---
 
-**Connect once. Bring every tool with you.** Connections keeps apps and custom MCP servers on your Proofable profile so supported agents, clients, and Pro jobs can use the same approved stack without reconnecting every integration.
+Link an app once on your Proofable profile. Supported agents and jobs use the same approved connection instead of reconnecting in every tool.
 
-**Connect** in Cursor, Claude, or another assistant signs that host into the same profile. It does not replace Connections.
+Connecting Cursor, Claude, or another assistant to Proofable signs that host into your profile. Connections holds the apps your agents work in.
 
-## Open Connections
+## Link an app
 
-On [proofable.me](https://proofable.me), open **Connections** from your profile.
+<Steps>
+  <Step title="Open Connections">
+    Sign in at [proofable.me](https://proofable.me) and open **Connections** from your profile.
+  </Step>
+  <Step title="Pick an app">
+    Choose the app the work needs.
+  </Step>
+  <Step title="Choose capabilities">
+    Turn on only what the agent needs. For Gmail that can be Read, Send, and Drafts, with Delete off unless you turn it on.
+  </Step>
+  <Step title="Connect">
+    Click **Connect** and finish the provider's sign-in window.
+  </Step>
+</Steps>
 
-## Link an account
+You can link more than one account per app, and each connection is separate. Change capabilities any time. Removing one takes effect immediately. Adding one that needs broader provider permissions can require reconnecting.
 
-1. Open **Connections**.
-2. Pick an app.
-3. Choose capabilities (for Gmail: Read, Send, Drafts; Delete stays off unless you turn it on).
-4. Click **Connect** on the app and finish the provider window.
+## Add a custom MCP server
 
-You can link more than one account per app. Each connection is separate.
+For an app that exposes its own MCP server, open **Connections**, click **Add connection**, and paste the server URL, plus an API key if it needs one.
 
-Change capabilities any time. Removing one takes effect immediately. Adding one that needs broader provider permissions may require reconnecting.
+## Use a connection
 
-## Use them
-
-Once linked, chat or start a Pro job:
+Ask in chat or in a [job](/jobs):
 
 - "Read my latest emails"
 - "Find the Q3 roadmap in Drive"
 - "Send a Slack message to engineering"
 - "Create a GitHub issue for this bug"
-- "Open a pull request for this fix"
 
-If an app is not linked yet, the assistant tells you to open **Connections**.
+If an app isn't linked yet, the assistant tells you to open **Connections**.
 
-Pro jobs keep running after you leave.
+## The same connections everywhere
 
-## Custom server URL
-
-For an app that exposes its own server URL:
-
-1. Open **Connections**.
-2. Click **Add connection**.
-3. Paste the server URL and API key if it requires one.
-
-## Same stack, other paths
-
-| Path | What you do |
-|------|-------------|
-| Hosted | Sign in on proofable.me. Open Connections. Chat or start a Pro job. |
-| Assistant | Add `https://mcp.proofable.me/mcp`, click **Connect**, then work in that host. Open Connections when the work needs an app. [MCP setup](../mcp/setup) |
-| Private cloud | Point the runtime at the same MCP URL. [Run Proofable in a private cloud](./private-cloud-agents) |
-| Your product | Hosted sign-in, SDK, or API. Same proofs. Connections still holds the app accounts chat and jobs use. |
+| Where you work | What to do |
+|---|---|
+| Proofable | Sign in, open Connections, then chat or start a job. |
+| Your assistant | [Connect an AI client](/mcp/setup), then open Connections when the work needs an app. |
+| Private cloud | Point the runtime at the same endpoint. [Private cloud](/deployment/private-cloud) |
+| Your product | Use hosted sign-in, the SDK, or the API. Connections still holds the app accounts that chat and jobs use. |
 
 ## Security
 
 - Proofable does not store provider sign-in tokens.
-- Only enabled capabilities run.
-- Sends, creates, and deletes still go through your agent permissions.
+- Only the capabilities you enable can run.
+- Sends, creates, and deletes still pass through your agent's permissions.
 - Every action is saved as a result you can review.
 
 Disconnect any account from **Connections**.
 
-**Next:** [Agents](../agents/overview) and [MCP setup](../mcp/setup)
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Agents" icon="robot" href="/agents">
+    Owners and limits for the agents that use your apps.
+  </Card>
+  <Card title="Jobs" icon="clock" href="/jobs">
+    Put connected work on a schedule.
+  </Card>
+</CardGroup>

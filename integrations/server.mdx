@@ -1,65 +1,58 @@
 ---
-title: Integrations
-description: Backend proof creation and profile access keys when Hosted Verify is not enough.
+title: "Create proofs from your server"
+sidebarTitle: "Server integrations"
+description: "Create proofs for users who approved your app, and automate Proofable as your own profile, from backend code."
 icon: server
 ---
 
-Most products use [Sell access](../quickstart) or [Hosted sign-in](./auth-hosted-verify): **VerifyGate** or **Hosted Verify**, then **`gateCheck`** on the server with the visitor’s **account address**. Use this page only when your backend creates proofs directly, or when you automate Proofable as your own profile.
+Most products never need this. They add a [gate](/gates/sell-access), then check the result on the server with `gateCheck`. Use this page when your backend creates proofs directly, or when you automate Proofable as your own profile.
 
-## When you need this
+## Choose a path
 
 | Need | Use |
-|------|-----|
-| Visitor verifies in the browser; you only check later | [Sell access](../quickstart). No access key |
-| Your server creates proofs for an approved user | `verifyFromApp` after one-time approval |
-| MCP, CI, or raw HTTP as **your** Proofable profile | Profile access key (`npk_*`) |
+|---|---|
+| Visitors verify in the browser and you check later | [Sell access with one gate](/gates/sell-access). No access key. |
+| Your server creates proofs for a user who approved your app | `verifyFromApp` after one-time approval |
+| MCP, CI, or raw HTTP as your own profile | An [access key](/deployment/access-keys) |
 
-## Backend proof creation (`verifyFromApp`)
+## Create proofs for approved users
 
-After a user approves your product once (app-link permission), your server can create proofs for them without a per-request signature.
+After a user approves your app once, your server can create proofs for them without a signature on every request.
 
 ```javascript
-import { ProofableClient } from "@proofable/sdk";
+import { ProofableClient } from '@proofable/sdk';
 
-// Server only. Never put this config in a browser bundle
+// Server only. Never put this config in a browser bundle.
 const client = new ProofableClient({
   appId: process.env.PROOFABLE_APP_ID,
-  // Must match the origin the user approved (or use origin:* on the approval)
-  appOrigin: process.env.PROOFABLE_APP_ORIGIN, // e.g. https://app.example.com
-  // Optional: bills/automates as your builder profile
+  // Must match the origin the user approved, or use origin:* on the approval
+  appOrigin: process.env.PROOFABLE_APP_ORIGIN, // for example https://app.example.com
+  // Optional: bill and automate as your builder profile
   apiKey: process.env.PROOFABLE_ACCESS_KEY,
 });
 
 const proof = await client.verifyFromApp({
   user: { walletAddress: user.accountAddress },
-  verifier: "ownership-basic",
-  content: { claim: "User completed onboarding", source: "your-app" },
+  verifier: 'ownership-basic',
+  content: { claim: 'User completed onboarding', source: 'your-app' },
 });
 ```
 
-Requirements:
+This needs:
 
-- Active user approval for your `appId` and site origin ([Agent permissions: App link](../agents/agent-delegation))
-- `X-Neus-App` (from `appId`) and matching `Origin` on the request (`appOrigin` sets both for Node)
+- An active user approval for your `appId` and site origin. [App link](/agents/agent-delegation#app-link)
+- `X-Neus-App` from `appId` and a matching `Origin` on each request. In Node, `appOrigin` sets both.
 
-If approval is missing, send the user through [Hosted Verify](./auth-hosted-verify) first.
+If the approval is missing, send the user through [Hosted Verify](/verification/hosted) first.
 
-This is **not** the same as creating a **listing** under Profile → **Listings**, which bills hosted verification to your account.
+Creating proofs this way is different from publishing a listing, which bills hosted verification to your account.
 
-## Profile access keys
+## Automate as your profile
 
-Create keys under [Profile → Account](https://proofable.me/profile?tab=account).
-
-Pass the key to `ProofableClient` as `apiKey` on the **server**. The SDK sends `Authorization: Bearer npk_...`. Never ship keys in browser bundles.
-
-Access keys identify **your builder profile** for automation. They do not replace per-user approval for backend proof creation.
+An access key identifies your builder profile for automation. Pass it as `apiKey` on the server. It does not replace per-user approval for creating proofs for other people. [Access keys](/deployment/access-keys)
 
 ## Billing
 
-Published gates are the default billing source. Pass **`gateId`** on hosted checkout and `gateCheck`; Proofable resolves owner, usage, and payment from that gate.
+Published gates are the default billing source. Pass `gateId` to hosted checkout and `gateCheck`, and Proofable resolves the owner, usage, and payment from that gate. `appId` is public attribution for server flows and does not bill your account by itself. [Pricing](/pricing)
 
-`appId` is public attribution for advanced server flows. It does not bill your account by itself.
-
-See [Billing](../platform/billing).
-
-**Next:** [API Authentication](../api/authentication)
+Next: [API authentication](/api/authentication)

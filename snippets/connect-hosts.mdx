@@ -1,0 +1,150 @@
+<Tabs>
+  <Tab title="Everyday use">
+    <AccordionGroup>
+      <Accordion title="Claude">
+        Works in Claude on the web and in Claude Desktop.
+
+        1. Open **Customize**, then **Connectors**.
+        2. Click **+**, then **Add custom connector**.
+        3. Enter `https://mcp.proofable.me/mcp` and click **Add**.
+        4. Click **Connect** and sign in to Proofable.
+
+        On Team and Enterprise plans, an owner adds the connector first under **Organization settings**, then **Connectors**. Members then click **Connect**.
+
+        Try it:
+
+        ```text
+        Use Proofable to show my agents and what they are currently allowed to do.
+        ```
+      </Accordion>
+    </AccordionGroup>
+  </Tab>
+  <Tab title="For developers">
+    <AccordionGroup>
+      <Accordion title="Cursor">
+        Open [proofable.me/install](https://proofable.me/install) and choose **Install in Cursor**. Or add Proofable to `~/.cursor/mcp.json`:
+
+        ```json
+        {
+          "mcpServers": {
+            "proofable": {
+              "url": "https://mcp.proofable.me/mcp"
+            }
+          }
+        }
+        ```
+
+        Cursor adds Proofable. Click **Connect** and sign in.
+
+        Try it:
+
+        ```text
+        Use Proofable to show my agents and what they are currently allowed to do.
+        ```
+      </Accordion>
+      <Accordion title="Claude Code">
+        Install the Proofable plugin. It registers the server and adds the Proofable workflow skills.
+
+        ```text
+        /plugin marketplace add proofable/mcp
+        /plugin install proofable-mcp@proofable
+        ```
+
+        Or register only the server:
+
+        ```bash
+        claude mcp add --transport http proofable https://mcp.proofable.me/mcp
+        ```
+
+        Use one of the two, not both. Then run `/mcp` and sign in to Proofable.
+
+        Try it:
+
+        ```text
+        Use Proofable to show my agents and what they are currently allowed to do.
+        ```
+      </Accordion>
+      <Accordion title="Codex">
+        ```bash
+        npx -y @proofable/sdk setup --client codex
+        codex mcp login proofable
+        ```
+
+        Setup adds Proofable to `~/.codex/config.toml`. The login command opens browser sign-in.
+
+        Try it:
+
+        ```text
+        Use Proofable to show my agents and what they are currently allowed to do.
+        ```
+      </Accordion>
+      <Accordion title="VS Code">
+        Open [proofable.me/install](https://proofable.me/install) and choose **Install in VS Code**. Or add Proofable to `.vscode/mcp.json`:
+
+        ```json
+        {
+          "servers": {
+            "proofable": {
+              "type": "http",
+              "url": "https://mcp.proofable.me/mcp"
+            }
+          }
+        }
+        ```
+
+        VS Code adds Proofable. Click **Connect** and sign in.
+
+        Try it:
+
+        ```text
+        Use Proofable to show my agents and what they are currently allowed to do.
+        ```
+      </Accordion>
+      <Accordion title="Any MCP client">
+        Add the hosted server to the client's MCP settings:
+
+        ```json
+        {
+          "mcpServers": {
+            "proofable": {
+              "type": "http",
+              "url": "https://mcp.proofable.me/mcp"
+            }
+          }
+        }
+        ```
+
+        If the client rejects the `type` field, remove it and keep `url`. Then click **Connect** and sign in.
+
+        Try it:
+
+        ```text
+        Use Proofable to show my agents and what they are currently allowed to do.
+        ```
+      </Accordion>
+      <Accordion title="Access key">
+        For servers, CI, scheduled jobs, containers, and agents that cannot use browser OAuth.
+
+        1. Create a key under [Access keys](https://proofable.me/profile?tab=account).
+        2. Store it in the environment as `PROOFABLE_ACCESS_KEY`.
+        3. Send it as a Bearer token:
+
+        ```json
+        {
+          "mcpServers": {
+            "proofable": {
+              "type": "http",
+              "url": "https://mcp.proofable.me/mcp",
+              "headers": {
+                "Authorization": "Bearer ${PROOFABLE_ACCESS_KEY}"
+              }
+            }
+          }
+        }
+        ```
+
+        Treat the key like a password. [Access keys](/deployment/access-keys) covers the SDK, containers, and rotation.
+      </Accordion>
+    </AccordionGroup>
+  </Tab>
+</Tabs>

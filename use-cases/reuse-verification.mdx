@@ -1,0 +1,85 @@
+---
+title: "Reuse verification"
+description: "Stop making users and agents prove the same thing again. Accept a current proof that already meets your rule."
+icon: rotate
+---
+
+When someone already holds a proof that meets your rule, Proofable accepts it and skips the check.
+
+```text
+Existing proof
+      ↓
+Current?
+      ↓
+Valid for this rule?
+      ↓
+Passed
+```
+
+## How reuse is decided
+
+<Steps>
+  <Step title="Find existing proofs">
+    Proofable looks for proofs the person or agent already holds for each required check.
+  </Step>
+  <Step title="Confirm they are current">
+    Expired and revoked proofs never count. Point-in-time checks, such as a token balance or wallet risk, must be recent enough for your rule.
+  </Step>
+  <Step title="Confirm they fit this rule">
+    A stricter rule can need a new check. A basic proof of human does not satisfy a gate that also requires a minimum age.
+  </Step>
+  <Step title="Pass, or verify only what's missing">
+    If every requirement is covered, the person continues. If not, they complete only the missing checks.
+  </Step>
+</Steps>
+
+## Reuse in your product
+
+| Where | How |
+|---|---|
+| React | `VerifyGate` reuses a saved proof by default (`strategy="reuse-or-create"`). |
+| Your server | `gateCheck` returns `allRequiredSatisfied` and which checks were satisfied or missing. |
+| An AI assistant | `proofable_proofs_check` answers yes or no without creating anything. |
+| New proofs | Pass `reusedVerifierProofs` from the gate check so satisfied checks are not run again. |
+
+```js
+const { data } = await client.gateCheck({
+  gateId: 'gate_your-app-name',
+  address: user.accountAddress,
+  includeQHashes: true,
+});
+
+if (data?.gate?.allRequiredSatisfied !== true) {
+  // Ask the person to verify data.gate.missingVerifierIds
+}
+```
+
+## Reuse costs less
+
+| Action | Credits | List price |
+|---|---|---|
+| Check an existing proof | 1 | $0.0025 |
+| Create a new proof | 4 to 73 | $0.01 to $0.18 |
+
+Signed-in owners checking their own proofs through MCP pay nothing.
+
+## Private proofs
+
+Gate checks read public and unlisted proofs by default. A private proof counts when its owner is signed in, or when you pass a signed payload from `createGatePrivateAuth`. [Gates in the SDK](/sdks/gates)
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Proofs" icon="shield-check" href="/proofs">
+    What a proof records and how to read it.
+  </Card>
+  <Card title="Proof lifecycle" icon="rotate" href="/verification/lifecycle">
+    Freshness, reuse strategies, and revocation.
+  </Card>
+  <Card title="Gate checkout" icon="door-open" href="/gates/checkout">
+    How reuse works inside a checkout.
+  </Card>
+  <Card title="Pricing" icon="tags" href="/pricing">
+    What checks and new proofs cost.
+  </Card>
+</CardGroup>

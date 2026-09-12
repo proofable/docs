@@ -1,0 +1,115 @@
+---
+title: "Agents in the SDK"
+sidebarTitle: "Agents"
+description: "Create agents with owner approval, set spend caps, and check an agent's permission before each action with getHostedAgentCreateUrl, toAgentDelegationMaxSpend, and evaluateRuntimeAction."
+icon: robot
+---
+
+## Create an agent with owner approval
+
+When an agent has its own account, it signs its identity first. Then send the owner to Proofable to approve permissions:
+
+```js
+import { getHostedAgentCreateUrl } from '@proofable/sdk';
+
+const url = getHostedAgentCreateUrl({
+  agentId: 'workflow-orchestrator',
+  agentWallet,
+  controllerWallet,
+  identityQHash, // the identity proof the agent signed
+  allowedActions: ['read_context', 'execute_jobs'],
+  deniedActions: ['send_message'],
+  runtimePolicy: { requiresHumanApproval: true },
+  returnUrl: 'https://app.example.com/agents/callback',
+});
+```
+
+With `identityQHash`, Proofable asks the owner only for permissions. The callback receives the permission proof ID, `agentId`, and `agentWallet`.
+
+| Option | Purpose |
+|---|---|
+| `agentId`, `agentWallet` | The agent. Required. |
+| `controllerWallet` | The owner who approves |
+| `identityQHash` | An existing identity proof. Skips the identity step. |
+| `allowedActions`, `deniedActions` | What the agent may and may not do |
+| `maxSpend` | Spend cap in token base units |
+| `expiresAt` | When the permission ends, in Unix milliseconds |
+| `scope` | Where the permission applies |
+| `runtimePolicy` | Allowed providers and models, and whether a person must approve |
+| `approvalPolicy` | Approval for new claims or content |
+| `returnUrl` | Where to send the owner afterward |
+
+Keep agent setup on its own URL. Do not combine it with `gateId` or `intent: 'login'`.
+
+For an agent on the owner's own profile, ask Proofable over MCP instead: [`proofable_agent_create`](/mcp/agent-create).
+
+## Sign identity and permissions directly
+
+For server-side or custom signing, create the two proofs with `client.verify`:
+
+```js
+await client.verify({
+  verifier: 'agent-identity',
+  data: { agentId: 'my-assistant', agentWallet, agentChainRef: 'eip155:8453', agentType: 'ai' },
+  walletAddress: agentWallet,
+});
+
+await client.verify({
+  verifier: 'agent-delegation',
+  data: {
+    controllerWallet,
+    controllerChainRef: 'eip155:8453',
+    agentWallet,
+    agentChainRef: 'eip155:8453',
+    allowedActions: ['read_proofs'],
+  },
+  walletAddress: controllerWallet,
+});
+```
+
+Every field is in [Agent identity](/agents/agent-identity) and [Agent permissions](/agents/agent-delegation).
+
+## Set a spend cap
+
+```js
+import { toAgentDelegationMaxSpend } from '@proofable/sdk';
+
+toAgentDelegationMaxSpend('25', 6); // '25000000' for 25 USDC
+```
+
+Your application checks the cap before it signs each payment.
+
+## Check an action before it runs
+
+```js
+import { evaluateRuntimeAction } from '@proofable/sdk/runtime-mount';
+
+const decision = evaluateRuntimeAction(bundle, 'send_message', { irreversible: true });
+
+if (!decision.allowed) {
+  throw new Error(`${decision.code}: ${decision.message}`);
+}
+```
+
+| `code` | `decision` | Meaning |
+|---|---|---|
+| `ACTION_ALLOWED` | `allowed` | The permission allows the action. |
+| `ACTION_DENIED` | `denied` | The action is on the deny list. |
+| `ACTION_NOT_ALLOWED` | `denied` | An allow list exists and the action is not on it. |
+| `HUMAN_APPROVAL_REQUIRED` | `approval_required` | An irreversible action needs a person to approve. |
+| `PERMISSION_EXPIRED` | `denied` | The permission proof has expired. |
+| `PERMISSION_REQUIRED` | `denied` | No current permission proof is loaded. |
+| `MOUNT_REQUIRED` | `denied` | No agent bundle was passed. |
+| `ACTION_REQUIRED` | `denied` | No action name was passed. |
+
+The deny list applies first, then the allow list, then approval. The SDK evaluates one action. Your host owns the tool call and must stop it when `allowed` is `false`.
+
+## Load the permission bundle
+
+| From | How |
+|---|---|
+| CLI | `npx -y @proofable/sdk mount <agentId> --apply <host>` writes `.proofable/mount.json` |
+| MCP | `proofable_agent_mount` returns the same bundle |
+| Code | `resolveRuntimeBundleFromMcp` from `@proofable/sdk/runtime-mount`, then `applyRuntimeBundle(host, bundle, cwd)` from `@proofable/sdk/runtime-adapters` |
+
+[Load agent context](/agents/runtime-mount) covers where each host picks the bundle up.

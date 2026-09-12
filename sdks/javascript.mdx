@@ -10,7 +10,7 @@ Use `@proofable/sdk` for `api.proofable.me` so headers and paths stay correct.
 
 | Layer | Use |
 |-------|-----|
-| Browser | **`getHostedCheckoutUrl`**, **`VerifyGate`**, polling. Default hosted sign-in on **Proofable** ([Hosted sign-in](../cookbook/auth-hosted-verify)) |
+| Browser | **`getHostedCheckoutUrl`**, **`VerifyGate`**, polling. Default hosted sign-in on **Proofable** ([Hosted sign-in](../verification/hosted)) |
 | Server | **`gateCheck`** with `gateId`; advanced: **`verifyFromApp`**, access keys |
 
 Do not put **`npk_*`** or other secrets in browser bundles. If you need calls the SDK does not expose from the client, **proxy through your backend**. [API overview](../api/overview).
@@ -38,7 +38,7 @@ window.location.assign(
 
 `getHostedCheckoutUrl` supports login, a published gate, or direct verifier checks. These are separate recipes: `intent: 'login'` removes checkout parameters, and `gateId` owns the gate policy instead of mixing with `verifiers` or `preset`. Shared handoff options are `returnUrl`, `mode`, `origin`, and `oauthProvider`; advanced sponsor options are `appId` and `billingWallet`.
 
-For agent identity + delegation, use `getHostedAgentCreateUrl` so dedicated-wallet identity and controller approval stay in the correct order. [Agent create](../mcp/agent-create) and [Hosted Verify](../cookbook/auth-hosted-verify).
+For agent identity + delegation, use `getHostedAgentCreateUrl` so dedicated-wallet identity and controller approval stay in the correct order. [Agent create](../mcp/agent-create) and [Hosted Verify](../verification/hosted).
 
 React: [Widgets](../widgets/overview).
 

@@ -1,0 +1,72 @@
+---
+title: "Gate access"
+description: "Require verification before access or payment, with one published rule you can enforce in a page, a checkout, an API, or an agent action."
+icon: door-closed
+---
+
+A gate is an access rule. It lists the checks someone must pass, and optionally a price. People reuse proofs they already hold and verify only what is missing.
+
+## Choose what to protect
+
+| Protect | Use |
+|---|---|
+| A page, feature, or download | `VerifyGate` in your app and `gateCheck` on your server |
+| Paid access or a digital product | A paid listing with hosted checkout |
+| An API | [Pay per call](/gates/pay-per-call) with a proof check |
+| An agent action | The agent's permission check. [Control agent actions](/use-cases/control-agent-actions) |
+
+## Publish a gate
+
+<Steps>
+  <Step title="Publish a listing">
+    Sign in at [proofable.me](https://proofable.me), open **Listings** in your profile, choose what to verify, and set a price or keep it free. Publish, then copy the `gateId`.
+  </Step>
+  <Step title="Add it to your app">
+    ```jsx
+    import { VerifyGate } from '@proofable/sdk/widgets';
+
+    <VerifyGate gateId="gate_your-app-name">
+      <ProtectedContent />
+    </VerifyGate>;
+    ```
+
+    Not using React? Send people to the hosted checkout link from `getHostedCheckoutUrl`.
+  </Step>
+  <Step title="Confirm on your server">
+    ```js
+    const result = await client.gateCheck({
+      gateId: 'gate_your-app-name',
+      address: user.accountAddress,
+    });
+
+    if (result.data?.gate?.allRequiredSatisfied !== true) {
+      // Send the visitor back to verify
+    }
+    ```
+  </Step>
+</Steps>
+
+## Who pays
+
+Your credits pay for checks through your gate by default. To charge visitors, turn on checkout in the gate's pricing step. Card payments settle to your connected payout account, and USDC on Base works without one. Payment runs after verification. [Pricing](/pricing)
+
+## What people receive
+
+After they pass, and pay when the gate has a price, Proofable delivers what you attached: access, a redirect, a download, or a revealed value. The value stays hidden until then. Their proofs stay with them for the next gate.
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Sell access with one gate" icon="rocket" href="/gates/sell-access">
+    Publish, embed, and confirm in three steps.
+  </Card>
+  <Card title="Gate checkout" icon="door-open" href="/gates/checkout">
+    The full checkout contract behind a gate.
+  </Card>
+  <Card title="NFT and token gating" icon="image" href="/gates/nft-gating">
+    Require a holder or a minimum balance.
+  </Card>
+  <Card title="Gates" icon="door-closed" href="/gates">
+    Everything a gate can hold and enforce.
+  </Card>
+</CardGroup>
