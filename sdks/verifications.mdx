@@ -9,7 +9,7 @@ Default strategy: **`reuse-or-create`**.
 
 ## Privacy
 
-`client.verify()` is an advanced server or controlled-signing path. `VerifyGate` create opens **Hosted Verify** and uses the published gate policy. Full matrix: [Security](../security)
+`client.verify()` is an advanced server or controlled-signing path. `VerifyGate` opens **Hosted Verify** for checks that cannot finish inside your app. Full matrix: [Security](../security)
 
 | Option | When |
 |--------|------|
@@ -24,7 +24,7 @@ Default strategy: **`reuse-or-create`**.
 
 ```jsx
 <VerifyGate
-  gateId="gate_your-app-name"
+  gate={[{ verifierId: 'proof-of-human' }]}
   strategy="reuse-or-create"
 >
   <Protected />
@@ -36,7 +36,7 @@ Default strategy: **`reuse-or-create`**.
 High-stakes actions - force new proof:
 
 ```jsx
-<VerifyGate strategy="fresh" gateId="gate_your-app-name">
+<VerifyGate strategy="fresh" gate={[{ verifierId: 'proof-of-human' }]}>
   <Protected />
 </VerifyGate>
 ```
@@ -44,18 +44,18 @@ High-stakes actions - force new proof:
 ## Read-only gate
 
 ```jsx
-<VerifyGate strategy="reuse" gateId="gate_your-app-name">
+<VerifyGate strategy="reuse" gate={[{ verifierId: 'proof-of-human' }]}>
   <Protected />
 </VerifyGate>
 ```
 
 ## Hosted interactive
 
-Hand off to `/verify` with a published gate:
+Hand off to `/verify` for the missing verifier:
 
 ```jsx
 <VerifyGate
-  gateId="gate_your-app-name"
+  gate={[{ verifierId: 'proof-of-human' }]}
   hostedCheckoutUrl="https://proofable.me/verify"
 />
 ```
@@ -68,9 +68,11 @@ Prefer **`gateCheck`** over pulling full proofs for every decision:
 
 ```javascript
 const result = await client.gateCheck({
-  gateId: 'gate_your-app-name',
-  address: '0x...',
+  gate: [{ verifierId: 'proof-of-human' }],
+  subject: { accountId: user.accountAddress },
 });
+
+if (!result.satisfied) throw new Error('Verification required');
 ```
 
 ## Next

@@ -13,8 +13,8 @@
       "type": "object"
     },
     "namespace": {
-      "default": "neus",
-      "description": "Logical partition so the same `pseudonymId` can exist in different apps or communities. Omit to use the default namespace.",
+      "default": "proofable",
+      "description": "Logical partition so the same `pseudonymId` can exist in different apps or communities. Omit to write `proofable`. Legacy `neus` writes remap to `proofable`; existing `neus:<handle>` proofs still resolve.",
       "maxLength": 64,
       "minLength": 1,
       "pattern": "^[a-z0-9]([a-z0-9._-]*[a-z0-9])?$",

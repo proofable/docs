@@ -10,8 +10,8 @@ Use `@proofable/sdk` for `api.proofable.me` so headers and paths stay correct.
 
 | Layer | Use |
 |-------|-----|
-| Browser | **`getHostedCheckoutUrl`**, **`VerifyGate`**, polling. Default hosted sign-in on **Proofable** ([Hosted sign-in](../verification/hosted)) |
-| Server | **`gateCheck`** with `gateId`; advanced: **`verifyFromApp`**, access keys |
+| Browser | **`VerifyGate`** or **Hosted Verify** for missing interactive checks ([Hosted sign-in](../verification/hosted)) |
+| Server | **`defineGate`** + **`gateCheck`** for the final decision; advanced: **`verifyFromApp`**, access keys |
 
 Do not put **`npk_*`** or other secrets in browser bundles. If you need calls the SDK does not expose from the client, **proxy through your backend**. [API overview](../api/overview).
 
@@ -30,7 +30,7 @@ import { getHostedCheckoutUrl } from '@proofable/sdk';
 
 window.location.assign(
   getHostedCheckoutUrl({
-    gateId: 'gate_your-app-name',
+    verifiers: ['proof-of-human'],
     returnUrl: 'https://app.example.com/callback',
   }),
 );
@@ -57,7 +57,7 @@ Other options (advanced): `apiKey` (server key, sent as `Authorization: Bearer`)
 
 ## App attribution (`appId`)
 
-Set `appId` only for advanced server/app attribution flows. It is public, not a secret, and it is not required for published gate checkout or `gateCheck({ gateId })`.
+Set `appId` only for advanced server/app attribution flows. It is public, not a secret, and it is not required for inline `gateCheck`, published listing checkout, or `gateCheck({ gateId })`.
 
 ```javascript
 const client = new ProofableClient({
@@ -147,7 +147,7 @@ Live verifier list: `GET /api/v1/verification/verifiers`.
 
 | Method | Use when |
 |--------|----------|
-| **`gateCheck()`** | **Allow/deny** via `GET /api/v1/proofs/check` (server-enforced). |
+| **`gateCheck()`** | **Allow/deny** via `POST /api/v1/proofs/check` for inline requirements (server-enforced). |
 | **`checkGate()`** | Preview against proofs you already loaded. Not a substitute for **`gateCheck()`** where trust matters. |
 
 ## Link a wallet with Hosted Verify
@@ -172,13 +172,15 @@ const res = await client.verify({
 ## Gate checks from your servers
 
 ```javascript
-const res = await client.gateCheck({
-  gateId: 'gate_your-app-name',
-  address: 'YOUR_WALLET_OR_DID',
-  since: Date.now() - 60 * 60 * 1000
+import { defineGate } from '@proofable/sdk';
+
+const gate = defineGate([{ verifierId: 'proof-of-human' }]);
+const result = await client.gateCheck({
+  gate,
+  subject: { accountId: user.accountAddress },
 });
 
-if (res.data?.gate?.allRequiredSatisfied !== true) {
+if (!result.satisfied) {
   throw new Error('Access denied');
 }
 ```
@@ -187,7 +189,7 @@ if (res.data?.gate?.allRequiredSatisfied !== true) {
 **`gateCheck`** uses **public** and **unlisted** proofs by default. **Private** proofs count when that user is **signed in**. For strict live checks, create a fresh proof and wait for **verified** status.
 </Warning>
 
-The gate stores verifier requirements, billing owner, sponsor/x402 policy, and attribution. Direct `verifierIds` checks are advanced protocol calls; do not use them as the normal product checkout path.
+`defineGate()` only normalizes requirements locally. It makes no request and persists nothing. `result.proofs` contains zero or more matching proof references; `result.missing` identifies checks that still need verification. A persisted listing and `gateId` remain optional for managed checkout and fulfillment.
 
 ## Polling
 

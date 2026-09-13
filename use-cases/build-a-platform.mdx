@@ -4,27 +4,40 @@ description: "Add Proofable sign-in, verification, agent permissions, and proof 
 icon: layer-group
 ---
 
-Your users sign in and verify on Proofable, then return to your product with a proof ID. You never build passkey, OAuth, or wallet screens.
+Define requirements in your product and enforce the result on your server. Proofable reuses existing proof before asking the user to verify again.
+
+```javascript
+import { ProofableClient, defineGate } from '@proofable/sdk';
+
+const client = new ProofableClient();
+const gate = defineGate([{ verifierId: 'proof-of-human' }]);
+const result = await client.gateCheck({
+  gate,
+  subject: { accountId: user.accountAddress },
+});
+
+if (!result.satisfied) throw new Error('Verification required');
+await submitReview();
+```
+
+No dashboard or published listing is required. Your application owns the final allow or deny decision.
 
 <Tabs>
-  <Tab title="Hosted flow">
-    Send people to Proofable for sign-in, a check, or checkout, then back to your app.
+  <Tab title="Missing verification">
+    Use Hosted Verify only when the server check reports a missing verifier.
 
     ```js
     import { getHostedCheckoutUrl } from '@proofable/sdk';
 
-    // Sign in only
     window.location.assign(
-      getHostedCheckoutUrl({ intent: 'login', returnUrl: 'https://app.example.com/after-login' }),
-    );
-
-    // Or require the checks on a published gate
-    window.location.assign(
-      getHostedCheckoutUrl({ gateId: 'gate_your-app-name', returnUrl: 'https://app.example.com/callback' }),
+      getHostedCheckoutUrl({
+        verifiers: ['proof-of-human'],
+        returnUrl: 'https://app.example.com/callback',
+      }),
     );
     ```
 
-    Read the proof ID from `qHash` on the return URL. Pass `mode: 'popup'` and `origin` to keep people on your page. [Hosted verification](/verification/hosted)
+    Re-run the server check after the user returns. Pass `mode: 'popup'` and `origin` to keep people on your page. [Hosted verification](/verification/hosted)
   </Tab>
   <Tab title="SDK">
     ```bash
@@ -46,7 +59,7 @@ Your users sign in and verify on Proofable, then return to your product with a p
 
     | Need | Endpoint |
     |---|---|
-    | Check access | `GET /api/v1/proofs/check` |
+    | Check inline requirements | `POST /api/v1/proofs/check` |
     | Create a proof | `POST /api/v1/verification` |
     | Read a proof | `GET /api/v1/proofs/{qHash}` |
     | Load a gate | `GET /api/v1/profile/gates/{gateId}` |
@@ -62,14 +75,14 @@ Your users sign in and verify on Proofable, then return to your product with a p
 | Sign-in | Hosted passkey, wallet, and Google or Microsoft sign-in |
 | Verified users | Checks that save reusable proofs |
 | Agents for your users | An owner, identity, and permission proof for each agent |
-| Access control | Gates enforced in the browser and on your server |
+| Access control | Verification UX in the browser; final decisions on your server |
 | Payments | Visitor checkout and pay per call |
 
 Users keep their proofs. When they reach another product that accepts them, they don't start over.
 
 ## Who pays
 
-Published gates bill the gate owner by default. When your server creates proofs with `verifyFromApp`, pass your access key to bill your builder profile. Agent setup bills whoever signs each step. [Pricing](/pricing)
+Your app can sponsor usage, users can pay through a Listing, and agents or APIs can use x402. Payer-resolution details are in [Pricing](/pricing).
 
 ## Keep credentials on the server
 

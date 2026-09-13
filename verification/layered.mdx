@@ -5,7 +5,7 @@ description: "Combine account, social, and proof of human checks in one gate for
 icon: shield-halved
 ---
 
-One weak signal is easy to game. Publish a listing that layers checks, so visitors must pass more than one.
+One weak signal is easy to game. Define a local policy that layers checks, so visitors must pass more than one.
 
 | Layer | Check | When |
 |---|---|---|
@@ -16,15 +16,24 @@ One weak signal is easy to game. Publish a listing that layers checks, so visito
 
 For consumer apps, start with a social account plus proof of human. Add `ownership-basic` or `wallet-risk` only when your threat model needs them.
 
-## Publish the layered gate
+## Define the layered requirements
 
-[Create a listing](https://proofable.me/profile/portals/new), require the checks above, set pricing, and publish. Visitors only need your `gateId`.
+```javascript
+import { defineGate } from '@proofable/sdk';
+
+const layered = defineGate([
+  { verifierId: 'ownership-social' },
+  { verifierId: 'proof-of-human' },
+]);
+```
+
+This is local configuration. It does not publish or persist a Gate.
 
 ## Add it to your app
 
 ```jsx
 <VerifyGate
-  gateId="gate_layered"
+  gate={layered}
   onVerified={(result) => {
     // Store result.qHash to prevent replay
   }}
@@ -36,14 +45,16 @@ For consumer apps, start with a social account plus proof of human. Add `ownersh
 ## Check on your server
 
 ```javascript
-const layered = await client.gateCheck({
-  gateId: 'gate_layered',
-  address: user.accountAddress,
+const result = await client.gateCheck({
+  gate: layered,
+  subject: { accountId: user.accountAddress },
 });
+
+if (!result.satisfied) throw new Error('Verification required');
 ```
 
 <Warning>
 Set recency on the gate for point-in-time checks, and store proof IDs where replay matters.
 </Warning>
 
-[Sell access with one gate](/gates/sell-access) covers publishing. [Hosted verification](/verification/hosted) covers the browser flow.
+[Sell access with a Listing](/gates/sell-access) covers optional publishing and commerce. [Hosted verification](/verification/hosted) covers the browser flow for missing checks.

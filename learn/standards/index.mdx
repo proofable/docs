@@ -27,7 +27,7 @@ A signed CAIP-380 request proves who signed and that the request was not changed
 | AuthZEN | A standard way to ask whether an action is allowed | A Proofable proof can be the evidence that decision uses | Works with | [First guarded action](/mcp/guarded-action), [Whitepaper](/whitepaper#standards-and-interoperability) |
 | AARM | Runtime checks before an agent acts | Proofable checks identity, limits, and current permission before an action, then records the result | Works with | [First guarded action](/mcp/guarded-action) |
 | ATF | Identity, behavior, access limits, and how to stop or revoke | Proofable covers those with identity, permission checks, deny, and revoke | Works with | [Agent permissions](/agents/agent-delegation), [Proof lifecycle](/verification/lifecycle) |
-| ERC-8004 | Public agent discovery | Proofable publishes compatible discovery cards and keeps its own proof and permission model | Available | [Platform agent card](https://proofable.me/.well-known/agent-card.json), [Discover agents](/agents/named-agent-card) |
+| ERC-8004 | Public agent discovery | Proofable can publish registration metadata while keeping its own proof and permission model | Not registered | [Platform metadata](https://proofable.me/.well-known/agent-card.json), [Discover agents](/agents/named-agent-card) |
 | x402 | Pay for a single HTTP call | Payment settles the call. Proofable can still require a current proof before the call proceeds | Available | [Pay per call](/gates/pay-per-call) |
 | Phala | Confidential compute | Hosted AI can run in a Phala-backed confidential environment. The same proofs work on a private deploy | Available | [Private cloud agents](/deployment/private-cloud) |
 

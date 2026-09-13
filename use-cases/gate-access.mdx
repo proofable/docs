@@ -4,7 +4,7 @@ description: "Require verification before access or payment, with one published 
 icon: door-closed
 ---
 
-A gate is an access rule. It lists the checks someone must pass, and optionally a price. People reuse proofs they already hold and verify only what is missing.
+A gate is a policy over proof. Define the checks in your product. People reuse proofs they already hold and verify only what is missing. Publish a listing only when you want a persisted `gateId`, price, or schedule.
 
 ## Choose what to protect
 
@@ -15,31 +15,37 @@ A gate is an access rule. It lists the checks someone must pass, and optionally 
 | An API | [Pay per call](/gates/pay-per-call) with a proof check |
 | An agent action | The agent's permission check. [Control agent actions](/use-cases/control-agent-actions) |
 
-## Publish a gate
+## Define a gate
 
 <Steps>
-  <Step title="Publish a listing">
-    Sign in at [proofable.me](https://proofable.me) and [create a listing](https://proofable.me/profile/portals/new). Choose what to verify, set a price or keep it free, then publish and copy the `gateId`. Listed offers also appear on the [marketplace](https://proofable.me/marketplace).
+  <Step title="Write the policy in your app">
+    ```js
+    import { defineGate } from '@proofable/sdk';
+
+    const gate = defineGate([{ verifierId: 'proof-of-human' }]);
+    ```
+
+    You do not need a dashboard visit or a published listing to start.
   </Step>
   <Step title="Add it to your app">
     ```jsx
     import { VerifyGate } from '@proofable/sdk/widgets';
 
-    <VerifyGate gateId="gate_your-app-name">
+    <VerifyGate gate={gate} onVerified={grantAccess}>
       <ProtectedContent />
     </VerifyGate>;
     ```
 
-    Not using React? Send people to the hosted checkout link from `getHostedCheckoutUrl`.
+    Not using React? Send people to Hosted Verify with `getHostedCheckoutUrl`, then confirm on your server.
   </Step>
   <Step title="Confirm on your server">
     ```js
     const result = await client.gateCheck({
-      gateId: 'gate_your-app-name',
-      address: user.accountAddress,
+      gate,
+      subject: { accountId: user.accountAddress },
     });
 
-    if (result.data?.gate?.allRequiredSatisfied !== true) {
+    if (result.satisfied !== true) {
       // Send the visitor back to verify
     }
     ```
@@ -48,7 +54,7 @@ A gate is an access rule. It lists the checks someone must pass, and optionally 
 
 ## Who pays
 
-Your credits pay for checks through your gate by default. To charge visitors, turn on checkout in the gate's pricing step. Card payments settle to your connected payout account, and USDC on Base works without one. Payment runs after verification. [Pricing](/pricing)
+Your app can sponsor usage. Users can pay through a Listing. Agents and APIs can pay per call with x402. [Pricing](/pricing)
 
 ## What people receive
 

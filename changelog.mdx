@@ -17,6 +17,29 @@ Proofable is under active development. Published APIs and verifier schemas may c
 </Note>
 
 <Update
+  label="September 13, 2026"
+  description="v0.1.1"
+  tags={["SDK", "API", "Docs", "MCP"]}
+  rss={{
+    title: "Proofable v0.1.1",
+    description: "Inline Gate Policy, subject reuse without a profile, and x402 on POST /proofs/check."
+  }}
+>
+## Builder path without a listing
+
+Define the checks in your app. Check the visitor by account. Reuse a current proof. Verify only what is missing.
+
+- `defineGate` + `gateCheck({ gate, subject })` does not create a Proofable profile.
+- `POST /api/v1/proofs/check` takes the same x402 pay-per-call rail as `GET`.
+- MCP sign-in stays OAuth. Machine API calls stay x402, sponsor, or credits.
+- `gateCheck({ gateId })` still works for published listings.
+
+```bash
+npm install @proofable/sdk@0.1.1
+```
+</Update>
+
+<Update
   label="September 6, 2026"
   description="v0.1.0"
   tags={["MCP", "SDK", "Docs", "Agents"]}

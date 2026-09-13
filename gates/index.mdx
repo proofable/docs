@@ -1,49 +1,62 @@
 ---
 title: "Gates"
-description: "Require proof before something happens. Protect access, payment, checkout, APIs, or sensitive agent actions with required checks."
+description: "A gate is a policy over proof. Define the checks in your product, then enforce them anywhere."
 icon: door-open
 ---
 
-A gate lists the checks someone must pass before they continue. Publish it once as a listing, then enforce it anywhere with its `gateId`.
+A gate is a policy over proof. You define what must already be proven. The user verifies in your product. Proofable returns a portable result. You decide what happens next.
+
+Publishing a listing is optional. Use it only when you want a persisted `gateId`, price, schedule, or marketplace offer.
 
 ## What a gate holds
 
 | Part | What it sets |
 |---|---|
-| Checks | What must be verified, with optional rules such as a minimum balance or a company domain |
-| Price | Free, or a price paid by card or USDC |
-| Schedule | Optional start and end times, enforced on the server |
-| Reward | What people receive after they pass: access, a redirect, a download, or a revealed value |
+| Checks | What must already be proven, with optional match rows such as a provider or minimum age |
+| Price | Optional. Free unless you publish a charge |
+| Schedule | Optional start and end times, enforced on the server when published |
+| Reward | Optional. What people receive after they pass a published listing |
 
 ## Enforce it
 
 | Where | How |
 |---|---|
-| A React page | `VerifyGate` with the `gateId` |
-| Any page | A hosted checkout link from `getHostedCheckoutUrl` |
-| Your server | `gateCheck`. Only `allRequiredSatisfied === true` means ready. |
+| Your server | `defineGate` + `gateCheck`. `satisfied === true` means ready |
+| A React page | `VerifyGate` with the `gate` policy |
+| A published listing | `VerifyGate` with a `gateId`, or a hosted checkout link |
 | An API | [Pay per call](/gates/pay-per-call) with a proof check |
 | An agent action | The agent's permission check before the tool runs. [Control agent actions](/use-cases/control-agent-actions) |
 
-```jsx
-import { VerifyGate } from '@proofable/sdk/widgets';
+```js
+import { ProofableClient, defineGate } from '@proofable/sdk';
 
-<VerifyGate gateId="gate_your-app-name">
-  <ProtectedContent />
-</VerifyGate>;
+const proofable = new ProofableClient();
+const gate = defineGate([{ verifierId: 'proof-of-human' }]);
+const result = await proofable.gateCheck({ gate, subject });
+if (result.satisfied) {
+  // grant access
+}
 ```
 
-## How checkout runs
+```jsx
+import { defineGate } from '@proofable/sdk';
+import { VerifyGate } from '@proofable/sdk/widgets';
 
-1. **Load the gate.** Requirements, price, and schedule. The reward stays hidden.
-2. **Check existing proofs.** Proofs the person already holds cover what they can.
-3. **Verify what's missing.** Only the checks that are not yet covered.
-4. **Pay.** For priced gates, after verification.
-5. **Deliver.** Proofable releases the reward and records the result.
+const gate = defineGate([{ verifierId: 'proof-of-human' }]);
+
+<VerifyGate gate={gate} onVerified={grantAccess} />;
+```
+
+## How a check runs
+
+1. **Define the policy.** Verifier IDs plus optional match, freshness, and count rows.
+2. **Check existing proofs.** `gateCheck` evaluates the subject's current proofs against that policy.
+3. **Verify what's missing.** Hosted Verify or your own verify call covers only the gaps.
+4. **Decide.** `satisfied` is the decision. Proofable does not grant access for you.
 
 ## Who pays
 
-Your credits pay for checks through your gate by default. Turn on visitor checkout to charge a price instead. [Pricing](/pricing)
+Checks on a published listing use your credits by default. Turn on visitor checkout to charge a price instead. Inline `defineGate` checks and other API calls can be sponsored by your app or paid per call with [x402](/gates/pay-per-call). [Pricing](/pricing)
 
 ## Guides
 

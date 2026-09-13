@@ -1,7 +1,7 @@
 ---
 title: Discover agents
 sidebarTitle: Discover agents
-description: Public agent pages, JSON profiles, and A2A / EIP-8004 cards. Other marketplaces can list the same agent.
+description: Public agent pages, JSON profiles, and A2A discovery cards. Other marketplaces can list the same agent.
 icon: address-card
 ---
 
@@ -17,10 +17,10 @@ That card is the portable record. Other marketplaces can list the same agent. Pr
 | Universal JSON | `https://proofable.me/api/agent/{agentId}?format=json` | Identity + permissions + proofs |
 | A2A (per agent) | `https://proofable.me/api/agent/{agentId}?format=a2a` | Agent-to-Agent card |
 | A2A (platform) | `https://proofable.me/.well-known/a2a/agent-card.json` | Platform-wide A2A card |
-| EIP-8004 (platform) | `https://proofable.me/.well-known/agent-card.json` | Ethereum registry card |
-| EIP-8004 (per agent) | `https://api.proofable.me/.well-known/agent-card.json?agentId={agentId}` | Per-agent ERC-8004 bridge |
+| Platform metadata | `https://proofable.me/.well-known/agent-card.json` | Service discovery and registration status |
+| Per-agent metadata | `https://api.proofable.me/.well-known/agent-card.json?agentId={agentId}` | Per-agent discovery metadata |
 
-Per-agent EIP-8004 cards resolve to `GET https://api.proofable.me/api/v1/agents/card/{agentId}`. The platform A2A card is also available at `/api/agent/config?format=a2a`.
+Per-agent cards resolve to `GET https://api.proofable.me/api/v1/agents/card/{agentId}`. The platform A2A card is also available at `/api/agent/config?format=a2a`. Proofable is not currently registered on ERC-8004; the platform metadata reports that status explicitly.
 
 ## Examples
 

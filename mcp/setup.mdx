@@ -29,6 +29,20 @@ With the CLI installed globally, run `proofable setup`. If a Proofable plugin is
 
 ## After you connect
 
+### Load an existing agent
+
+```text
+Load my existing Proofable agents into this project. If I do not have one yet, create or import an agent and set its context and limits.
+```
+
+This calls `proofable_context`, then `proofable_agent_mount` for an agent already on the profile, or `proofable_agent_create` when none exist. Do not start with an unscoped `proofable_proofs_get`.
+
+```bash
+npx -y @proofable/sdk mount <agentId> --apply cursor
+```
+
+`--apply` accepts `cursor`, `claude`, or `codex`. [Load agent context](/agents/runtime-mount)
+
 ### Create an agent
 
 ```text
@@ -37,17 +51,17 @@ Create or import an agent on my Proofable profile. Set spend and action limits. 
 
 This calls `proofable_agent_create`, then `proofable_agent_link` to confirm. The agent lives on your signed-in profile unless you ask for a dedicated spend account.
 
+### Read a proof
+
+```text
+Read my current proofs. If I give you a proof ID, fetch that record.
+```
+
+This calls `proofable_proofs_get`. Use it when you need a specific record, not as the first action after Connect. Use `proofable_proofs_check` only for yes/no eligibility.
+
 ### Link apps
 
 Open **Connections** on [proofable.me](https://proofable.me) to link the apps your agents use. [Connections](/connections)
-
-### Load an agent into a project
-
-```bash
-npx -y @proofable/sdk mount <agentId> --apply cursor
-```
-
-`--apply` accepts `cursor`, `claude`, or `codex`. [Load agent context](/agents/runtime-mount)
 
 ### Sell from your assistant
 
@@ -68,9 +82,9 @@ Give your assistant this prompt to connect and set up in one pass:
 Connect this host to Proofable. MCP is how I use Proofable from any chat, IDE, or job runtime: profile, proofs, listings, permissions, and private context.
 1. Install Proofable on this host (plugin, install page, or https://mcp.proofable.me/mcp). Do not add a second `proofable` entry.
 2. Tell me to click Connect if sign-in is not done.
-3. Call proofable_context once. Reuse existing proofs before a new check. Before spend, publish, secrets, or a sensitive tool, check proofs first. Summarize as Proofable: Passed, Action needed, or Blocked.
+3. Call proofable_context once. Load existing agents with proofable_agent_mount, or create or import one with proofable_agent_create. Do not start with an unscoped proofable_proofs_get. Reuse titles in contextIndex. Before spend, publish, secrets, or a sensitive tool, check proofs first. Summarize as Proofable: Passed, Action needed, or Blocked.
 4. If I want to sell: open payouts at https://proofable.me/profile?tab=credits, then create a listing at https://proofable.me/profile/portals/new. Walk me through type, what to verify, price, and Listed. Do not invent proof IDs or verifier IDs.
-5. If I need an agent, create or import it on my signed-in profile. Use generate only for a dedicated spend key.
+5. If I need a specific proof, read it with proofable_proofs_get and that proof ID. Use generate only for a dedicated spend key.
 
 Canonical endpoint: https://mcp.proofable.me/mcp
 Docs: https://docs.proofable.me/mcp/setup

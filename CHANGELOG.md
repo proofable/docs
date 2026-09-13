@@ -6,7 +6,12 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ## [Unreleased]
 
-(nothing yet)
+## [0.1.2] - 2026-09-13
+
+### Changed
+
+- Builder docs now lead with `defineGate` and subject `gateCheck`. A published `gateId` is optional.
+- Pay-per-call documents x402 on both `GET` and `POST /api/v1/proofs/check`, plus verification and access-grant.
 
 ## [0.1.1] - 2026-09-09
 
