@@ -264,7 +264,7 @@ html.dark #navbar img.nav-logo[alt="light logo"] {
   }
 
   /*
-    Selected tab — quiet plate fill + theme ink. No blue wash (Linear/Cursor).
+    Selected tab — quiet plate fill, theme ink, no accent wash.
   */
   #navbar .nav-tabs a.nav-tabs-item[aria-current],
   #navbar .nav-tabs a.nav-tabs-item[data-active="true"],
@@ -318,8 +318,8 @@ html.dark #navbar img.nav-logo[alt="light logo"] {
 }
 
 /*
-  Active sidebar item — Linear/Cursor style: quiet plate fill, no accent blue.
-  Match app selected-row soft fill without primary wash.
+  Active sidebar item — quiet plate fill, no accent wash.
+  Matches the app selected-row soft fill.
 */
 #navigation-items a[aria-current="page"],
 #navigation-items a[aria-current="true"],

@@ -1,28 +1,25 @@
 ---
-title: "Verify identity & ownership"
-description: "Verify who's behind the account, domain, wallet, organization, or agent, and keep the result as a proof you can check again."
+title: "Verify anything"
+sidebarTitle: "Verify"
+description: "Confirm who or what you are dealing with."
 icon: id-card
 ---
 
-Run a check once. Proofable saves the result as a proof that your product, and any app you share it with, can check instead of asking again.
+Confirm the subject first. Save the result as a proof. The next access decision reads that proof instead of collecting the same evidence again.
 
-## What you can verify
+## Start with the check you need
 
-| Subject | Check | How it runs |
-|---|---|---|
-| A real person | [Proof of human](/verification/proof-of-human) | Interactive |
-| Social accounts | [Linked social accounts](/verification/ownership-social) | Interactive |
-| Work accounts | [Team and organization](/verification/ownership-org-oauth) | Interactive |
-| Domains | [Domain ownership](/verification/ownership-dns-txt) | Lookup |
-| Handles | [Username](/verification/ownership-pseudonym) | Instant |
-| Wallets | [Linked wallets](/verification/wallet-link) and [wallet risk](/verification/wallet-risk) | Instant and lookup |
-| Assets | [NFT holder](/verification/nft-ownership), [token balance](/verification/token-holding), and [contract control](/verification/contract-ownership) | Lookup |
-| Content | [Content ownership](/verification/ownership-basic) | Instant |
-| Agents | [Agent identity](/agents/agent-identity) and [agent permissions](/agents/agent-delegation) | Instant |
+| If you need | Start here |
+|---|---|
+| A real person | [Proof of human](/verification/proof-of-human) |
+| A social or work account | [Linked social accounts](/verification/ownership-social) or [team and organization](/verification/ownership-org-oauth) |
+| A domain or handle | [Domain ownership](/verification/ownership-dns-txt) or [username](/verification/ownership-pseudonym) |
+| A wallet or on-chain asset | [Linked wallets](/verification/wallet-link), [NFT holder](/verification/nft-ownership), or [token balance](/verification/token-holding) |
+| An agent | [Agent identity](/agents/agent-identity) |
 
-**Interactive** checks run on Proofable: passkey, OAuth, or a personhood step. **Instant** checks finish when the account signs. **Lookup** checks read live state, such as a DNS record or a token balance.
+The full catalog, including risk and content checks, is on [Verify](/verification).
 
-Social accounts include X, GitHub, Discord, LinkedIn, Telegram, Facebook, and Coinbase. Work accounts include Google Workspace and Microsoft 365.
+**Interactive** checks run on Proofable: passkey, OAuth, or a personhood step. **Instant** checks finish when the account signs. **Lookup** checks read live state.
 
 ## Start a check
 
@@ -59,17 +56,13 @@ Social accounts include X, GitHub, Discord, LinkedIn, Telegram, Facebook, and Co
 
 ## Require it before access
 
-Define the required checks in your app, use `gateCheck` on your server, and show `VerifyGate` only when something is missing. Publish a listing only for managed commerce. [Gate access](/use-cases/gate-access)
-
-## Share only what's needed
-
-Private by default. Share the proof, not the data. Proofable verifies the underlying evidence privately; your application receives the proof and decision data it needs instead of taking custody of the source identity data.
+Define the required checks in your app, use `gateCheck` on your server, and show `VerifyGate` only when something is missing. [Gate access](/use-cases/gate-access)
 
 ## Next
 
 <CardGroup cols={2}>
   <Card title="Verify" icon="badge-check" href="/verification">
-    Every way to start a check and read the result.
+    Every supported check and how it runs.
   </Card>
   <Card title="Hosted verification" icon="key" href="/verification/hosted">
     Sign-in and checks without building UI.

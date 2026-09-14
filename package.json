@@ -1,7 +1,7 @@
 {
   "name": "@proofable/docs",
   "private": true,
-  "description": "Documentation for Proofable verification, reusable proof, and agent permissions.",
+  "description": "Docs for verification, gates, proofs, agents, and MCP.",
   "license": "Apache-2.0",
   "type": "module",
   "engines": {

@@ -6,11 +6,9 @@ icon: robot
 
 Create or import an agent linked to your Proofable profile. Default is your signed-in account. Add a separate spend account and limits only when you need them.
 
-Fastest dedicated key: set **`agentWallet`** to **`"generate"`**. Store the returned key once. Proofable does not keep it.
-
 | Step | Action |
 |------|--------|
-| 1 | **`proofable_agent_link`** with **`agentId`** and **`agentWallet`** (use the signed-in account from **`proofable_context`** unless you already have a dedicated key) |
+| 1 | **`proofable_agent_link`** with **`agentId`** and **`agentWallet`** (use the signed-in account from **`proofable_context`** unless you already have a dedicated account) |
 | 2 | **`proofable_agent_create`** with the same stable identifiers |
 | 3 | Follow the returned **`next_action`** exactly |
 | 4 | **`proofable_agent_link`** until **`linked: true`** |
@@ -19,7 +17,7 @@ Leave out **`controllerWallet`** when the signed-in account from **`proofable_co
 
 Ask:
 
-> Create or import an agent on my Proofable profile. Use generate if I need a separate spend account. Set spend and action limits. Then confirm it is ready.
+> Create or import an agent on my Proofable profile. Give it a separate spend account if it needs one. Set spend and action limits. Then confirm it is ready.
 
 [Agent concepts](../agents/concepts)
 
@@ -29,26 +27,9 @@ Ask:
 
 Omit **`agentWallet`**. The agent lives on your signed-in account. Identity is enough. Several agents on one account need **`agentId`** on every link and mount call.
 
-### Dedicated key (`generate`)
+### Dedicated account
 
-**`agentWallet: "generate"`** creates a separate spend account and returns the private key once. Store it in Vault with **`proofable_secret_create`** before you continue.
-
-```json
-{
-  "agentId": "data-analyst",
-  "agentWallet": "generate",
-  "delegationAllowedActions": ["read_context", "read_proofs"],
-  "delegationDeniedActions": ["send_message"],
-  "delegationRuntimePolicy": { "requiresHumanApproval": true },
-  "maxSpend": "15000000"
-}
-```
-
-Use this when you want independent spend, revocation, or offboarding without bringing a key of your own.
-
-### Bring your own account
-
-Pass an existing **`agentWallet`**. The agent account signs identity. The approving profile signs spend and action limits.
+Proofable does not generate or hold private keys. Create the account in your wallet or secure runtime, then pass only its public address as **`agentWallet`**.
 
 ```json
 {
@@ -57,11 +38,15 @@ Pass an existing **`agentWallet`**. The agent account signs identity. The approv
   "delegationAllowedActions": ["read_context", "read_proofs"],
   "delegationDeniedActions": ["send_message"],
   "delegationRuntimePolicy": { "requiresHumanApproval": true },
-  "maxSpend": "15000000",
-  "expiresAt": 1798761600000,
-  "returnUrl": "https://app.example.com/agents/callback"
+  "maxSpend": "15000000"
 }
 ```
+
+Use a dedicated account when you want independent spend, revocation, or offboarding without touching your profile account.
+
+### Bring an existing account
+
+Pass an existing **`agentWallet`**. The agent account signs identity. The approving profile signs spend and action limits.
 
 When the signed-in account does not control that key:
 

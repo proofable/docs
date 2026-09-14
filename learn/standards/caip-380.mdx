@@ -24,7 +24,7 @@ One wallet-signed envelope; apps validate off-chain; stable **qHash**.
 | CAIP-2 | `namespace:reference` | Network context. Use `chain` for any non-EVM signing and account identity, for example `solana:mainnet` or `near:mainnet`. |
 | CAIP-10 | `namespace:reference:account` | Account id fields such as `agentAccountId` and `controllerAccountId`. |
 | `did:pkh` | `did:pkh:namespace:reference:account` | Stable DID for profiles, proof subjects, and `/u/[did]` URLs. It is derived from the same chain and account context, but is not a bare CAIP-10 string. |
-| `chainId` | number | EVM-only compatibility field. For signer context it can be omitted by standard EVM integrations because Proofable resolves the hub chain. For asset verifiers, set the verifier-specific `chainId` inside `data`. |
+| `chainId` | number | EVM-only compatibility field for the **account / signing** network (Proofable defaults to Base mainnet, `8453`). Do not put the optional voucher hub here. For NFT, token, or contract checks, set that asset's `chainId` inside `data`. |
 
 Rule of thumb: EVM browser flows can rely on hosted verify or pass an explicit EVM provider. Any non-EVM flow passes the wallet or provider explicitly and includes `chain` as a CAIP-2 value. The envelope is chain-agnostic by design. Any namespace that publishes a CAIP-2 reference and a signing profile can participate.
 

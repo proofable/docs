@@ -1,13 +1,13 @@
 ---
-title: "Connect an AI client"
-sidebarTitle: "Connect an AI client"
-description: "Connect Claude, Cursor, Claude Code, Codex, VS Code, or any MCP client to Proofable, then check agent permissions and reuse proofs from the tools you already use."
+title: "Add Proofable to any MCP client"
+sidebarTitle: "Connect a client"
+description: "Sign in once. Same proofs and limits in the next client."
 icon: plug
 ---
 
 import ConnectHosts from '/snippets/connect-hosts.mdx';
 
-Proofable MCP connects chats, editors, and agent runtimes to one profile. Your agents, permissions, and proofs come with you to each client.
+Add Proofable to any app, chat, or agent that speaks MCP. Same checks, proofs, and limits. Cursor, Claude, Codex, and VS Code are shortcuts.
 
 Interactive clients sign in with OAuth. Servers and CI use an [access key](/deployment/access-keys). Both use `https://mcp.proofable.me/mcp` and the same profile.
 
@@ -29,13 +29,21 @@ With the CLI installed globally, run `proofable setup`. If a Proofable plugin is
 
 ## After you connect
 
+### Show your profile
+
+```text
+Show my Proofable profile and current proofs.
+```
+
+This loads the signed-in profile and current proofs. Do not fetch every proof as the first step.
+
 ### Load an existing agent
 
 ```text
-Load my existing Proofable agents into this project. If I do not have one yet, create or import an agent and set its context and limits.
+Show what my agents are allowed to do.
 ```
 
-This calls `proofable_context`, then `proofable_agent_mount` for an agent already on the profile, or `proofable_agent_create` when none exist. Do not start with an unscoped `proofable_proofs_get`.
+This loads agents on the signed-in profile. Create or import one if you do not have one yet.
 
 ```bash
 npx -y @proofable/sdk mount <agentId> --apply cursor
@@ -66,7 +74,7 @@ Open **Connections** on [proofable.me](https://proofable.me) to link the apps yo
 ### Sell from your assistant
 
 1. For paid listings, set up payouts under [Payouts](https://proofable.me/profile?tab=credits).
-2. [Create a listing](https://proofable.me/profile/portals/new) and pick its type, such as an AI service, a skill, or a digital product.
+2. [Create a listing](https://proofable.me/profile/portals/new). Name it, say what buyers get, and set the price.
 3. Add what buyers must verify, and set a price or keep it free.
 4. Set discovery to **Listed**, then share the link.
 
@@ -79,14 +87,14 @@ Give your assistant this prompt to connect and set up in one pass:
 ```text
 # Proofable connect
 
-Connect this host to Proofable. MCP is how I use Proofable from any chat, IDE, or job runtime: profile, proofs, listings, permissions, and private context.
-1. Install Proofable on this host (plugin, install page, or https://mcp.proofable.me/mcp). Do not add a second `proofable` entry.
-2. Tell me to click Connect if sign-in is not done.
-3. Call proofable_context once. Load existing agents with proofable_agent_mount, or create or import one with proofable_agent_create. Do not start with an unscoped proofable_proofs_get. Reuse titles in contextIndex. Before spend, publish, secrets, or a sensitive tool, check proofs first. Summarize as Proofable: Passed, Action needed, or Blocked.
-4. If I want to sell: open payouts at https://proofable.me/profile?tab=credits, then create a listing at https://proofable.me/profile/portals/new. Walk me through type, what to verify, price, and Listed. Do not invent proof IDs or verifier IDs.
-5. If I need a specific proof, read it with proofable_proofs_get and that proof ID. Use generate only for a dedicated spend key.
+Connect this host to Proofable.
+1. Install Proofable (plugin, or add https://mcp.proofable.me/mcp). Do not add a second `proofable` entry.
+2. Tell me to click Connect if I am not signed in.
+3. Ask for my Proofable profile and current proofs. Then show what my agents are allowed to do. Before spend, publish, secrets, or a sensitive tool, check current proof first. Summarize as Passed, Action needed, or Blocked.
+4. If I want to sell: open payouts at https://proofable.me/profile?tab=credits, then create a listing at https://proofable.me/profile/portals/new.
+5. If I give you a proof ID, read that record. Do not invent proof IDs.
 
-Canonical endpoint: https://mcp.proofable.me/mcp
+Endpoint: https://mcp.proofable.me/mcp
 Docs: https://docs.proofable.me/mcp/setup
 ```
 

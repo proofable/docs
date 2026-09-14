@@ -82,7 +82,7 @@ Create a new proof by paying per call:
 POST https://api.proofable.me/api/v1/verification
 ```
 
-Cost = gate check (1 credit) + each verifier's weight + proof write (2 credits) + optional add-ons. Verifier weights range from 1 (ownership-basic) to 70 (wallet-risk). See [Verifiers](../verification/verifiers) for per-verifier credit amounts.
+Cost = gate check (1 credit) + each verifier's weight + proof write (2 credits) + optional add-ons. Verifier weights range from 1 (ownership-basic) to 70 (wallet-risk). The per-verifier credit table is returned by [`GET /api/v1/payments/pricing`](../reference#pricing).
 
 ## Access grant
 

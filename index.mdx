@@ -1,31 +1,37 @@
 ---
-title: "Getting started"
-description: "Explore common use cases and start using Proofable immediately."
-"og:title": "Getting started with Proofable"
-"twitter:title": "Getting started with Proofable"
-icon: rocket
+title: "The trust harness for people, apps, and agents."
+sidebarTitle: "Docs"
+description: "Docs for verification, gates, proofs, agents, and MCP."
+"og:title": "Proofable Docs | The trust harness for people, apps, and agents."
+"twitter:title": "Proofable Docs | The trust harness for people, apps, and agents."
+icon: book
 "og:image": "/images/og-default.png"
 "twitter:image": "/images/og-default.png"
 ---
 
 import ConnectHosts from '/snippets/connect-hosts.mdx';
 
-## Build with Proofable
+Verify anything. Gate anything. Carry what's trusted. Prove what happened.
 
-Define requirements in your code, check existing proof on your server, verify only what is missing, then make the final decision in your product.
+**Free to start. Pro is $19.99 a month.** [Pricing](/pricing)
 
-- You do not need to publish a Gate.
-- You do not need the Proofable dashboard.
-- Proofable checks existing proof before asking the user to verify again.
-- Your application owns the final allow or deny decision.
+## Any MCP client
+
+Add `https://mcp.proofable.me/mcp` to an app, chat, or agent that speaks MCP, then sign in. Cursor, Claude, Codex, and VS Code are shortcuts.
+
+<ConnectHosts />
+
+Ask: `Show my Proofable profile and current proofs.`
+
+## In your app
+
+Verify a user or agent once. Check that result on your server.
 
 ```ts
 import { ProofableClient, defineGate } from '@proofable/sdk';
 
 const proofable = new ProofableClient();
 const gate = defineGate([{ verifierId: 'proof-of-human' }]);
-
-// Run this on your server before accepting the protected action.
 const result = await proofable.gateCheck({
   gate,
   subject: { accountId: user.accountAddress },
@@ -36,48 +42,9 @@ if (!result.satisfied) {
   throw new Error('Verification required');
 }
 
-await submitReview();
+// Allow the action.
 ```
 
-`defineGate()` is local and does not publish or persist anything. The check returns a decision, zero or more proof references in `result.proofs`, and the resolved subject identifier. [JavaScript SDK reference](/sdks/javascript)
+Your server allows or denies. Proofable returns the current result.
 
-## Common use cases
-
-<CardGroup cols={2}>
-  <Card title="Gate anything" icon="door-closed" href="/use-cases/gate-access">
-    Define what must be proven. You decide what happens next.
-  </Card>
-  <Card title="Verify identity & ownership" icon="id-card" href="/use-cases/verify-identity-and-ownership">
-    Verify people, organizations, domains, wallets, agents, and accounts.
-  </Card>
-  <Card title="Reuse verification" icon="rotate" href="/use-cases/reuse-verification">
-    Use a completed check again instead of starting verification from zero.
-  </Card>
-  <Card title="Control agent actions" icon="shield-halved" href="/use-cases/control-agent-actions">
-    Require permission before an agent uses sensitive tools, spends, publishes, or accesses secrets.
-  </Card>
-  <Card title="Prove what happened" icon="receipt" href="/use-cases/prove-what-happened">
-    Keep an inspectable record of who acted, what they were allowed to do, and the result.
-  </Card>
-  <Card title="Build with Proofable" icon="layer-group" href="/use-cases/build-a-platform">
-    Add Proofable identity, authority, verification, and proof to your own product.
-  </Card>
-</CardGroup>
-
-## Other ways to use Proofable
-
-<Steps>
-  <Step title="Sign in">
-    Sign in at [proofable.me](https://proofable.me/verify?intent=login). Your profile holds your agents, proofs, permissions, and connections.
-
-    **Free to start · Pro $19.99/mo · Enterprise custom**
-
-    [View pricing →](/pricing)
-  </Step>
-  <Step title="Connect an agent to Proofable">
-    If an AI assistant or agent uses Proofable for you, connect it to the hosted MCP server at `https://mcp.proofable.me/mcp`.
-
-    <ConnectHosts />
-
-  </Step>
-</Steps>
+[Add Proofable to your product](/use-cases/build-a-platform)

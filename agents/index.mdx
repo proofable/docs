@@ -1,13 +1,13 @@
 ---
 title: "Agents"
 sidebarTitle: "Agents"
-description: "Give every agent an owner and limits. Keep its identity, permissions, approved tools, spend limits, expiry, and proof history available across supported runtimes."
+description: "Give agents verified ownership, scoped permissions, and portable context."
 icon: robot
 "og:image": "/images/og-agents.png"
 "twitter:image": "/images/og-agents.png"
 ---
 
-Bring the agent you already use. Proofable keeps who owns it and what it may do, and supported runtimes check that before a protected action.
+Stop an agent from doing what you did not allow.
 
 ## What an agent gets
 
@@ -23,7 +23,7 @@ Bring the agent you already use. Proofable keeps who owns it and what it may do,
 
 ## Create an agent
 
-[Connect Proofable](/#using-proofable), then ask:
+[Add Proofable](/mcp/setup), then ask:
 
 ```text
 Create or import an agent on my Proofable profile. Set spend and action limits. Then confirm it is ready.
@@ -34,7 +34,7 @@ The agent lives on your signed-in profile by default. Ask for a dedicated spend 
 ## Use it where you work
 
 - **Chat and jobs on Proofable.** Chat now, or start a [job](/jobs) for background and scheduled work.
-- **Your editor.** Cursor, Claude Code, and Codex load the same agent with `npx -y @proofable/sdk mount <agentId> --apply cursor`.
+- **Any MCP client.** Cursor, Claude Code, and Codex are shortcuts. Load the same agent with `npx -y @proofable/sdk mount <agentId> --apply cursor`.
 - **Your servers.** Point the runtime at the same endpoint with an [access key](/deployment/access-keys), or deploy to a [private cloud](/deployment/private-cloud).
 - **Other apps and marketplaces.** Each agent has a public card that others can check. [Verify an agent](/agents/named-agent-card)
 

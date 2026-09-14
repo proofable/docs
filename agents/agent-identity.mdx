@@ -18,7 +18,7 @@ Listed `skills` are metadata only. They do not install MCP servers.
     Call **`proofable_context`**, then **`proofable_agent_link`** with **`agentId`** and the agent account. If **`linked: true`**, you are done.
   </Step>
   <Step title="Create or import">
-    Call **`proofable_agent_create`** with a stable **`agentId`**. Omit **`agentWallet`** to use your profile, or set it to **`"generate"`** for a dedicated key. Follow the returned **`next_action`**.
+    Call **`proofable_agent_create`** with a stable **`agentId`**. Omit **`agentWallet`** to use your profile, or pass an existing dedicated account address. Follow the returned **`next_action`**.
   </Step>
   <Step title="Confirm">
     Call **`proofable_agent_link`** again until **`linked: true`**.
@@ -29,7 +29,7 @@ Listed `skills` are metadata only. They do not install MCP servers.
 { "agentId": "my-assistant" }
 ```
 
-**`agentWallet: "generate"`** returns the dedicated key once. Store it in Vault or your key manager. Proofable does not keep it.
+Proofable does not generate or hold private keys. Create a dedicated account in your wallet or key manager, then pass its public address. Store the private key there; Proofable never receives it.
 
 [Agent create](../mcp/agent-create) and [Verify an agent](./named-agent-card)
 

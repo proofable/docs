@@ -7,7 +7,7 @@ icon: door-open
 
 A published listing is a reusable checkout: visitors complete the verifiers you configured, optionally pay, and receive the reward you attached. This page documents the full server contract behind hosted checkout so you can mirror it from your own app or backend.
 
-The simplest integrations do not need any of this directly. Use the [VerifyGate widget](../widgets/verifygate) or the hosted checkout link. Read on when you want to drive the flow yourself.
+Use the [VerifyGate widget](../widgets/verifygate) or the hosted checkout link for the usual path. This page is the raw server contract.
 
 ## Which API host?
 
@@ -76,7 +76,7 @@ When `gateId` is passed, the response carries a per-requirement `data.gate` bloc
 
 - `satisfiedVerifierIds` / `missingVerifierIds`: which requirements existing proofs cover.
 - `reusedVerifierProofs`: verifierId → qHash map (requires `includeQHashes=true`). Pass it as `options.reusedVerifierProofs` on `POST /api/v1/verification` so satisfied checks are not re-run.
-- Re-run the gate check after every interactive step (OAuth grant, personhood session) before treating checkout as complete. Interactive completions only count once the protocol confirms them here.
+- Re-run the gate check after every interactive step (OAuth grant, personhood session) before treating checkout as complete. Interactive completions only count once Proofable confirms them here.
 
 ## Request-time vs proof-based rules
 

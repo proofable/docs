@@ -127,8 +127,12 @@ for (const redirect of redirects) {
 }
 
 const installRedirect = redirects.find(row => row.source === '/install');
-if (installRedirect?.destination !== '/') {
-  errors.push('/install must redirect to Getting started');
+if (installRedirect?.destination !== '/mcp/setup') {
+  errors.push('/install must redirect to MCP setup');
+}
+const quickstartRedirect = redirects.find(row => row.source === '/quickstart');
+if (quickstartRedirect?.destination !== '/') {
+  errors.push('/quickstart must redirect to Getting started');
 }
 for (const removedPage of [
   'mcp/ide-plugin',

@@ -8,12 +8,12 @@ icon: memo
 rss: true
 ---
 
-Proofable releases as one product. Each entry below bundles the changes that shipped together across MCP, the SDK, and these docs, with the upgrade steps that matter for that release.
+Each entry is a product release: MCP, the SDK, and these docs, plus the upgrade steps for that cut. The [predecessor releases](#history) are summarized at the bottom.
 
-Repo-level release records: [`proofable/sdk`](https://github.com/proofable/sdk/blob/main/CHANGELOG.md), [`proofable/mcp`](https://github.com/proofable/mcp/blob/main/CHANGELOG.md), and [`proofable/docs`](https://github.com/proofable/docs/blob/main/CHANGELOG.md).
+Package records: [`proofable/sdk`](https://github.com/proofable/sdk/blob/main/CHANGELOG.md), [`proofable/mcp`](https://github.com/proofable/mcp/blob/main/CHANGELOG.md), and [`proofable/docs`](https://github.com/proofable/docs/blob/main/CHANGELOG.md).
 
 <Note>
-Proofable is under active development. Published APIs and verifier schemas may change between minor versions. Breaking changes are listed in each entry and in the repo changelogs.
+Published APIs and verifier schemas may change between minor versions. Breaking changes are listed in each entry and in the repo changelogs.
 </Note>
 
 <Update
@@ -22,7 +22,7 @@ Proofable is under active development. Published APIs and verifier schemas may c
   tags={["SDK", "API", "Docs", "MCP"]}
   rss={{
     title: "Proofable v0.1.1",
-    description: "Inline Gate Policy, subject reuse without a profile, and x402 on POST /proofs/check."
+    description: "Inline Gate Policy, subject reuse without a profile, one description per public surface, and x402 on POST /proofs/check."
   }}
 >
 ## Builder path without a listing
@@ -33,6 +33,16 @@ Define the checks in your app. Check the visitor by account. Reuse a current pro
 - `POST /api/v1/proofs/check` takes the same x402 pay-per-call rail as `GET`.
 - MCP sign-in stays OAuth. Machine API calls stay x402, sponsor, or credits.
 - `gateCheck({ gateId })` still works for published listings.
+
+## One description per public surface
+
+GitHub, npm, the MCP Registry, and product pages no longer repeat the product line. Each surface now carries its own description, so search and directories show what that surface is instead of one slogan everywhere.
+
+- MCP package and registry: Give AI agents identity, permissions, and reusable proof through one MCP.
+- SDK package: SDK and CLI for verification gates, reusable proof, and agent permissions.
+- Docs: Docs for verification, gates, proofs, agents, and MCP.
+- The product line stays the remembered brand: The trust harness for people, apps, and agents.
+- Release notes now summarize the predecessor `@neus` releases in one readable [history section](#history).
 
 ```bash
 npm install @proofable/sdk@0.1.1
@@ -45,20 +55,19 @@ npm install @proofable/sdk@0.1.1
   tags={["MCP", "SDK", "Docs", "Agents"]}
   rss={{
     title: "Proofable v0.1.0",
-    description: "One product for identity, permissions, and portable proof across AI clients and apps."
+    description: "First Proofable release. Connect once. Carry identity, limits, and proof across AI clients and apps."
   }}
 >
-## Proofable is live
+## First Proofable release
 
-One connection carries agent identity, permissions, selected context, and current proof across your AI clients and apps. Your existing framework runs the work; Proofable carries the trust state the next tool needs.
+Connect your AI client once. Sign in. Carry agent identity, limits, and current proof into the next client or app.
 
-- Connect your AI client in one line, with hosted sign-in for Cursor, Claude Code, Codex, and VS Code.
-- Verify once, reuse the proof. Another app can check its current status without repeating the work.
+- Connect Cursor, Claude Code, Codex, or VS Code with hosted sign-in.
+- Reuse a current proof instead of repeating the check.
 - Give each agent an identity, a spend limit, and permissions you can revoke.
-- Store secrets encrypted, and sell verified access with one link.
-- Require current proof before access, payment, or a protected action.
+- Require current proof before access or a protected action.
 
-If you are upgrading from the earlier `@neus` packages, see the [migration guide](/migrate). Nothing else in your setup changes.
+If you are upgrading from the earlier `@neus` packages, see the [migration guide](/migrate).
 
 ### Breaking changes
 
@@ -69,3 +78,40 @@ If you are upgrading from the earlier `@neus` packages, see the [migration guide
 
 Full rename mapping and fix steps: [Migration guide](/migrate).
 </Update>
+
+## History
+
+Before the Proofable packages, the same product shipped as `@neus/sdk` and `@neus/mcp-server`. The notes below are the highlights of each predecessor release. The complete record stays with those packages on npm and in the archived source at [proofable/network](https://github.com/proofable/network) under the `neus-final` tag. To move an `@neus` install to Proofable, see the [migration guide](/migrate).
+
+| Release | Date | Highlights |
+| --- | --- | --- |
+| 1.3.9 | 2026-08-13 | OAuth browser command-injection sink removed; registry scanning scoped to the MCP package; retired `neus` import/export/revoke aliases; trust-workflow skill restored in the plugin bundle. |
+| 1.3.8 | 2026-07-30 | RFC 9207 issuer validation in `neus setup` and `neus auth`; retired `neus-trust` plugin fallback probe. |
+| 1.3.7 | 2026-07-30 | One-click marketplace install restored in Cursor; RFC 8707 `resource` normalization fixes `invalid_target`. |
+| 1.3.6 | 2026-07-30 | Cursor plugin owns MCP registration, CLI defers when present; trust-workflow skill moved into the package as its single home. |
+| 1.3.5 | 2026-07-21 | Optional ZKPassport dependency aligned to 0.16.1. |
+| 1.3.4 | 2026-07-21 | Offline portable-proof verification (EIP-191, Ed25519, EIP-1271) with strict canonical JSON and a CAIP-380 interoperability fixture. |
+| 1.3.0 | 2026-07-08 | `llms.txt` and `pricing.txt` for AI search; docs opened to AI crawlers; Codex plugin metadata; public SDK surface tightened. |
+| 1.2.0 | 2026-06-18 | Agent context mount: `neus mount <agentId>` for Cursor, Claude Code, and Codex; `neus_agent_mount` in-session; runtime-mount SDK modules. |
+| 1.1.0 | 2026-05-26 | First public MCP release: OAuth-first setup, `@neus/mcp-server` on npm, public tools including encrypted Vault secrets, Claude Code marketplace plugin. |
+| 1.0.12 | 2026-05-26 | First `@neus/sdk` release with the hosted MCP CLI and OAuth browser flow. |
+
+<!--
+Media placeholders for this changelog page. Drop the finished files under docs/images/releases/ and swap each comment for the matching <img> / <Video> include.
+-->
+
+<!--
+<update-image-v0.1.1>
+  TODO: screenshot — defineGate + gateCheck in an app: gate panel before and after a proof is reused.
+  Suggested path: docs/images/releases/sdk-0.1.1-define-gate.png
+</update-image-v0.1.1>
+-->
+
+<!--
+<update-image-v0.1.0>
+  TODO: screenshot — Connect flow: add https://mcp.proofable.me/mcp, click Connect, sign in.
+  Suggested path: docs/images/releases/mcp-0.1.0-connect.png
+  TODO: 30-60s clip — first run: register endpoint, Connect, ask for profile and current proofs.
+  Suggested path: docs/images/releases/mcp-0.1.0-first-run.mp4
+</update-image-v0.1.0>
+-->

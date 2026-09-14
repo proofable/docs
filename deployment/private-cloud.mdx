@@ -63,7 +63,7 @@ Any runtime with Intel TDX, AMD SEV-SNP, or equivalent remote attestation over t
 
 ## Agent frameworks
 
-Any agent that speaks MCP can connect, including Hermes and OpenClaw. Package it the same way, set `PROOFABLE_ACCESS_KEY`, and point it at `https://mcp.proofable.me/mcp`. The framework handles planning and memory. Proofable handles identity, permissions, and proof before sensitive actions.
+Any agent that speaks MCP can connect, including OpenClaw. Package it the same way, set `PROOFABLE_ACCESS_KEY`, and point it at `https://mcp.proofable.me/mcp`. The framework handles planning and memory. Proofable handles identity, permissions, and proof before sensitive actions.
 
 For Cursor Cloud Agents, connect Proofable MCP inside Cursor. Proofable does not launch those VMs.
 

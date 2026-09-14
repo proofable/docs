@@ -1,5 +1,7 @@
 # Security
 
-For **SDK usage, signing, and privacy defaults**, see [sdk/SECURITY.md](sdk/SECURITY.md).
+Report vulnerabilities to [dev@proofable.me](mailto:dev@proofable.me). Do not file them as public issues.
 
-**Report vulnerabilities:** email [dev@proofable.me](mailto:dev@proofable.me). Do not file security issues publicly before coordinated disclosure.
+Published policy: [Security disclosure](https://docs.proofable.me/learn/legal/security-disclosure).
+
+SDK signing and privacy defaults: [proofable/sdk SECURITY.md](https://github.com/proofable/sdk/blob/main/SECURITY.md).

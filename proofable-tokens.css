@@ -1,7 +1,7 @@
 /**
  * Proofable docs tokens, colocated for Mintlify (styles.css must not @import outside docs/).
- * Mirrors the product design system. Light is the shipped default — same as
- * neus/lib/theme/colorScheme.ts — with dark as an explicit html.dark override.
+ * Mirrors the product design system. Light is the shipped default, with dark as an
+ * explicit html.dark override.
  */
 @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap');
 

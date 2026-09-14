@@ -124,11 +124,11 @@
           },
           "chainId": {
             "type": "integer",
-            "description": "Advanced/optional. EVM signing-context hint; auto-resolved to the protocol hub chain when omitted. Not required for standard integrations. For non-EVM, use chain (CAIP-2) instead. For chain-specific asset claims (NFT, token, contract), set chainId inside verifier data, not here."
+            "description": "Advanced/optional. EVM signing context; defaults to Base mainnet (8453) when omitted and remains independent from the optional protocol hub. For non-EVM, use chain (CAIP-2). For chain-specific asset claims (NFT, token, contract), set chainId inside verifier data, not here."
           },
           "chain": {
             "type": "string",
-            "description": "CAIP-2 chain identifier for non-EVM wallets (e.g. solana:mainnet). EVM wallets do not need this field; the protocol resolves hub context automatically."
+            "description": "CAIP-2 signer-chain identifier. Non-EVM wallets must provide it (for example solana:mainnet); EVM wallets may provide eip155:<id> or use the Base mainnet default."
           },
           "signatureMethod": {
             "type": "string"
@@ -235,11 +235,11 @@
           },
           "chainId": {
             "type": "integer",
-            "description": "Advanced/optional. EVM signing-context hint; auto-resolved to the protocol hub chain when omitted. Not required for standard integrations. For non-EVM, use chain (CAIP-2) instead. For chain-specific asset claims (NFT, token, contract), set chainId inside verifier data, not here."
+            "description": "Advanced/optional. EVM signing context; defaults to Base mainnet (8453) when omitted and remains independent from the optional protocol hub. For non-EVM, use chain (CAIP-2). For chain-specific asset claims (NFT, token, contract), set chainId inside verifier data, not here."
           },
           "chain": {
             "type": "string",
-            "description": "CAIP-2 chain identifier for non-EVM wallets (e.g. solana:mainnet). EVM wallets do not need this field; the protocol resolves hub context automatically."
+            "description": "CAIP-2 signer-chain identifier. Non-EVM wallets must provide it (for example solana:mainnet); EVM wallets may provide eip155:<id> or use the Base mainnet default."
           },
           "signatureMethod": {
             "type": "string"

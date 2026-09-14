@@ -1,13 +1,15 @@
 # Proofable docs
 
-Verification, reusable proof, and agent permissions for apps and AI clients.
+Docs for verification, gates, proofs, agents, and MCP.
 
-- Product: [proofable.me](https://proofable.me)
-- Docs: [docs.proofable.me](https://docs.proofable.me)
-- API: [api.proofable.me](https://api.proofable.me)
-- MCP: `https://mcp.proofable.me/mcp`
-- SDK: [`proofable/sdk`](https://github.com/proofable/sdk)
-- MCP integrations: [`proofable/mcp`](https://github.com/proofable/mcp)
+Published site: [docs.proofable.me](https://docs.proofable.me)
 
-Preview with `npm run dev`; validate all docs, routes, and the public OpenAPI
-document with `npm run validate`.
+Start here: [github.com/proofable/sdk](https://github.com/proofable/sdk)
+
+Use with any MCP client: `https://mcp.proofable.me/mcp`
+
+Product: [proofable.me](https://proofable.me)
+
+This repository is the docs source, public OpenAPI, and verifier schemas. Preview with `npm run dev`. Check with `npm run validate`.
+
+Issues: [github.com/proofable/docs/issues](https://github.com/proofable/docs/issues). Security: [SECURITY.md](./SECURITY.md). Contributing: [CONTRIBUTING.md](./CONTRIBUTING.md).

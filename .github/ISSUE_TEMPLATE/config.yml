@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://docs.proofable.me
+    about: Published docs
+  - name: Discussions
+    url: https://github.com/proofable/docs/discussions
+    about: Questions, ideas, and verifier proposals
+  - name: Security
+    url: https://github.com/proofable/docs/blob/main/SECURITY.md
+    about: Report a vulnerability privately

@@ -74,19 +74,30 @@
             "pages": ["index", "pricing", "security", "enterprise", "migrate"]
           },
           {
-            "group": "Common use cases",
+            "group": "Use cases",
             "pages": [
-              "use-cases/control-agent-actions",
-              "use-cases/prove-what-happened",
               "use-cases/verify-identity-and-ownership",
               "use-cases/reuse-verification",
+              "connections",
               "use-cases/gate-access",
+              "use-cases/prove-what-happened",
+              "use-cases/control-agent-actions",
               "use-cases/build-a-platform"
             ]
           },
           {
-            "group": "Products",
-            "pages": ["agents/index", "proofs", "verification/index", "gates/index", "connections", "jobs"]
+            "group": "Reference",
+            "pages": ["agents/index", "proofs", "verification/index", "gates/index", "jobs"]
+          },
+          {
+            "group": "Legal",
+            "pages": [
+              "learn/legal/index",
+              "learn/legal/privacy-policy",
+              "learn/legal/terms-of-use",
+              "learn/legal/security-disclosure",
+              "learn/legal/dmca"
+            ]
           },
           {
             "group": "Guides",
@@ -128,7 +139,27 @@
           },
           {
             "group": "MCP",
-            "pages": ["mcp/overview", "mcp/auth", "mcp/tools"]
+            "pages": [
+              "mcp/overview",
+              "mcp/auth",
+              "mcp/tools",
+              "mcp/endpoints",
+              "mcp/oauth",
+              {
+                "group": "Tools",
+                "pages": [
+                  "mcp/context",
+                  "mcp/verifiers-catalog",
+                  "mcp/proofs-check",
+                  "mcp/verify",
+                  "mcp/verify-or-guide",
+                  "mcp/proofs-get",
+                  "mcp/agent-create",
+                  "mcp/agent-link",
+                  "mcp/secrets"
+                ]
+              }
+            ]
           },
           {
             "group": "JavaScript SDK",
@@ -242,7 +273,7 @@
     },
     {
       "source": "/content/get-started/quickstart",
-      "destination": "/gates/sell-access"
+      "destination": "/"
     },
     {
       "source": "/content/get-started/choose-an-integration-path",
@@ -262,7 +293,7 @@
     },
     {
       "source": "/get-started/quickstart",
-      "destination": "/gates/sell-access"
+      "destination": "/"
     },
     {
       "source": "/get-started/choose-an-integration-path",
@@ -538,7 +569,7 @@
     },
     {
       "source": "/install",
-      "destination": "/"
+      "destination": "/mcp/setup"
     },
     {
       "source": "/mcp/ide-plugin",
@@ -578,7 +609,7 @@
     },
     {
       "source": "/quickstart",
-      "destination": "/gates/sell-access"
+      "destination": "/"
     },
     {
       "source": "/agents/overview",

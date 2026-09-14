@@ -1,7 +1,7 @@
 ---
 title: Rate limits
 sidebarTitle: Rate limits
-description: "Per-tier request limits for the Proofable API, how to read limit headers, and the retry pattern that keeps integrations resilient."
+description: "Per-tier request limits for the Proofable API, how to read limit headers, and the retry pattern."
 icon: clock
 ---
 
@@ -42,7 +42,7 @@ CORS exposes `Retry-After`, `RateLimit`, and `RateLimit-Policy` so browsers and 
 
 - **Reuse proofs.** A gate check (1 credit) reads an existing proof. Creating a new one (4 to 73 credits) is heavier and counts against the verification window. Cache the proof ID and check it instead.
 - **Gate checks, not raw verification.** Use `gateCheck` with your `gateId` for access decisions. It reads saved results first and only creates a new proof when needed.
-- **Need higher limits?** Pro raises API throughput four times. Enterprise raises it ten times, with service levels and custom packages. See [Pricing](/pricing).
+- **Need higher limits?** Pro raises API throughput four times. Enterprise raises it ten times, by agreement. See [Pricing](/pricing).
 
 ## 402 and credits
 

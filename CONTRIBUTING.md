@@ -1,5 +1,7 @@
 # Contributing
 
+By participating you agree to the [Code of Conduct](./CODE_OF_CONDUCT.md).
+
 **If you are integrating Proofable into a product**, use **[docs.proofable.me](https://docs.proofable.me)** and the live product first. The table below is for people proposing changes here.
 
 | Need | Where |
@@ -24,7 +26,11 @@ The published documentation at [docs.proofable.me](https://docs.proofable.me), t
 
 ## Verifier proposals
 
-The public verifier catalog lives in **this repo**: JSON Schemas under [`verifiers/schemas/`](./verifiers/schemas) and the machine index at [`verifiers/VERIFIERS.json`](./verifiers/VERIFIERS.json). Open a [Discussion](https://github.com/proofable/docs/discussions) first, then a PR with the spec, the schema, and the docs page together. Once merged, it propagates to the protocol verifier registry. See [Propose a verifier](https://docs.proofable.me/verification/propose-a-verifier) for the full flow.
+The public verifier catalog lives in **this repo**: JSON Schemas under [`verifiers/schemas/`](./verifiers/schemas) and the machine index at [`verifiers/VERIFIERS.json`](./verifiers/VERIFIERS.json). Open a [Discussion](https://github.com/proofable/docs/discussions) first, then a PR with the spec, the schema, and the docs page together. After merge, the check appears in the live catalog. See [Propose a verifier](https://docs.proofable.me/verification/propose-a-verifier).
+
+## Changelog
+
+Put a user-facing note under `## [Unreleased]` in [CHANGELOG.md](./CHANGELOG.md). Use Added, Changed, Deprecated, Removed, Fixed, or Security. Write what a builder will notice. Leave out ticket IDs, private repository names, and process notes.
 
 ## Do not commit
 
@@ -35,4 +41,4 @@ These paths are local-only or generated elsewhere (see `.gitignore`):
 
 ## Describing your change
 
-Explain **what builders or end users will experience differently** (for example new fields, new errors, or renamed concepts). If you adjust verifiers or any documented HTTP surface, keep the written API reference and examples aligned with the live product.
+Explain **what builders or end users will experience differently** (for example new fields, new errors, or renamed concepts). If you adjust verifiers or any documented HTTP surface, keep the written API reference and examples in step with the live product.

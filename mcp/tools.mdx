@@ -14,12 +14,23 @@ Call **`proofable_context`** once, then pick the tool for the job.
 | Finish what's missing | `proofable_verify_or_guide` | Reuses a proof, or returns the next step. |
 | Create or refresh a proof | `proofable_verify` | Creates the proof when a new one is needed. |
 | Read a proof | `proofable_proofs_get` | Current proof records and status. |
-| Create or import an agent | `proofable_agent_create` | Links the agent to your profile. Optional separate spend account and controls. Use `generate` for a dedicated key. |
+| Create or import an agent | `proofable_agent_create` | Links the agent to your profile. Optional separate spend account and controls. Pass an existing account address for dedicated spend. |
 | Confirm the agent is ready | `proofable_agent_link` | Identity and the permissions that account needs. |
 | Load the agent | `proofable_agent_mount` | Identity, permissions, skills, and current settings. |
 | Store a secret | `proofable_secret_create` | Encrypted Vault secret. |
 | List secrets | `proofable_secret_list` | Stored names and details. Never the secret itself. |
 | Revoke a secret | `proofable_secret_revoke` | Removes a stored secret by proof ID. |
+
+## Pro job tools
+
+Pro adds only the four tools needed to run and manage jobs. Product connections, research, model settings, sandbox execution, and private session notes stay in the Proofable app.
+
+| Job | Tool | What it does |
+|---|---|---|
+| Start work | `proofable_job_create` | Run agent work now or on a schedule. |
+| List work | `proofable_job_list` | List jobs available to the signed-in profile. |
+| Inspect work | `proofable_job_get` | Read one job and its latest run state. |
+| Stop work | `proofable_job_cancel` | Cancel a run or recurring schedule. |
 
 | Topic | Detail |
 |-------|--------|

@@ -1,32 +1,37 @@
 # Changelog
 
-All notable changes to the Proofable public docs are documented in this file. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
+All notable changes to the Proofable public docs are documented in this file.
+
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/changelog).
 
 ## [Unreleased]
 
-## [0.1.2] - 2026-09-13
-
-### Changed
-
-- Builder docs now lead with `defineGate` and subject `gateCheck`. A published `gateId` is optional.
-- Pay-per-call documents x402 on both `GET` and `POST /api/v1/proofs/check`, plus verification and access-grant.
-
-## [0.1.1] - 2026-09-09
+## [0.1.1] - 2026-09-13
 
 ### Added
 
-- **Changelog page.** Product release notes with tag filters and an RSS feed at [docs.proofable.me/changelog](https://docs.proofable.me/changelog).
-- **Migration guide.** One path from `@neus` packages to `@proofable` at [docs.proofable.me/migrate](https://docs.proofable.me/migrate), covering the rename map, the one-path upgrade, what carries over, and stale-state fixes for old setups.
+- **Changelog page.** Product release notes with tag filters and an RSS feed at [docs.proofable.me/changelog](https://docs.proofable.me/changelog), including a readable summary of the predecessor `@neus` releases.
+- **Migration guide.** One path from `@neus` packages to `@proofable` at [docs.proofable.me/migrate](https://docs.proofable.me/migrate).
+- Code of Conduct, support page, and short GitHub issue and pull request templates.
 
 ### Changed
 
-- **Status routing.** `/platform/status` now lands on the changelog. Release notes live there; repo changelogs keep per-package release records.
-- **Announcement surfaces.** The navbar links the changelog, and a dismissible banner points `@neus` users at the migration guide.
+- **One description per public surface.** GitHub, npm, registry, and product docs descriptions use the locked surface lines instead of repeating the product line.
+- **Builder docs lead with inline gates.** `defineGate` and subject `gateCheck` first; a published `gateId` is optional.
+- **Pay-per-call documents x402** on both `GET` and `POST /api/v1/proofs/check`, plus verification and access-grant.
+- Use-case examples use generic agent names.
+- Contributor and verifier-proposal pages describe this repository only, with `npm run validate` as the public check.
 
 ## [0.1.0] - 2026-09-06
 
+### Added
+
 - First standalone Proofable documentation release.
 - Public SDK, MCP, API, verifier, security, billing, and integration guidance.
-- Proofable domains and repository ownership aligned across public documentation.
+
+[Unreleased]: https://github.com/proofable/docs/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/proofable/docs/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/proofable/docs/releases/tag/v0.1.0

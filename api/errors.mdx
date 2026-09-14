@@ -38,6 +38,8 @@ The same schema is published on every public operation in [Proofable OpenAPI](ht
 | `PROOF_NOT_FOUND` | Gate/fulfill proof not found | Confirm the gate and the proof exist |
 | `WALLET_AUTH_REQUIRED` | Action needs an owner wallet signature/session | Authenticate the right wallet, then retry |
 | `RATE_LIMIT_EXCEEDED` | Too many requests | Back off and retry after `Retry-After` |
+| `INSUFFICIENT_CREDITS` | The account paying needs more credits | Add credits, or pay the call with x402 and retry |
+| `PAYMENT_ALREADY_USED` | A payment was already bound to this gate or proof | Do not reuse payment evidence across checkouts |
 
 ## HTTP Status Codes
 
@@ -47,6 +49,7 @@ The same schema is published on every public operation in [Proofable OpenAPI](ht
 | 202 | Accepted (async processing) |
 | 400 | Bad request |
 | 401 | Unauthorized |
+| 402 | Payment required. The response carries a quote; add credits or pay the call with x402 and retry |
 | 403 | Forbidden |
 | 404 | Not found |
 | 429 | Rate limited |

@@ -1,13 +1,14 @@
 ---
-title: "Control agent actions"
-description: "Decide what an agent can access, spend, or change before it acts, and stop the tool calls it is not allowed to make."
+title: "Stop an agent from doing what you did not allow"
+sidebarTitle: "Agents"
+description: "Set what an agent can access, spend, or change before it acts."
 icon: shield-halved
 ---
 
 Give each agent an owner and explicit limits. Before a sensitive tool call, the agent's current permission decides whether the call runs, waits for approval, or stops.
 
 ```text
-Agent          research-agent
+Agent          draft-agent
 Action         Send email
 Authority      Draft  ✓
                Send   ✕
@@ -31,15 +32,15 @@ A missing, expired, or revoked permission fails closed.
 
 <Steps>
   <Step title="Give the agent limits">
-    [Connect Proofable](/#using-proofable), then ask your assistant:
+    [Add Proofable](/mcp/setup), then ask your assistant:
 
     ```text
-    Create or import an agent named research-agent. Allow draft_email, deny send_email, and require human approval for irreversible actions.
+    Create or import an agent named draft-agent. Allow draft_email, deny send_email, and require human approval for irreversible actions.
     ```
   </Step>
   <Step title="Load its permission where the tool runs">
     ```bash
-    npx -y @proofable/sdk mount research-agent --apply cursor
+    npx -y @proofable/sdk mount draft-agent --apply cursor
     ```
 
     This writes the agent's current permission to `.proofable/mount.json`. Use `claude` or `codex` in place of `cursor` for those hosts. If the CLI asks for a credential, run `npx -y @proofable/sdk auth --oauth` first.

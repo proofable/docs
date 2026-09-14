@@ -1,0 +1,27 @@
+name: Bug
+description: A docs page, schema, or example does not match the live product
+labels: [bug]
+body:
+  - type: textarea
+    id: happened
+    attributes:
+      label: What is wrong
+      placeholder: Page, schema, or example, and what it says today.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What it should say
+    validations:
+      required: true
+  - type: input
+    id: page
+    attributes:
+      label: Page or file
+      placeholder: https://docs.proofable.me/…
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: Do not paste keys, tokens, or private proof content.
