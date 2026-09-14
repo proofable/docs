@@ -14,7 +14,7 @@ npx -y @proofable/sdk setup
 npx -y @proofable/sdk mount my-agent --apply cursor
 ```
 
-Same command for `claude` or `codex`. VS Code uses `--apply cursor`. This writes `.proofable/mount.json` and the host adapter. Start a new session so the project picks it up.
+Same command for `claude`, `codex`, `hermes`, `openclaw`, or `opencode`. VS Code uses `--apply cursor`. This writes `.proofable/mount.json` and the host adapter. Hermes, OpenClaw, and OpenCode also write a pointer at `.hermes/proofable.json`, `.openclaw/proofable.json`, or `.opencode/proofable.json`. ACP jobs already attach hosted Proofable MCP; this pointer is project identity, not a second protocol. Start a new session so the project picks it up.
 
 The editor runs the tools. Proofable supplies identity, limits, and proofs. Cursor Cloud Agents can use the hosted MCP endpoint the same way. Proofable does not spawn those VMs for you.
 
@@ -26,7 +26,7 @@ The editor runs the tools. Proofable supplies identity, limits, and proofs. Curs
 npx -y @proofable/sdk mount <agentId> --apply <host>
 ```
 
-Valid `--apply` values are `cursor`, `claude`, or `codex`. VS Code uses `--apply cursor`. Run it in the project. If the host is not connected yet, run `proofable setup` first. The browser never downloads a static rules file.
+Valid `--apply` values are `cursor`, `claude`, `codex`, `hermes`, `openclaw`, or `opencode`. VS Code uses `--apply cursor`. Run it in the project. If the host is not connected yet, run `proofable setup` first. The browser never writes host files.
 
 ## Assistant tool
 

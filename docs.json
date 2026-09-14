@@ -104,7 +104,7 @@
             "pages": [
               {
                 "group": "Agents",
-                "pages": ["mcp/guarded-action", "agents/agent-delegation", "agents/agent-identity", "agents/named-agent-card", "agents/team-agents", "agents/runtime-mount"]
+                "pages": ["mcp/guarded-action", "agents/agent-delegation", "agents/agent-identity", "agents/import", "agents/named-agent-card", "agents/team-agents", "agents/runtime-mount"]
               },
               {
                 "group": "Proofs",

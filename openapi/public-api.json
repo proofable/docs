@@ -1537,6 +1537,20 @@
                 "type": "string",
                 "maxLength": 64,
                 "description": "Default inference mode (e.g., \"openai-chat\", \"openai-responses\")."
+              },
+              "origin": {
+                "type": "string",
+                "enum": [
+                  "hermes",
+                  "openclaw",
+                  "opencode",
+                  "cursor",
+                  "claude",
+                  "codex",
+                  "hosted",
+                  "other"
+                ],
+                "description": "Runtime origin for wrap-and-connect imports. Display metadata only. Local frameworks share this token with `proofable mount --apply`. hosted/other have no implied adapter."
               }
             },
             "additionalProperties": false
@@ -4360,6 +4374,151 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agents/import/preview": {
+      "post": {
+        "operationId": "previewAgentImport",
+        "summary": "Inspect an agent package, repository, card, or runtime link",
+        "tags": [
+          "Agents"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Inspected import preview"
+          },
+          "400": {
+            "description": "Invalid or unrecognized source"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Archive too large"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agents/import/commit": {
+      "post": {
+        "operationId": "commitAgentImport",
+        "summary": "Map an inspected agent import onto identity registration",
+        "tags": [
+          "Agents"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Import mapped to identity registration"
+          },
+          "400": {
+            "description": "Preview missing or invalid"
+          },
+          "401": {
+            "description": "Authentication required"
           },
           "403": {
             "description": "Forbidden",

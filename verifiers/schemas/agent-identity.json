@@ -96,6 +96,20 @@
           "maxLength": 128,
           "type": "string"
         },
+        "origin": {
+          "description": "Runtime origin for wrap-and-connect imports. Display metadata only. Local frameworks share this token with `proofable mount --apply`. hosted/other have no implied adapter.",
+          "enum": [
+            "hermes",
+            "openclaw",
+            "opencode",
+            "cursor",
+            "claude",
+            "codex",
+            "hosted",
+            "other"
+          ],
+          "type": "string"
+        },
         "provider": {
           "description": "Default inference provider label (e.g., \"ollama\", \"openai\").",
           "maxLength": 64,

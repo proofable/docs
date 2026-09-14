@@ -15,6 +15,8 @@ npx -y @proofable/sdk
 | `npx -y @proofable/sdk setup` | Register hosted MCP on the local client |
 | `npx -y @proofable/sdk doctor --live` | Confirm the live connection |
 | `npx -y @proofable/sdk auth` | Sign in when the host needs a profile session |
+| `npx -y @proofable/sdk import <path\|url>` | Inspect a package, repo, card, or runtime link |
+| `npx -y @proofable/sdk mount <agentId> --apply <host>` | Write the mount bundle for `cursor`, `claude`, `codex`, `hermes`, `openclaw`, or `opencode` |
 
 The commands above require no permanent install. If you use the CLI regularly, run `npm install -g @proofable/sdk`; then the shorter `proofable setup`, `proofable doctor --live`, and `proofable auth` commands are available.
 

@@ -1,0 +1,57 @@
+---
+title: Import an agent
+sidebarTitle: Import an agent
+description: Bring a package, repo, or card. Proofable wraps identity and connections.
+icon: file-import
+---
+
+Drop a package, pick a GitHub repo, or paste a card or runtime link. Proofable inspects the source, registers identity on your profile, and asks you to reconnect apps. It does not copy secrets or run the package.
+
+Supported inputs include OpenClaw workspace files, Hermes config and skills, Agent Skills `SKILL.md` folders, A2A Agent Cards, MCP URLs, GitHub repositories, and zip or tar packages.
+
+## From the product
+
+1. Open **Import your agent**.
+2. Drop files or paste a link. Do not start with a name.
+3. Review the detected label, skills, and apps that need reconnect.
+4. Continue to register identity. Set spend and action limits as a separate step.
+5. Connect the runtime from the project:
+
+```bash
+npx -y @proofable/sdk mount <agentId> --apply <host>
+```
+
+Hermes, OpenClaw, OpenCode, Cursor, Claude Code, and Codex imports use those `--apply` values. VS Code uses `--apply cursor`. The browser never writes host files.
+
+## From the CLI
+
+```bash
+npx -y @proofable/sdk auth --oauth
+npx -y @proofable/sdk import ./agent-pack.zip
+```
+
+`import` accepts a path, a directory, or a URL. It prints a hosted register link. Secrets in `.env` files, keys, and token stores stay out of the preview.
+
+## HTTP
+
+Inspect first, then map onto identity create. Retry is safe. There is no separate MCP import tool.
+
+```bash
+POST https://api.proofable.me/api/v1/agents/import/preview
+POST https://api.proofable.me/api/v1/agents/import/commit
+```
+
+Send JSON: `url`, `text`, `filename`, `archiveBase64`, or `files`. Commit returns `identityPrefill` and `mcpCreateArgs` for [`proofable_agent_create`](/mcp/agent-create).
+
+If a Proofable identity is already on the source, Proofable links it only after this profile owns it. Otherwise it registers a new agent and leaves the source unchanged.
+
+## What stays out
+
+Credentials, OAuth databases, private keys, and token values are excluded. Reconnect those apps with OAuth or an existing account connection. Spend limits stay an explicit review.
+
+## Related
+
+- [Agent identity](./agent-identity)
+- [Connect agent context](./runtime-mount)
+- [Agent create](../mcp/agent-create)
+- [Proofable CLI](../sdks/cli)
