@@ -1,10 +1,10 @@
 ---
 title: MCP OAuth
-description: "OAuth 2.0 with PKCE for MCP client authentication: discovery, authorization, token exchange, refresh, and revocation."
+description: "Connect a custom MCP host to Proofable sign-in: discovery, authorization, token exchange, refresh, and revocation."
 icon: shield-check
 ---
 
-Proofable MCP uses **OAuth 2.0 Authorization Code with PKCE** for MCP clients. The user signs in on Proofable (same passkey/wallet flow as the product).
+Proofable MCP uses the **Authorization Code** grant. The user signs in on Proofable with the same passkey or wallet flow as the product.
 
 <Note>
   **Default:** add `https://mcp.proofable.me/mcp` and click **Connect**. Optional terminal installer: `npx -y @proofable/sdk setup`. Use this page for custom MCP hosts, security review, standalone sign-in, or raw HTTP integration.
@@ -181,7 +181,7 @@ OAuth access tokens are valid only when `aud` is `https://mcp.proofable.me/mcp`,
 | `neus:secrets` | Portable encrypted secrets in Vault | Yes |
 | `offline_access` | Refresh token so the client can stay signed in | Yes |
 
-These four scopes are the complete public permission model. Profile access keys (`npk_*`) are a full-profile server credential.
+These four scopes are the complete public permission model. Server keys (`npk_*`) are a full-profile credential.
 
 ## Revocation
 

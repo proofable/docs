@@ -1,12 +1,12 @@
 ---
 title: MCP auth
-description: Host Connect for interactive clients, Profile access keys for servers and automation, and token security.
+description: Pick the auth path for your caller: browser sign-in for interactive clients, a server key for servers, CI, and headless agents.
 icon: lock
 ---
 
 Interactive MCP clients sign in through the host. Register `https://mcp.proofable.me/mcp`, click **Connect**, and finish browser sign-in. The host runs OAuth 2.0 with PKCE and can refresh the session for up to 30 days.
 
-For servers, CI, and environments that cannot open a browser, use a durable profile access key instead. Both paths hit the same endpoint and the same Proofable profile.
+For servers, CI, and environments that cannot open a browser, use a durable server key instead. Both paths hit the same endpoint and the same Proofable profile.
 
 ## Sign in
 
@@ -40,7 +40,7 @@ For full OAuth mechanics, see [MCP OAuth](./oauth).
 
 ## Access key (servers and automation)
 
-Use a **profile access key** from [Access Keys](https://proofable.me/profile?tab=account) when browser OAuth is not available: servers, CI, cron, containers, cloud agents, and gateways.
+Use a **server key** from [Access Keys](https://proofable.me/profile?tab=account) when browser OAuth is not available: servers, CI, cron, containers, cloud agents, and gateways.
 
 Set the canonical environment variable and let the CLI write the config:
 
@@ -94,7 +94,7 @@ Authenticated MCP sessions should reuse existing proofs before any browser step.
 proofable disconnect --access-key <token>
 ```
 
-Disconnect revokes OAuth MCP tokens through the OAuth revocation endpoint. For `npk_*` credentials, it revokes the Profile access key through the Proofable API, then removes the local MCP header from configured clients.
+Disconnect revokes OAuth MCP tokens through the OAuth revocation endpoint. For `npk_*` credentials, it revokes the server key through the Proofable API, then removes the local MCP header from configured clients.
 
 ## MCP server auth challenge
 

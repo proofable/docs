@@ -11,8 +11,9 @@
     "dev": "npx --yes cross-env NODE_OPTIONS=--max-old-space-size=8192 npx --yes mint@4.2.108 dev",
     "lint:markdown": "npx --yes markdownlint-cli2@0.18.1 --config .markdownlint-cli2.jsonc",
     "lint:routes": "node scripts/validate-doc-routes.mjs",
+    "lint:copy": "node scripts/validate-doc-copy.mjs",
     "lint:openapi": "npx --yes @redocly/cli@2.14.1 lint openapi/public-api.json",
-    "validate": "npm run lint:markdown && npm run lint:routes && npm run lint:openapi"
+    "validate": "npm run lint:markdown && npm run lint:routes && npm run lint:copy && npm run lint:openapi"
   }
 }
 

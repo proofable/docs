@@ -1,4 +1,4 @@
-# Proofable docs
+# Proofable Docs
 
 Docs for verification, gates, proofs, agents, and MCP.
 

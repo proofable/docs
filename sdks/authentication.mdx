@@ -12,7 +12,7 @@ Default: no wallet or passkey code in your app. Visitors sign in or complete che
 | Browser: access gate | `VerifyGate` + `gateId` | No |
 | Browser: sign-in | `getHostedCheckoutUrl` + `intent: 'login'` | No |
 | Server | `ProofableClient` + `gateCheck` with the same `gateId` | No |
-| Automation as your profile | `ProofableClient` + profile access key (`npk_*`) | No |
+| Automation as your profile | `ProofableClient` + server key (`npk_*`) | No |
 | Advanced server | `verifyFromApp` after per-user approval | No |
 | Browser (exception) | `client.verify({ wallet })` | Yes. [Signing format](../verification/signing-format) |
 
@@ -65,7 +65,7 @@ if (result.data?.gate?.allRequiredSatisfied !== true) {
 }
 ```
 
-## Profile access keys
+## Server keys
 
 For servers, CI, and MCP when browser sign-in is unavailable. Create keys under [Profile → Account](https://proofable.me/profile?tab=account).
 

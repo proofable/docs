@@ -1,10 +1,10 @@
 ---
 title: Authentication
-description: "Authenticate servers and apps to the Proofable API with OAuth, Profile access keys, or wallet-signed requests. Includes scopes and headers."
+description: "Authenticate servers and apps to the Proofable API with OAuth, server keys, or wallet-signed requests. Includes scopes and headers."
 icon: fingerprint
 ---
 
-Pick the path that matches your caller. Most products use Hosted Verify for people and a profile access key for servers.
+Pick the path that matches your caller. Most products use Hosted Verify for people and a server key for backend calls.
 
 Credits apply to checks and saved results, not to hosted session sign-in. See [Docs](..) and [Pricing](../pricing).
 
@@ -38,11 +38,11 @@ Request only the scopes you need:
 | `neus:secrets` | Portable encrypted secrets |
 | `offline_access` | Refresh token |
 
-Profile access keys (`npk_*`) are a full-profile server credential.
+Server keys (`npk_*`) are a full-profile credential.
 
 See [Add Proofable to any MCP client](../mcp/setup) and [MCP OAuth](../mcp/oauth).
 
-## Profile access keys
+## Server keys
 
 [Access keys](https://proofable.me/profile?tab=account) for servers, CI, and MCP automation. Never in browser bundles.
 
