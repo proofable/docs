@@ -33,6 +33,7 @@ const FROZEN = new Set([
   'Gate access, actions, payments, or content by verified proof.',
   'Create, reuse, and share verifiable proof instead of checking twice.',
   'Keep agent identity, permissions, context, and proof across runtimes.',
+  'One owner, infinite agents. Verified identity, scoped permissions, portable context, and proof that compounds in one agent registry.',
 ]);
 
 function walk(dir) {
