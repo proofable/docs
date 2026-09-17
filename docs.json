@@ -131,11 +131,11 @@
         ]
       },
       {
-        "tab": "API Reference",
+        "tab": "Build",
         "groups": [
           {
             "group": "Overview",
-            "pages": ["reference"]
+            "pages": ["build"]
           },
           {
             "group": "MCP",
