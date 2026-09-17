@@ -67,7 +67,7 @@ A missing, expired, or revoked permission fails closed.
 | Where the agent runs | What enforces the decision |
 |---|---|
 | Chat and jobs on Proofable | Proofable checks permissions, tool access, and proofs before each action. |
-| Cursor, Claude Code, and Codex | The host loads the agent's rules. Start a new session after you mount. |
+| Your tools | The host loads the agent's rules. Start a new session after you mount. |
 | Your own workers and backends | Your code calls `evaluateRuntimeAction` and stops when `allowed` is `false`. |
 
 Proofable supplies the decision. The system that owns the tool call must honor it.

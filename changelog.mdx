@@ -60,9 +60,9 @@ npm install @proofable/sdk@0.1.1
 >
 ## First Proofable release
 
-Connect your AI client once. Sign in. Carry agent identity, limits, and current proof into the next client or app.
+Connect your AI client once. Carry agent identity, limits, and current proof into the next client or app.
 
-- Connect Cursor, Claude Code, Codex, or VS Code with hosted sign-in.
+- Connect context, tools, and authority to your profile.
 - Reuse a current proof instead of repeating the check.
 - Give each agent an identity, a spend limit, and permissions you can revoke.
 - Require current proof before access or a protected action.
@@ -92,7 +92,7 @@ Before the Proofable packages, the same product shipped as `@neus/sdk` and `@neu
 | 1.3.5 | 2026-07-21 | Optional ZKPassport dependency aligned to 0.16.1. |
 | 1.3.4 | 2026-07-21 | Offline portable-proof verification (EIP-191, Ed25519, EIP-1271) with strict canonical JSON and a CAIP-380 interoperability fixture. |
 | 1.3.0 | 2026-07-08 | `llms.txt` and `pricing.txt` for AI search; docs opened to AI crawlers; Codex plugin metadata; public SDK surface tightened. |
-| 1.2.0 | 2026-06-18 | Agent context mount: `neus mount <agentId>` for Cursor, Claude Code, and Codex; `neus_agent_mount` in-session; runtime-mount SDK modules. |
+| 1.2.0 | 2026-06-18 | Agent context mount: `neus mount <agentId>` for any runtime; `neus_agent_mount` in-session; runtime-mount SDK modules. |
 | 1.1.0 | 2026-05-26 | First public MCP release: OAuth-first setup, `@neus/mcp-server` on npm, public tools including encrypted Vault secrets, Claude Code marketplace plugin. |
 | 1.0.12 | 2026-05-26 | First `@neus/sdk` release with the hosted MCP CLI and OAuth browser flow. |
 

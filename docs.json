@@ -721,7 +721,7 @@
     "options": [
       {
         "title": "View pricing",
-        "description": "Free to start. Pro is $19.99 a month.",
+        "description": "Start with a free plan. Upgrade to Pro for more features.",
         "icon": "tags",
         "href": "/pricing"
       },
