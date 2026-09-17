@@ -135,7 +135,7 @@
         "groups": [
           {
             "group": "Overview",
-            "pages": ["build"]
+            "pages": ["reference"]
           },
           {
             "group": "MCP",
