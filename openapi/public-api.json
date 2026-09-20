@@ -4055,7 +4055,7 @@
       "get": {
         "operationId": "listDiscoverableGates",
         "summary": "List public, discoverable marketplace gates",
-        "description": "Returns public gates that are active, deployed, and tagged as marketplace listings. Bounded scan; a dedicated gate index is the post-launch optimization if listing volume grows.",
+        "description": "Returns public gates that are active, deployed, and tagged as marketplace listings.",
         "tags": [
           "Gates"
         ],
