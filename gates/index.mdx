@@ -8,6 +8,8 @@ Require proof before it happens. You decide what must already be proven. The per
 
 Publishing a listing is optional. Use it only when you want a persisted `gateId`, price, schedule, or marketplace offer.
 
+One check is not a gate. A single `proof-of-human` requirement is [Verify](/verification) with a saved proof: run the check once and read the result everywhere. Reach for a gate when the decision needs a policy of several checks, a price, or a schedule.
+
 ## What a gate holds
 
 | Part | What it sets |
@@ -31,7 +33,10 @@ Publishing a listing is optional. Use it only when you want a persisted `gateId`
 import { ProofableClient, defineGate } from '@proofable/sdk';
 
 const proofable = new ProofableClient();
-const gate = defineGate([{ verifierId: 'proof-of-human' }]);
+const gate = defineGate([
+  { verifierId: 'proof-of-human' },
+  { verifierId: 'ownership-dns-txt', match: { domain: 'acme.com' } },
+]);
 const result = await proofable.gateCheck({ gate, subject });
 if (result.satisfied) {
   // grant access
@@ -42,7 +47,10 @@ if (result.satisfied) {
 import { defineGate } from '@proofable/sdk';
 import { VerifyGate } from '@proofable/sdk/widgets';
 
-const gate = defineGate([{ verifierId: 'proof-of-human' }]);
+const gate = defineGate([
+  { verifierId: 'proof-of-human' },
+  { verifierId: 'ownership-dns-txt', match: { domain: 'acme.com' } },
+]);
 
 <VerifyGate gate={gate} onVerified={grantAccess} />;
 ```
