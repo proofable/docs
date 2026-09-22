@@ -1,18 +1,14 @@
 ---
 title: Update proof metadata (`proofable_proofs_update`)
-description: The durable work tracker for proofs. Tags written here are the index that proofs-get filters, so work survives sessions and apps.
+description: Change the display title or retrieval tags on a proof you own.
 icon: pen
 ---
 
 Change the **`title`**, or add and remove tags with **`addTags`** and **`removeTags`**. Omit **`walletAddress`** when signed in to use the current account.
 
-## Why this tool exists
+## What changes
 
-Proofs are durable, and this is how durable work stays tracked. A proof can carry its own lifecycle through `status:` tags — `status:backlog`, `status:todo`, `status:in-progress`, `status:review`, `status:done` — plus `workspace:<namespace>` tags so multiple apps or teams can share one convention without colliding.
-
-Every tag written here is the **exact index** that [**`proofable_proofs_get`**](./proofs-get) filters by: `tags`, `scope`, `tagPrefix`, `tagContains`, and full-text search. Write the tag once, retrieve the work anywhere — a different session, a different app, a different agent. Work survives sessions and apps instead of living in one chat's memory.
-
-Verified content, verifier results, and ownership never change. This tool only writes the retrieval index. Visibility (private, unlisted, listed) and private-proof sharing through signed access grants are separate surfaces: [Proofs](../proofs).
+The title helps people recognize a proof. Tags are short, exact values for retrieval with [**`proofable_proofs_get`**](./proofs-get). Keep descriptions, instructions, and work details in the title or proof body; do not put sentences in tags. A tag update does not change verified content, verifier results, or ownership. Visibility and private-proof sharing are separate controls: [Proofs](../proofs).
 
 | Auth | Visibility |
 |------|------------|
@@ -25,8 +21,8 @@ Verified content, verifier results, and ownership never change. This tool only w
 {
   "qHash": "0x...",
   "title": "New title",
-  "addTags": ["status:in-progress", "workspace:proofable"],
-  "removeTags": ["status:todo"]
+  "addTags": ["research"],
+  "removeTags": ["draft"]
 }
 ```
 
@@ -34,8 +30,8 @@ Verified content, verifier results, and ownership never change. This tool only w
 |-------|-------|
 | `qHash` | Required. The proof ID of a proof you own. |
 | `title` | New title. Omit to keep, `null` to clear. |
-| `addTags` | Tags to add, e.g. `status:in-progress`, `workspace:proofable`. |
-| `removeTags` | Tags to remove, e.g. `status:todo`. |
+| `addTags` | Exact retrieval tags to add. |
+| `removeTags` | Exact existing tags to remove. |
 | `walletAddress` | Optional owner wallet. Omit when signed in to use the current account. |
 
 One of `title`, `addTags`, or `removeTags` is required.
@@ -44,12 +40,9 @@ One of `title`, `addTags`, or `removeTags` is required.
 
 Returns the updated proof ID, its current `tags`, `title`, and an `unchanged` flag when nothing needed to change.
 
-## The full loop
+## Read it back
 
-1. Do the work — verify, create, link, store. Each action produces a proof.
-2. **`proofable_proofs_update`** — set the proof's title and tags: its status and workspace.
-3. **`proofable_proofs_get`** — retrieve later by those exact tags, `scope`, `tagPrefix`, or full-text search, in any session, any app.
-4. Repeat: update status as work moves (`status:todo` → `status:in-progress` → `status:done`).
+Use **`proofable_proofs_get`** with `tags` for an exact tag match, `tagPrefix` for a namespace, or `tagContains` for tag text. The `scope` presets select existing proof categories; they are not arbitrary tags. Search query `q` is separate from tag matching.
 
 ## Assistant output
 
@@ -65,7 +58,7 @@ Avoid raw JSON, or edits to fields this tool does not own (verified content, res
 
 <CardGroup cols={2}>
   <Card title="Read proofs" icon="receipt" href="./proofs-get">
-    The read side: filter by the exact tags this tool writes.
+    Find the updated proof by ID or filter its tags.
   </Card>
   <Card title="MCP overview" icon="plug" href="./overview">
     Install, session flow, and tool map.

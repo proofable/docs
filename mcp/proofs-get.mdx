@@ -1,10 +1,10 @@
 ---
 title: Read proofs (`proofable_proofs_get`)
-description: Pull the full proof records behind a wallet or DID, for when a yes or no answer is not enough.
+description: Find proofs by ID or a narrow account filter, then read their metadata or content.
 icon: receipt
 ---
 
-Use when you have an **`identifier`** and need proof records, fields, tags, or delegated context. For a trust action, start with **`proofable_verify_or_guide`**. If the user explicitly needs a yes/no eligibility answer, use **`proofable_proofs_check`** first and call this tool only when details beyond yes/no are needed. Profile totals and account context come from **`proofable_context`**.
+Use when you need a proof by ID or need to find proof records, tags, or content. Omit **`identifier`** when signed in to search the current account. For an explicit yes/no eligibility answer, use **`proofable_proofs_check`**. Profile totals and account context come from **`proofable_context`**.
 
 In user-facing replies, summarize the result in plain language and link only real proof URLs returned by Proofable.
 
@@ -17,10 +17,11 @@ In user-facing replies, summarize the result in plain language and link only rea
 
 | Need | Use |
 |------|-----|
-| Show prior proofs | Read recent proofs for the account |
-| Reuse assistant context | Filter by tags such as `memory`, `rules`, or `instruction` |
+| Find one known proof | Pass `qHash` |
+| Browse all proofs | Pass `scope: "all"` for paginated metadata |
+| Reuse assistant context | Use a narrow `scope` such as `memory` or an exact `tags` value |
 | Confirm an agent handoff | Include `agentWallet` for delegated reads |
-| Continue a session | Filter by the tags your app saved on earlier proofs |
+| Find related records | Use `tagPrefix`, `tagContains`, `tagPrefixesAll`, `verifierId`, or `q` |
 
 Keep tag values short and product-facing in your own app. Avoid exposing private workflow names in assistant replies.
 
@@ -28,30 +29,32 @@ Keep tag values short and product-facing in your own app. Avoid exposing private
 
 ```json
 {
-  "identifier": "0x...",
-  "limit": 25,
+  "scope": "memory",
+  "limit": 5,
   "offset": 0,
-  "tags": "memory,rules,instruction",
-  "agentWallet": "0x...",
-  "include": "metadata"
+  "include": "content"
 }
 ```
 
 | Field | Notes |
 |-------|-------|
-| `identifier` | Wallet address or **`did:pkh:...`** |
-| `tags` | Comma-separated proof tag filter |
+| `identifier` | Wallet address or **`did:pkh:...`**; optional when signed in |
+| `scope` | Category preset (`memory`, `research`, `rules`, `instruction`, `tools`, `receipts`) or `all` for a whole-account metadata list |
+| `tags` | Comma-separated exact tags; when present, takes precedence over `scope` |
+| `tagPrefix`, `tagContains` | Match the beginning of a tag or text within a tag |
+| `tagPrefixesAll` | Comma-separated prefixes that must each match a tag |
+| `verifierId`, `q` | Filter by check ID or search text |
 | `agentWallet` | Delegation (**`x-agent-wallet`**) |
-| `include` | `metadata` for the minimal index; `content` only when full proof bodies are required |
+| `include` | Defaults to `metadata`; `content` requires a known proof ID or narrowing filter and is capped for list reads |
 | `qHash` | When set, returns that one record instead of a vault page |
 
 When `identifier` is a DID, Proofable resolves the DID to its native account. Non-EVM signing and account context still use CAIP-2 `chain`; see [CAIP-380 Portable Proof](../learn/standards/caip-380).
 
 ## Response
 
-`include: "metadata"` returns a compact paginated proof index: proof id, status, check ids and outcomes, title, tags, timestamps, and content length when known. It does not include proof bodies, profile summary, or agent context.
+With no ID or filter, the tool returns an index hint rather than a vault page. `scope: "all"` returns paginated metadata. `include: "metadata"` returns proof ID, status, check IDs and outcomes, title, tags, timestamps, and content length when known. It does not include proof bodies or profile summary.
 
-Use `include: "content"` for a specific proof or tightly filtered page when the body is required. Use the paginated `proofs` list for history and the profile summary from `proofable_context` for aggregate totals. Never infer a total or absence from one page.
+Use `include: "content"` for a specific proof or tightly filtered page when the body is required. A whole-vault read does not unlock bodies. Filtered content lists are capped at five records by default, so inspect pagination before inferring absence. An upstream read error is an error, not an empty proof list. Use the profile summary from `proofable_context` for aggregate totals.
 
 ## Assistant output
 
