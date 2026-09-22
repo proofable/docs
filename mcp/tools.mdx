@@ -52,7 +52,7 @@ Wallet address in native format, or `did:pkh:…`. Delegated reads: **`agentWall
 
 | Phase | Calls |
 |-------|-------|
-| Default | Connect → **`proofable_context`** → **`proofable_agent_link`** for agents → **`proofable_proofs_check`** → continue if satisfied |
+| Default | Connect → **`proofable_context`** → **`proofable_agent_link`** for agents → **`proofable_verify_or_guide`** before sensitive actions |
 | Project agent | **`proofable_agent_mount`** or `proofable mount <agentId> --apply <host>` in the repo |
 | Details | **`proofable_proofs_get`** for proof records, tags, delegated context, and proof fields |
 | Secrets | **`proofable_secret_list`** / **`proofable_secret_create`** / **`proofable_secret_revoke`** when auth is configured ([Secrets](./secrets)) |

@@ -5,11 +5,11 @@ description: "Create a saved proof from a signed-in MCP session and finish suppo
 icon: circle-check
 ---
 
-Use **`proofable_verify`** to create a proof when the signed-in account can complete the check in-session. Ownership checks finish here. Share a hosted link only when this tool returns one.
+Use **[`proofable_verify_or_guide`](./verify-or-guide)** as the normal trust path. It reuses a qualifying proof when one exists or returns the one next step needed to finish verification.
 
-For an outside login, payment, or a different account, use **[`proofable_verify_or_guide`](./verify-or-guide)**.
+Use **`proofable_verify`** when the signed-in account can complete a known check in-session and a new proof is actually needed. Ownership checks finish here. Share a hosted link only when this tool returns one.
 
-Always run **`proofable_proofs_check`** first and reuse an existing proof before creating a new one.
+Use **`proofable_proofs_check`** only when the user explicitly needs a yes/no eligibility, gate, or access answer.
 
 When signed in, **omit `walletAddress`**. The tool uses your profile account from `proofable_context`. For `ownership-basic`, omit `owner`. The signed-in account is filled in.
 

@@ -1,10 +1,10 @@
 ---
 title: "Agents"
 sidebarTitle: "Agents"
-description: "One owner, infinite agents. Verified identity, scoped permissions, portable context, and proof that compounds in one agent registry."
+description: "Give each agent its own identity and limits. The controls stay with the agent across models, tools, runtimes, and MCP."
 icon: robot
-"og:image": "/images/og-agents.png"
-"twitter:image": "/images/og-agents.png"
+"og:image": "/images/og-default.png"
+"twitter:image": "/images/og-default.png"
 ---
 
 Stop an agent from doing what you did not allow.
@@ -31,7 +31,9 @@ Create or import an agent on my Proofable profile. Set spend and action limits. 
 
 The agent lives on your signed-in profile by default. Ask for a dedicated spend account only when the agent should pay from its own account. [`proofable_agent_create`](/mcp/agent-create) covers every option.
 
-## Use it where you work
+## Use it where I work
+
+Pick the surface that matches where the agent already runs:
 
 - **Chat and jobs on Proofable.** Chat now, or start a [job](/jobs) for background and scheduled work.
 - **Any MCP client.** Load the same agent with `npx -y @proofable/sdk mount <agentId> --apply cursor`.

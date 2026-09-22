@@ -39,7 +39,7 @@ Passed
 |---|---|
 | React | `VerifyGate` reuses a saved proof by default (`strategy="reuse-or-create"`). |
 | Your server | `gateCheck` returns `allRequiredSatisfied` and which checks were satisfied or missing. |
-| An AI assistant | `proofable_proofs_check` answers yes or no without creating anything. |
+| An AI assistant | `proofable_verify_or_guide` reuses a proof or returns the next step; `proofable_proofs_check` answers an explicit yes/no question. |
 | New proofs | Pass `reusedVerifierProofs` from the gate check so satisfied checks are not run again. |
 
 ```js

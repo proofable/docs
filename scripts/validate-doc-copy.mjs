@@ -28,12 +28,12 @@ const SECOND_PERSON = /\b(you|your)\b/i;
 
 /** Frozen brand strings. Exempt by contract; these change upstream, never here. */
 const FROZEN = new Set([
-  'Give AI agents identity, permissions, and reusable proof through one MCP.',
+  'Give AI agents identity, scoped access, trusted context, and verifiable actions through MCP.',
+  'Give each agent its own identity and limits. The controls stay with the agent across models, tools, runtimes, and MCP.',
   'SDK and CLI for verification gates, reusable proof, and agent permissions.',
   'Gate access, actions, payments, or content by verified proof.',
   'Create, reuse, and share verifiable proof instead of checking twice.',
   'Keep agent identity, permissions, context, and proof across runtimes.',
-  'One owner, infinite agents. Verified identity, scoped permissions, portable context, and proof that compounds in one agent registry.',
 ]);
 
 function walk(dir) {

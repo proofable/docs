@@ -4,7 +4,7 @@ description: Pull the full proof records behind a wallet or DID, for when a yes 
 icon: receipt
 ---
 
-Use when you have an **`identifier`** and need proof records, fields, tags, or delegated context. In the reuse-first flow, call this after **`proofable_proofs_check`** when you need details beyond yes/no eligibility. Profile totals and account context come from **`proofable_context`**.
+Use when you have an **`identifier`** and need proof records, fields, tags, or delegated context. For a trust action, start with **`proofable_verify_or_guide`**. If the user explicitly needs a yes/no eligibility answer, use **`proofable_proofs_check`** first and call this tool only when details beyond yes/no are needed. Profile totals and account context come from **`proofable_context`**.
 
 In user-facing replies, summarize the result in plain language and link only real proof URLs returned by Proofable.
 
@@ -66,8 +66,8 @@ Avoid raw JSON, private implementation tags, or guessed proof URLs.
 ## Next
 
 <CardGroup cols={2}>
-  <Card title="Proof check" icon="circle-check" href="./proofs-check">
-    Confirm existing proofs before creating new ones.
+  <Card title="Reuse or verify" icon="circle-check" href="./verify-or-guide">
+    Reuse a qualifying proof or finish the one missing step.
   </Card>
   <Card title="MCP overview" icon="plug" href="./overview">
     Install, session flow, and tool map.
