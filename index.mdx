@@ -27,23 +27,32 @@ Ask: `Show my Proofable profile and current proofs.`
 
 Verify a user or agent once. Check that result on your server.
 
+One check needs no gate. Send the person to Hosted Verify and read the proof:
+
+```text
+https://proofable.me/verify?verifiers=proof-of-human&returnUrl=https://app.example.com/callback
+```
+
+The `qHash` comes back in your callback. Your server checks it:
+
 ```ts
-import { ProofableClient, defineGate } from '@proofable/sdk';
+import { ProofableClient } from '@proofable/sdk';
 
 const proofable = new ProofableClient();
-const gate = defineGate([{ verifierId: 'proof-of-human' }]);
 const result = await proofable.gateCheck({
-  gate,
+  gate: [{ verifierId: 'proof-of-human' }],
   subject: { accountId: user.accountAddress },
 });
 
 if (!result.satisfied) {
-  // Show VerifyGate or Hosted Verify for result.missing, then check again.
+  // Send them to Hosted Verify, then check again.
   throw new Error('Verification required');
 }
 
 // Allow the action.
 ```
+
+Reach for a published gate only when the decision needs several checks, a price, or a schedule. [Gates](/gates)
 
 Your server allows or denies. Proofable returns the current result.
 
