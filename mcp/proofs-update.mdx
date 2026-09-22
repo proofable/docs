@@ -1,0 +1,60 @@
+---
+title: Update proof metadata (`proofable_proofs_update`)
+description: Rename a proof or change its tags. Verified content, results, and ownership never change.
+icon: pen
+---
+
+Change the **`title`**, or add and remove tags with **`addTags`** and **`removeTags`**. Omit **`walletAddress`** when signed in to use the current account.
+
+Portable status convention: `status:backlog`, `status:todo`, `status:in-progress`, `status:review`, or `status:done`, plus `workspace:<namespace>` tags.
+
+| Auth | Visibility |
+|------|------------|
+| None | Not available |
+| Bearer | Proofs owned by the signed-in account ([Auth](./auth)) |
+
+## Input
+
+```json
+{
+  "qHash": "0x...",
+  "title": "New title",
+  "addTags": ["status:in-progress", "workspace:proofable"],
+  "removeTags": ["status:todo"]
+}
+```
+
+| Field | Notes |
+|-------|-------|
+| `qHash` | Required. The proof ID of a proof you own. |
+| `title` | New title. Omit to keep, `null` to clear. |
+| `addTags` | Tags to add, e.g. `status:in-progress`, `workspace:proofable`. |
+| `removeTags` | Tags to remove, e.g. `status:todo`. |
+| `walletAddress` | Optional owner wallet. Omit when signed in to use the current account. |
+
+## Response
+
+Returns the updated proof ID, its current `tags`, `title`, and an `unchanged` flag when nothing needed to change.
+
+Keep tag values short and product-facing in your own app. Avoid exposing private workflow names in assistant replies.
+
+## Assistant output
+
+Do:
+
+```txt
+Proofable: Passed. Proof title and tags updated. Next: Continue.
+```
+
+Avoid raw JSON, or edits to fields this tool does not own (verified content, results, ownership).
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Read proofs" icon="receipt" href="./proofs-get">
+    Read the records and tags this tool changes.
+  </Card>
+  <Card title="MCP overview" icon="plug" href="./overview">
+    Install, session flow, and tool map.
+  </Card>
+</CardGroup>

@@ -9,6 +9,10 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ## [Unreleased]
 
+### Added
+
+- **`proofable_proofs_update` reference page.** The 13th hosted MCP tool is documented: title and tag updates on proofs you own, with the portable status convention (`status:backlog|todo|in-progress|review|done`, `workspace:<namespace>`).
+
 ## [0.1.1] - 2026-09-13
 
 ### Added

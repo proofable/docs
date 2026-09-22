@@ -154,6 +154,7 @@
                   "mcp/verify",
                   "mcp/verify-or-guide",
                   "mcp/proofs-get",
+                  "mcp/proofs-update",
                   "mcp/agent-create",
                   "mcp/agent-link",
                   "mcp/secrets"

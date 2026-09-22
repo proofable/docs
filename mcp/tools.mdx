@@ -14,6 +14,7 @@ Call **`proofable_context`** once, then pick the tool for the job.
 | Finish what's missing | `proofable_verify_or_guide` | Reuses a proof, or returns the next step. |
 | Create or refresh a proof | `proofable_verify` | Creates the proof when a new one is needed. |
 | Read a proof | `proofable_proofs_get` | Current proof records and status. |
+| Update proof metadata | `proofable_proofs_update` | Change the title or tags on a proof you own. Never changes verified content or ownership. |
 | Create or import an agent | `proofable_agent_create` | Links the agent to your profile. Optional separate spend account and controls. Pass an existing account address for dedicated spend. |
 | Confirm the agent is ready | `proofable_agent_link` | Identity and the permissions that account needs. |
 | Load the agent | `proofable_agent_mount` | Identity, permissions, skills, and current settings. |
@@ -23,7 +24,7 @@ Call **`proofable_context`** once, then pick the tool for the job.
 
 ## Pro job tools
 
-Pro adds only the four tools needed to run and manage jobs. Product connections, research, model settings, sandbox execution, and private session notes stay in the Proofable app.
+Pro adds only the four tools needed to run and manage jobs. Product connections, research, model settings, sandbox execution, and private sessions stay in the Proofable app.
 
 | Job | Tool | What it does |
 |---|---|---|
@@ -45,6 +46,7 @@ Pro adds only the four tools needed to run and manage jobs. Product connections,
 | `proofable_proofs_check` | `wallet` | `verifiers` |
 | `proofable_verify`, `proofable_verify_or_guide` | `walletAddress` | `verifierIds` |
 | `proofable_proofs_get` | `identifier` | optional `tags` (comma-separated proof tags) |
+| `proofable_proofs_update` | `qHash` (proof ID) | optional `title`, `addTags`, `removeTags` |
 
 Wallet address in native format, or `did:pkh:…`. Delegated reads: **`agentWallet`** on **`proofable_proofs_get`** (**`x-agent-wallet`** on the API).
 
@@ -81,6 +83,9 @@ Same flow as [Overview](./overview).
   </Card>
   <Card title="Proofs get" icon="receipt" href="./proofs-get">
     Read proof records and current status.
+  </Card>
+  <Card title="Proofs update" icon="pen" href="./proofs-update">
+    Change the title or tags on a proof you own.
   </Card>
   <Card title="Agent create" icon="robot" href="./agent-create">
     Create or import an agent. Optional separate spend account.
