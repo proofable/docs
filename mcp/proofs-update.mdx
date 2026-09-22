@@ -1,12 +1,18 @@
 ---
 title: Update proof metadata (`proofable_proofs_update`)
-description: Rename a proof or change its tags. Verified content, results, and ownership never change.
+description: The durable work tracker for proofs. Tags written here are the index that proofs-get filters, so work survives sessions and apps.
 icon: pen
 ---
 
 Change the **`title`**, or add and remove tags with **`addTags`** and **`removeTags`**. Omit **`walletAddress`** when signed in to use the current account.
 
-Portable status convention: `status:backlog`, `status:todo`, `status:in-progress`, `status:review`, or `status:done`, plus `workspace:<namespace>` tags.
+## Why this tool exists
+
+Proofs are durable, and this is how durable work stays tracked. A proof can carry its own lifecycle through `status:` tags — `status:backlog`, `status:todo`, `status:in-progress`, `status:review`, `status:done` — plus `workspace:<namespace>` tags so multiple apps or teams can share one convention without colliding.
+
+Every tag written here is the **exact index** that [**`proofable_proofs_get`**](./proofs-get) filters by: `tags`, `scope`, `tagPrefix`, `tagContains`, and full-text search. Write the tag once, retrieve the work anywhere — a different session, a different app, a different agent. Work survives sessions and apps instead of living in one chat's memory.
+
+Verified content, verifier results, and ownership never change. This tool only writes the retrieval index.
 
 | Auth | Visibility |
 |------|------------|
@@ -32,11 +38,18 @@ Portable status convention: `status:backlog`, `status:todo`, `status:in-progress
 | `removeTags` | Tags to remove, e.g. `status:todo`. |
 | `walletAddress` | Optional owner wallet. Omit when signed in to use the current account. |
 
+One of `title`, `addTags`, or `removeTags` is required.
+
 ## Response
 
 Returns the updated proof ID, its current `tags`, `title`, and an `unchanged` flag when nothing needed to change.
 
-Keep tag values short and product-facing in your own app. Avoid exposing private workflow names in assistant replies.
+## The full loop
+
+1. Do the work — verify, create, link, store. Each action produces a proof.
+2. **`proofable_proofs_update`** — set the proof's title and tags: its status and workspace.
+3. **`proofable_proofs_get`** — retrieve later by those exact tags, `scope`, `tagPrefix`, or full-text search, in any session, any app.
+4. Repeat: update status as work moves (`status:todo` → `status:in-progress` → `status:done`).
 
 ## Assistant output
 
@@ -52,7 +65,7 @@ Avoid raw JSON, or edits to fields this tool does not own (verified content, res
 
 <CardGroup cols={2}>
   <Card title="Read proofs" icon="receipt" href="./proofs-get">
-    Read the records and tags this tool changes.
+    The read side: filter by the exact tags this tool writes.
   </Card>
   <Card title="MCP overview" icon="plug" href="./overview">
     Install, session flow, and tool map.

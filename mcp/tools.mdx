@@ -14,7 +14,7 @@ Call **`proofable_context`** once, then pick the tool for the job.
 | Finish what's missing | `proofable_verify_or_guide` | Reuses a proof, or returns the next step. |
 | Create or refresh a proof | `proofable_verify` | Creates the proof when a new one is needed. |
 | Read a proof | `proofable_proofs_get` | Current proof records and status. |
-| Update proof metadata | `proofable_proofs_update` | Change the title or tags on a proof you own. Never changes verified content or ownership. |
+| Update proof metadata | `proofable_proofs_update` | The durable work tracker: set title and `status:`/`workspace:` tags; proofs-get filters by those exact tags. |
 | Create or import an agent | `proofable_agent_create` | Links the agent to your profile. Optional separate spend account and controls. Pass an existing account address for dedicated spend. |
 | Confirm the agent is ready | `proofable_agent_link` | Identity and the permissions that account needs. |
 | Load the agent | `proofable_agent_mount` | Identity, permissions, skills, and current settings. |
