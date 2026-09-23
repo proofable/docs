@@ -1,6 +1,6 @@
 # Proofable Docs
 
-Docs for verification, gates, proofs, agents, and MCP.
+Grant access with proof your app can check again. Set limits on what AI agents can do.
 
 Published site: [docs.proofable.me](https://docs.proofable.me)
 

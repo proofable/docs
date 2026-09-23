@@ -6,8 +6,6 @@ icon: receipt
 
 Use when you need a proof by ID or need to find proof records, tags, or content. Omit **`identifier`** when signed in to search the current account. For an explicit yes/no eligibility answer, use **`proofable_proofs_check`**. Profile totals and account context come from **`proofable_context`**.
 
-In user-facing replies, summarize the result in plain language and link only real proof URLs returned by Proofable.
-
 | Auth | Visibility |
 |------|------------|
 | None | Public-scope view |
@@ -47,12 +45,17 @@ Keep tag values short and product-facing in your own app. Avoid exposing private
 | `agentWallet` | Delegation (**`x-agent-wallet`**) |
 | `include` | Defaults to `metadata`; `content` requires a known proof ID or narrowing filter and is capped for list reads |
 | `qHash` | When set, returns that one record instead of a vault page |
+| `includeComments` | Set `true` with `qHash` to include comments visible to the signed-in account |
 
 When `identifier` is a DID, Proofable resolves the DID to its native account. Non-EVM signing and account context still use CAIP-2 `chain`; see [CAIP-380 Portable Proof](../learn/standards/caip-380).
 
+To read comments for one proof, pass its **`qHash`** and set **`includeComments: true`**. Private proof comments are available to the proof owner.
+
+In user-facing replies, summarize the result in plain language and link only real proof URLs returned by Proofable.
+
 ## Response
 
-With no ID or filter, the tool returns an index hint rather than a vault page. `scope: "all"` returns paginated metadata. `include: "metadata"` returns proof ID, status, check IDs and outcomes, title, tags, timestamps, and content length when known. It does not include proof bodies or profile summary.
+With no ID or filter, the tool returns an index hint rather than a vault page. `scope: "all"` returns paginated metadata. `include: "metadata"` returns proof ID, status, check IDs and outcomes, title, tags, timestamps, and content length when known. It does not include proof bodies or profile summary. With `includeComments: true`, comments appear under `data.feedback.comments`.
 
 Use `include: "content"` for a specific proof or tightly filtered page when the body is required. A whole-vault read does not unlock bodies. Filtered content lists are capped at five records by default, so inspect pagination before inferring absence. An upstream read error is an error, not an empty proof list. Use the profile summary from `proofable_context` for aggregate totals.
 

@@ -1,64 +1,65 @@
 ---
-title: Update proof metadata (`proofable_proofs_update`)
-description: Change the display title or retrieval tags on a proof you own.
+title: Update or comment on a proof (`proofable_proofs_update`)
+description: Use a proof ID to edit its details or leave feedback.
 icon: pen
 ---
 
-Change the **`title`**, or add and remove tags with **`addTags`** and **`removeTags`**. Omit **`walletAddress`** when signed in to use the current account.
+With the **`qHash`** in hand, edit the title or tags, or leave one vote or comment per call. Omit **`walletAddress`** when signed in.
 
 ## What changes
 
-The title helps people recognize a proof. Tags are short, exact values for retrieval with [**`proofable_proofs_get`**](./proofs-get). Keep descriptions, instructions, and work details in the title or proof body; do not put sentences in tags. A tag update does not change verified content, verifier results, or ownership. Visibility and private-proof sharing are separate controls: [Proofs](../proofs).
+The title helps people recognize a proof. Tags are short values for retrieval with [**`proofable_proofs_get`**](./proofs-get). Votes and comments are feedback, not proof that a claim is correct or approved. Owners can vote on their own proofs. Private proof feedback is owner-only; public proof feedback requires sign-in. These actions do not change verified content, verifier results, or ownership. Visibility is a separate control: [Proofs](../proofs).
 
 | Auth | Visibility |
 |------|------------|
 | None | Not available |
-| Bearer | Proofs owned by the signed-in account ([Auth](./auth)) |
+| Bearer | Metadata changes require ownership. Public proof feedback requires sign-in; private proof feedback requires ownership ([Auth](./auth)). |
 
 ## Input
 
 ```json
 {
   "qHash": "0x...",
-  "title": "New title",
-  "addTags": ["research"],
-  "removeTags": ["draft"]
+  "vote": "up"
 }
 ```
 
 | Field | Notes |
 |-------|-------|
-| `qHash` | Required. The proof ID of a proof you own. |
+| `qHash` | Required. The proof ID to update or review. |
 | `title` | New title. Omit to keep, `null` to clear. |
 | `addTags` | Exact retrieval tags to add. |
 | `removeTags` | Exact existing tags to remove. |
+| `vote` | `up`, `down`, or `clear` to change your vote. Proof owners can vote on their own proofs. |
+| `comment` | Add a comment. Use `parentId` to reply to an existing comment. |
+| `parentId` | Optional comment ID to reply to. Requires `comment`. |
 | `walletAddress` | Optional owner wallet. Omit when signed in to use the current account. |
 
-One of `title`, `addTags`, or `removeTags` is required.
+Send one kind of update per call: metadata, one vote, or one comment.
 
 ## Response
 
-Returns the updated proof ID, its current `tags`, `title`, and an `unchanged` flag when nothing needed to change.
+Returns the proof ID and the result of the update, vote, or comment.
 
 ## Read it back
 
-Use **`proofable_proofs_get`** with `tags` for an exact tag match, `tagPrefix` for a namespace, or `tagContains` for tag text. The `scope` presets select existing proof categories; they are not arbitrary tags. Search query `q` is separate from tag matching.
+Use **`proofable_proofs_get`** with `qHash` and `includeComments: true` to read comments. Use `tags` for an exact tag match, `tagPrefix` for a namespace, or `tagContains` for tag text.
 
 ## Assistant output
 
 Do:
 
 ```txt
-Proofable: Passed. Proof title and tags updated. Next: Continue.
+Proofable: Feedback saved on this proof.
 ```
 
-Avoid raw JSON, or edits to fields this tool does not own (verified content, results, ownership).
+Avoid raw JSON or claiming votes establish correctness or approval.
 
 ## Next
 
 <CardGroup cols={2}>
   <Card title="Read proofs" icon="receipt" href="./proofs-get">
-    Find the updated proof by ID or filter its tags.
+    Read the proof and its comments by ID.
   </Card>
   <Card title="MCP overview" icon="plug" href="./overview">
     Install, session flow, and tool map.
