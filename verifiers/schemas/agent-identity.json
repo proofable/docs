@@ -111,7 +111,7 @@
           "type": "string"
         },
         "provider": {
-          "description": "Default inference provider label (e.g., \"ollama\", \"openai\").",
+          "description": "Default inference provider label (e.g., \"openrouter\", \"openai\").",
           "maxLength": 64,
           "type": "string"
         }

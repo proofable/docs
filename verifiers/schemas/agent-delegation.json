@@ -133,7 +133,7 @@
           "type": "array"
         },
         "allowedProviders": {
-          "description": "Allowed inference provider labels (e.g., [\"ollama\", \"openai\"]).",
+          "description": "Allowed inference provider labels (e.g., [\"openrouter\", \"openai\"]).",
           "items": {
             "maxLength": 64,
             "type": "string"
