@@ -5,16 +5,14 @@ description: "Pay for a single check with x402 over Base USDC, no account requir
 icon: coins
 ---
 
-Four endpoints accept per-call payment:
+Two endpoints accept per-call payment. Checking an existing proof is free and is not listed here.
 
 | Resource | Method | What it does | Base cost |
 |----------|--------|--------------|-----------|
-| `/api/v1/proofs/check` | GET | Evaluate existing proofs by address, `gateId`, or verifier filters | 1 credit ($0.0025) |
-| `/api/v1/proofs/check` | POST | Evaluate an inline Gate Policy (`defineGate`) against a subject | 1 credit ($0.0025) |
 | `/api/v1/verification` | POST | Create a new proof | 3+ credits (gate + verifier + proof write) |
 | `/api/v1/verification/access/grant` | POST | Create a signed private-proof sharing capability | 2 credits |
 
-The exact price for each request is in the `PAYMENT-REQUIRED` header. It scales with the number of checks, query complexity, and optional add-ons (IPFS pinning, extra chains).
+The exact price for each request is in the `PAYMENT-REQUIRED` header. It scales with the verifier's weight and optional add-ons (IPFS pinning, extra chains).
 
 ## Flow
 
@@ -61,18 +59,9 @@ curl --include \
   -d '{"subject":{"accountId":"0x1111111111111111111111111111111111111111"},"requirements":[{"verifierId":"proof-of-human"}]}'
 ```
 
-A single-verifier gate check costs **1 credit (0.0025 USDC)**. The price scales with the number of verifier IDs requested, query complexity, and result limit:
-
-| Parameter | Effect on price |
-|-----------|----------------|
-| `verifierId` | Base check (1 credit) |
-| `verifierIds=a,b,c` | 1 credit + 1 per additional verifier |
-| `gateId` | Uses the gate's check policy (creator pays by default) |
-| `traitPath`, `contentHash`, `contractAddress`, `domain`, `riskLevel`, `sanctioned`, `poisoned` | +2 credits (complex query surcharge) |
-| `sinceDays` or `since` | +1 credit (time-window surcharge) |
-| `limit` > 50 | +1 credit per 50 additional results |
-
-The `PAYMENT-REQUIRED` header always carries the exact amount for that request.
+Checking an existing proof is **free**. There is no per-check charge and no surcharge for query
+complexity, verifier count, or result limit. Rate limits per plan are the only control. You pay only
+when you create a new proof.
 
 ## Proof creation
 

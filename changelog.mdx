@@ -17,6 +17,28 @@ Published APIs and verifier schemas may change between minor versions. Breaking 
 </Note>
 
 <Update
+  label="September 25, 2026"
+  description="Checking a proof is free"
+  tags={["API", "Docs", "Pricing"]}
+  rss={{
+    title: "Checking a proof is free",
+    description: "Checks against an existing proof no longer cost credits. You pay only to create a proof."
+  }}
+>
+## Checks are free
+
+Checking an existing proof now costs **0 credits**. You pay only when you create a new proof.
+
+- `GET` and `POST /api/v1/proofs/check` are free. Rate limits per plan are the only control.
+- Per-request surcharges for verifier count, query complexity, time window, and result limit are removed.
+- `/api/v1/proofs/check` is no longer an x402 pay-per-call resource. Proof creation and share grants still are.
+- Access grants are a flat 2 credits. Duration tiers (`perHour`, `maxDurationBonus`) were removed; the grant's own duration limit is enforced where the grant is created.
+
+Reuse is the point of a portable proof, so checking one is free and rate-limited rather than metered. See [Pricing](/pricing) and [Reuse verification](/use-cases/reuse-verification).
+
+</Update>
+
+<Update
   label="September 24, 2026"
   description="v0.1.2"
   tags={["SDK", "API", "Docs", "MCP", "Agents"]}

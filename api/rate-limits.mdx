@@ -40,7 +40,7 @@ CORS exposes `Retry-After`, `RateLimit`, and `RateLimit-Policy` so browsers and 
 
 ## Tips
 
-- **Reuse proofs.** A gate check (1 credit) reads an existing proof. Creating a new one (4 to 73 credits) is heavier and counts against the verification window. Cache the proof ID and check it instead.
+- **Reuse proofs.** Checking an existing proof is free. Creating a new one (4 to 73 credits) is heavier and counts against the verification window. Cache the proof ID and check it instead — repeat checks cost nothing.
 - **Gate checks, not raw verification.** Use `gateCheck` with your `gateId` for access decisions. It reads saved results first and only creates a new proof when needed.
 - **Need higher limits?** Pro raises API throughput four times. Enterprise raises it ten times, by agreement. See [Pricing](/pricing).
 

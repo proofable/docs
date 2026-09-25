@@ -31,10 +31,13 @@ One credit lists at $0.0025.
 | Action | Credits | Price |
 |---|---|---|
 | Sign in | 0 | Free |
-| Check an existing proof | 1 | $0.0025 |
+| Check an existing proof | 0 | Free |
 | Create and save a new proof | 4+ | From $0.01 |
 
-Verification pricing depends on the selected verifier. The current price is shown before a billable verification runs. The credit weight for each verifier is returned by [`GET /api/v1/payments/pricing`](/reference), which lists every check's credit cost.
+Checking a saved proof is free, forever, and rate-limited per plan — reuse is the point of a portable
+proof. You pay only when you create a new proof. Creating one depends on the selected verifier; the
+current price is shown before a billable verification runs. The credit weight for each verifier is
+returned by [`GET /api/v1/payments/pricing`](/reference), which lists every check's credit cost.
 
 ## Top-ups
 
