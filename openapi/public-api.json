@@ -1565,7 +1565,8 @@
           "controllerWallet",
           "controllerChainRef",
           "agentWallet",
-          "agentChainRef"
+          "agentChainRef",
+          "allowedActions"
         ],
         "properties": {
           "controllerChainRef": {
@@ -1600,20 +1601,6 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 128
-          },
-          "scope": {
-            "type": "string",
-            "maxLength": 128,
-            "default": "global",
-            "description": "Delegation scope. Defaults to \"global\" (all permissions) when omitted."
-          },
-          "permissions": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "maxLength": 64
-            },
-            "maxItems": 32
           },
           "maxSpend": {
             "type": "string",
@@ -1741,7 +1728,8 @@
               "maxLength": 128
             },
             "maxItems": 32,
-            "description": "Explicit allowlist of canonical actions the agent may perform (e.g., [\"read_context\", \"read_proofs\", \"execute_jobs\"]). Owner-view-only: not included in public proof responses."
+            "minItems": 1,
+            "description": "Required. The canonical actions this agent may perform (e.g., [\"read_context\", \"read_proofs\", \"execute_jobs\"]). Nothing outside this list is granted. make_payment also requires allowedPaymentTypes and maxSpend. Owner-view-only: not included in public proof responses."
           },
           "deniedActions": {
             "type": "array",
@@ -1750,7 +1738,16 @@
               "maxLength": 128
             },
             "maxItems": 32,
-            "description": "Explicit denylist of action types the agent may NOT perform. Takes precedence over allowedActions and permissions. Owner-view-only: not included in public proof responses."
+            "description": "Explicit denylist of action types the agent may NOT perform. Takes precedence over allowedActions. Owner-view-only: not included in public proof responses."
+          },
+          "allowedOrigins": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 256
+            },
+            "maxItems": 16,
+            "description": "For an app acting as the agent (agentId = app id): the exact web origins it may act from, or \"*\" for server-to-server callers."
           },
           "approvalPolicy": {
             "type": "object",

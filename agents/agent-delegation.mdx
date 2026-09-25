@@ -39,7 +39,6 @@ await client.verify({
     controllerChainRef: 'eip155:8453',
     agentWallet: '0x...',
     agentChainRef: 'eip155:8453',
-    scope: 'global',
     allowedActions: ['read_proofs'],
   },
   walletAddress: '0x...',
@@ -53,7 +52,7 @@ Both accounts need a CAIP-2 network reference (`controllerChainRef`, `agentChain
 One-time user approval lets your backend create proofs without asking for a signature on every request. This is different from creating a **listing** in your profile for hosted verification. See [Server integrations](../integrations/server).
 
 1. User signs in on Proofable
-2. User approves the permissions once
+2. User approves the delegation once
 3. Your app stores the proof ID in **`qHash`**
 4. Your backend calls verification with **`x-neus-app`**. No per-request signature
 
@@ -63,21 +62,16 @@ await client.verify({
   data: {
     controllerWallet: userWallet,
     agentWallet: userWallet,
-    scope: 'app-link',
-    permissions: [
-      'app:your-app-id',
-      'origin:https://app.example.com',
-    ],
+    agentId: 'your-app-id',
+    allowedActions: ['create_proof'],
+    allowedOrigins: ['https://app.example.com'],
     expiresAt: Date.now() + 90 * 24 * 60 * 60 * 1000,
   },
   walletAddress: userWallet,
 });
 ```
 
-**Permissions:**
-- `app:<appId>`: matches your `x-neus-app` header
-- `origin:<url>`: restrict to your domain
-- `origin:*`: any origin
+**`agentId`** matches your `x-neus-app` header. **`allowedOrigins`** lists the exact web origins your app may act from; use `"*"` for server-to-server callers with no browser origin.
 
 Send `x-neus-app: your-app-id` and matching site origin on verification requests. On Node, set `appOrigin: 'https://app.example.com'` on `ProofableClient` (or pass `Origin` via `extraHeaders`).
 
@@ -85,7 +79,7 @@ Send `x-neus-app: your-app-id` and matching site origin on verification requests
 
 `maxSpend` is a whole-number string in token base units. For USDC (6 decimals), 25 USDC = `"25000000"`. Use `toAgentDelegationMaxSpend('25', 6)` from `@proofable/sdk`.
 
-When `scope: "payments:x402"` and `allowedPaymentTypes: ["x402"]` are set, the agent can settle metered API calls via x402 without a Proofable account. The calling application enforces the `maxSpend` cap client-side before signing each payment. The protocol does not decrement `maxSpend` server-side. When the cap is exhausted, the application stops signing payments and the agent is refused. See [Pay per call](../gates/pay-per-call) for the full settlement flow.
+When `allowedActions` includes `make_payment`, `allowedPaymentTypes` and `maxSpend` are both required. The agent can then settle metered API calls via the allowed rails, such as x402, without a Proofable account. The calling application enforces the `maxSpend` cap client-side before signing each payment. The protocol does not decrement `maxSpend` server-side. When the cap is exhausted, the application stops signing payments and the agent is refused. See [Pay per call](../gates/pay-per-call) for the full settlement flow.
 
 ```javascript
 import { toAgentDelegationMaxSpend } from '@proofable/sdk';
@@ -95,8 +89,7 @@ await client.verify({
   data: {
     controllerWallet: '0x...',
     agentWallet: '0x...',
-    scope: 'payments:x402',
-    allowedActions: ['execute_payments', 'read_proofs'],
+    allowedActions: ['make_payment', 'read_proofs'],
     maxSpend: toAgentDelegationMaxSpend('100.50', 6),
     allowedPaymentTypes: ['x402'],
     receiptDisclosure: 'summary',
@@ -115,12 +108,11 @@ await client.verify({
 | `agentWallet` | Yes | Agent address |
 | `agentChainRef` | Yes* | CAIP-2 chain for the agent wallet. *Optional if the request supplies `chain` or `chainId` |
 | `agentId` | No | Linked identity id |
-| `scope` | No | Permission scope (default: `global`) |
-| `permissions` | No | App-link scope tags (e.g. `app:<id>`, `origin:<url>`). For action allow/deny lists, use `allowedActions`/`deniedActions` instead. |
-| `allowedActions` | No | Explicit action allowlist |
-| `deniedActions` | No | Explicit action denylist |
-| `maxSpend` | No | Spend cap in token base units |
-| `allowedPaymentTypes` | No | Payment rails (e.g. `x402`) |
+| `allowedActions` | Yes | Explicit action allowlist. Must list at least one canonical action; an empty list grants nothing |
+| `deniedActions` | No | Explicit action denylist. Always wins over `allowedActions` |
+| `allowedOrigins` | No | Exact web origins an app agent may act from, or `"*"` for server callers |
+| `maxSpend` | With `make_payment` | Spend cap in token base units |
+| `allowedPaymentTypes` | With `make_payment` | Payment rails (e.g. `x402`) |
 | `receiptDisclosure` | No | `summary`, `full`, or `none` |
 | `expiresAt` | No | Expiration (Unix ms) |
 | `instructions` | No | Policy text (16000 chars) |
@@ -128,20 +120,19 @@ await client.verify({
 | `runtimePolicy` | No | Provider/model limits and human-approval requirement |
 | `approvalPolicy` | No | Approval requirements for new claims or content |
 
-The protocol accepts bounded action strings in **`allowedActions`** and **`deniedActions`**. `deniedActions` always wins over `allowedActions`. Use **`permissions`** only for app-link scope tags (`app:<id>`, `origin:<url>`).
+The protocol accepts canonical action strings only in **`allowedActions`** and **`deniedActions`**. `deniedActions` always wins over `allowedActions`, and an empty allow-list grants nothing.
 
 ## Human approval pattern
 
-Your application enforces the limits recorded in the permission proof:
+Your application enforces the limits recorded in the delegation proof:
 
 ```javascript
-const permissions = {
+const delegation = {
   controllerWallet,
   agentWallet,
   agentId: 'data-analyst',
-  scope: 'global',
   allowedActions: ['read_data', 'draft_report'],
-  deniedActions: ['send_message', 'approve_payment'],
+  deniedActions: ['send_message', 'make_payment'],
   runtimePolicy: {
     requiresHumanApproval: true,
   },
@@ -156,7 +147,7 @@ const permissions = {
 
 At runtime:
 
-1. Check the current permission proof before the tool call.
+1. Check the current delegation proof before the tool call.
 2. Apply **`deniedActions`** first.
 3. Pause when the policy requires human approval.
 4. Continue only after approval is confirmed.
@@ -173,4 +164,4 @@ A proof ID returned in **`qHash`**. Read that exact record with **`proofable_pro
 await client.revokeOwnProof(qHash, walletAddress);
 ```
 
-Set **`expiresAt`** and **`maxSpend`** when money or high-risk actions are in scope.
+Set **`expiresAt`** and **`maxSpend`** when money or high-risk actions are in play.

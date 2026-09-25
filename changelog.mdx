@@ -17,6 +17,29 @@ Published APIs and verifier schemas may change between minor versions. Breaking 
 </Note>
 
 <Update
+  label="September 24, 2026"
+  description="v0.1.2"
+  tags={["SDK", "API", "Docs", "MCP", "Agents"]}
+  rss={{
+    title: "Proofable v0.1.2",
+    description: "Agent delegation follows the canonical action contract. Explicit allow-lists, bounded spend, and origin limits replace scopes."
+  }}
+>
+## Canonical delegation actions
+
+An agent's authority is what its delegation lists, not a scope string. `allowedActions` minus `deniedActions` is the grant, and an empty allow-list grants nothing.
+
+- Delegations require `allowedActions` and only accept canonical action names.
+- Spend authority is bounded: `make_payment` needs `allowedPaymentTypes` and `maxSpend` together.
+- App agents list the web origins they may act from in `allowedOrigins`, or `"*"` for servers.
+- Revoked, superseded, and expired delegations grant nothing.
+
+```bash
+npm install @proofable/sdk@0.1.2
+```
+</Update>
+
+<Update
   label="September 13, 2026"
   description="v0.1.1"
   tags={["SDK", "API", "Docs", "MCP"]}

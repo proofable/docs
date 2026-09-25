@@ -124,7 +124,7 @@ There is no separate Bazaar registration step. See [x402 Bazaar discovery](https
 
 Pair x402 with an agent permission proof to limit autonomous spending.
 
-- Grant `agent-delegation` with `scope: "payments:x402"` and a `maxSpend` cap.
+- Grant `agent-delegation` with `allowedActions: ["make_payment"]`, plus `allowedPaymentTypes: ["x402"]` and a `maxSpend` cap; the spend rails and ceiling are required together.
 - `maxSpend` is a whole-number string in token base units. For USDC, 25 USDC is `"25000000"`.
 - Use `toAgentDelegationMaxSpend('25', 6)` from `@proofable/sdk` when constructing the cap.
 - The calling application should also enforce a per-request maximum before signing any payment.

@@ -24,12 +24,22 @@
       "type": "string"
     },
     "allowedActions": {
-      "description": "Explicit allowlist of canonical actions the agent may perform (e.g., [\"read_context\", \"read_proofs\", \"execute_jobs\"]). Owner-view-only: not included in public proof responses.",
+      "description": "Required. The canonical actions this agent may perform (e.g., [\"read_context\", \"read_proofs\", \"execute_jobs\"]). Nothing outside this list is granted. make_payment also requires allowedPaymentTypes and maxSpend. Owner-view-only: not included in public proof responses.",
       "items": {
         "maxLength": 128,
         "type": "string"
       },
       "maxItems": 32,
+      "minItems": 1,
+      "type": "array"
+    },
+    "allowedOrigins": {
+      "description": "For an app acting as the agent (agentId = app id): the exact web origins it may act from, or \"*\" for server-to-server callers.",
+      "items": {
+        "maxLength": 256,
+        "type": "string"
+      },
+      "maxItems": 16,
       "type": "array"
     },
     "allowedPaymentTypes": {
@@ -70,7 +80,7 @@
       "type": "string"
     },
     "deniedActions": {
-      "description": "Explicit denylist of action types the agent may NOT perform. Takes precedence over allowedActions and permissions. Owner-view-only: not included in public proof responses.",
+      "description": "Explicit denylist of action types the agent may NOT perform. Takes precedence over allowedActions. Owner-view-only: not included in public proof responses.",
       "items": {
         "maxLength": 128,
         "type": "string"
@@ -95,14 +105,6 @@
       "description": "Preferred inference model label (backward compat; prefer runtimePolicy.allowedModelClasses for structured policy). Owner-view-only: not included in public proof responses.",
       "maxLength": 128,
       "type": "string"
-    },
-    "permissions": {
-      "items": {
-        "maxLength": 64,
-        "type": "string"
-      },
-      "maxItems": 32,
-      "type": "array"
     },
     "provider": {
       "description": "Preferred inference provider label (backward compat; prefer runtimePolicy.allowedProviders for structured policy). Owner-view-only: not included in public proof responses.",
@@ -149,12 +151,6 @@
         }
       },
       "type": "object"
-    },
-    "scope": {
-      "default": "global",
-      "description": "Delegation scope. Defaults to \"global\" (all permissions) when omitted.",
-      "maxLength": 128,
-      "type": "string"
     },
     "skills": {
       "description": "Agent skills as structured objects",
@@ -208,7 +204,8 @@
     "controllerWallet",
     "controllerChainRef",
     "agentWallet",
-    "agentChainRef"
+    "agentChainRef",
+    "allowedActions"
   ],
   "title": "agent-delegation",
   "type": "object"

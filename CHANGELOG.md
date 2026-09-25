@@ -7,11 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/changelog).
 
-## [Unreleased]
+## [0.1.2] - 2026-09-24
 
 ### Added
 
 - **`proofable_proofs_update` reference page.** The 13th hosted MCP tool is documented: title and tag updates on proofs you own, with the portable status convention (`status:backlog|todo|in-progress|review|done`, `workspace:<namespace>`).
+
+### Changed
+
+- **Agent delegation follows the canonical action contract.** The public OpenAPI spec and verifier schemas document `allowedActions` (required, never empty), `deniedActions`, `allowedPaymentTypes`, and `allowedOrigins`; the legacy `scope` and `permissions` fields are removed. Spend delegations require `allowedPaymentTypes` and `maxSpend` together.
 
 ## [0.1.1] - 2026-09-13
 
@@ -36,6 +40,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 - First standalone Proofable documentation release.
 - Public SDK, MCP, API, verifier, security, billing, and integration guidance.
 
-[Unreleased]: https://github.com/proofable/docs/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/proofable/docs/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/proofable/docs/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/proofable/docs/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/proofable/docs/releases/tag/v0.1.0
