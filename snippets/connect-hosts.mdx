@@ -1,5 +1,22 @@
 <Tabs>
-  <Tab title="Everyday use">
+  <Tab title="Any MCP client">
+    <AccordionGroup>
+      <Accordion title="Chat and desktop apps">
+        Proofable works in any app that speaks MCP. The endpoint and the sign-in are the same everywhere.
+
+        1. Open the app's MCP or connector settings.
+        2. Add `https://mcp.proofable.me/mcp`.
+        3. Click **Connect** and sign in to Proofable.
+
+        Try it:
+
+        ```text
+        Show my Proofable profile and current proofs.
+        ```
+      </Accordion>
+    </AccordionGroup>
+  </Tab>
+  <Tab title="Install shortcuts">
     <AccordionGroup>
       <Accordion title="Claude">
         Works in Claude on the web and in Claude Desktop.
@@ -17,12 +34,8 @@
         Show my Proofable profile and current proofs.
         ```
       </Accordion>
-    </AccordionGroup>
-  </Tab>
-  <Tab title="For developers">
-    <AccordionGroup>
       <Accordion title="Cursor">
-        Open [proofable.me/install](https://proofable.me/install) and choose **Install in Cursor**. Or add Proofable to `~/.cursor/mcp.json`:
+        Open [proofable.me/install](https://proofable.me/install) and choose **Open in Cursor**. Or add Proofable to `~/.cursor/mcp.json`:
 
         ```json
         {
@@ -79,7 +92,7 @@
         ```
       </Accordion>
       <Accordion title="VS Code">
-        Open [proofable.me/install](https://proofable.me/install) and choose **Install in VS Code**. Or add Proofable to `.vscode/mcp.json`:
+        Open [proofable.me/install](https://proofable.me/install) and choose **Open in VS Code**. Or add Proofable to `.vscode/mcp.json`:
 
         ```json
         {
@@ -100,7 +113,7 @@
         Show my Proofable profile and current proofs.
         ```
       </Accordion>
-      <Accordion title="Any MCP client">
+      <Accordion title="Paste the config">
         Add the hosted server to the client's MCP settings:
 
         ```json

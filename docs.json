@@ -3,8 +3,8 @@
   "name": "Proofable Docs",
   "theme": "mint",
   "logo": {
-    "light": "/images/proofable-mark-256.png",
-    "dark": "/images/proofable-mark-256.png",
+    "light": "/images/proofable-mark.svg",
+    "dark": "/images/proofable-mark.svg",
     "href": "https://proofable.me"
   },
   "favicon": "/images/proofable-mark.svg",
