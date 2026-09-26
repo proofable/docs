@@ -949,7 +949,7 @@
             "type": "string",
             "format": "hostname",
             "minLength": 1,
-            "description": "Hostname to verify (TXT lookup at _neus.<domain>)."
+            "description": "Hostname to verify (TXT lookup at _proofable.<domain> or _neus.<domain>)."
           },
           "walletAddress": {
             "type": "string",

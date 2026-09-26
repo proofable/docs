@@ -15,13 +15,13 @@ icon: globe
 
 ## Flow Type
 
-Lookup. Proofable resolves DNS TXT at `_neus.<domain>` and compares it to the **account address** used for this verification (see below).
+Lookup. Proofable resolves DNS TXT at `_proofable.<domain>` (canonical) and `_neus.<domain>` (legacy, still supported) and compares the record to the **account address** used for this verification (see below).
 
 ## DNS record (what builders publish)
 
 Create a **TXT** record:
 
-- **Name / host:** `_neus` (effective lookup: `_neus.<your-domain>`, e.g. `_neus.example.com` if the apex is `example.com`).
+- **Name / host:** `_proofable` (canonical). `_neus` still verifies for existing records, so no domain has to change at once. Effective lookup: `_proofable.<your-domain>` then `_neus.<your-domain>`, e.g. `_proofable.example.com` if the apex is `example.com`.
 - **Value:** a single line starting with `wallet=` followed by the **same wallet or account address** Proofable uses when it runs this check.
 
 Supported shapes today:
