@@ -4,14 +4,14 @@ description: Pick the auth path for your caller: browser sign-in for interactive
 icon: lock
 ---
 
-Interactive MCP clients sign in through the host. Register `https://mcp.proofable.me/mcp`, click **Connect**, and finish browser sign-in. The host runs OAuth 2.0 with PKCE and can refresh the session for up to 30 days.
+Interactive MCP clients sign in through the host. Register `https://mcp.proofable.me/mcp` and finish the browser sign-in your client opens. The host runs OAuth 2.0 with PKCE and can refresh the session for up to 30 days.
 
 For servers, CI, and environments that cannot open a browser, use a durable server key instead. Both paths hit the same endpoint and the same Proofable profile.
 
 ## Sign in
 
 1. Register the hosted remote once (plugin, registry listing, or URL-only MCP config).
-2. Click **Connect** in the host MCP panel.
+2. Start the sign-in in the client's MCP panel.
 
 Optional terminal installer (writes the same URL):
 
@@ -34,7 +34,7 @@ GET https://proofable.me/.well-known/oauth-authorization-server
 → Authenticated MCP session (Bearer on protected MCP requests)
 ```
 
-`tools/list` and `ping` stay public so marketplaces can list tools. Unauthenticated `initialize` and every `tools/call` return `401` + `WWW-Authenticate` so the host shows **Connect**, stores the access token, and sends it on later calls. A GET probe on `/mcp` is not a login challenge.
+`tools/list` and `ping` stay public so marketplaces can list tools. Unauthenticated `initialize` and every `tools/call` return `401` + `WWW-Authenticate` so the host starts its own sign-in, stores the access token, and sends it on later calls. A GET probe on `/mcp` is not a login challenge.
 
 For full OAuth mechanics, see [MCP OAuth](./oauth).
 
@@ -65,13 +65,13 @@ Or paste the block into any client's MCP settings:
 }
 ```
 
-Marketplace gateways that reserve `Authorization` for their own OAuth (such as Smithery) forward the same key as `x-proofable-access-key`; the hosted MCP maps it onto the same Bearer principal. That is a transport alias, not a second credential: same `npk_*` key, same profile, same revocation path. Leave the gateway's key field empty to Connect with OAuth instead.
+Marketplace gateways that reserve `Authorization` for their own OAuth (such as Smithery) forward the same key as `x-proofable-access-key`; the hosted MCP maps it onto the same Bearer principal. That is a transport alias, not a second credential: same `npk_*` key, same profile, same revocation path. Leave the gateway's key field empty to use the host's own sign-in instead.
 
 ## Choose an auth mode
 
 | Mode | Best for |
 |------|----------|
-| **Host Connect (OAuth)** | Interactive clients: browser sign-in, no manual keys, silent refresh for 30 days |
+| **Host sign-in (OAuth)** | Interactive clients: the host opens browser sign-in, no manual keys, silent refresh for 30 days |
 | **Access key (`npk_*`)** | Servers, CI, and automation with stable environment variables. Durable and never expires |
 
 Both modes send the same `Authorization: Bearer <token>` header against the same Proofable Profile and Account. `npk_*` keys are long-lived credentials. OAuth sessions are long-lived too. The host refreshes the short-lived access token silently for up to 30 days via the `offline_access` refresh token.

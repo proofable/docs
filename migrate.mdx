@@ -32,7 +32,7 @@ npx -y @proofable/sdk doctor --live
 
 1. Replace `@neus/sdk` with `@proofable/sdk`.
 2. Run setup to register the Proofable MCP connection.
-3. Click **Connect** once, then confirm with `doctor --live` if you use the CLI.
+3. Finish the sign-in your client opens, then confirm with `doctor --live` if you use the CLI.
 4. Rename `NEUS_ACCESS_KEY` to `PROOFABLE_ACCESS_KEY` in servers or CI.
 
 If your application imports SDK names directly, use `ProofableClient` and `buildMcpHttpConfig` in place of their `Neus*` predecessors.
@@ -41,7 +41,7 @@ If your application imports SDK names directly, use `ProofableClient` and `build
 
 A `neus` entry may still point the client at the old server. Remove only that old entry, then run setup again. Do not keep both entries: one client would show two servers and could use the old workflow.
 
-If sign-in fails after the swap, do not delete stored data. Sign out, click **Connect**, and sign in again. From a terminal, run `npx -y @proofable/sdk auth`.
+If sign-in fails after the swap, do not delete stored data. Run `npx -y @proofable/sdk refresh`, then sign in again if that does not recover it.
 
 If a project still uses the old agent mount, run `proofable mount` again. Keep one Proofable connection and one current workflow skill installed.
 

@@ -89,7 +89,7 @@ Give your assistant this prompt to connect and set up in one pass:
 
 Connect this host to Proofable.
 1. Install Proofable (plugin, or add https://mcp.proofable.me/mcp). Do not add a second `proofable` entry.
-2. Tell me to click Connect if I am not signed in.
+2. Tell me to sign in if I am not signed in.
 3. Ask for my Proofable profile and current proofs. Then show what my agents are allowed to do. Before spend, publish, secrets, or a sensitive tool, check current proof first. Summarize as Passed, Action needed, or Blocked.
 4. If I want to sell: open payouts at https://proofable.me/profile?tab=credits, then create a listing at https://proofable.me/profile/portals/new.
 5. If I give you a proof ID, read that record. Do not invent proof IDs.
@@ -109,8 +109,8 @@ This revokes the stored OAuth token. For an access key, add `--access-key <key>`
 ## Troubleshooting
 
 - **No tools appear.** Restart the MCP client after you register the endpoint.
-- **No Connect button, or Unauthorized with Logout visible.** Click **Logout**, then **Connect**.
-- **The host has no Connect button.** Use the host's own MCP sign-in after you register the endpoint.
+- **Session dropped or Unauthorized.** Run `npx -y @proofable/sdk refresh` first: it reuses the saved refresh token with no browser round trip. Sign out and sign in again only if that fails.
+- **The host has no Connect button.** Use the host's own MCP sign-in after you register the endpoint. Only Claude connectors and Devin render a control called Connect.
 - **Two Proofable servers.** A marketplace plugin and a manual config both registered Proofable. Remove the extra `proofable` entry. If you used the CLI, run `npx -y @proofable/sdk setup` again to drop the leftover entry.
 - **Confirm the connection.** Run `npx -y @proofable/sdk doctor --live`.
 - **Agent permission missing.** Create or refresh the agent permission on Proofable, then run `mount` again.
