@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/changelog).
 
+## [Unreleased]
+
+### Added
+
+- **Eligibility clause in the Terms of Use.** Section 4 states the minimum age and the capacity to contract. The Terms had no eligibility or age statement before.
+
+### Fixed
+
+- **Terms of Use: wrong legal entity in the limitation of liability.** "Proofable NETWORK, INC." corrected to NEUS Network, Inc.
+- **Terms of Use: the privacy section contradicted the Privacy Policy.** Section 6 now points at the Privacy Policy as authoritative and lists the categories it documents.
+- **Privacy Policy: retention bound.** Records held only for operating, securing, or auditing the Service are removed within 24 months of account closure, outside records kept by law, by an open dispute, or on a public network.
+
 ## [0.1.2] - 2026-09-24
 
 ### Added
