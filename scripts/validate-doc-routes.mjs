@@ -127,8 +127,14 @@ for (const redirect of redirects) {
 }
 
 const installRedirect = redirects.find(row => row.source === '/install');
-if (installRedirect?.destination !== '/mcp/setup') {
-  errors.push('/install must redirect to MCP setup');
+if (installRedirect?.destination !== 'https://proofable.me/install') {
+  errors.push('/install must route readers to the Proofable install guide');
+}
+if (redirectSources.has('/integrations/server')) {
+  errors.push('/integrations/server must remain directly reachable');
+}
+if (redirects.find(row => row.source === '/integrations')?.destination !== '/integrations/server') {
+  errors.push('/integrations must route to the server integration guide');
 }
 const quickstartRedirect = redirects.find(row => row.source === '/quickstart');
 if (quickstartRedirect?.destination !== '/') {

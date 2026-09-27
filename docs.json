@@ -206,11 +206,7 @@
     },
     {
       "source": "/integrations",
-      "destination": "/"
-    },
-    {
-      "source": "/integrations/:path*",
-      "destination": "/"
+      "destination": "/integrations/server"
     },
     {
       "source": "/choose-an-integration-path",
@@ -570,7 +566,7 @@
     },
     {
       "source": "/install",
-      "destination": "/mcp/setup"
+      "destination": "https://proofable.me/install"
     },
     {
       "source": "/mcp/ide-plugin",
