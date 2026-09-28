@@ -5,10 +5,10 @@ description: "Add the Proofable MCP endpoint to any MCP client, then connect and
 icon: plug
 ---
 
-Paste this into your AI tool, or choose your client below. Your tool opens sign-in when it needs your account.
+Give your AI the existing [Proofable setup skill](https://raw.githubusercontent.com/proofable/mcp/main/skills/proofable-setup/SKILL.md), or choose your client below.
 
-<Prompt description="Install Proofable in this tool and help me complete my first task." actions={["copy", "cursor"]}>
-Set up Proofable in this tool using https://docs.proofable.me/mcp/setup. Use its supported plugin or one-click install when available. In a terminal-capable tool, use npx -y @proofable/sdk setup for the MCP server and workflow skill. Reuse an existing connection. Complete the sign-in this tool opens, then load my profile once. Ask what I want to do and help me finish one useful task, such as reviewing GitHub code or summarizing Gmail. Connect only the app that task needs, with my approval, or let me paste context. If I bring an existing agent, guide its import and let me review before registering it. Ask before granting access, sending, publishing, or spending. Report what actually worked and any action I still need to take.
+<Prompt description="Set up Proofable" actions={["copy", "cursor"]}>
+https://raw.githubusercontent.com/proofable/mcp/main/skills/proofable-setup/SKILL.md
 </Prompt>
 
 ## Connect your client
@@ -17,19 +17,7 @@ import ConnectHosts from '/snippets/connect-hosts.mdx';
 
 <ConnectHosts />
 
-## Do your first task
-
-Ask your AI for the outcome you want. It can guide the next connection or use context you paste.
-
-```text
-Review my GitHub pull requests for bugs and risky changes. Help me connect GitHub if needed, with my approval, or let me paste a diff.
-```
-
-```text
-Summarize Gmail messages that need my attention and draft replies for my review. Help me connect Gmail if needed. Do not send anything.
-```
-
-To bring an agent you already use, follow [Import an agent](/agents/import). To choose a starter, [create an agent on your profile](https://proofable.me/profile/agents/new). An agent identity is optional for using your profile directly.
+To bring an agent you already use, follow [Import an agent](/agents/import).
 
 ## From a terminal
 
@@ -40,6 +28,10 @@ npx -y @proofable/sdk setup
 The CLI registers the hosted server and installs the workflow skill for supported clients. It reuses existing plugin entries. [CLI reference](/sdks/cli)
 
 ## Building an app
+
+<Prompt description="Integrate Proofable" actions={["copy", "cursor"]}>
+https://raw.githubusercontent.com/proofable/mcp/main/skills/proofable-integrate/SKILL.md
+</Prompt>
 
 Use the [JavaScript SDK](/sdks/javascript), [HTTP API](/api/overview), or [hosted verification](/verification/hosted) for your product. Servers and CI use [access keys](/deployment/access-keys).
 
