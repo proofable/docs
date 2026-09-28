@@ -7,114 +7,41 @@ icon: plug
 
 import ConnectHosts from '/snippets/connect-hosts.mdx';
 
-One endpoint works everywhere. The hosts below are shortcuts; anything else that speaks MCP uses the same URL.
+Give your AI the existing [Proofable setup skill](https://raw.githubusercontent.com/proofable/mcp/main/skills/proofable-setup/SKILL.md), or choose your client below.
 
-Interactive clients sign in with OAuth. Servers and CI use an [access key](/deployment/access-keys). Both use `https://mcp.proofable.me/mcp` and the same profile.
+<Prompt description="Set up Proofable" actions={["copy", "cursor"]}>
+https://raw.githubusercontent.com/proofable/mcp/main/skills/proofable-setup/SKILL.md
+</Prompt>
 
 ## Connect your client
 
 <ConnectHosts />
 
-Proofable answers **Passed**, **Action needed**, or **Blocked**.
+To bring an agent you already use, follow [Import an agent](/agents/import).
 
 ## From a terminal
-
-The CLI writes the same entry for any tool, plus the Proofable workflow skill:
 
 ```bash
 npx -y @proofable/sdk setup
 ```
 
-With the CLI installed globally, run `proofable setup`. If a Proofable plugin is already installed, setup does not add a second `proofable` entry. [CLI reference](/sdks/cli)
+The CLI registers the hosted server and installs the workflow skill for supported clients. It reuses existing plugin entries. [CLI reference](/sdks/cli)
 
-## After you connect
+## Building an app
 
-### Show your profile
+<Prompt description="Integrate Proofable" actions={["copy", "cursor"]}>
+https://raw.githubusercontent.com/proofable/mcp/main/skills/proofable-integrate/SKILL.md
+</Prompt>
 
-```text
-Show my Proofable profile and current proofs.
-```
-
-This loads the signed-in profile and current proofs. Do not fetch every proof as the first step.
-
-### Load an existing agent
-
-```text
-Show what my agents are allowed to do.
-```
-
-This loads agents on the signed-in profile. Create or import one if you do not have one yet.
-
-```bash
-npx -y @proofable/sdk mount <agentId> --apply cursor
-```
-
-`--apply` accepts `cursor`, `claude`, `codex`, `hermes`, `openclaw`, or `opencode`. VS Code uses `--apply cursor`. [Load agent context](/agents/runtime-mount)
-
-### Create an agent
-
-```text
-Create or import an agent on my Proofable profile. Set spend and action limits. Then confirm it is ready.
-```
-
-This calls `proofable_agent_create`, then `proofable_agent_link` to confirm. The agent lives on your signed-in profile unless you ask for a dedicated spend account.
-
-### Read a proof
-
-```text
-Read my current proofs. If I give you a proof ID, fetch that record.
-```
-
-This calls `proofable_proofs_get`. Use it when you need a specific record, not as the first action after Connect. Use `proofable_proofs_check` only for yes/no eligibility.
-
-### Link apps
-
-Open **Connections** on [proofable.me](https://proofable.me) to link the apps your agents use. [Connections](/connections)
-
-### Sell from your assistant
-
-1. For paid listings, set up payouts under [Payouts](https://proofable.me/profile?tab=credits).
-2. [Create a listing](https://proofable.me/profile/portals/new). Name it, say what buyers get, and set the price.
-3. Add what buyers must verify, and set a price or keep it free.
-4. Set discovery to **Listed**, then share the link.
-
-To embed a gate in your own app, see [Sell access with one gate](/gates/sell-access).
-
-## Paste this prompt
-
-Give your assistant this prompt to connect and set up in one pass:
-
-```text
-# Proofable connect
-
-Connect this host to Proofable.
-1. Install Proofable (plugin, or add https://mcp.proofable.me/mcp). Do not add a second `proofable` entry.
-2. Tell me to sign in if I am not signed in.
-3. Ask for my Proofable profile and current proofs. Then show what my agents are allowed to do. Before spend, publish, secrets, or a sensitive tool, check current proof first. Summarize as Passed, Action needed, or Blocked.
-4. If I want to sell: open payouts at https://proofable.me/profile?tab=credits, then create a listing at https://proofable.me/profile/portals/new.
-5. If I give you a proof ID, read that record. Do not invent proof IDs.
-
-Endpoint: https://mcp.proofable.me/mcp
-Docs: https://docs.proofable.me/mcp/setup
-```
-
-## Disconnect
-
-```bash
-npx -y @proofable/sdk disconnect
-```
-
-This revokes the stored OAuth token. For an access key, add `--access-key <key>` to revoke the key and remove it from local MCP config.
+Use the [JavaScript SDK](/sdks/javascript), [HTTP API](/api/overview), or [hosted verification](/verification/hosted) for your product. Servers and CI use [access keys](/deployment/access-keys).
 
 ## Troubleshooting
 
-- **No tools appear.** Restart the MCP client after you register the endpoint.
-- **Session dropped or Unauthorized.** Run `npx -y @proofable/sdk refresh` first: it reuses the saved refresh token with no browser round trip. Sign out and sign in again only if that fails.
-- **The host has no Connect button.** Use the host's own MCP sign-in after you register the endpoint. Only Claude connectors and Devin render a control called Connect.
-- **Two Proofable servers.** A marketplace plugin and a manual config both registered Proofable. Remove the extra `proofable` entry. If you used the CLI, run `npx -y @proofable/sdk setup` again to drop the leftover entry.
-- **Confirm the connection.** Run `npx -y @proofable/sdk doctor --live`.
-- **Agent permission missing.** Create or refresh the agent permission on Proofable, then run `mount` again.
-- **Search-only endpoint.** Use `https://mcp.proofable.me/mcp`. `https://docs.proofable.me/mcp` only searches these docs.
-- **Upgrading from `@neus`.** [Migrate from @neus](/migrate) has the rename map and fixes for old setups.
+- No tools appear. Restart your client after adding Proofable.
+- Session expired. Run `npx -y @proofable/sdk refresh` before signing in again.
+- Confirm the connection. Run `npx -y @proofable/sdk doctor --live`.
+- Two Proofable entries. Keep one plugin or manual server entry. Running setup again removes a leftover entry when the plugin already supplies it.
+- Need agent context in a project. Run `npx -y @proofable/sdk mount <agentId> --apply <host>`. See [Load agent context](/agents/runtime-mount).
+- Search-only endpoint. Use `https://mcp.proofable.me/mcp`. The docs MCP endpoint only searches documentation.
 
-[MCP overview](/mcp/overview) lists every tool. To run an agent on your own infrastructure, see [Private cloud](/deployment/private-cloud).
+To disconnect, run `npx -y @proofable/sdk disconnect`. [MCP tools](/mcp/tools) and [authentication](/mcp/auth) cover the full reference.
