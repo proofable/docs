@@ -565,10 +565,6 @@
       "destination": "/integrations/server"
     },
     {
-      "source": "/install",
-      "destination": "https://proofable.me/install"
-    },
-    {
       "source": "/mcp/ide-plugin",
       "destination": "/mcp/setup"
     },
@@ -711,6 +707,11 @@
     {
       "source": "/sdks/security",
       "destination": "/security"
+    },
+    {
+      "source": "/install",
+      "destination": "/mcp/setup",
+      "permanent": true
     }
   ],
   "contextual": {
