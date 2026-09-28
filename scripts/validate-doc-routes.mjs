@@ -127,8 +127,8 @@ for (const redirect of redirects) {
 }
 
 const installRedirect = redirects.find(row => row.source === '/install');
-if (installRedirect?.destination !== 'https://proofable.me/install') {
-  errors.push('/install must route readers to the Proofable install guide');
+if (installRedirect?.destination !== '/mcp/setup') {
+  errors.push('/install must route readers directly to the public MCP setup docs');
 }
 if (redirectSources.has('/integrations/server')) {
   errors.push('/integrations/server must remain directly reachable');
