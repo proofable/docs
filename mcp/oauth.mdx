@@ -51,12 +51,14 @@ GET https://mcp.proofable.me/.well-known/oauth-protected-resource/mcp
 }
 ```
 
-`tools/list` and `ping` stay public for marketplace listing. Unauthenticated `initialize` and every `tools/call` return:
+`https://mcp.proofable.me/mcp` is public-first: anonymous `initialize` succeeds for marketplaces and anonymous API users. Protected operations carry the challenge:
 
 ```http
 HTTP/1.1 401 Unauthorized
 WWW-Authenticate: Bearer resource_metadata="https://mcp.proofable.me/mcp/.well-known/oauth-protected-resource", scope="neus:core neus:profile neus:secrets"
 ```
+
+Use the auth-first lane `https://mcp.proofable.me/mcp/oauth` when the client should meet the challenge on `initialize` itself — the same `401` + `WWW-Authenticate` response, served for every method without a token, so interactive installs start DCR + PKCE immediately.
 
 ### Authorization server metadata
 
