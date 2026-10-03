@@ -13,6 +13,7 @@
     "lint:routes": "node scripts/validate-doc-routes.mjs",
     "lint:copy": "node scripts/validate-doc-copy.mjs",
     "lint:openapi": "npx --yes @redocly/cli@2.14.1 lint openapi/public-api.json",
+    "whitepaper:pdf": "node scripts/whitepaper-to-pdf.mjs",
     "validate": "npm run lint:markdown && npm run lint:routes && npm run lint:copy && npm run lint:openapi"
   }
 }

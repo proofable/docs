@@ -1,117 +1,197 @@
 ---
-title: Technical Whitepaper
-description: "How a verification result becomes a portable proof another app can check, and what the format guarantees."
+title: "The Trust Harness for AI"
+description: "Portable proof, authorization, and verifiable receipts for people and AI agents."
 icon: book-open
 sidebarTitle: Whitepaper
 ---
 
-## Verification results that can be reused
+**Architecture and Trust Model · Version 1.0 · October 2026**
 
-Architecture and Trust Model. Version 1.0, August 2026.
-
-**Author:** Christopher Leal, Founder and Protocol Architect, NEUS Network, Inc.
+**Author:** Christopher Leal, Founder & Protocol Architect, Proofable  
+**Published by:** Proofable  
+**Legal entity:** NEUS Network, Inc.  
 **Contact:** chris@proofable.me
 
 ## Abstract
 
-Trust decisions still reset at application boundaries. Users repeatedly prove control of accounts, domains, wallets, and assets, while AI agents often operate with credentials that say little about what they are allowed to do at the moment of action.
+Trust decisions still reset at application boundaries.
 
-Proofable turns completed identity, ownership, risk, eligibility, and authority checks into portable proofs that other systems can evaluate and reuse under their own policy. A gate evaluates those proofs immediately before a protected action. Missing, stale, expired, revoked, or out-of-scope proofs stop the action or trigger the required verification.
+People repeatedly prove control of accounts, domains, wallets, credentials, and assets. AI agents increasingly act across multiple tools and systems using credentials that reveal little about who authorized them, what they may do, or whether that authority is still current.
 
-Proofs are private and offchain by default. [CAIP-380](/learn/standards/caip-380) supports signed wallet verification requests, while Proofable stores verifier results and lifecycle state separately. This separates request integrity from verification outcomes and current authority.
+Proofable turns completed identity, ownership, risk, eligibility, and authority checks into **portable proofs** that other systems can evaluate under their own policy.
 
-## 1. Problem and design goals
+Before a protected action, a Proofable gate evaluates the relevant proofs, their current lifecycle state, and the authority attached to the request. If required proof is missing, stale, expired, revoked, or outside its permitted scope, the action is denied or routed through the required verification or approval flow.
 
-Authentication can identify a session. It does not carry a completed trust decision into the next system or define current authority for a sensitive action.
+Proofs are private and offchain by default. Proofable separates request integrity, verification outcome, lifecycle state, and current authority so that a valid historical proof never becomes permanent permission.
 
-Users and applications repeatedly rebuild checks for identity, ownership, eligibility, and risk. Agents add a more urgent problem: they are commonly given credentials that are broader than the action they need to perform. Possession of a session or API key says little about who approved a payout, which resource a grant covers, what limits apply, or whether approval is still current.
+The result is a reusable trust layer for systems that need to answer four questions at the moment software acts:
 
-Proofable treats trust as a current decision about a subject, an action, and a resource. It applies the same resource-centered principle used in zero-trust architectures: authority is not inferred from network location or possession of a broad credential. It is evaluated for the protected resource under current policy [10, 11].
+**Who is acting?  
+Who authorized them?  
+What are they allowed to do?  
+What actually happened?**
+
+## 1. Problem: trust resets at application boundaries
+
+Authentication can identify a session.
+
+It does not carry a completed trust decision into the next system, and it does not establish current authority for a sensitive action.
+
+People and applications repeatedly rebuild checks for identity, ownership, eligibility, control, and risk. Agents make the problem more consequential because they are often given credentials broader than the action they need to perform.
+
+Possession of a session or API key says little about:
+
+- who approved a payout;
+- which resource a grant applies to;
+- what limits govern the action;
+- whether the authority has been revoked;
+- or whether the approval is still current.
+
+Proofable treats trust as a current decision about a **subject, action, resource, and policy**.
+
+It follows the same resource-centered principle used in zero-trust architectures: authority is not inferred from network location or possession of a broad credential. It is evaluated for the protected resource under current policy [10, 11].
 
 | Principle | Meaning |
 | --- | --- |
-| Reuse first | Look for an acceptable current proof before starting another check. |
+| Reuse first | Use an acceptable current proof before repeating a verification. |
 | Local policy | Each relying party decides which issuers, verifiers, freshness, scope, and assurance it accepts. |
 | Enforce at action time | Evaluate trust immediately before the protected action. |
 | Private by default | Routine proof creation and evaluation do not require public disclosure or a blockchain transaction. |
 
-## 2. Trust model and roles
+## 2. Trust model
 
-Proofable reduces the flow to five steps: resolve, check, verify, evaluate, then act or stop.
+Proofable reduces the enforcement path to five steps:
+
+**Resolve → Check → Verify → Evaluate → Act or stop**
 
 <Frame caption="**Figure 1.** Reuse accepted current proofs, verify only missing or stale requirements, and enforce policy before execution.">
   <img src="/images/whitepaper/figure-1-reuse-lifecycle.svg" alt="Reuse-first verification lifecycle: resolve, check current receipts, verify only missing or stale checks, evaluate policy, then act or stop." />
 </Frame>
 
-A proof can be reused only when the relying party accepts its source and it still satisfies current policy. Proofable does not create universal trust. It provides a common proof model that different systems can evaluate under their own policy. Related credential standards also separate issuers from verifiers; Proofable preserves that separation of roles [9].
+A proof is reusable only when the relying party accepts its source and it still satisfies current policy.
+
+Proofable does not create universal trust. It provides a common proof model that different systems can evaluate under their own requirements.
+
+Related credential standards separate issuers from verifiers. Proofable preserves that separation while adding lifecycle state, local policy, and enforcement at the protected boundary [9].
 
 | Role | Responsibility |
 | --- | --- |
 | Subject | The human, organization, account, agent, wallet, domain, asset, or other object the proof describes. |
-| Verifier | Runs a defined check and returns a result limited to that check. |
-| Issuer | Attributes the proof to the service or verification path that produced it. |
-| Controller | Grants authority to an agent when delegation is required. |
-| Relying party | Chooses what it trusts and which policy must hold before an action. |
+| Verifier | Performs a defined check and returns a result limited to that check. |
+| Issuer | Attributes the resulting proof to the service or verification path that produced it. |
+| Controller | Grants scoped authority to an agent when delegation is required. |
+| Relying party | Defines which proofs it accepts and which policy must hold before an action. |
 | Gate | Evaluates current proofs and policy at the protected boundary. |
 
 <Frame caption="**Figure 2.** Public interfaces feed one verification engine. Gates evaluate current proof state at the protected boundary.">
   <img src="/images/whitepaper/figure-2-system-architecture.svg" alt="Proofable system architecture: integration surfaces feed the verification engine, which produces saved results that gates evaluate before protected actions." />
 </Frame>
 
-The protected system must enforce the gate on the server or inside the trusted runtime. Any path that bypasses the gate bypasses the protection.
+The protected system must enforce the gate on the server or inside the trusted runtime.
+
+**Any execution path that bypasses the gate bypasses the protection.**
 
 ## 3. Portable proofs
 
-A Proofable proof is a saved verification result that another accepted integration can evaluate without rerunning the original check. It records what was checked, the subject it applies to, the outcome, the issuer, current status, expiration, visibility, and any scope or constraints needed to evaluate the result.
+A Proofable proof is a saved verification result that another accepted integration can evaluate without repeating the original check.
 
-Portability means the result can move across integrations that choose to accept it. It does not mean every system must trust the issuer, that evidence becomes public, or that a historical copy remains valid forever.
+A proof records:
+
+- what was checked;
+- which subject it applies to;
+- the verification outcome;
+- the issuer;
+- current lifecycle state;
+- expiration;
+- visibility;
+- and any scope or constraints required to interpret it.
+
+Portability means the result can move across integrations that choose to accept it.
+
+It does **not** mean every system must trust the issuer, that evidence becomes public, or that a historical success remains valid forever.
 
 | State | Current use |
 | --- | --- |
-| Pending | Not acceptable until the required check has completed successfully. |
-| Passed and active | May be acceptable if issuer, subject, freshness, scope, and policy also pass. |
+| Pending | Not acceptable until the required verification completes successfully. |
+| Passed and active | May be accepted if issuer, subject, freshness, scope, and policy also pass. |
 | Failed | Does not satisfy a requirement that expects a passing result. |
-| Expired or revoked | Do not accept for future actions, even if the proof passed earlier. |
+| Expired or revoked | Must not authorize future actions, even if the proof previously passed. |
 
-Outcome and lifecycle are separate. A prior success never overrides expiry or revocation. High-value actions should check current status close to execution so that a decision does not rely on stale authority.
+Verification outcome and lifecycle state are separate.
+
+A prior success never overrides expiration or revocation.
+
+High-value actions should evaluate current state close to execution so that authority is not inferred from stale evidence.
 
 ### Privacy and anchoring
 
-Proofs are private and offchain by default. Public proof pages are a disclosure choice, not a higher assurance level. Optional onchain anchoring can create a durable reference, but the anchor is not the verifier result and does not replace a current status check.
+Proofs are **private and offchain by default**.
+
+A public proof page is a disclosure choice, not a higher assurance level.
+
+Optional onchain anchoring can provide a durable reference, but the anchor is not the verification result and does not replace a current status check.
 
 ## 4. Agent identity and authority
 
-An agent needs two different records: one that identifies the agent and one that states what the agent may do. Combining them would turn descriptive capability into implied permission.
+An agent needs two distinct records:
+
+1. **Identity** — what the agent is and who controls it.
+2. **Authority** — what that controller has permitted it to do.
+
+Combining the two would turn capability into implied permission.
 
 <Frame caption="**Figure 3.** Agent identity and agent authority are separate. Sensitive actions require current, applicable delegation at runtime.">
   <img src="/images/whitepaper/figure-3-agent-authority.svg" alt="Agent identity and authority model: agent identity receipt describes the agent, controller-signed delegation receipt grants specific actions and limits, runtime gate evaluates both before a protected tool call." />
 </Frame>
 
-Capabilities describe what an agent can do. Delegation determines what it is allowed to do. A payment-capable agent, for example, may still have no authority to pay a particular recipient or may be limited to a specific amount, network, resource, or time window.
+Capabilities describe what an agent **can** do.
+
+Delegation determines what it is **allowed** to do.
+
+A payment-capable agent, for example, may have no authority to pay a particular recipient, or its authority may be limited by amount, asset, network, resource, environment, or time.
 
 ### Delegation boundaries
 
-- Bind the controller to the exact agent account that receives authority.
-- State allowed actions and explicit denied actions. A denial takes precedence over a general allowance.
+- Bind the controller to the exact agent receiving authority.
+- State allowed actions and explicit denied actions.
+- Give explicit denial precedence over broader allowance.
 - Scope authority to the relevant resource, environment, payment type, or operation.
-- Apply spend limits and expiry for payments and other high-impact actions.
-- Require human approval when policy calls for an additional approval step.
+- Apply spend limits and expiration to payments and other high-impact actions.
+- Require human approval where policy demands an additional decision.
 
-Delegation narrows what an agent is allowed to affect. It does not guarantee safe reasoning. Sandboxing, output validation, rate limits, secret handling, and human approval remain necessary controls around the runtime.
+Delegation narrows what an agent may affect.
 
-## 5. Gate enforcement and security considerations
+It does not guarantee safe reasoning.
 
-A gate turns current proof state into an enforceable decision at the point where value, data, or infrastructure can change. The decision is local: two applications can evaluate the same proof differently because they accept different issuers, freshness windows, scopes, or risk levels.
+Sandboxing, output validation, rate limits, secret handling, and human approval remain necessary controls around the runtime.
+
+## 5. Enforcement and security
+
+A gate turns current proof state into an enforceable decision at the point where **data, value, permissions, or infrastructure can change**.
+
+The decision remains local.
+
+Two applications may evaluate the same proof differently because they accept different issuers, freshness windows, scopes, assurance levels, or risk thresholds.
 
 <Frame caption="**Figure 4.** Gate evaluation applies relying-party policy to current proof state before the protected action is allowed, constrained, approved, or denied.">
   <img src="/images/whitepaper/figure-4-gate-evaluation.svg" alt="Gate evaluation pipeline: resolve policy and receipts, validate bindings and current lifecycle state, apply scope and constraints, then allow, require approval, or deny before execution." />
 </Frame>
 
-High-value decisions should bind policy to the exact action parameters. A payment can bind amount, asset, destination, and network. A deployment can bind repository, artifact, environment, and operation. This reduces the gap between what was approved and what actually runs.
+High-value decisions should bind authority to the exact action parameters.
 
-### Security considerations
+A payment can bind:
 
-The security model depends on four explicit assumptions:
+**amount → asset → destination → network**
+
+A deployment can bind:
+
+**repository → artifact → environment → operation**
+
+This reduces the gap between what was approved and what actually executes.
+
+### Security assumptions
+
+Following the security-considerations guidance in RFC 3552 [13], Proofable makes its core assumptions explicit:
 
 - The relying party controls which issuers and verifiers it accepts.
 - The protected action cannot execute through a path that bypasses the gate.
@@ -120,87 +200,159 @@ The security model depends on four explicit assumptions:
 
 ### Threats addressed
 
-- **Replay and stale state.** Enforce freshness and current status. Expired or revoked proofs must not authorize a new action.
+- **Replay and stale state.** Enforce freshness and current lifecycle state. Expired or revoked proofs cannot authorize a new action.
 - **Subject substitution.** Bind each proof to the actor and resource involved in the current action.
 - **Scope escalation.** Authority for one action, resource, destination, or amount does not imply broader authority.
-- **Gate bypass.** Do not expose an alternate path to the protected action that avoids evaluation.
-- **Verifier or issuer compromise.** Assurance is limited by the sources the relying party chooses to trust.
-- **Availability failure.** If required current status cannot be established, high-risk actions should fail closed.
+- **Gate bypass.** Do not expose an alternate execution path that avoids policy evaluation.
+- **Verifier or issuer compromise.** Assurance is bounded by the sources the relying party chooses to trust.
+- **Availability failure.** When required current state cannot be established, high-risk actions should fail closed.
 
 ### Out of scope
 
-Proofable does not replace authentication, endpoint authorization, payment settlement, runtime sandboxing, secrets management, rate limiting, or observability. It does not guarantee that an agent will reason safely. Integrators remain responsible for those controls and for ensuring that protected actions cannot bypass the gate.
+Proofable does not replace:
+
+- authentication;
+- endpoint authorization;
+- payment settlement;
+- runtime sandboxing;
+- secrets management;
+- rate limiting;
+- or observability.
+
+It does not guarantee that an agent will reason safely.
+
+Integrators remain responsible for those controls and for ensuring that protected actions cannot bypass the gate.
 
 ## 6. Standards and interoperability
 
-Proofable uses existing standards for account identifiers, signatures, agent discovery, tool access, and payments rather than redefining those layers.
+Proofable uses existing standards for account identifiers, signatures, agent discovery, tool access, and payments instead of redefining those layers.
 
 ### CAIP-380 Portable Proof
 
-[CAIP-380](/learn/standards/caip-380) is a Chain Agnostic Improvement Proposal in Draft status [1]. It defines a canonical signed envelope for wallet-based verification requests. Proofable implements the envelope for applicable requests and stores the verifier result separately as a Proofable proof.
+[CAIP-380](/learn/standards/caip-380) defines a canonical signed envelope for portable wallet verification requests [1].
 
-For CAIP-380 requests, `qHash` is a deterministic SHAKE-256 hash of the canonical request [1, 12]. Proofable can use the same value to correlate that request with its stored proof. `qHash` establishes correlation, not the verifier outcome. A valid request signature does not prove that a verifier ran or that a stored proof is still active.
+Proofable implements that envelope for applicable requests while storing the resulting verifier outcome separately as a Proofable proof.
 
-<Frame caption="**Figure 5.** `qHash` can correlate a CAIP-380 signed request with a Proofable proof, but request integrity and verifier outcome remain separate claims.">
+For CAIP-380 requests, `qHash` is a deterministic SHAKE-256 hash of the canonical request [1, 12].
+
+Proofable can use that value to correlate the signed request with the stored proof.
+
+`qHash` proves correlation.
+
+It does **not** prove the verifier outcome.
+
+Likewise, a valid request signature proves request integrity; it does not prove that verification succeeded or that a previously issued proof remains active.
+
+<Frame caption="**Figure 5.** `qHash` can correlate a CAIP-380 signed request with a Proofable proof, while request integrity and verifier outcome remain separate claims.">
   <img src="/images/whitepaper/figure-5-envelope-and-receipt.svg" alt="CAIP-380 request envelope and Proofable proof: the signed envelope proves request integrity, the Proofable proof records the verifier outcome and lifecycle state, qHash correlates them but does not prove the result by itself." />
 </Frame>
 
-CAIP-380 uses CAIP-2 and CAIP-10 for chain and account identifiers [1-4]. Signing follows the chain's native scheme. The envelope accepts any CAIP-2 namespace. Detailed canonicalization and validation rules remain in the CAIP and implementation documentation.
+CAIP-380 uses CAIP-2 and CAIP-10 for chain and account identifiers [1–4].
+
+Signing follows the chain's native scheme. The envelope accepts any CAIP-2 namespace.
+
+Detailed canonicalization and validation rules remain in the CAIP and implementation documentation.
 
 | Protocol | Role beside Proofable |
 | --- | --- |
 | CAIP-2 and CAIP-10 | Chain and account identifiers for cross-chain bindings [2]. |
 | CAIP-380 | Signed request envelope for applicable wallet verification [1]. |
-| MCP | Tool and context interface where proofs can be checked before sensitive actions [5]. |
-| A2A | Agent discovery, authentication, and interaction surface. Proofable can expose agent cards with proof context [6]. |
-| ERC-8004 | Draft agent identity, reputation, and validation registry standard. Proofable can expose compatible discovery data while retaining its own proof and authority model [7]. |
-| x402 | HTTP-native payment challenge and settlement. Proofable authority remains separate from settlement and can be checked before payment [8]. |
+| MCP | Tool and context interface where Proofable policy can be evaluated before sensitive actions [5]. |
+| A2A | Agent discovery and interaction surface where Proofable identity and proof context can accompany an agent [6]. |
+| ERC-8004 | Agent identity, reputation, and validation registry model that can coexist with Proofable proof and authority records [7]. |
+| x402 | HTTP-native payment challenge and settlement layer. Proofable authority remains separate and can be evaluated before settlement [8]. |
 
-These protocols solve different problems. An authenticated connection, discovery card, or payment rail is not proof of current authority. The relying party still evaluates accepted proofs and local policy before the protected action.
+These protocols solve different problems.
 
-See [Standards & interoperability](/learn/standards) for the current list and links.
+An authenticated connection, discovery record, or payment rail does not establish current authority by itself.
+
+The relying party still evaluates accepted proofs and local policy before allowing the protected action.
+
+See [Standards & interoperability](/learn/standards) for current implementation details and references.
 
 ## 7. Applications and implementation
 
-The same proof and gate model applies across browser flows, backend services, agent runtimes, and payment boundaries.
+The same proof-and-gate model applies across browser flows, backend services, agent runtimes, marketplaces, and payment boundaries.
 
-- **Agent actions.** Check agent identity and scoped delegation before a tool call, write, deployment, payment, or private data access.
-- **Marketplace and partner access.** Combine ownership, risk, or eligibility proofs at the protected boundary and reuse them where the relying party accepts them.
-- **Organization and domain control.** Use domain, organization, account, and wallet proofs before partner handoff or sensitive API writes.
-- **Payments.** Evaluate identity, delegation, amount, asset, destination, and network before the settlement flow proceeds.
+### Agent actions
+
+Evaluate agent identity and scoped delegation before a tool call, write, deployment, payment, or private-data access.
+
+### Marketplace and partner access
+
+Combine ownership, risk, identity, or eligibility proofs at the protected boundary and reuse them wherever the relying party accepts them.
+
+### Organization and domain control
+
+Use domain, organization, account, and wallet proofs before partner handoff, privileged configuration changes, or sensitive API writes.
+
+### Payments
+
+Evaluate identity, delegation, amount, asset, destination, and network before settlement proceeds.
 
 ### Implementation and stewardship
 
-NEUS Network, Inc. develops and operates the hosted Proofable trust service and maintains its public developer interfaces and implementation. Open standards used by Proofable remain governed through their respective standards processes. The live verifier catalog, schemas, API behavior, and SDK methods are maintained in the Proofable documentation and public repository.
+**Proofable** is developed and operated by **NEUS Network, Inc.**
 
-## Conclusion
+Proofable maintains the hosted trust service, developer platform, SDK, MCP server, APIs, and implementation documentation.
 
-Proofable separates proof from policy and identity from authority. It does not require applications to share one trust policy; it gives them a common proof model and a common point of enforcement. Completed checks can be reused where accepted, while current authority is evaluated at the moment an action matters. For agents, that creates a narrow, revocable path from identity to delegated authority to execution without treating login, capability, or payment as permission.
+Open standards used by Proofable remain governed through their respective standards processes.
 
-### Implementation resources
+The live verifier catalog, proof schemas, API behavior, and SDK interfaces are maintained in Proofable's documentation and public repositories.
+
+## Conclusion: trust that travels
+
+Proofable separates:
+
+**proof from policy;  
+identity from authority;  
+capability from permission;  
+request integrity from verification outcome.**
+
+Applications do not need to share one universal trust policy.
+
+They need a common way to carry verifiable facts and evaluate them under local policy when an action matters.
+
+For people, that means completed verification does not need to reset at every application boundary.
+
+For agents, it creates a narrow and revocable path from:
+
+**identity → delegated authority → execution → receipt**
+
+without treating login, capability, or payment as permission.
+
+The model, runtime, application, or chain can change.
+
+The trust record can persist.
+
+**Trust should travel.**
+
+## Implementation resources
 
 - Platform: [proofable.me](https://proofable.me)
 - Documentation: [docs.proofable.me](https://docs.proofable.me)
-- Public repositories: [proofable/sdk](https://github.com/proofable/sdk), [proofable/mcp](https://github.com/proofable/mcp), [proofable/docs](https://github.com/proofable/docs)
-- Trust Center: [smart-contract audit](https://proofable.me/trust-center#smart-contract-audit)
+- SDK: [proofable/sdk](https://github.com/proofable/sdk)
+- MCP: [proofable/mcp](https://github.com/proofable/mcp)
+- Documentation repository: [proofable/docs](https://github.com/proofable/docs)
+- Trust Center: [proofable.me/trust-center](https://proofable.me/trust-center)
 
 ## References
 
 ### Specifications and standards
 
-- **[1]** Chain Agnostic Improvement Proposals. [CAIP-380: Portable Proof](https://standards.chainagnostic.org/CAIPs/caip-380). Status: Draft.
+- **[1]** Chain Agnostic Improvement Proposals. [CAIP-380: Portable Proof](https://standards.chainagnostic.org/CAIPs/caip-380).
 - **[2]** Chain Agnostic Improvement Proposals. CAIP-2: Blockchain ID Specification; CAIP-10: Account ID Specification.
 - **[3]** Ethereum Improvement Proposals. ERC-191 and ERC-1271.
 - **[4]** Ethereum Improvement Proposals. ERC-6492: Signature Validation for Predeploy Contracts.
-- **[5]** Model Context Protocol. Specification, 28 July 2026.
-- **[6]** A2A Protocol. Specification v1.0.
-- **[7]** Ethereum Improvement Proposals. ERC-8004: Trustless Agents. Status: Draft.
-- **[8]** x402 Foundation. x402 Version 2 Specification.
+- **[5]** Model Context Protocol. Specification.
+- **[6]** A2A Protocol. Specification.
+- **[7]** Ethereum Improvement Proposals. ERC-8004: Trustless Agents.
+- **[8]** x402 Foundation. x402 Specification.
 
 ### Informative references
 
-- **[9]** W3C. Verifiable Credentials Data Model v2.0. W3C Recommendation, 15 May 2025.
+- **[9]** W3C. Verifiable Credentials Data Model v2.0. W3C Recommendation.
 - **[10]** NIST. SP 800-207: Zero Trust Architecture.
-- **[11]** Ward, R.; Beyer, B. BeyondCorp: A New Approach to Enterprise Security. ;login:, 39(6), 2014.
+- **[11]** Ward, R.; Beyer, B. BeyondCorp: A New Approach to Enterprise Security. *;login:*, 39(6), 2014.
 - **[12]** NIST. FIPS PUB 202: SHA-3 Standard.
 - **[13]** Rescorla, E.; Korver, B. RFC 3552: Guidelines for Writing RFC Text on Security Considerations.
