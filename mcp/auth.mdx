@@ -1,10 +1,10 @@
 ---
 title: MCP auth
-description: Pick the auth path for your caller: browser sign-in for interactive clients, a server key for servers, CI, and headless agents.
+description: "Pick the auth path for your caller: browser sign-in for interactive clients, a server key for servers, CI, and headless agents."
 icon: lock
 ---
 
-Interactive MCP clients sign in through the host. Register `https://mcp.proofable.me/mcp` and finish the browser sign-in your client opens. The host runs OAuth 2.0 with PKCE and can refresh the session for up to 30 days.
+Interactive MCP clients sign in through the host. Register `https://mcp.proofable.me/mcp` (public-first: connects anonymously, then upgrades with sign-in) and finish the browser sign-in your client opens. The host runs OAuth 2.0 with PKCE and can refresh the session for up to 30 days.
 
 For servers, CI, and environments that cannot open a browser, use a durable server key instead. Both paths hit the same endpoint and the same Proofable profile.
 
@@ -34,7 +34,9 @@ GET https://proofable.me/.well-known/oauth-authorization-server
 → Authenticated MCP session (Bearer on protected MCP requests)
 ```
 
-`tools/list` and `ping` stay public so marketplaces can list tools. Unauthenticated `initialize` and every `tools/call` return `401` + `WWW-Authenticate` so the host starts its own sign-in, stores the access token, and sends it on later calls. A GET probe on `/mcp` is not a login challenge.
+`https://mcp.proofable.me/mcp` is the **public-first** endpoint. Anonymous `initialize` succeeds, so marketplaces and clients connect without a browser round-trip. What a caller can *do* varies with the credential it presents: anonymous callers execute the anonymous tier (`proofable_context`, `proofable_verifiers_catalog`, `proofable_proofs_check`, `proofable_verify_or_guide`); a valid Bearer unlocks the full advertised tier; entitled accounts unlock the extended surface. A `tools/call` on a protected tool without a credential returns `401` + `WWW-Authenticate` — the protected operation carries the challenge, never the handshake. An expired or invalid Bearer also receives `401` + `WWW-Authenticate` once, so OAuth-capable hosts silently refresh.
+
+`https://mcp.proofable.me/mcp/oauth` is the **auth-first** endpoint for interactive installs. Without a token even `initialize` answers `401` + `WWW-Authenticate`, which is the challenge that starts host OAuth (DCR + PKCE + token exchange). Use it for Connect buttons and clients that expect the discovery flow to begin with a login. A GET probe on `/mcp` is not a login challenge.
 
 For full OAuth mechanics, see [MCP OAuth](./oauth).
 
@@ -98,14 +100,14 @@ Disconnect revokes OAuth MCP tokens through the OAuth revocation endpoint. For `
 
 ## MCP server auth challenge
 
-When a client calls a **protected** method without credentials, the server returns:
+When a client calls a **protected operation** without credentials, the server returns:
 
 ```http
 HTTP/1.1 401 Unauthorized
 WWW-Authenticate: Bearer resource_metadata="https://mcp.proofable.me/mcp/.well-known/oauth-protected-resource", scope="neus:core neus:profile neus:secrets"
 ```
 
-Hosts that support MCP OAuth follow that metadata and open Connect. Stateless streamable HTTP has no GET SSE stream: GET and DELETE on `/mcp` return **405** with no `WWW-Authenticate`. Do not treat a GET probe as a sign-in prompt.
+Anonymous calls to the anonymous tier succeed on `/mcp` with no challenge. Hosts that support MCP OAuth follow that metadata and open Connect — `/mcp/oauth` starts the same challenge for every method. Stateless streamable HTTP has no GET SSE stream: GET and DELETE on `/mcp` return **405** with no `WWW-Authenticate`. Do not treat a GET probe as a sign-in prompt.
 
 ## Interactive verification flows
 

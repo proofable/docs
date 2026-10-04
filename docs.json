@@ -565,6 +565,11 @@
       "destination": "/integrations/server"
     },
     {
+      "source": "/install",
+      "destination": "/mcp/setup",
+      "permanent": true
+    },
+    {
       "source": "/mcp/ide-plugin",
       "destination": "/mcp/setup"
     },
