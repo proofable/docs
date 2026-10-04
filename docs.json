@@ -712,6 +712,11 @@
     {
       "source": "/sdks/security",
       "destination": "/security"
+    },
+    {
+      "source": "/install",
+      "destination": "/mcp/setup",
+      "permanent": true
     }
   ],
   "contextual": {
