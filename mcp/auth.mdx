@@ -4,9 +4,9 @@ description: "Pick the auth path for your caller: browser sign-in for interactiv
 icon: lock
 ---
 
-Interactive MCP clients sign in through the host. Register `https://mcp.proofable.me/mcp/oauth` (auth-first: even `initialize` answers `401` + `WWW-Authenticate`, the challenge that starts host OAuth) and finish the browser sign-in your client opens. The host runs OAuth 2.0 with PKCE and can refresh the session for up to 30 days.
+Interactive MCP clients sign in through the host. Register `https://mcp.proofable.me/mcp` (public-first: connects anonymously, then upgrades with sign-in) and finish the browser sign-in your client opens. The host runs OAuth 2.0 with PKCE and can refresh the session for up to 30 days.
 
-For servers, CI, and environments that cannot open a browser, use a durable server key against the canonical resource endpoint `https://mcp.proofable.me/mcp`. Both paths reach the same Proofable profile and the same OAuth resource audience.
+For servers, CI, and environments that cannot open a browser, use a durable server key instead. Both paths hit the same endpoint and the same Proofable profile.
 
 ## Sign in
 

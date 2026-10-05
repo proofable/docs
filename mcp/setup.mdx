@@ -42,6 +42,6 @@ Use the [JavaScript SDK](/sdks/javascript), [HTTP API](/api/overview), or [hoste
 - Confirm the connection. Run `npx -y @proofable/sdk doctor --live`.
 - Two Proofable entries. Keep one plugin or manual server entry. Running setup again removes a leftover entry when the plugin already supplies it.
 - Need agent context in a project. Run `npx -y @proofable/sdk mount <agentId> --apply <host>`. See [Load agent context](/agents/runtime-mount).
-- Search-only endpoint. Use `https://mcp.proofable.me/mcp/oauth` for the product; the docs MCP endpoint only searches documentation.
+- Search-only endpoint. Use `https://mcp.proofable.me/mcp`. The docs MCP endpoint only searches documentation.
 
 To disconnect, run `npx -y @proofable/sdk disconnect`. [MCP tools](/mcp/tools) and [authentication](/mcp/auth) cover the full reference.
