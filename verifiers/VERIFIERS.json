@@ -57,7 +57,7 @@
         "gateCheck": true,
         "verificationRequest": true
       },
-      "description": "Associate an available .neus username with a wallet",
+      "description": "Associate an available .proofable username with a wallet",
       "expiry": "expiring",
       "flow": "instant",
       "id": "ownership-pseudonym",
