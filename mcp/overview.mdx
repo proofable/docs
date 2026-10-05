@@ -11,7 +11,7 @@ Connect one endpoint and every client reads the same profile: the proofs you alr
 
 Connect once. The same agents, selected context, limits, and current proofs are there in every supported client.
 
-Add `https://mcp.proofable.me/mcp` to the client, then sign in.
+Add `https://mcp.proofable.me/mcp/oauth` to the client, then sign in. Interactive hosts use the auth-first lane, which answers the handshake with `401` + `WWW-Authenticate` and starts the client's own OAuth. The canonical resource `https://mcp.proofable.me/mcp` stays for server keys and discovery.
 
 Interactive hosts use OAuth. For servers, CI, and headless agents, send a server key as a Bearer token. See [Add Proofable to any MCP client](./setup).
 
