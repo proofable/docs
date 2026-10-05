@@ -23,6 +23,8 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const IMPERATIVE = /^(add|authenticate|bind|bring|build|call|check|choose|combine|confirm|connect|control|create|decide|define|discover|drop|enforce|give|handle|import|install|keep|know|list|load|manage|mount|move|open|pass|pay|pick|prove|publish|pull|put|read|register|require|retry|reuse|roll|run|screen|see|select|sell|send|set|share|sign|start|stop|store|submit|track|use|verify|wire|wrap|write)\b/i;
 /** Coverage and question openers orient the reader even without an imperative. */
 const ORIENTED_OPENER = /^(every|how|what|when|where|which|whichever|who|why)\b/i;
+/** A named audience explains who a compact description is for. */
+const AUDIENCE = /\bfor\s+(people|teams|developers|operators|organizations|agents|buyers|customers)\b/i;
 const CONSEQUENCE = /\b(so|before|instead|without|then|when|after|unless|rather|beyond|already|never|cannot|skip|reuse|unlock|grant|stop|prevent)\b/i;
 const SECOND_PERSON = /\b(you|your)\b/i;
 
@@ -71,6 +73,7 @@ for (const file of walk(ROOT)) {
     SECOND_PERSON.test(description) ||
     IMPERATIVE.test(description) ||
     ORIENTED_OPENER.test(description) ||
+    AUDIENCE.test(description) ||
     CONSEQUENCE.test(description);
   const commas = (description.match(/,/g) || []).length;
   if (!oriented && commas >= 2) fail('INVENTORY', 'comma list with no reader orientation');

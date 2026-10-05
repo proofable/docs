@@ -54,18 +54,18 @@ For the permission above, `send_message` returns:
 }
 ```
 
-`read_proofs` returns `ACTION_ALLOWED`. An expired or missing permission fails closed. An irreversible action returns `HUMAN_APPROVAL_REQUIRED` when the permission requires approval.
+`read_proofs` returns `ACTION_ALLOWED`. A delegated permission with an empty or missing `allowedActions` list grants no actions. An expired or missing permission fails closed. An irreversible action returns `HUMAN_APPROVAL_REQUIRED` when the permission requires approval.
 
 ## Decision order
 
 `evaluateRuntimeAction` applies the mounted permission in this order:
 
-1. Require a valid runtime mount and current permission proof.
+1. Require a valid runtime mount and an unexpired mounted permission.
 2. Apply `deniedActions`.
-3. Apply a non-empty `allowedActions` list.
+3. Require an explicit, non-empty `allowedActions` list for delegated authority, then check the action against it. Controller-owned mounts do not require a delegation allowlist.
 4. Require approval for an irreversible action when configured.
 5. Allow the host tool call.
 
-The SDK evaluates one action. The host still owns the tool call and must stop when `allowed` is `false`.
+The SDK evaluates one action against the mounted snapshot, as of `@proofable/sdk@0.1.4`. Load that snapshot from a trusted mount; caller-supplied JSON is not a verified proof. The host still owns the tool call and must stop when `allowed` is `false`. A mount file cannot discover a revocation that happens after it was written; refresh current authority through the connected Proofable host before a consequential action that needs current revocation status.
 
 Runnable source: [`examples/guarded-agent-action`](https://github.com/proofable/mcp/tree/main/examples/guarded-agent-action).

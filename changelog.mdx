@@ -17,6 +17,25 @@ Published APIs and verifier schemas may change between minor versions. Breaking 
 </Note>
 
 <Update
+  label="October 5, 2026"
+  description="v0.1.4"
+  tags={["SDK", "Docs", "Agents"]}
+  rss={{
+    title: "Proofable SDK v0.1.4",
+    description: "Delegated runtime mounts fail closed when the permission carries no explicit allow-list."
+  }}
+>
+## Delegated mounts fail closed without an allow-list
+
+`@proofable/sdk@0.1.4` makes an empty or missing `allowedActions` list grant nothing for a delegated permission, matching the hosted contract. A delegated host action is denied with `ACTION_NOT_ALLOWED`; controller-owned mounts keep their existing behavior. See [Run your first guarded action](/mcp/guarded-action).
+
+```bash
+npm install @proofable/sdk@0.1.4
+```
+
+</Update>
+
+<Update
   label="September 25, 2026"
   description="Checking a proof is free"
   tags={["API", "Docs", "Pricing"]}
