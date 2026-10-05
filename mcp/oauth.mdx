@@ -51,14 +51,14 @@ GET https://mcp.proofable.me/.well-known/oauth-protected-resource/mcp
 }
 ```
 
-`https://mcp.proofable.me/mcp` is public-first: anonymous `initialize` succeeds for marketplaces and anonymous API users. Protected operations carry the challenge:
+`https://mcp.proofable.me/mcp` is the single endpoint: an uncredentialed request, including `initialize`, returns `401` + `WWW-Authenticate`, so interactive installs start DCR + PKCE immediately. A server key uses the same URL as a Bearer token. Protected operations return the same challenge:
 
 ```http
 HTTP/1.1 401 Unauthorized
 WWW-Authenticate: Bearer resource_metadata="https://mcp.proofable.me/mcp/.well-known/oauth-protected-resource", scope="neus:core neus:profile neus:secrets"
 ```
 
-Use the auth-first lane `https://mcp.proofable.me/mcp/oauth` when the client should meet the challenge on `initialize` itself — the same `401` + `WWW-Authenticate` response, served for every method without a token, so interactive installs start DCR + PKCE immediately.
+The `401` + `WWW-Authenticate` response is served for every method without a token, on the same single endpoint, so interactive installs start DCR + PKCE immediately and server keys connect to the same URL.
 
 ### Authorization server metadata
 
