@@ -6,7 +6,7 @@ Published site: [docs.proofable.me](https://docs.proofable.me)
 
 Start here: [github.com/proofable/sdk](https://github.com/proofable/sdk)
 
-Use with any MCP client: `https://mcp.proofable.me/mcp`
+Use with any MCP client: `https://mcp.proofable.me/mcp/oauth`
 
 Product: [proofable.me](https://proofable.me)
 

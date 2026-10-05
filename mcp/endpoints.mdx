@@ -10,7 +10,8 @@ The **MCP URL** and the **HTTP API** use different transports and base paths. Di
 
 | URL | Role |
 |-----|------|
-| `https://mcp.proofable.me/mcp` | MCP. [Setup](./setup) |
+| `https://mcp.proofable.me/mcp/oauth` | MCP, auth-first lane. Interactive clients register this: without a credential even `initialize` answers `401 + WWW-Authenticate`, which starts host OAuth. [Setup](./setup) |
+| `https://mcp.proofable.me/mcp` | MCP, public-first lane. Anonymous `initialize` and directory discovery, and the RFC 8707 resource for server-key (Bearer) callers. |
 
 ## OAuth discovery
 
