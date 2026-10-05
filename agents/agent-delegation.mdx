@@ -54,7 +54,7 @@ One-time user approval lets your backend create proofs without asking for a sign
 1. User signs in on Proofable
 2. User approves the delegation once
 3. Your app stores the proof ID in **`qHash`**
-4. Your backend calls verification with **`x-neus-app`**. No per-request signature
+4. Your backend calls verification with **`x-proofable-app`**. No per-request signature
 
 ```javascript
 await client.verify({
@@ -71,9 +71,9 @@ await client.verify({
 });
 ```
 
-**`agentId`** matches your `x-neus-app` header. **`allowedOrigins`** lists the exact web origins your app may act from; use `"*"` for server-to-server callers with no browser origin.
+**`agentId`** matches your `x-proofable-app` header. **`allowedOrigins`** lists the exact web origins your app may act from; use `"*"` for server-to-server callers with no browser origin.
 
-Send `x-neus-app: your-app-id` and matching site origin on verification requests. On Node, set `appOrigin: 'https://app.example.com'` on `ProofableClient` (or pass `Origin` via `extraHeaders`).
+Send `x-proofable-app: your-app-id` and matching site origin on verification requests. On Node, set `appOrigin: 'https://app.example.com'` on `ProofableClient` (or pass `Origin` via `extraHeaders`).
 
 ## Payment limits
 

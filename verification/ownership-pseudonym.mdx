@@ -24,7 +24,7 @@ Instant. The user signs once and the pseudonym binding is created.
 | Field | Required | Notes |
 |------|----------|-------|
 | `pseudonymId` | Yes | Handle, 3–32 chars, pattern `^[a-z0-9][a-z0-9._-]{1,30}[a-z0-9]$` |
-| `namespace` | No | Defaults to `neus` |
+| `namespace` | No | Defaults to `proofable`. Legacy `neus` writes remap to `proofable`; existing `neus:<handle>` proofs still resolve. |
 | `displayName` | No | Human-readable label |
 | `metadata` | No | Optional object for app-specific attributes |
 

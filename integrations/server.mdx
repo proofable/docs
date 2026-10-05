@@ -41,7 +41,7 @@ const proof = await client.verifyFromApp({
 This needs:
 
 - An active user approval for your `appId` and site origin. [App link](/agents/agent-delegation#app-link)
-- `X-Neus-App` from `appId` and a matching `Origin` on each request. In Node, `appOrigin` sets both.
+- `X-Proofable-App` from `appId` and a matching `Origin` on each request. In Node, `appOrigin` sets both.
 
 If the approval is missing, send the user through [Hosted Verify](/verification/hosted) first.
 
