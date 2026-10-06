@@ -11,15 +11,6 @@
   "boundary": "authority \u2192 decision \u2192 dispatch \u2192 effect/outcome \u2192 receipt",
   "authority_policy_version": "authority-policy.v1",
   "authority_policy_boundary": "identity grants no authority; a separate delegation carries bounded authority and is re-evaluated from current state at dispatch",
-  "execution_principal": {
-    "class": "ordinary Pro test/reviewer tenant",
-    "admin": false,
-    "controller_wallet": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15"
-  },
-  "agent": {
-    "agentId": "proofable-authority-review",
-    "agentWallet": "0x738f1729be00dee66e3451156097c20a34ad3540"
-  },
   "results": {
     "binding_veto": "SUPPORTED",
     "revoked_stale": "SUPPORTED",
@@ -28,10 +19,7 @@
   },
   "public_trace": {
     "file": "trace.jsonl",
-    "record_count": 8,
-    "sha256": "be7486124319ba4f934fd27ab20457ae6394f59a84ba1c2ee682159bb447a516"
-  },
-  "certification_claim": false,
-  "aarm_conformance_claim": false,
-  "agentgovbench_rank_claim": false
+    "record_count": 6,
+    "sha256": "d749cf16fe8dd599f528e21e95863b930004a0b3f0a9882695e3d3b03e8c2183"
+  }
 }

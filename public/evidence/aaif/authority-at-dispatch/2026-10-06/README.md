@@ -36,11 +36,11 @@ conformance.
 | `manifest.json` | machine-readable manifest: revision, run, custody, results, disclosure |
 | `authority-effect-results.md` | results under the shared authority/effect contract |
 | `authority-effect-results.json` | machine-readable results |
-| `trace.jsonl` | one sanitized record per case (8 records) |
+| `trace.jsonl` | one sanitized record per supporting case (6 records) |
 | `SHA256SUMS` | SHA-256 for the five payload files beside it |
 
 `SHA256SUMS` covers every payload file in this directory except itself. Verify with
 `sha256sum -c SHA256SUMS`.
 
-Raw operational receipts, raw proof bodies, delegation policy contents, prompts and job payloads, and
-private runner/engine internals remain undisclosed (`source_record_visibility: private`).
+Disclosure controls which fields of the Proofable record are shared; non-public fields are not
+required to evaluate these results.

@@ -6,12 +6,12 @@ contract ([`probityai/agent-evidence-observer`](https://github.com/probityai/age
 Deployed revision `f92faf39a4bae480cca3e5c07ce2c95d6ab68411`; environment: live production hosted MCP.
 Custody: **SELF** (author-operated).
 
-| Scenario | Decision | Dispatch | Effect/outcome | Receipt | Result |
+| Scenario | Decision | Dispatch | Effect/outcome | Protocol record | Result |
 | --- | --- | --- | --- | --- | --- |
-| binding_veto | DENY (`JOB_AUTHORITY_DENIED`) | refused before executor assignment | none — no effect could commit | private terminal receipt | **SUPPORTED** |
-| revoked_stale | revoked: DENY (`DELEGATION_PROOF_DENIED`); never-revoked control: ALLOW | revoked: no job created; control: dispatched | none | private terminal receipt (control) | **SUPPORTED** |
-| unreachable | NOT APPLICABLE TO CURRENT PATH | not attempted | not applicable | n/a | **NOT APPLICABLE TO CURRENT PATH** |
-| post_dispatch_revoke | ALLOW at dispatch | dispatched; revocation occurred in flight | effect/outcome remained attributable to the original dispatch | private terminal receipt | **SUPPORTED** |
+| binding_veto | DENY (`JOB_AUTHORITY_DENIED`) | refused before executor assignment | none — no effect could commit | recorded | **SUPPORTED** |
+| revoked_stale | revoked: DENY (`DELEGATION_PROOF_DENIED`); never-revoked control: ALLOW | revoked: no job created; control: dispatched | none | recorded | **SUPPORTED** |
+| unreachable | NOT APPLICABLE TO CURRENT PATH | not attempted | not applicable | not applicable | **NOT APPLICABLE TO CURRENT PATH** |
+| post_dispatch_revoke | ALLOW at dispatch | dispatched; revocation occurred in flight | effect/outcome remained attributable to the original dispatch | recorded | **SUPPORTED** |
 
 ## Protocol boundary
 
