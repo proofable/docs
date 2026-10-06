@@ -1,56 +1,46 @@
-# Proofable — Authority-at-Dispatch evidence package
+# Proofable — Authority-at-Dispatch Evidence
 
-Proofable's implementation-owned export for the shared authority/effect contract associated with
+Proofable's implementation evidence for the authority/effect comparison associated with
 [AAIF Identity & Trust issue #13](https://github.com/aaif/wg-identity-and-trust/issues/13).
-
-**One protocol, one proof, one receipt — disclosure controls what fields are shown.** These records
-are the deployed Proofable protocol's own output, shared at a public-safe disclosure level. This is
-not a second evidence system, and it is **not** AAIF certification, WG conformance, or the
-separately-proposed joint/independently-operated run.
 
 **Run.** Live production hosted MCP, protocol revision
 `f92faf39a4bae480cca3e5c07ce2c95d6ab68411`, run `four-case-run-f92faf39a4ba`. Executed by an
-**ordinary non-admin Pro review tenant** (`admin:false`) with the dedicated agent
-`proofable-authority-review` under an explicit pinned delegation per case. Custody is **SELF**
-(author-operated).
+ordinary non-admin Pro review tenant (`admin:false`) with the dedicated agent
+`proofable-authority-review` under an explicit pinned delegation per case.
 
-## Four-case results
+## Results
 
-| Case | Proofable result |
+| Scenario | Result |
 | --- | --- |
-| Binding veto | **SUPPORTED** — unauthorized execution is denied before executor assignment |
-| Revoked authority / stale grant | **SUPPORTED** — revoked authority is denied while the valid control remains accepted |
-| Remote authority unreachable | **NOT APPLICABLE TO CURRENT PATH** — dispatch authority is evaluated from Proofable's current authority state rather than a remote authorization dependency |
-| Revocation after dispatch | **SUPPORTED** — dispatch, subsequent revocation, resulting effect/outcome, and receipt remain separate and attributable |
+| Binding veto / action outside delegated authority | **SUPPORTED** — unauthorized execution is denied before executor assignment |
+| Revoked authority / stale grant | **SUPPORTED** — revoked authority is denied while the never-revoked control remains accepted |
+| Remote authority unavailable | **NOT APPLICABLE TO CURRENT PATH** — Proofable evaluates current authority state locally at dispatch and has no remote authorization dependency on this path |
+| Revocation after dispatch | **SUPPORTED** — the dispatch decision, later revocation, resulting effect/outcome, and receipt remain separately attributable |
 
-**Protocol boundary:** authority → decision → dispatch → effect/outcome → receipt. These are distinct
-states in Proofable; collapsing them would treat a failed task as evidence that no effect committed,
-or a later denial as retroactively preventing an earlier effect.
+**Protocol boundary:** authority → decision → dispatch → effect/outcome → receipt.
 
-**Evidence scope:** Proofable protocol records decision, dispatch, effect state, terminal outcome, and
-receipt. This run was author-operated and has not yet been independently reproduced. External
-target-side witnessing was not part of this run.
+The result is a portable proof/receipt of the protocol decision and outcome; disclosure controls
+which fields are shared. Where Proofable does not independently observe a target-side effect, the
+record states `platform_observed_only`.
 
-## Files (this directory)
+**Evidence scope:** author-operated; independent reproduction not yet claimed.
+
+This is implementation evidence for the comparison in #13 — not AAIF certification or WG
+conformance.
+
+## Files
 
 | File | Role |
 | --- | --- |
 | `README.md` | this summary |
-| `manifest.json` | machine-readable projection: pins revision, run, custody, claims |
-| `proofable-row.md` | the issue #13 implementation row |
-| `matched-four-case-results.md` | four-case export under the shared authority/effect contract |
-| `matched-four-case.json` | machine-readable four-case records |
-| `vlad-four-case-mapping.md` | case-by-case mapping against the shared contract |
+| `manifest.json` | machine-readable manifest: revision, run, custody, results, disclosure |
+| `authority-effect-results.md` | results under the shared authority/effect contract |
+| `authority-effect-results.json` | machine-readable results |
 | `trace.jsonl` | one sanitized record per case (8 records) |
-| `SHA256SUMS` | SHA-256 for the seven payload files beside it |
+| `SHA256SUMS` | SHA-256 for the five payload files beside it |
 
 `SHA256SUMS` covers every payload file in this directory except itself. Verify with
 `sha256sum -c SHA256SUMS`.
 
-## Disclosure
-
-Visibility controls disclosure, not the artifact. The public package is the minimum public-safe
-representation of the actual Proofable proof/receipt, plus the revision and hashes needed to verify
-it. Raw operational receipts, raw proof bodies, delegation policy contents, prompts and job payloads,
-and private runner/engine internals remain undisclosed (`receipt_visibility: private` in the
-manifest).
+Raw operational receipts, raw proof bodies, delegation policy contents, prompts and job payloads, and
+private runner/engine internals remain undisclosed (`source_record_visibility: private`).

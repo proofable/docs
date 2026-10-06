@@ -1,14 +1,19 @@
 {
-  "schema": "proofable-aaif-matched-four-case/v1",
+  "schema": "proofable-authority-at-dispatch-evidence/v1",
+  "implementation": "Proofable",
+  "disclosure": "public",
+  "source_record_visibility": "private",
+  "independent_reproduction": false,
+  "deployed_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
+  "environment": "live production hosted MCP",
   "contract": {
     "reference": "probityai/agent-evidence-observer",
     "commit": "fb8cabc5c9c54459743497f2325bfef49b137a1a",
     "file": "interop/authority-unreachable-2026-10-03/CONTRACT.md"
   },
-  "implementation": "Proofable",
-  "deployed_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
   "custody": "SELF (author-operated; ordinary non-admin Pro review tenant)",
-  "note": "Proofable-native export under the shared contract. It expresses records Proofable's own production runner already produced; it does not port Proofable into the observer and does not invent target-side evidence. Independent peer execution remains pending.",
+  "boundary": "authority → decision → dispatch → effect/outcome → receipt",
+  "evidence_scope": "author-operated; independent reproduction not yet claimed",
   "cases": [
     {
       "implementation": "Proofable",
@@ -26,7 +31,7 @@
       "protected_target": "isolated computer execution (run_command)",
       "approved_action": {
         "bytes_digest": "not_applicable",
-        "note": "Proofable binds authority per action, not per approved-content byte; byte-level binding is not part of this experiment"
+        "note": "Proofable binds authority per action, not per approved-content byte; byte-level binding is out of scope for this run"
       },
       "delegation_reference": "0xce1702c88636afe05e4ba15ad5928b74e736b46b682ef83e13f1d4d45bf7afde",
       "pre_authorized_fallback": {
@@ -77,7 +82,7 @@
         ],
         "missing_proof": "not_applicable",
         "contradictions": "not_applicable",
-        "publication_decision": "private; public evidence is a sanitized projection",
+        "publication_decision": "private; this package is the public disclosure projection",
         "retained_evidence": "private epoch records on the operator host"
       },
       "operation_custody": {
@@ -112,7 +117,7 @@
       "protected_target": "Proofable job dispatch (the enforcement point is Proofable's own authority gate before an executor is assigned)",
       "approved_action": {
         "bytes_digest": "not_applicable",
-        "note": "Proofable binds authority per action, not per approved-content byte; byte-level binding is not part of this experiment"
+        "note": "Proofable binds authority per action, not per approved-content byte; byte-level binding is out of scope for this run"
       },
       "delegation_reference": "0x1135538b7efddcae5ef18b28d9da3c048d8ce0bfa154ddbe43553643da7898ac",
       "pre_authorized_fallback": {
@@ -163,7 +168,7 @@
         ],
         "missing_proof": "not_applicable",
         "contradictions": "not_applicable",
-        "publication_decision": "private; public evidence is a sanitized projection",
+        "publication_decision": "private; this package is the public disclosure projection",
         "retained_evidence": "private epoch records on the operator host"
       },
       "operation_custody": {
@@ -193,11 +198,11 @@
       "attempt_id": "2026-10-06T14:12:04.331Z",
       "principal": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
       "agent": "proofable-authority-review",
-      "requested_action": "dispatch under a remote-authority dependency (not applicable — see delegation/fallback)",
+      "requested_action": "dispatch under a remote-authority dependency",
       "protected_target": "Proofable job dispatch (the enforcement point is Proofable's own authority gate before an executor is assigned)",
       "approved_action": {
         "bytes_digest": "not_applicable",
-        "note": "Proofable binds authority per action, not per approved-content byte; byte-level binding is not part of this experiment"
+        "note": "Proofable binds authority per action, not per approved-content byte; byte-level binding is out of scope for this run"
       },
       "delegation_reference": null,
       "pre_authorized_fallback": {
@@ -249,7 +254,7 @@
         ],
         "missing_proof": "no remote authority dependency on this path",
         "contradictions": "not_applicable",
-        "publication_decision": "private; public evidence is a sanitized projection",
+        "publication_decision": "private; this package is the public disclosure projection",
         "retained_evidence": "private epoch records on the operator host"
       },
       "operation_custody": {
@@ -265,7 +270,7 @@
         "Case 3 is NOT APPLICABLE TO CURRENT PATH: Proofable evaluates authority from current local authority state at dispatch, not from a remote authority/verifier service.",
         "There is no remote authority dependency on this path to make unavailable, so the case is not exercised.",
         "Fail-closed behavior exists for unavailable authority inputs; it is not exercised as a live remote dependency on this path.",
-        "A genuine remote-authority-unreachable comparison requires the peer harness with a real remote status source, which is the separate joint-run item."
+        "A genuine remote-authority-unreachable comparison requires a path with a real remote authority dependency, which is a separate joint comparison."
       ],
       "status": "NOT_APPLICABLE_TO_CURRENT_PATH"
     },
@@ -285,7 +290,7 @@
       "protected_target": "bounded job execution (in-flight revocation)",
       "approved_action": {
         "bytes_digest": "not_applicable",
-        "note": "Proofable binds authority per action, not per approved-content byte; byte-level binding is not part of this experiment"
+        "note": "Proofable binds authority per action, not per approved-content byte; byte-level binding is out of scope for this run"
       },
       "delegation_reference": null,
       "pre_authorized_fallback": {
@@ -336,7 +341,7 @@
         ],
         "missing_proof": "not_applicable",
         "contradictions": "not_applicable",
-        "publication_decision": "private; public evidence is a sanitized projection",
+        "publication_decision": "private; this package is the public disclosure projection",
         "retained_evidence": "private epoch records on the operator host"
       },
       "operation_custody": {
