@@ -59,6 +59,7 @@ Author-operated; independent reproduction not yet claimed.
 
 - SDK: `@proofable/sdk` (Apache-2.0) · MCP: `proofable/mcp` · Docs: `docs.proofable.me`
 - Portable Proof profile: [CAIP-380](https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-380.md)
+- Standards landscape: `https://docs.proofable.me/learn/standards`
 
 ## Known limitations of this run
 
