@@ -33,6 +33,25 @@ A signed CAIP-380 request proves who signed and that the request was not changed
 
 Proofable uses these standards. It does not replace them. [CAIP-380](https://standards.chainagnostic.org/CAIPs/caip-380) remains the open specification for the signed request format.
 
+## Related standards by layer
+
+Proofable is not replacing identity, authorization, credential, or attestation standards. It provides the portable evidence layer connecting them:
+
+> SPIFFE and A2A can establish or describe an agent. OAuth and AuthZEN can determine what it may do. RATS/EAT can attest its environment or claims. VC and OpenID4VP can carry credentials across parties. CAEP can communicate trust-state changes. SCITT can add transparency and independent receipt verification. Proofable preserves the resulting identity, authority, decision, and effect records as portable proofs another relying party can independently appraise.
+
+| Layer | Existing work | Proofable relation |
+| --- | --- | --- |
+| Identity | [A2A](https://a2a-protocol.org), [SPIFFE/SPIRE](https://spiffe.io), OpenID AIIM | Consumes and links identity evidence; identity is not authority |
+| Delegated authority | [OAuth 2.0 Token Exchange (RFC 8693)](https://www.rfc-editor.org/info/rfc8693), [Rich Authorization Requests (RFC 9396)](https://www.rfc-editor.org/rfc/rfc9396) | Records bounded authority as a separate layer, native or delegated |
+| Authorization decision | [AuthZEN](https://openid.net/wg/authzen/specifications/) | Records the decision and its policy context at the action boundary |
+| Attestation and appraisal | [RATS (RFC 9334)](https://www.rfc-editor.org/rfc/rfc9334), [EAT (RFC 9711)](https://www.rfc-editor.org/rfc/rfc9711) | Carries evidence and keeps the appraisal result a separate dimension |
+| Portable credentials | [W3C VC 2.0](https://www.w3.org/TR/vc-data-model-2.0/), [OpenID4VP](https://openid.net/) | Complementary presentation formats; a proof/receipt can be appraised under any policy |
+| Freshness and revocation | [CAEP and Shared Signals](https://openid.net/), [Bitstring Status List](https://www.w3.org/TR/vc-bitstring-status-list/) | Records current trust state instead of assuming a decision stays valid |
+| Transparency | [SCITT (RFC 9943)](https://www.rfc-editor.org/rfc/rfc9943) | Complementary model for signed statements that gain verifiable transparency later |
+| Portable proof | [CAIP-380](/learn/standards/caip-380) | The canonical Proofable envelope that carries the record |
+
+Each layer answers a different question: who the agent is, what it may do, what was decided, what happened, and how strongly another party can rely on the record. Portable Proof keeps those answers as separate, linked records rather than collapsing them into one credential.
+
 ## Check an example
 
 Use a signed request from a check, or the published example:
