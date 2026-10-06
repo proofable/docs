@@ -1,11 +1,12 @@
 # Proofable authority-at-dispatch evidence (f92faf39a4ba)
 
-Eight bounded assertions ran through Proofable's **live production hosted MCP service** on protocol
-revision `f92faf39a4bae480cca3e5c07ce2c95d6ab68411`. The execution principal was an **ordinary non-admin Pro
-review tenant** (`admin:false`, so the Admin/CUSTOM job-ownership bypass does not apply), operating
-the dedicated agent `proofable-authority-review` under a controller-signed allow-list delegation. Every job
-pinned an explicit `delegationQHash`; each case varies only the delegation/job state. The
-founder/admin profile was not the execution principal.
+Bounded implementation assertions ran through Proofable's **live production hosted MCP service** on
+protocol revision `f92faf39a4bae480cca3e5c07ce2c95d6ab68411`. These are Proofable's own implementation probes, not
+the WG's proposed conformance cases and not Vlad's four matched cases. The execution principal was an
+**ordinary non-admin Pro review tenant** (`admin:false`, so the Admin/CUSTOM job-ownership bypass does
+not apply), operating the dedicated agent `proofable-authority-review` under a controller-signed allow-list
+delegation. Every job pinned an explicit `delegationQHash`; each assertion varies only the
+delegation/job state. The founder/admin profile was not the execution principal.
 
 | Assertion | Observed production behavior | Observed matches expected |
 | --- | --- | --- |

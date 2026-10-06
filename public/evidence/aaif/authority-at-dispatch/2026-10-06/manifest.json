@@ -16,8 +16,8 @@
     "raw_manifest_sha256": "84e4509634f53e10798011cfeb3e00c7d8a1eb8f25e105ce01c30d65761d3805",
     "raw_review_sha256": "8240a5dbd1ef0226f43ca6eec85e11c7674daf49f721496f0493a6d7947b5c55",
     "raw_trace_sha256": "329eb6f9bb1d0d4a51f96286eb10deee592b9b8101b6ed2fca1fb478e120b718",
-    "case_count": 8,
-    "passed_count": 8
+    "assertion_count": 8,
+    "assertions_matching_expected": 8
   },
   "public_trace": {
     "file": "trace.jsonl",
