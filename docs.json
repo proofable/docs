@@ -82,6 +82,7 @@
               "use-cases/gate-access",
               "use-cases/prove-what-happened",
               "use-cases/control-agent-actions",
+              "use-cases/authority-at-dispatch",
               "use-cases/build-a-platform"
             ]
           },

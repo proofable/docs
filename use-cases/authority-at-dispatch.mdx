@@ -1,0 +1,80 @@
+---
+title: "Authority at dispatch"
+sidebarTitle: "Authority at dispatch"
+description: "What Proofable enforces when an agent's authority is revoked, stale, or unreachable, with the gaps stated."
+icon: shield-halved
+---
+
+This page records Proofable's behavior for the AAIF working-group use case
+*"authorization when the escalation authority is unreachable."* It follows the same three headings
+the group uses — **enforced behavior**, **known gaps**, and **separate simulation evidence** — so a
+reviewer can compare implementations without mixing evidence.
+
+The behavior below is the deployed protocol, read live. Every claim names what was run, on which
+revision, and where it stops.
+
+## Enforced behavior
+
+An agent's authority is the delegation proof it presents, not a scope string. Every dispatch pins an
+explicit `delegationQHash`, and the authority is re-validated at the moment of dispatch. A missing,
+expired, or revoked permission fails closed.
+
+| Case | Deployed behavior |
+|---|---|
+| **Binding veto** | A grant that omits `run_command` is refused **before an executor is assigned**. |
+| **Stale evidence** | A revoked grant replayed is denied with `DELEGATION_PROOF_DENIED`; **no job is created**. |
+| **Revocation after dispatch** | The in-flight job's terminal state is read after the grant is revoked; the boundary between refused authority and an already-committed effect is recorded explicitly. |
+| **Human approval** | An approval-gated job parks, an authenticated decision is accepted, and it completes. Without approval it is cancelled; a late approval cannot resume it. |
+
+Every intercepted dispatch persists a signed **authority-decision receipt** — outcome, reason code,
+controller and agent identity, the pinned delegation, and an args digest — so a denial is auditable,
+not silent. Receipts are private by default.
+
+## Known gaps
+
+Stated plainly, because the group's value is in the comparison, not in a perfect row.
+
+<AccordionGroup>
+  <Accordion title="Remote authority unreachable is not yet exercised">
+    The engine has a fail-closed gateway branch, but Proofable has **not run** the
+    verifier-or-remote-authority-unreachable case live. Proofable's result for that specific case is
+    **unknown** until it is run with the group.
+  </Accordion>
+  <Accordion title="Self-operated, no independent peer witness">
+    The run is self-custodied: an ordinary non-admin Pro review tenant drives it with a dedicated
+    agent. There is no independent peer witness and no second tenant on the public surface.
+  </Accordion>
+  <Accordion title="Committed effect and recovery are the relying party's fields">
+    After a decision, committed effect, retries and recovery belong to the relying party. Proofable
+    fills what its records carry and marks the rest *outside the implementation*.
+  </Accordion>
+  <Accordion title="A public mount is narrower than the protocol engine">
+    The published `@proofable/sdk` mount evaluator does not expose a per-call delegation chain, a
+    per-user rate counter, a second tenant, or an unreachable-gateway path. Those are declared, not
+    scored.
+  </Accordion>
+</AccordionGroup>
+
+## Evidence
+
+The run records are versioned in the public `proofable/docs` repository and reachable without an
+account:
+
+- [Reviewer packet (README, manifest, trace, checksums)](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/2026-10-05)
+- [Manifest (raw)](https://raw.githubusercontent.com/proofable/docs/main/public/evidence/aaif/authority-at-dispatch/2026-10-05/manifest.json)
+
+Each record carries the pinned protocol revision, the exact command, and the trace field. Custody is
+`SELF`; receipts are private and referenced only by their private-visibility qHash. This packet is
+bounded implementation evidence, not a matched or certified result.
+
+## Run it yourself
+
+The live authority suite runs through the hosted MCP surface:
+
+```sh
+node --env-file=.env runners/aaif/harness-state.mjs prod
+node --env-file=.env runners/aaif/authority-suite.mjs <case|list>
+```
+
+Cases: `hosted_allow`, `binding_veto`, `approval_reachable`, `approval_unavailable`,
+`revoke_before_dispatch`, `expiry_before_dispatch`, `stale_authority`, `post_dispatch_revoke`.
