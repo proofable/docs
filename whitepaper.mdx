@@ -93,6 +93,10 @@ The protected system must enforce the gate on the server or inside the trusted r
 
 ## 3. Portable proofs
 
+Trust usually dies inside the system that produced it. A verified result is created, checked once, and then discarded at the next boundary — so people re-prove the same facts and agents act on authority nothing else can see. Portable Proof makes the verified result itself portable: one small signed envelope that binds a **subject** to a **result**, its **scope**, **status**, **time bounds**, **evidence references**, and a cryptographic **integrity reference**, so another system can evaluate it later without rerunning the check and without trusting the producing runtime.
+
+The envelope is deliberately small. What a result *means* lives in **profiles**, not the core — [CAIP-380](/learn/standards/caip-380) is the original cryptographic/signature profile, and appraisal, identity/verification, authority-decision and execution are separate record kinds that share the primitive and can reference one another. Providers and verifiers determine what is true; authorization systems determine what is allowed; runtimes perform the work. Portable Proof gives those results one object that another agent, application, or organization can evaluate. CAIP-380 predates the current agent-trust convergence; Proofable is the production trust harness built around the primitive.
+
 A Proofable proof is a saved verification result that another accepted integration can evaluate without repeating the original check.
 
 A proof records:
@@ -229,22 +233,20 @@ Proofable uses existing standards for account identifiers, signatures, agent dis
 
 ### CAIP-380 Portable Proof
 
-[CAIP-380](/learn/standards/caip-380) defines a canonical signed envelope for portable wallet verification requests [1].
+**Portable Proof is the primitive; CAIP-380 is its original cryptographic profile.** Portable Proof carries an authenticated result across a system boundary so another system can evaluate it later. It is one minimal envelope — `subject · producer · result · scope · status · evaluatedAt · expiresAt · evidence[] · integrity · authentication`. Meaning lives in profiles; verification, appraisal, authority decisions and execution are **distinct records** that share the primitive and may reference one another.
 
-Proofable implements that envelope for applicable requests while storing the resulting verifier outcome separately as a Proofable proof.
+[CAIP-380](/learn/standards/caip-380) is one such profile: the canonical signed envelope for portable wallet verification requests `[1]`. Proofable implements that profile for applicable requests and stores the resulting verifier outcome as a **`verification-result`** record; an authority decision is a separate **`authority-decision`** record. They are different kinds, not the same semantic record.
 
-For CAIP-380 requests, `qHash` is a deterministic SHAKE-256 hash of the canonical request [1, 12].
-
-Proofable can use that value to correlate the signed request with the stored proof.
+For CAIP-380 requests, `qHash` is a deterministic SHAKE-256 hash of the canonical request `[1, 12]`. Proofable can use that value to correlate the signed request with the stored result.
 
 `qHash` proves correlation.
 
 It does **not** prove the verifier outcome.
 
-Likewise, a valid request signature proves request integrity; it does not prove that verification succeeded or that a previously issued proof remains active.
+Likewise, a valid request signature proves request integrity; it does not prove that verification succeeded or that a previously issued record remains active.
 
-<Frame caption="**Figure 5.** `qHash` can correlate a CAIP-380 signed request with a Proofable proof, while request integrity and verifier outcome remain separate claims.">
-  <img src="/images/whitepaper/figure-5-envelope-and-receipt.svg" alt="CAIP-380 request envelope and Proofable proof: the signed envelope proves request integrity, the Proofable proof records the verifier outcome and lifecycle state, qHash correlates them but does not prove the result by itself." />
+<Frame caption="**Figure 5.** `qHash` correlates a CAIP-380 signed request with a Proofable result record, while request integrity and the verifier outcome remain separate claims.">
+  <img src="/images/whitepaper/figure-5-envelope-and-receipt.svg" alt="CAIP-380 signed request envelope and a Proofable result record: the signed envelope proves request integrity, the result record carries the verifier outcome and lifecycle state, qHash correlates them but does not prove the result by itself." />
 </Frame>
 
 CAIP-380 uses CAIP-2 and CAIP-10 for chain and account identifiers [1–4].
@@ -256,7 +258,7 @@ Detailed canonicalization and validation rules remain in the CAIP and implementa
 | Protocol | Role beside Proofable |
 | --- | --- |
 | CAIP-2 and CAIP-10 | Chain and account identifiers for cross-chain bindings [2]. |
-| CAIP-380 | Signed request envelope for applicable wallet verification [1]. |
+| CAIP-380 | The original cryptographic profile of Portable Proof — the signed envelope for wallet verification requests [1]. |
 | MCP | Tool and context interface where Proofable policy can be evaluated before sensitive actions [5]. |
 | A2A | Agent discovery and interaction surface where Proofable identity and proof context can accompany an agent [6]. |
 | ERC-8004 | Agent identity, reputation, and validation registry model that can coexist with Proofable proof and authority records [7]. |
