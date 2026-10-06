@@ -94,7 +94,7 @@
         "Effect boundary is platform-observable only.",
         "Scope is per-action; per-object/byte binding is out of scope for this case."
       ],
-      "status": "PARTIALLY_OBSERVED"
+      "status": "SUPPORTED"
     },
     {
       "implementation": "Proofable",
@@ -179,7 +179,7 @@
         "Author-operated (SELF); no independent peer witness and no independent target-side effect byte.",
         "Effect boundary is platform-observable only."
       ],
-      "status": "SUPPORTED_AND_OBSERVED"
+      "status": "SUPPORTED"
     },
     {
       "implementation": "Proofable",
@@ -221,7 +221,7 @@
         "first_observed_denial": "not_applicable"
       },
       "dispatch_decision": {
-        "decision": "not_applicable_current_path",
+        "decision": "not_applicable_to_current_path",
         "reason": "no remote authority dependency exists on this path",
         "enforcement_point": "not_applicable"
       },
@@ -262,12 +262,12 @@
         "covered_effect_boundary": "platform terminal state; no independent target-side witness"
       },
       "limitations": [
-        "Case 3 is NOT_APPLICABLE_CURRENT_PATH: Proofable evaluates authority from current local authority state at dispatch, not from a remote authority/verifier service.",
+        "Case 3 is NOT APPLICABLE TO CURRENT PATH: Proofable evaluates authority from current local authority state at dispatch, not from a remote authority/verifier service.",
         "There is no remote authority dependency on this path to make unavailable, so the case is not exercised.",
         "Fail-closed behavior exists for unavailable authority inputs; it is not exercised as a live remote dependency on this path.",
         "A genuine remote-authority-unreachable comparison requires the peer harness with a real remote status source, which is the separate joint-run item."
       ],
-      "status": "NOT_APPLICABLE_CURRENT_PATH"
+      "status": "NOT_APPLICABLE_TO_CURRENT_PATH"
     },
     {
       "implementation": "Proofable",
@@ -352,7 +352,7 @@
         "Author-operated (SELF); no independent peer witness and no independent target-side effect byte.",
         "Effect is observed at the platform, not by an independent target-side readback."
       ],
-      "status": "PARTIALLY_OBSERVED"
+      "status": "SUPPORTED"
     }
   ]
 }

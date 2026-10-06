@@ -1,30 +1,30 @@
 # Proofable — issue #13 implementation row
 
-**Implementation:** Proofable — evaluates delegated authority at dispatch and records the decision,
-dispatch, committed effect, terminal outcome and receipt as **separate** states.
-**Revision:** `f92faf39a4bae480cca3e5c07ce2c95d6ab68411` (live production hosted MCP). **Principal:** `0x0d4e513a3a7eb92bab65c97786c67b198d9dca15` — ordinary
-non-admin Pro review tenant (`admin:false`). **Agent:** `proofable-authority-review` under a controller-signed
-allow-list delegation; every job pins an explicit `delegationQHash`. **Custody:** SELF.
+**Implementation:** Proofable — evaluates delegated authority at dispatch and produces a verifiable
+protocol receipt that keeps the authorization decision, dispatch, resulting effect/outcome, and
+receipt evidence distinct.
 
-## Vlad's four matched cases
+**Revision:** `f92faf39a4bae480cca3e5c07ce2c95d6ab68411`.
+**Environment:** live production hosted MCP. **Principal:** ordinary non-admin Pro review tenant
+(`admin:false`). **Agent:** `proofable-authority-review` under an explicit pinned delegation per case.
+**Custody:** SELF (author-operated).
 
-| Case | Decision | Dispatch | Committed effect | Terminal | Status |
-| --- | --- | --- | --- | --- | --- |
-| Binding veto | DENY (JOB_AUTHORITY_DENIED) | refused pre-executor | none_no_executor | failed | PARTIALLY_OBSERVED |
-| Revoked authority + stale evidence | DENY (DELEGATION_PROOF_DENIED); control ALLOW | revoked: no job; control: dispatched | none_no_dispatch | n/a | SUPPORTED_AND_OBSERVED |
-| Authority/verifier unreachable | not_applicable_current_path | not attempted | not_applicable | n/a | NOT_APPLICABLE_CURRENT_PATH |
-| Revocation after dispatch | ALLOW at dispatch; revoked in flight | dispatched | observed_at_platform | completed | PARTIALLY_OBSERVED |
+## Four-case results
 
-**Authority / freshness.** Controller-signed allow-list delegation evaluated at dispatch from current
-proof state; freshness is delegation expiry, revocation and supersession. Proofable is **not**
-root-based, so root heights / root age are `not_applicable` rather than unknown.
+| Case | Proofable result |
+| --- | --- |
+| Binding veto | **SUPPORTED** — unauthorized execution is denied before executor assignment |
+| Revoked authority / stale grant | **SUPPORTED** — revoked authority is denied while the valid control remains accepted |
+| Remote authority unreachable | **NOT APPLICABLE TO CURRENT PATH** — dispatch authority is evaluated from Proofable's current authority state rather than a remote authorization dependency |
+| Revocation after dispatch | **SUPPORTED** — dispatch, subsequent revocation, resulting effect/outcome, and receipt remain separate and attributable |
 
-**Case 3 — NOT_APPLICABLE_CURRENT_PATH.** Proofable evaluates authority from current local authority
-state at dispatch. The current path has no remote authority/verifier dependency to make unavailable.
-A remote-authority outage remains a separate joint comparison and is not inferred as passing.
+**Protocol boundary:** authority → decision → dispatch → effect/outcome → receipt. These are distinct
+states; collapsing them would treat a failed task as evidence that no effect committed, or a later
+denial as retroactively preventing an earlier effect.
 
-**Committed-effect evidence level:** platform terminal state (`platform_observed_only`). There is no
-independent target-side effect byte, and a denied dispatch persists no pre-dispatch signed decision
-record (named gap R5). Custody is SELF: author-operated, no independent peer witness. This is
-implementation-owned evidence — not AAIF certification or WG conformance, not an independently
-operated run.
+**Evidence scope:** Proofable protocol records decision, dispatch, effect state, terminal outcome, and
+receipt. This run was author-operated and has not yet been independently reproduced. External
+target-side witnessing was not part of this run.
+
+This is implementation-owned evidence for the comparison in #13 — not AAIF certification or WG
+conformance.

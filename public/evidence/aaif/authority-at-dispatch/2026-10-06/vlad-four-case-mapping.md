@@ -1,17 +1,14 @@
-# Proofable — four-case implementation export (shared authority/effect contract)
+# Proofable — four-case implementation export (case mapping)
 
-| Case | Proofable support | Decision evidence | Dispatch evidence | Effect evidence | Receipt/evidence | Residual risk |
+| Case | Proofable result | Decision | Dispatch | Effect/outcome | Receipt | Note |
 | --- | --- | --- | --- | --- | --- | --- |
-| Binding veto | PARTIALLY_OBSERVED | DENY before executor assigned (grant omits run_command) | dispatched, refused pre-executor | none_no_executor (not independently witnessed) | private terminal receipt | No independent target-side effect byte. |
-| Revoked authority + stale evidence | SUPPORTED_AND_OBSERVED | DENY (DELEGATION_PROOF_DENIED); never-revoked control accepted | no job created | none_no_dispatch | n/a (no job) | Proofable is not root-based; no stale-witness rollover to time. |
-| Authority/verifier unreachable | NOT_APPLICABLE_CURRENT_PATH | not_applicable_current_path | not attempted | not_applicable | n/a | No remote authority dependency exists on this path; remote-unreachable remains a separate joint comparison. |
-| Revocation after dispatch | PARTIALLY_OBSERVED | ALLOW at dispatch; grant revoked in flight | dispatched | observed_at_platform | private terminal receipt | Effect is platform-observed, not an independent target byte. |
+| Binding veto | **SUPPORTED** | DENY before executor assignment (grant omits `run_command`) | refused pre-executor | none | private terminal receipt | Unauthorized execution is denied. |
+| Revoked authority / stale grant | **SUPPORTED** | revoked: DENY (`DELEGATION_PROOF_DENIED`); never-revoked control: ALLOW | revoked: no job; control: dispatched | none | private terminal receipt (control) | Revoked authority is denied while the valid control remains accepted. |
+| Remote authority unreachable | **NOT APPLICABLE TO CURRENT PATH** | not applicable | not attempted | not applicable | n/a | Dispatch authority is evaluated from Proofable's current authority state; no remote authorization dependency on this path. |
+| Revocation after dispatch | **SUPPORTED** | ALLOW at dispatch | dispatched; revoked in flight | attributable to the original dispatch | private terminal receipt | Dispatch, subsequent revocation, effect/outcome, and receipt remain separate and attributable. |
 
-Boundaries kept separate per the shared contract: **decision → dispatch → committed effect → terminal
-outcome → receipt/evidence**. `PARTIALLY_OBSERVED` means the platform observes the boundary but no
-independent target-side witness exists.
+**Protocol boundary:** authority → decision → dispatch → effect/outcome → receipt.
 
-Case 3 is **NOT_APPLICABLE_CURRENT_PATH**: Proofable evaluates authority from current local authority
-state at dispatch, so there is no remote authority dependency to make unavailable. A
-remote-authority outage remains a separate joint comparison and is not inferred as passing.
-
+**Evidence scope:** Proofable protocol records decision, dispatch, effect state, terminal outcome, and
+receipt. This run was author-operated and has not yet been independently reproduced. External
+target-side witnessing was not part of this run.

@@ -1,28 +1,35 @@
 # Proofable — Authority-at-Dispatch evidence package
 
 Proofable's implementation-owned export for the shared authority/effect contract associated with
-[AAIF Identity & Trust issue #13](https://github.com/aaif/wg-identity-and-trust/issues/13). This is a
-sanitized public evidence projection. It is **not** AAIF certification, WG conformance, and **not**
-the separately-proposed joint/independently-operated run.
+[AAIF Identity & Trust issue #13](https://github.com/aaif/wg-identity-and-trust/issues/13).
+
+**One protocol, one proof, one receipt — disclosure controls what fields are shown.** These records
+are the deployed Proofable protocol's own output, shared at a public-safe disclosure level. This is
+not a second evidence system, and it is **not** AAIF certification, WG conformance, or the
+separately-proposed joint/independently-operated run.
 
 **Run.** Live production hosted MCP, protocol revision
 `f92faf39a4bae480cca3e5c07ce2c95d6ab68411`, run `four-case-run-f92faf39a4ba`. Executed by an
 **ordinary non-admin Pro review tenant** (`admin:false`) with the dedicated agent
 `proofable-authority-review` under an explicit pinned delegation per case. Custody is **SELF**
-(author-operated); independent reproduction remains pending.
+(author-operated).
 
 ## Four-case results
 
-| Case | Result |
+| Case | Proofable result |
 | --- | --- |
-| Binding veto | PARTIALLY_OBSERVED — dispatch refused before executor assignment; no protected effect observed |
-| Revoked authority + stale evidence | SUPPORTED_AND_OBSERVED — revoked authority denied; never-revoked control accepted |
-| Authority/verifier unreachable | NOT_APPLICABLE_CURRENT_PATH — Proofable evaluates current local authority state at dispatch; there is no remote authority dependency on this path |
-| Revocation after dispatch | PARTIALLY_OBSERVED — allowed at dispatch, revoked in flight, effect observed at the Proofable platform boundary |
+| Binding veto | **SUPPORTED** — unauthorized execution is denied before executor assignment |
+| Revoked authority / stale grant | **SUPPORTED** — revoked authority is denied while the valid control remains accepted |
+| Remote authority unreachable | **NOT APPLICABLE TO CURRENT PATH** — dispatch authority is evaluated from Proofable's current authority state rather than a remote authorization dependency |
+| Revocation after dispatch | **SUPPORTED** — dispatch, subsequent revocation, resulting effect/outcome, and receipt remain separate and attributable |
 
-**Boundary kept explicit:** decision → dispatch → committed effect → terminal outcome →
-receipt/evidence. These are distinct states in Proofable. Where Proofable does not independently
-observe a target-side effect, the record explicitly says `platform_observed_only`.
+**Protocol boundary:** authority → decision → dispatch → effect/outcome → receipt. These are distinct
+states in Proofable; collapsing them would treat a failed task as evidence that no effect committed,
+or a later denial as retroactively preventing an earlier effect.
+
+**Evidence scope:** Proofable protocol records decision, dispatch, effect state, terminal outcome, and
+receipt. This run was author-operated and has not yet been independently reproduced. External
+target-side witnessing was not part of this run.
 
 ## Files (this directory)
 
@@ -40,9 +47,10 @@ observe a target-side effect, the record explicitly says `platform_observed_only
 `SHA256SUMS` covers every payload file in this directory except itself. Verify with
 `sha256sum -c SHA256SUMS`.
 
-## What is not published
+## Disclosure
 
-Raw operational receipts, raw proof bodies, delegation policy contents, prompts and job payloads, and
-private runner/engine internals remain **private** (`receipt_visibility: private` in the manifest).
-The public package is a deterministic sanitized projection: pinned revision, machine-readable records,
-and SHA-256 checksums, sufficient to reproduce the claim without exposing the underlying private data.
+Visibility controls disclosure, not the artifact. The public package is the minimum public-safe
+representation of the actual Proofable proof/receipt, plus the revision and hashes needed to verify
+it. Raw operational receipts, raw proof bodies, delegation policy contents, prompts and job payloads,
+and private runner/engine internals remain undisclosed (`receipt_visibility: private` in the
+manifest).
