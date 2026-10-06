@@ -13,6 +13,8 @@
   },
   "custody": "SELF (author-operated; ordinary non-admin Pro review tenant)",
   "boundary": "authority → decision → dispatch → effect/outcome → receipt",
+  "authority_policy_version": "authority-policy.v1",
+  "authority_policy_boundary": "identity grants no authority; a separate delegation carries bounded authority and is re-evaluated from current state at dispatch",
   "evidence_scope": "author-operated; independent reproduction not yet claimed",
   "cases": [
     {

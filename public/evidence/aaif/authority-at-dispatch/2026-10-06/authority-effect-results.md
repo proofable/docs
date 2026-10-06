@@ -19,6 +19,22 @@ Custody: **SELF** (author-operated).
 states; collapsing them would treat a failed task as evidence that no effect committed, or a later
 denial as retroactively preventing an earlier effect.
 
+## How Proofable produces the result (public-safe summary)
+
+- **Identity is not authority.** An agent identity record establishes who the agent is and grants no
+  permissions. Bounded authority is a separate delegation, so an agent can be authenticated and still
+  lack the authority to act.
+- **Authority is evaluated at the action boundary.** The dispatch path resolves the selected
+  delegation from current state and checks the requested action against it — revoked or expired
+  authority is denied rather than inherited from a still-valid identity.
+- **A denial is itself evidence.** A refused dispatch produces a signed authority-decision record
+  (`outcome`, `reason`, `policyVersion`), not only a silent failure.
+- **The record is portable.** The same signed record can be carried to another relying party, which
+  applies its own appraisal; disclosure is separate from evidentiary validity, so the full delegation,
+  runtime policy, and internal execution state need not be disclosed.
+
+Authority policy version: `authority-policy.v1`.
+
 ## Remote authority unavailable (NOT APPLICABLE TO CURRENT PATH)
 
 Proofable evaluates dispatch authority from its own current authority state; this path has no remote
