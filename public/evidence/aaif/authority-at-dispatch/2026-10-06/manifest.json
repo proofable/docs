@@ -26,7 +26,8 @@
   "projection_method": "Expected assertions and observed job/receipt fields selected from the private epoch manifest and deterministic review. Raw delegated scope lists, prompts, keys and full job replies are omitted; receipt qHashes are included only as private-visibility references.",
   "custody": "SELF; ordinary-Pro tenant, founder/admin not used as execution principal; receipts private",
   "receipt_visibility": "private",
-  "matched_aaif_experiment": false,
+  "shared_contract_export": true,
+  "joint_independently_operated_run": false,
   "certification_claim": false,
   "aarm_conformance_claim": false,
   "agentgovbench_rank_claim": false

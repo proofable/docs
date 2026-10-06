@@ -1,27 +1,48 @@
-# Proofable — AAIF #13 evidence package
+# Proofable — Authority-at-Dispatch evidence package
 
-**This package contains Proofable's implementation-owned evidence for the proposed matched
-authority-at-dispatch experiment associated with AAIF Identity & Trust issue #13. It does not
-represent AAIF certification, WG conformance, or the separate proposed eight-case matrix.**
+Proofable's implementation-owned export for the shared authority/effect contract associated with
+[AAIF Identity & Trust issue #13](https://github.com/aaif/wg-identity-and-trust/issues/13). This is a
+sanitized public evidence projection. It is **not** AAIF certification, WG conformance, and **not**
+the separately-proposed joint/independently-operated run.
 
-What was run: Proofable's bounded authority-at-dispatch implementation assertions, plus the matched
-four-case export, through its **live production hosted MCP service** on the pinned revision
-`f92faf39a4bae480cca3e5c07ce2c95d6ab68411`, executed by an **ordinary non-admin Pro review tenant** with a dedicated agent and an
-explicit pinned delegation per job.
+**Run.** Live production hosted MCP, protocol revision
+`f92faf39a4bae480cca3e5c07ce2c95d6ab68411`, run `four-case-run-f92faf39a4ba`. Executed by an
+**ordinary non-admin Pro review tenant** (`admin:false`) with the dedicated agent
+`proofable-authority-review` under an explicit pinned delegation per case. Custody is **SELF**
+(author-operated); independent reproduction remains pending.
 
-What is claimed: implementation evidence with the boundaries decision → dispatch → committed effect →
-terminal outcome → receipt/evidence kept separate, and every unavailable field marked. Custody is
-**SELF** (author-operated).
+## Four-case results
 
-What is **not** claimed: AAIF certification or conformance, WG conformance, an independent
-peer-operated run, an independent target-side effect witness, or independent reproduction.
+| Case | Result |
+| --- | --- |
+| Binding veto | PARTIALLY_OBSERVED — dispatch refused before executor assignment; no protected effect observed |
+| Revoked authority + stale evidence | SUPPORTED_AND_OBSERVED — revoked authority denied; never-revoked control accepted |
+| Authority/verifier unreachable | NOT_APPLICABLE_CURRENT_PATH — Proofable evaluates current local authority state at dispatch; there is no remote authority dependency on this path |
+| Revocation after dispatch | PARTIALLY_OBSERVED — allowed at dispatch, revoked in flight, effect observed at the Proofable platform boundary |
 
-Files: `proofable-row.md` (issue #13 row) · `matched-four-case-results.md` (shared-contract four-case
-export) · `manifest.json` · `trace.jsonl` (sha256 `409e025c4ca0e2a60fa82b1d7a29eba5509d906a567c27c3090f859175e14d11`) · `checksums.txt` · `REPRODUCE.md` ·
-`reply-to-vlad.md` · `implementation-assertions.md` · `vlad-four-case-mapping.md`.
+**Boundary kept explicit:** decision → dispatch → committed effect → terminal outcome →
+receipt/evidence. These are distinct states in Proofable. Where Proofable does not independently
+observe a target-side effect, the record explicitly says `platform_observed_only`.
 
-Two evidence sets, never conflated. (1) Proofable's own bounded implementation assertions
-(`implementation-assertions.md`) — native implementation evidence. (2) Vlad's four matched cases
-(`vlad-four-case-mapping.md` and `matched-four-case-results.md`) — the shared-contract export for the
-matched run. The working group's separately-proposed multi-case matrix is **not** part of this package;
-it is not adopted and is not evidence for #13.
+## Files (this directory)
+
+| File | Role |
+| --- | --- |
+| `README.md` | this summary |
+| `manifest.json` | machine-readable projection: pins revision, run, custody, claims |
+| `proofable-row.md` | the issue #13 implementation row |
+| `matched-four-case-results.md` | four-case export under the shared authority/effect contract |
+| `matched-four-case.json` | machine-readable four-case records |
+| `vlad-four-case-mapping.md` | case-by-case mapping against the shared contract |
+| `trace.jsonl` | one sanitized record per case (8 records) |
+| `SHA256SUMS` | SHA-256 for the seven payload files beside it |
+
+`SHA256SUMS` covers every payload file in this directory except itself. Verify with
+`sha256sum -c SHA256SUMS`.
+
+## What is not published
+
+Raw operational receipts, raw proof bodies, delegation policy contents, prompts and job payloads, and
+private runner/engine internals remain **private** (`receipt_visibility: private` in the manifest).
+The public package is a deterministic sanitized projection: pinned revision, machine-readable records,
+and SHA-256 checksums, sufficient to reproduce the claim without exposing the underlying private data.

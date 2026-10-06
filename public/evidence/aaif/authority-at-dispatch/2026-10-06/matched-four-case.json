@@ -14,7 +14,7 @@
       "implementation": "Proofable",
       "source_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
       "deployed_build_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
-      "adapter_revision": "runners/aaif/build-matched-four-case.mjs",
+      "export_method": "Proofable implementation-owned deterministic export (private tooling, not published)",
       "executed_path": "live production hosted MCP (proofable_job_create / proofable_proof_revoke over the ordinary-Pro review tenant)",
       "evidence_class": "runtime execution (not source inspection)",
       "run_id": "four-case-run-f92faf39a4ba",
@@ -34,7 +34,7 @@
         "scope": "not_applicable"
       },
       "authority_evidence": {
-        "source": "local Proofable proof store (getProofsByWallet)",
+        "source": "current local Proofable authority state evaluated at dispatch",
         "status": "current at dispatch",
         "observation_time": "2026-10-06T14:11:25.265Z",
         "age": "not_applicable",
@@ -100,7 +100,7 @@
       "implementation": "Proofable",
       "source_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
       "deployed_build_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
-      "adapter_revision": "runners/aaif/build-matched-four-case.mjs",
+      "export_method": "Proofable implementation-owned deterministic export (private tooling, not published)",
       "executed_path": "live production hosted MCP (proofable_job_create / proofable_proof_revoke over the ordinary-Pro review tenant)",
       "evidence_class": "runtime execution (not source inspection)",
       "run_id": "four-case-run-f92faf39a4ba",
@@ -120,7 +120,7 @@
         "scope": "not_applicable"
       },
       "authority_evidence": {
-        "source": "local Proofable proof store (getProofsByWallet)",
+        "source": "current local Proofable authority state evaluated at dispatch",
         "status": "revoked (replay) vs valid (control)",
         "observation_time": "2026-10-06T14:11:40.597Z",
         "age": "not_applicable",
@@ -185,7 +185,7 @@
       "implementation": "Proofable",
       "source_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
       "deployed_build_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
-      "adapter_revision": "runners/aaif/build-matched-four-case.mjs",
+      "export_method": "Proofable implementation-owned deterministic export (private tooling, not published)",
       "executed_path": "live production hosted MCP (proofable_job_create / proofable_proof_revoke over the ordinary-Pro review tenant)",
       "evidence_class": "runtime execution (not source inspection)",
       "run_id": "four-case-run-f92faf39a4ba",
@@ -206,7 +206,7 @@
         "note": "no pre-authorized fallback on this path"
       },
       "authority_evidence": {
-        "source": "local Proofable proof store (getProofsByWallet)",
+        "source": "current local Proofable authority state evaluated at dispatch",
         "status": "current at dispatch",
         "observation_time": "2026-10-06T14:12:04.331Z",
         "age": "not_applicable",
@@ -221,22 +221,22 @@
         "first_observed_denial": "not_applicable"
       },
       "dispatch_decision": {
-        "decision": "unknown",
-        "reason": "remote authority dependency not present on this path",
+        "decision": "not_applicable_current_path",
+        "reason": "no remote authority dependency exists on this path",
         "enforcement_point": "not_applicable"
       },
       "observed_effect": {
-        "state": "unknown",
-        "evidence": "not independently observed",
+        "state": "not_applicable",
+        "evidence": "no remote authority dependency to make unavailable; case not exercised",
         "target_read": "none",
         "effect_id": null,
         "note": "A task return is not used as proof of a committed target-side effect; where only platform state exists it is marked platform_observed_only."
       },
       "task_recovery": {
-        "terminal_state": "unknown",
+        "terminal_state": "not_applicable",
         "retries": 0,
         "duplicates": 0,
-        "recovery_latency": "not_observed",
+        "recovery_latency": "not_applicable",
         "interruption_point": "not_applicable"
       },
       "reader_appraisal": {
@@ -247,7 +247,7 @@
           "delegation resolved at dispatch",
           "action checked against allow-list"
         ],
-        "missing_proof": "remote authority dependency absent on this path",
+        "missing_proof": "no remote authority dependency on this path",
         "contradictions": "not_applicable",
         "publication_decision": "private; public evidence is a sanitized projection",
         "retained_evidence": "private epoch records on the operator host"
@@ -262,18 +262,18 @@
         "covered_effect_boundary": "platform terminal state; no independent target-side witness"
       },
       "limitations": [
-        "Case 3 is resolved as NOT APPLICABLE to Proofable's current authority path, not demonstrated.",
-        "Proofable's dispatch authority reads the LOCAL proof store (getProofsByWallet); it does not query a remote authority/verifier service on this path.",
-        "The engine has a modeled fail-closed gateway branch (gatewayReachable=false → GATEWAY_UNREACHABLE → DENY), but that is an engine input, not a live remote dependency, so there is no live outage to exercise here.",
-        "A genuine remote-authority-unreachable comparison requires the peer harness with a real remote status source, which is the joint-run item."
+        "Case 3 is NOT_APPLICABLE_CURRENT_PATH: Proofable evaluates authority from current local authority state at dispatch, not from a remote authority/verifier service.",
+        "There is no remote authority dependency on this path to make unavailable, so the case is not exercised.",
+        "Fail-closed behavior exists for unavailable authority inputs; it is not exercised as a live remote dependency on this path.",
+        "A genuine remote-authority-unreachable comparison requires the peer harness with a real remote status source, which is the separate joint-run item."
       ],
-      "status": "NOT_DEMONSTRATED"
+      "status": "NOT_APPLICABLE_CURRENT_PATH"
     },
     {
       "implementation": "Proofable",
       "source_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
       "deployed_build_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
-      "adapter_revision": "runners/aaif/build-matched-four-case.mjs",
+      "export_method": "Proofable implementation-owned deterministic export (private tooling, not published)",
       "executed_path": "live production hosted MCP (proofable_job_create / proofable_proof_revoke over the ordinary-Pro review tenant)",
       "evidence_class": "runtime execution (not source inspection)",
       "run_id": "four-case-run-f92faf39a4ba",
@@ -293,7 +293,7 @@
         "scope": "not_applicable"
       },
       "authority_evidence": {
-        "source": "local Proofable proof store (getProofsByWallet)",
+        "source": "current local Proofable authority state evaluated at dispatch",
         "status": "current at dispatch",
         "observation_time": "2026-10-06T14:12:04.711Z",
         "age": "not_applicable",
