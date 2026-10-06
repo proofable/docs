@@ -1,0 +1,358 @@
+{
+  "schema": "proofable-aaif-matched-four-case/v1",
+  "contract": {
+    "reference": "probityai/agent-evidence-observer",
+    "commit": "fb8cabc5c9c54459743497f2325bfef49b137a1a",
+    "file": "interop/authority-unreachable-2026-10-03/CONTRACT.md"
+  },
+  "implementation": "Proofable",
+  "deployed_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
+  "custody": "SELF (author-operated; ordinary non-admin Pro review tenant)",
+  "note": "Proofable-native export under the shared contract. It expresses records Proofable's own production runner already produced; it does not port Proofable into the observer and does not invent target-side evidence. Independent peer execution remains pending.",
+  "cases": [
+    {
+      "implementation": "Proofable",
+      "source_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
+      "deployed_build_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
+      "adapter_revision": "runners/aaif/build-matched-four-case.mjs",
+      "executed_path": "live production hosted MCP (proofable_job_create / proofable_proof_revoke over the ordinary-Pro review tenant)",
+      "evidence_class": "runtime execution (not source inspection)",
+      "run_id": "four-case-run-f92faf39a4ba",
+      "case_id": "binding_veto",
+      "attempt_id": "2026-10-06T14:11:25.265Z",
+      "principal": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+      "agent": "proofable-authority-review",
+      "requested_action": "isolated-computer execution requiring run_command",
+      "protected_target": "isolated computer execution (run_command)",
+      "approved_action": {
+        "bytes_digest": "not_applicable",
+        "note": "Proofable binds authority per action, not per approved-content byte; byte-level binding is not part of this experiment"
+      },
+      "delegation_reference": "0xce1702c88636afe05e4ba15ad5928b74e736b46b682ef83e13f1d4d45bf7afde",
+      "pre_authorized_fallback": {
+        "exists": false,
+        "scope": "not_applicable"
+      },
+      "authority_evidence": {
+        "source": "local Proofable proof store (getProofsByWallet)",
+        "status": "current at dispatch",
+        "observation_time": "2026-10-06T14:11:25.265Z",
+        "age": "not_applicable",
+        "deployed_freshness_rule": "delegation evaluated at dispatch from current proof state; freshness = delegation expiry/revocation (not root-based)",
+        "check_performed_at_dispatch": "controller→agent delegation resolved and action checked against allowedActions"
+      },
+      "temporal_revocation": {
+        "trigger_time": "not_applicable",
+        "authority_evidence_consulted": "not_applicable",
+        "last_accepted_action": "not_applicable",
+        "required_deny_point": "before executor assignment",
+        "first_observed_denial": "2026-10-06T14:11:40.225Z"
+      },
+      "dispatch_decision": {
+        "decision": "DENY",
+        "reason": "JOB_AUTHORITY_DENIED: run_command is required for isolated harness execution.",
+        "enforcement_point": "Proofable authority gate at dispatch"
+      },
+      "observed_effect": {
+        "state": "none_no_executor",
+        "evidence": "failed before an executor was assigned; no protected effect could commit",
+        "target_read": "none",
+        "effect_id": "0xeeeaebe48bcd58de7e42db07d3b56fcb92f1372a49b591e2a7b3c6a21b19efc2",
+        "note": "A task return is not used as proof of a committed target-side effect; where only platform state exists it is marked platform_observed_only."
+      },
+      "task_recovery": {
+        "terminal_state": "failed",
+        "retries": 0,
+        "duplicates": 0,
+        "recovery_latency": "not_applicable",
+        "interruption_point": "not_applicable"
+      },
+      "reader_appraisal": {
+        "selected_pins": {
+          "deployed_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411"
+        },
+        "checks_performed": [
+          "delegation resolved at dispatch",
+          "action checked against allow-list"
+        ],
+        "missing_proof": "not_applicable",
+        "contradictions": "not_applicable",
+        "publication_decision": "private; public evidence is a sanitized projection",
+        "retained_evidence": "private epoch records on the operator host"
+      },
+      "operation_custody": {
+        "producer": "Proofable operator (ordinary non-admin Pro review tenant)",
+        "gate": "Proofable authority gate",
+        "status_source": "Proofable proof store",
+        "reader": "not_applicable",
+        "keys_controlled_by": "operator",
+        "custody": "SELF (author-operated)",
+        "covered_effect_boundary": "platform terminal state; no independent target-side witness"
+      },
+      "limitations": [
+        "Author-operated (SELF); no independent peer witness and no independent target-side effect byte.",
+        "Effect boundary is platform-observable only.",
+        "Scope is per-action; per-object/byte binding is out of scope for this case."
+      ],
+      "status": "PARTIALLY_OBSERVED"
+    },
+    {
+      "implementation": "Proofable",
+      "source_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
+      "deployed_build_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
+      "adapter_revision": "runners/aaif/build-matched-four-case.mjs",
+      "executed_path": "live production hosted MCP (proofable_job_create / proofable_proof_revoke over the ordinary-Pro review tenant)",
+      "evidence_class": "runtime execution (not source inspection)",
+      "run_id": "four-case-run-f92faf39a4ba",
+      "case_id": "revoked_stale",
+      "attempt_id": "2026-10-06T14:11:40.597Z",
+      "principal": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+      "agent": "proofable-authority-review",
+      "requested_action": "dispatch under a revoked grant, with a never-revoked control",
+      "protected_target": "Proofable job dispatch (the enforcement point is Proofable's own authority gate before an executor is assigned)",
+      "approved_action": {
+        "bytes_digest": "not_applicable",
+        "note": "Proofable binds authority per action, not per approved-content byte; byte-level binding is not part of this experiment"
+      },
+      "delegation_reference": "0x1135538b7efddcae5ef18b28d9da3c048d8ce0bfa154ddbe43553643da7898ac",
+      "pre_authorized_fallback": {
+        "exists": false,
+        "scope": "not_applicable"
+      },
+      "authority_evidence": {
+        "source": "local Proofable proof store (getProofsByWallet)",
+        "status": "revoked (replay) vs valid (control)",
+        "observation_time": "2026-10-06T14:11:40.597Z",
+        "age": "not_applicable",
+        "deployed_freshness_rule": "delegation evaluated at dispatch from current proof state; freshness = delegation expiry/revocation (not root-based)",
+        "check_performed_at_dispatch": "controller→agent delegation resolved and action checked against allowedActions"
+      },
+      "temporal_revocation": {
+        "trigger_time": "not_applicable",
+        "authority_evidence_consulted": "not_applicable",
+        "last_accepted_action": "not_applicable",
+        "required_deny_point": "not_applicable",
+        "first_observed_denial": "not_applicable"
+      },
+      "dispatch_decision": {
+        "decision": "DENY",
+        "reason": "DELEGATION_PROOF_DENIED",
+        "enforcement_point": "Proofable authority gate at dispatch"
+      },
+      "observed_effect": {
+        "state": "none_no_executor",
+        "evidence": "unknown",
+        "target_read": "none",
+        "effect_id": null,
+        "note": "A task return is not used as proof of a committed target-side effect; where only platform state exists it is marked platform_observed_only."
+      },
+      "task_recovery": {
+        "terminal_state": "unknown",
+        "retries": 0,
+        "duplicates": 0,
+        "recovery_latency": "not_applicable",
+        "interruption_point": "not_applicable"
+      },
+      "reader_appraisal": {
+        "selected_pins": {
+          "deployed_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411"
+        },
+        "checks_performed": [
+          "delegation resolved at dispatch",
+          "action checked against allow-list"
+        ],
+        "missing_proof": "not_applicable",
+        "contradictions": "not_applicable",
+        "publication_decision": "private; public evidence is a sanitized projection",
+        "retained_evidence": "private epoch records on the operator host"
+      },
+      "operation_custody": {
+        "producer": "Proofable operator (ordinary non-admin Pro review tenant)",
+        "gate": "Proofable authority gate",
+        "status_source": "Proofable proof store",
+        "reader": "not_applicable",
+        "keys_controlled_by": "operator",
+        "custody": "SELF (author-operated)",
+        "covered_effect_boundary": "platform terminal state; no independent target-side witness"
+      },
+      "limitations": [
+        "Author-operated (SELF); no independent peer witness and no independent target-side effect byte.",
+        "Effect boundary is platform-observable only."
+      ],
+      "status": "SUPPORTED_AND_OBSERVED"
+    },
+    {
+      "implementation": "Proofable",
+      "source_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
+      "deployed_build_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
+      "adapter_revision": "runners/aaif/build-matched-four-case.mjs",
+      "executed_path": "live production hosted MCP (proofable_job_create / proofable_proof_revoke over the ordinary-Pro review tenant)",
+      "evidence_class": "runtime execution (not source inspection)",
+      "run_id": "four-case-run-f92faf39a4ba",
+      "case_id": "unreachable",
+      "attempt_id": "2026-10-06T14:12:04.331Z",
+      "principal": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+      "agent": "proofable-authority-review",
+      "requested_action": "dispatch under a remote-authority dependency (not applicable — see delegation/fallback)",
+      "protected_target": "Proofable job dispatch (the enforcement point is Proofable's own authority gate before an executor is assigned)",
+      "approved_action": {
+        "bytes_digest": "not_applicable",
+        "note": "Proofable binds authority per action, not per approved-content byte; byte-level binding is not part of this experiment"
+      },
+      "delegation_reference": null,
+      "pre_authorized_fallback": {
+        "exists": false,
+        "scope": "not_applicable",
+        "note": "no pre-authorized fallback on this path"
+      },
+      "authority_evidence": {
+        "source": "local Proofable proof store (getProofsByWallet)",
+        "status": "current at dispatch",
+        "observation_time": "2026-10-06T14:12:04.331Z",
+        "age": "not_applicable",
+        "deployed_freshness_rule": "delegation evaluated at dispatch from current proof state; freshness = delegation expiry/revocation (not root-based)",
+        "check_performed_at_dispatch": "controller→agent delegation resolved and action checked against allowedActions"
+      },
+      "temporal_revocation": {
+        "trigger_time": "not_applicable",
+        "authority_evidence_consulted": "not_applicable",
+        "last_accepted_action": "not_applicable",
+        "required_deny_point": "not_applicable",
+        "first_observed_denial": "not_applicable"
+      },
+      "dispatch_decision": {
+        "decision": "unknown",
+        "reason": "remote authority dependency not present on this path",
+        "enforcement_point": "not_applicable"
+      },
+      "observed_effect": {
+        "state": "unknown",
+        "evidence": "not independently observed",
+        "target_read": "none",
+        "effect_id": null,
+        "note": "A task return is not used as proof of a committed target-side effect; where only platform state exists it is marked platform_observed_only."
+      },
+      "task_recovery": {
+        "terminal_state": "unknown",
+        "retries": 0,
+        "duplicates": 0,
+        "recovery_latency": "not_observed",
+        "interruption_point": "not_applicable"
+      },
+      "reader_appraisal": {
+        "selected_pins": {
+          "deployed_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411"
+        },
+        "checks_performed": [
+          "delegation resolved at dispatch",
+          "action checked against allow-list"
+        ],
+        "missing_proof": "remote authority dependency absent on this path",
+        "contradictions": "not_applicable",
+        "publication_decision": "private; public evidence is a sanitized projection",
+        "retained_evidence": "private epoch records on the operator host"
+      },
+      "operation_custody": {
+        "producer": "Proofable operator (ordinary non-admin Pro review tenant)",
+        "gate": "Proofable authority gate",
+        "status_source": "Proofable proof store",
+        "reader": "not_applicable",
+        "keys_controlled_by": "operator",
+        "custody": "SELF (author-operated)",
+        "covered_effect_boundary": "platform terminal state; no independent target-side witness"
+      },
+      "limitations": [
+        "Case 3 is resolved as NOT APPLICABLE to Proofable's current authority path, not demonstrated.",
+        "Proofable's dispatch authority reads the LOCAL proof store (getProofsByWallet); it does not query a remote authority/verifier service on this path.",
+        "The engine has a modeled fail-closed gateway branch (gatewayReachable=false → GATEWAY_UNREACHABLE → DENY), but that is an engine input, not a live remote dependency, so there is no live outage to exercise here.",
+        "A genuine remote-authority-unreachable comparison requires the peer harness with a real remote status source, which is the joint-run item."
+      ],
+      "status": "NOT_DEMONSTRATED"
+    },
+    {
+      "implementation": "Proofable",
+      "source_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
+      "deployed_build_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
+      "adapter_revision": "runners/aaif/build-matched-four-case.mjs",
+      "executed_path": "live production hosted MCP (proofable_job_create / proofable_proof_revoke over the ordinary-Pro review tenant)",
+      "evidence_class": "runtime execution (not source inspection)",
+      "run_id": "four-case-run-f92faf39a4ba",
+      "case_id": "post_dispatch_revoke",
+      "attempt_id": "2026-10-06T14:12:04.711Z",
+      "principal": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+      "agent": "proofable-authority-review",
+      "requested_action": "bounded job execution, then revoke the pinned grant in flight",
+      "protected_target": "bounded job execution (in-flight revocation)",
+      "approved_action": {
+        "bytes_digest": "not_applicable",
+        "note": "Proofable binds authority per action, not per approved-content byte; byte-level binding is not part of this experiment"
+      },
+      "delegation_reference": null,
+      "pre_authorized_fallback": {
+        "exists": false,
+        "scope": "not_applicable"
+      },
+      "authority_evidence": {
+        "source": "local Proofable proof store (getProofsByWallet)",
+        "status": "current at dispatch",
+        "observation_time": "2026-10-06T14:12:04.711Z",
+        "age": "not_applicable",
+        "deployed_freshness_rule": "delegation evaluated at dispatch from current proof state; freshness = delegation expiry/revocation (not root-based)",
+        "check_performed_at_dispatch": "controller→agent delegation resolved and action checked against allowedActions"
+      },
+      "temporal_revocation": {
+        "trigger_time": "unknown",
+        "authority_evidence_consulted": "pinned delegation at dispatch",
+        "last_accepted_action": "unknown",
+        "required_deny_point": "next dispatch after revocation",
+        "first_observed_denial": "not_applicable"
+      },
+      "dispatch_decision": {
+        "decision": "ALLOW",
+        "reason": null,
+        "enforcement_point": "Proofable authority gate at dispatch"
+      },
+      "observed_effect": {
+        "state": "observed_at_platform",
+        "evidence": "job reached completed; the platform terminal state is the effect observation, not an independent target-side byte",
+        "target_read": "platform_observed_only",
+        "effect_id": "0x72b9148e90b4a0e67aa30601190d4c413015df1ce756322d01197a41cdf757f1",
+        "note": "A task return is not used as proof of a committed target-side effect; where only platform state exists it is marked platform_observed_only."
+      },
+      "task_recovery": {
+        "terminal_state": "completed",
+        "retries": 0,
+        "duplicates": 0,
+        "recovery_latency": "not_observed",
+        "interruption_point": "not_applicable"
+      },
+      "reader_appraisal": {
+        "selected_pins": {
+          "deployed_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411"
+        },
+        "checks_performed": [
+          "delegation resolved at dispatch",
+          "action checked against allow-list"
+        ],
+        "missing_proof": "not_applicable",
+        "contradictions": "not_applicable",
+        "publication_decision": "private; public evidence is a sanitized projection",
+        "retained_evidence": "private epoch records on the operator host"
+      },
+      "operation_custody": {
+        "producer": "Proofable operator (ordinary non-admin Pro review tenant)",
+        "gate": "Proofable authority gate",
+        "status_source": "Proofable proof store",
+        "reader": "not_applicable",
+        "keys_controlled_by": "operator",
+        "custody": "SELF (author-operated)",
+        "covered_effect_boundary": "platform terminal state; no independent target-side witness"
+      },
+      "limitations": [
+        "Author-operated (SELF); no independent peer witness and no independent target-side effect byte.",
+        "Effect is observed at the platform, not by an independent target-side readback."
+      ],
+      "status": "PARTIALLY_OBSERVED"
+    }
+  ]
+}
