@@ -117,6 +117,21 @@ for (const file of mdxFiles) {
 }
 
 const redirects = Array.isArray(config.redirects) ? config.redirects : [];
+
+// Mintlify refuses to deploy when two redirects share a source ("Each source path can only be
+// used once"). A Set hides this, so assert uniqueness explicitly — a duplicate silently breaks
+// every deploy while the local route checks still pass.
+const redirectSourceCounts = new Map();
+for (const redirect of redirects) {
+  const source = String(redirect.source || '');
+  redirectSourceCounts.set(source, (redirectSourceCounts.get(source) || 0) + 1);
+}
+for (const [source, count] of redirectSourceCounts) {
+  if (count > 1) {
+    errors.push(`Redirect source is declared ${count} times: ${source} (Mintlify requires one source per path)`);
+  }
+}
+
 const redirectSources = new Set(redirects.map(row => row.source));
 for (const redirect of redirects) {
   const destination = String(redirect.destination || '').split(/[?#]/, 1)[0];
