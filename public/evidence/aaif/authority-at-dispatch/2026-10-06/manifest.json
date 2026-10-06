@@ -10,7 +10,7 @@
   "custody": "SELF (author-operated; ordinary non-admin Pro review tenant)",
   "boundary": "authority \u2192 decision \u2192 dispatch \u2192 effect/outcome \u2192 receipt",
   "authority_policy_version": "authority-policy.v1",
-  "authority_policy_boundary": "identity grants no authority; a separate delegation carries bounded authority and is re-evaluated from current state at dispatch",
+  "authority_policy_boundary": "identity is independent of how authority is received; authority may be native or delegated, and when delegated the grant is evaluated from current state at the action boundary",
   "results": {
     "binding_veto": "SUPPORTED",
     "revoked_stale": "SUPPORTED",

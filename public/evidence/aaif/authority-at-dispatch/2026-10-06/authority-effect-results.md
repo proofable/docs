@@ -21,17 +21,21 @@ denial as retroactively preventing an earlier effect.
 
 ## How Proofable produces the result (public-safe summary)
 
-- **Identity is not authority.** An agent identity record establishes who the agent is and grants no
-  permissions. Bounded authority is a separate delegation, so an agent can be authenticated and still
-  lack the authority to act.
-- **Authority is evaluated at the action boundary.** The dispatch path resolves the selected
-  delegation from current state and checks the requested action against it — revoked or expired
-  authority is denied rather than inherited from a still-valid identity.
+- **Identity is not authority.** An agent can have its own identity independent of how it receives
+  authority. When authority is delegated, Proofable records the grant separately and evaluates its
+  current state at the action boundary. An agent can be authenticated and still lack the authority to
+  act.
+- **Authority is evaluated at the action boundary.** For this delegated-authority scenario, the
+  dispatch path resolves the selected grant from current state and checks the requested action against
+  it — revoked or expired authority is denied rather than inherited from a still-valid identity.
 - **A denial is itself evidence.** A refused dispatch produces a signed authority-decision record
   (`outcome`, `reason`, `policyVersion`), not only a silent failure.
 - **The record is portable.** The same signed record can be carried to another relying party, which
-  applies its own appraisal; disclosure is separate from evidentiary validity, so the full delegation,
+  applies its own appraisal; disclosure is separate from evidentiary validity, so the full grant,
   runtime policy, and internal execution state need not be disclosed.
+- **Layers stay separate.** Proofable treats identity, authority, execution evidence and appraisal as
+  distinct layers. Authority may be native or delegated; the proof/receipt is the evidence layer that
+  connects them, not an authorization model in itself.
 
 Authority policy version: `authority-policy.v1`.
 
