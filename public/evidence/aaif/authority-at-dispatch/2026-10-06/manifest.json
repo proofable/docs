@@ -21,5 +21,17 @@
     "file": "trace.jsonl",
     "record_count": 6,
     "sha256": "d749cf16fe8dd599f528e21e95863b930004a0b3f0a9882695e3d3b03e8c2183"
+  },
+  "reader_appraisal": {
+    "trace_check": "recompute SHA-256 of trace.jsonl and compare with manifest.public_trace.sha256",
+    "record_check": "the underlying Proofable proof/receipt is a CAIP-380 envelope; verify it offline with verifyPortableProofEnvelope from the public Apache-2.0 @proofable/sdk",
+    "policy_digest": "not emitted by the deployed system; authority_policy_version is the policy identifier"
+  },
+  "public_references": {
+    "sdk": "https://www.npmjs.com/package/@proofable/sdk",
+    "mcp": "https://github.com/proofable/mcp",
+    "docs": "https://docs.proofable.me",
+    "caip380": "https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-380.md",
+    "hosted_mcp_endpoint": "https://mcp.proofable.me/mcp"
   }
 }
