@@ -151,53 +151,6 @@
         }
       },
       "type": "object"
-    },
-    "skills": {
-      "description": "Agent skills as structured objects",
-      "items": {
-        "properties": {
-          "configId": {
-            "description": "Optional opaque integration or provider configuration reference. Not a secret, not an OAuth token, not credential material.",
-            "maxLength": 128,
-            "type": "string"
-          },
-          "enabled": {
-            "type": "boolean"
-          },
-          "id": {
-            "maxLength": 64,
-            "type": "string"
-          },
-          "kind": {
-            "enum": [
-              "native",
-              "integration",
-              "plugin",
-              "mcp",
-              "toolkit"
-            ],
-            "type": "string"
-          },
-          "label": {
-            "maxLength": 64,
-            "type": "string"
-          },
-          "provider": {
-            "maxLength": 64,
-            "type": "string"
-          },
-          "version": {
-            "maxLength": 32,
-            "type": "string"
-          }
-        },
-        "required": [
-          "id"
-        ],
-        "type": "object"
-      },
-      "maxItems": 48,
-      "type": "array"
     }
   },
   "required": [
