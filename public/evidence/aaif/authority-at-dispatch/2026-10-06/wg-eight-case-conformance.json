@@ -1,0 +1,105 @@
+{
+  "schema": "proofable-aaif-wg-eight-case-conformance/v1",
+  "artifact": "Working-group eight-case conformance mapping",
+  "note": "Maps the CURRENT Proofable implementation onto the working group's eight proposed conformance cases. Separate from Proofable's own bounded implementation assertions and from Vlad's four matched cases. No conformance score is claimed; NOT_DEMONSTRATED rows are genuine gaps.",
+  "status_vocabulary": [
+    "DEMONSTRATED",
+    "PARTIAL",
+    "NOT_DEMONSTRATED"
+  ],
+  "tally": {
+    "NOT_DEMONSTRATED": 4,
+    "PARTIAL": 3,
+    "DEMONSTRATED": 1
+  },
+  "cases": [
+    {
+      "n": 1,
+      "title": "Delegator authority revoked after downstream delegation",
+      "expected_invariant": "Revoking a delegator's authority invalidates every downstream delegation derived from it.",
+      "failure_condition": "A downstream delegate still acts after its delegator's authority is revoked.",
+      "observable_evidence": "A downstream chain exists; revoke the delegator; the downstream delegate is then refused.",
+      "status": "NOT_DEMONSTRATED",
+      "proofable_evidence": "Proofable has no sub-delegation chain. revoke_before_dispatch revokes a single controller→agent delegation and denies dispatch, but there is no downstream delegation to invalidate.",
+      "missing": "A sub-delegation model (delegate-of-a-delegate) — a product capability Proofable does not have.",
+      "residual_risk": "Proofable cannot be compared on this case until it implements multi-level delegation; reporting DEMONSTRATED would be false."
+    },
+    {
+      "n": 2,
+      "title": "Valid delegation used for the wrong object or action",
+      "expected_invariant": "A valid delegation permits only the specific action (and object) it names.",
+      "failure_condition": "A delegate performs an action or targets an object outside its delegated scope while the delegation is otherwise valid.",
+      "observable_evidence": "An in-scope grant is used for an out-of-scope action/object and is refused at the enforcement point.",
+      "status": "PARTIAL",
+      "proofable_evidence": "binding_veto: an active grant that omits run_command is refused isolated execution before an executor is assigned (JOB_AUTHORITY_DENIED). This proves ACTION-scope enforcement. Object/byte binding (the exact media, packaging or destination) is not proven.",
+      "missing": "A per-object/per-byte binding assertion (e.g. a delegated destination or content hash enforced at dispatch).",
+      "residual_risk": "Scope is per-action, not per-object; a same-action/different-object misuse is not covered by current evidence."
+    },
+    {
+      "n": 3,
+      "title": "Stale revocation information",
+      "expected_invariant": "A relying party acting on stale revocation state cannot authorize an action whose authority has since been revoked.",
+      "failure_condition": "A revoked delegation is accepted because the consumer read a stale revocation state.",
+      "observable_evidence": "A revoked grant replayed against a consumer that re-reads state is denied; the read is at the enforcement point, not cached.",
+      "status": "PARTIAL",
+      "proofable_evidence": "stale_authority: a revoked grant replayed twice is denied both times (DELEGATION_PROOF_DENIED), no job created. Proofable re-evaluates authority at dispatch from current proof state, so it does not act on stale revocation state — but there is no explicit max-age window or a consumer-held-stale-state assertion.",
+      "missing": "A documented maximum tolerable age for revocation state, and an assertion that a deliberately stale consumer is refused.",
+      "residual_risk": "Freshness is \"evaluated at dispatch\" by construction; the WG may require an explicit window rather than a structural guarantee."
+    },
+    {
+      "n": 4,
+      "title": "Human / escalation authority unavailable",
+      "expected_invariant": "When the escalation authority is unreachable, the default is to block; only an explicitly pre-authorized fallback may proceed.",
+      "failure_condition": "An action proceeds because the escalation authority could not be reached.",
+      "observable_evidence": "With the escalation authority unavailable, a refusal is recorded, no protected effect commits, and the action can resume after reconnection.",
+      "status": "DEMONSTRATED",
+      "proofable_evidence": "approval_unavailable: the job parks at waiting_approval, is cancelled without approval, and a late approve is refused (JOB_APPROVAL_STATE_CHANGED) with no executor — the lapsed approval did not execute the action. The authority engine also has a fail-closed gateway branch (GATEWAY_UNREACHABLE → DENY).",
+      "missing": "The REMOTE-authority-unreachable variant (verifier/authority timeout, not a human approval window) is not exercised live; the 24h approval timeout is unit-tested only.",
+      "residual_risk": "The human-unavailable half is demonstrated; the remote-authority-unreachable half is `unknown` and is exactly the matched-run case."
+    },
+    {
+      "n": 5,
+      "title": "Authority amplified through multi-hop delegation",
+      "expected_invariant": "Each delegation hop attenuates authority; no hop can amplify (widen) the authority it received.",
+      "failure_condition": "A downstream delegation grants more than its upstream delegation held.",
+      "observable_evidence": "A chain of delegations where every hop is a subset of the previous, and a widening hop is refused.",
+      "status": "NOT_DEMONSTRATED",
+      "proofable_evidence": "No multi-hop delegation exists. The engine distinguishes an ABSENT allowedActions (unscoped controller path) from a PRESENT-but-EMPTY one (scoped to nothing), but no attenuation chain is exercised.",
+      "missing": "A sub-delegation model with a per-hop attenuation invariant.",
+      "residual_risk": "This is the same missing capability as case 1; not testable without a delegation chain."
+    },
+    {
+      "n": 6,
+      "title": "Identity valid while effective authority is expired or invalid",
+      "expected_invariant": "Identity/authentication can remain valid while effective authority is expired, and the expired authority alone blocks the action.",
+      "failure_condition": "An action proceeds on the strength of a still-valid identity after the authority has expired.",
+      "observable_evidence": "Identity proof still active; delegation expired; the action is refused.",
+      "status": "PARTIAL",
+      "proofable_evidence": "expiry_before_dispatch: a delegation past its expiry is denied (DELEGATION_PROOF_DENIED), no job created. The agent-identity proof remains active in the same run, but the record does not explicitly co-assert identity validity alongside the expiry denial.",
+      "missing": "An explicit co-assertion in one record: identity valid AND authority expired AND action refused.",
+      "residual_risk": "The separation is structurally true (identity and delegation are separate proofs), but the evidence does not yet state both facts in a single record."
+    },
+    {
+      "n": 7,
+      "title": "Delegation chain becomes a surveillance graph",
+      "expected_invariant": "A delegation chain does not expose linkability that turns it into a surveillance graph.",
+      "failure_condition": "The delegation structure reveals the human principal or links otherwise-separate subjects.",
+      "observable_evidence": "A privacy/linkability analysis over the delegation chain and its recorded provenance.",
+      "status": "NOT_DEMONSTRATED",
+      "proofable_evidence": "Nothing in the current assertions tests privacy or linkability exposure. Proofable's model is the opposite of a hidden-principal rail: proofs are portable and offchain by default and state what was verified (private proof BODIES are protected, but the delegation names a controller wallet).",
+      "missing": "A linkability/privacy analysis and, if required, a hidden-principal or unlinkability mechanism Proofable does not implement.",
+      "residual_risk": "This case is not a fit for Proofable's design; the honest position is N/A-to-NOT_DEMONSTRATED rather than a claimed pass."
+    },
+    {
+      "n": 8,
+      "title": "Erroneous or disputed revocation, with contest and recovery evidence",
+      "expected_invariant": "A revocation that is disputed can be contested, resolved, and — if erroneous — the authority restored, with evidence for each transition.",
+      "failure_condition": "An erroneous revocation is permanent with no contest or restoration path, or a restoration leaves no evidence.",
+      "observable_evidence": "Contest → resolution outcome → restoration/confirmation, each recorded.",
+      "status": "NOT_DEMONSTRATED",
+      "proofable_evidence": "Revocation metadata exists (proofs are revocable and excluded once revoked), but there is no contest → outcome → restoration workflow, and no record shape for it.",
+      "missing": "A dispute/contest and restoration workflow with transition evidence.",
+      "residual_risk": "A genuine product gap; building it is out of scope for this evidence task."
+    }
+  ]
+}
