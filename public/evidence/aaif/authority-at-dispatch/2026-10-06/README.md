@@ -3,10 +3,10 @@
 Proofable's implementation evidence for the authority/effect comparison associated with
 [AAIF Identity & Trust issue #13](https://github.com/aaif/wg-identity-and-trust/issues/13).
 
-**Run.** Live production hosted MCP, protocol revision
-`f92faf39a4bae480cca3e5c07ce2c95d6ab68411`, run `four-case-run-f92faf39a4ba`. Executed by an
-ordinary non-admin Pro review tenant (`admin:false`) with the dedicated agent
-`proofable-authority-review` under an explicit pinned delegation per case.
+**Run.** Live production hosted MCP, protocol revision `f92faf39a4bae480cca3e5c07ce2c95d6ab68411`, run
+`authority-suite-epoch-f92faf39a4ba`. Executed by an ordinary non-admin Pro review tenant (`admin:false`) with
+the dedicated agent `proofable-authority-review` under an explicit pinned delegation per case.
+The post-revocation ordering case was re-observed on the same pinned revision.
 
 ## Results
 
@@ -15,9 +15,15 @@ ordinary non-admin Pro review tenant (`admin:false`) with the dedicated agent
 | Binding veto / action outside delegated authority | **SUPPORTED** — unauthorized execution is denied before executor assignment |
 | Revoked authority / stale grant | **SUPPORTED** — revoked authority is denied while the never-revoked control remains accepted |
 | Remote authority unavailable | **NOT APPLICABLE TO CURRENT PATH** — Proofable evaluates current authority state locally at dispatch and has no remote authorization dependency on this path |
-| Revocation after dispatch | **SUPPORTED** — the dispatch decision, later revocation, resulting effect/outcome, and receipt remain separately attributable |
+| Revocation after dispatch | **SUPPORTED** — the dispatch decision, the later revocation, the resulting effect/outcome, and the refusal of the next dispatch are separately attributable |
 
 **Protocol boundary:** authority → decision → dispatch → effect/outcome → receipt.
+
+**Revocation after dispatch.** One grant is dispatched under, revoked while the action is in flight, and
+then used for the next dispatch. The earlier action was allowed at dispatch and its effect was already
+committed and read back at the platform; the next dispatch under the same revoked grant was refused with
+a reason. When authorization was refused is therefore reported separately from whether the prior action
+had already committed an effect. Revocation latency is **not measured** in this run.
 
 The result is a portable proof/receipt of the protocol decision and outcome; disclosure controls
 which fields are shared. Where Proofable does not independently observe a target-side effect, the

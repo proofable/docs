@@ -1,16 +1,21 @@
 {
-  "schema": "proofable-authority-at-dispatch-evidence/v1",
+  "schema": "proofable-authority-at-dispatch-evidence/v2",
   "implementation": "Proofable",
-  "environment": "prod",
   "deployed_revision": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
-  "run_id": "four-case-run-f92faf39a4ba",
+  "run_id": "authority-suite-epoch-f92faf39a4ba",
   "disclosure": "public",
   "source_record_visibility": "private",
   "independent_reproduction": false,
   "custody": "SELF (author-operated; ordinary non-admin Pro review tenant)",
-  "boundary": "authority \u2192 decision \u2192 dispatch \u2192 effect/outcome \u2192 receipt",
+  "boundary": "authority → decision → dispatch → effect/outcome → receipt",
   "authority_policy_version": "authority-policy.v1",
   "authority_policy_boundary": "identity is independent of how authority is received; authority may be native or delegated, and when delegated the grant is evaluated from current state at the action boundary",
+  "evidence_scope": "author-operated; independent reproduction not yet claimed; revocation latency not measured",
+  "contract": {
+    "reference": "probityai/agent-evidence-observer",
+    "commit": "fb8cabc5c9c54459743497f2325bfef49b137a1a",
+    "file": "interop/authority-unreachable-2026-10-03/CONTRACT.md"
+  },
   "results": {
     "binding_veto": "SUPPORTED",
     "revoked_stale": "SUPPORTED",
@@ -20,12 +25,17 @@
   "public_trace": {
     "file": "trace.jsonl",
     "record_count": 6,
-    "sha256": "d749cf16fe8dd599f528e21e95863b930004a0b3f0a9882695e3d3b03e8c2183"
+    "sha256": "b70a6b9dfd7e0d4499bacddda0d4605552f72e90982011001df9631756f5c0a8"
   },
   "reader_appraisal": {
     "trace_check": "recompute SHA-256 of trace.jsonl and compare with manifest.public_trace.sha256",
     "record_check": "the underlying Proofable proof/receipt is a CAIP-380 envelope; verify it offline with verifyPortableProofEnvelope from the public Apache-2.0 @proofable/sdk",
     "policy_digest": "not emitted by the deployed system; authority_policy_version is the policy identifier"
+  },
+  "post_dispatch_revocation": {
+    "record": "authority-effect-results.json → cases[case_id=post_dispatch_revoke].temporal_revocation",
+    "trace": "trace.jsonl → post_dispatch_revoke.dispatch_sequence",
+    "separates": "the next dispatch refusal (with its reason) from the earlier action's already-committed effect"
   },
   "public_references": {
     "sdk": "https://www.npmjs.com/package/@proofable/sdk",
