@@ -2,7 +2,19 @@
   "schema": "proofable-authority-at-dispatch-evidence/v2",
   "implementation": "Proofable",
   "deployed_revision": "e1217327a1568b39d5153686b8085471b5329cde",
-  "run_id": "authority-suite-epoch-aaif-e1217327a-20261008",
+  "run_id": "aaif-e1217327a-20261008",
+  "source_runs": [
+    {
+      "run_id": "aaif-e1217327a-20261008",
+      "role": "eight-case authority suite",
+      "records": 8
+    },
+    {
+      "run_id": "aaif-e1217327a-20261008",
+      "role": "ordered post-revocation probe",
+      "records": 1
+    }
+  ],
   "disclosure": "public",
   "source_record_visibility": "public_link_only_for_disclosed_receipts",
   "independent_reproduction": false,
@@ -11,6 +23,9 @@
   "authority_policy_version": "authority-policy.v1",
   "authority_policy_boundary": "identity is independent of how authority is received; authority may be native or delegated, and when delegated the grant is evaluated from current state at the action boundary",
   "evidence_scope": "author-operated; independent reproduction not yet claimed; revocation latency not measured",
+  "portable_proof_signer": "each disclosed envelope is signed by the Proofable service wallet, which attests a server-observed statement; the envelope subject/owner names whose record is stored, not who signed it",
+  "signer_address": "0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec",
+  "subject_controller_address": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
   "contract": {
     "reference": "probityai/agent-evidence-observer",
     "commit": "fb8cabc5c9c54459743497f2325bfef49b137a1a",
@@ -29,7 +44,7 @@
   },
   "portable_proofs": {
     "file": "portable-proofs.json",
-    "count": 17,
+    "count": 11,
     "references": [
       {
         "case_id": "hosted_allow",
@@ -52,26 +67,6 @@
         "qHash": "0x71804bd8ca81e1ccb691ce6bfd8422b884437b4390b9c289f09db19fc2309f3c"
       },
       {
-        "case_id": "approval_reachable",
-        "relation": "job-outcome",
-        "qHash": "0xf80c5b1bcab2a3a4f14d4a8745200dffa987517eb78f4950cafbf6688f42384e"
-      },
-      {
-        "case_id": "approval_reachable",
-        "relation": "authority-decision",
-        "qHash": "0xe662eaa54a5e3d7875827794d6a69b4e86973fee49cfa71e555f821d5ed28c35"
-      },
-      {
-        "case_id": "approval_unavailable",
-        "relation": "job-outcome",
-        "qHash": "0x8e142577c043c102a63563ad4864f814c71c66e9282592268d3a5daa0f8003c8"
-      },
-      {
-        "case_id": "approval_unavailable",
-        "relation": "authority-decision",
-        "qHash": "0x6c53cb0005c9dc30fde5bb1bd06860d74ae51790be3869a6605bfc9f71e01954"
-      },
-      {
         "case_id": "revoke_before_dispatch",
         "relation": "authority-decision",
         "qHash": "0x8a3e5ff89c8a86423bae61db96c9732f319a6f6cdb34f4bde560c90d25366c95"
@@ -90,16 +85,6 @@
         "case_id": "stale_authority",
         "relation": "authority-decision",
         "qHash": "0x40b44805057d6ec3708debcb0b490b3087d8e7cb2e853c6a6f434c57ee8a430d"
-      },
-      {
-        "case_id": "post_dispatch_revoke",
-        "relation": "job-outcome",
-        "qHash": "0xbcd0d9a750e9d7e3d5679c1ec9457dd5bd3a7333081a29659c31070bc8d55d9e"
-      },
-      {
-        "case_id": "post_dispatch_revoke",
-        "relation": "authority-decision",
-        "qHash": "0x6fb0c224126040e13ab6c63ee7bbe4595f10847166dc6393df1247b115735818"
       },
       {
         "case_id": "post_dispatch_revoke_ordered",

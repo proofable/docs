@@ -3,6 +3,18 @@
   "implementation": "Proofable",
   "deployed_revision": "e1217327a1568b39d5153686b8085471b5329cde",
   "run_id": "aaif-e1217327a-20261008",
+  "source_runs": [
+    {
+      "run_id": "aaif-e1217327a-20261008",
+      "role": "eight-case authority suite",
+      "records": 8
+    },
+    {
+      "run_id": "aaif-e1217327a-20261008",
+      "role": "ordered post-revocation probe",
+      "records": 1
+    }
+  ],
   "custody": "SELF (author-operated; no independent witness)",
   "boundary": "authority → decision → dispatch → effect/outcome → receipt",
   "results": {
@@ -24,8 +36,9 @@
         "check_at_dispatch": "controller→agent delegation resolved; requested action checked against the allow-list"
       },
       "dispatch_decision": {
-        "decision": "ALLOW",
+        "job_admission": "ALLOW",
         "protected_action_decision": "DENY",
+        "decision": "DENY",
         "reason": "run_command is required"
       },
       "observed_effect": {

@@ -7,7 +7,7 @@ Deployed revision `e1217327a1568b39d5153686b8085471b5329cde`; environment: live 
 
 | Scenario | Decision | Dispatch | Effect/outcome | Protocol record | Result |
 | --- | --- | --- | --- | --- | --- |
-| binding_veto | job dispatch ALLOW; run_command DENY | protected action refused before executor assignment | none — no effect could commit | signed decision + job outcome | **SUPPORTED** |
+| binding_veto | job dispatch DENY; run_command DENY | protected action refused before executor assignment | none — no effect could commit | signed decision + job outcome | **SUPPORTED** |
 | revoked_stale | revoked: DENY (`DELEGATION_PROOF_DENIED`); never-revoked control: ALLOW | revoked: no job created; control: dispatched | none | recorded | **SUPPORTED** |
 | unreachable | NOT APPLICABLE TO CURRENT PATH | not attempted | not applicable | not applicable | **NOT APPLICABLE TO CURRENT PATH** |
 | post_dispatch_revoke | ALLOW at dispatch; next dispatch after revocation: DENY (`DELEGATION_PROOF_DENIED`) | dispatched; revocation occurred in flight; next dispatch refused | the earlier action's effect was already committed and remains observed at the platform | recorded | **SUPPORTED** |

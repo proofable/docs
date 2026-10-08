@@ -3,11 +3,20 @@
 Proofable's implementation evidence for the authority/effect comparison associated with
 [AAIF Identity & Trust issue #13](https://github.com/aaif/wg-identity-and-trust/issues/13).
 
-**Run.** Live production hosted MCP, protocol revision `e1217327a1568b39d5153686b8085471b5329cde`, run
-`aaif-e1217327a-20261008`. Executed by the Proofable operator under a non-privileged review profile
-(not an administrative path), with the dedicated agent `proofable-authority-review` under an
-explicit pinned delegation per case.
-The post-revocation ordering case was re-observed on the same pinned revision.
+**Run.** Live production hosted MCP, protocol revision `e1217327a1568b39d5153686b8085471b5329cde`, run `aaif-e1217327a-20261008`,
+assembled from 2 source runs:
+- `aaif-e1217327a-20261008` — eight-case authority suite
+- `aaif-e1217327a-20261008` — ordered post-revocation probe
+Executed by the Proofable operator under a non-privileged review profile (not an administrative
+path), with the dedicated agent `proofable-authority-review` under an explicit pinned delegation
+per case. The ordered post-revocation boundary is a second source run in the same packet, not a
+re-observation of the same run.
+
+**Signer and subject.** Every disclosed envelope is signed by the Proofable service wallet
+`0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec`. The signature means *Proofable attests this
+server-observed statement*; it is not the controller signing their own outcome. The controller
+`0x0d4e513a3a7eb92bab65c97786c67b198d9dca15` is the statement's subject/owner whose record is
+stored. The two addresses differ by design.
 
 ## Results
 
