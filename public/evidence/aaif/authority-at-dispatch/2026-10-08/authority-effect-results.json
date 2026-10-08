@@ -3,7 +3,7 @@
   "implementation": "Proofable",
   "deployed_revision": "e1217327a1568b39d5153686b8085471b5329cde",
   "run_id": "aaif-e1217327a-20261008",
-  "custody": "SELF (author-operated; ordinary non-admin Pro review tenant)",
+  "custody": "SELF (author-operated; no independent witness)",
   "boundary": "authority → decision → dispatch → effect/outcome → receipt",
   "results": {
     "binding_veto": "SUPPORTED",

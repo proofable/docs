@@ -4,8 +4,9 @@ Proofable's implementation evidence for the authority/effect comparison associat
 [AAIF Identity & Trust issue #13](https://github.com/aaif/wg-identity-and-trust/issues/13).
 
 **Run.** Live production hosted MCP, protocol revision `e1217327a1568b39d5153686b8085471b5329cde`, run
-`aaif-e1217327a-20261008`. Executed by an ordinary non-admin Pro review tenant (`admin:false`) with
-the dedicated agent `proofable-authority-review` under an explicit pinned delegation per case.
+`aaif-e1217327a-20261008`. Executed by the Proofable operator under a non-privileged review profile
+(not an administrative path), with the dedicated agent `proofable-authority-review` under an
+explicit pinned delegation per case.
 The post-revocation ordering case was re-observed on the same pinned revision.
 
 ## Results
