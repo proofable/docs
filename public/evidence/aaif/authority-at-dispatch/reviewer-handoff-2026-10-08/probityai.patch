@@ -1,0 +1,410 @@
+diff --git a/interop/authority-unreachable-2026-10-03/implementation-records/SOURCES.json b/interop/authority-unreachable-2026-10-03/implementation-records/SOURCES.json
+index 7ebcf89..12b123b 100644
+--- a/interop/authority-unreachable-2026-10-03/implementation-records/SOURCES.json
++++ b/interop/authority-unreachable-2026-10-03/implementation-records/SOURCES.json
+@@ -72,37 +72,47 @@
+       "tag": "public-v2026-10-07"
+     },
+     "proofable": {
+-      "commit": "3a45f026fd0c06b9d1d411c053597584b6b1c3dc",
++      "commit": "bbd7ee67b8d15557b032c8724cbbc4c4f0d14bce",
+       "files": {
+         "README.md": {
+-          "bytes": 2409,
+-          "sha256": "67dcbff2c2045f421ad8ef8dd1926f0ff967870c66570cd45575d13a127cda4a",
+-          "url": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/README.md"
++          "bytes": 3342,
++              "sha256": "15337a02172629522f72fddda1f2ccadf6343abc8b6c109283b2e0fc97b998e7",
++          "url": "https://raw.githubusercontent.com/proofable/docs/bbd7ee67b8d15557b032c8724cbbc4c4f0d14bce/public/evidence/aaif/authority-at-dispatch/2026-10-08/README.md"
+         },
+         "SHA256SUMS": {
+-          "bytes": 424,
+-          "sha256": "3ddf1e631c23f5b26442a06b57d153b9976bddbc6721cbef40b296ff81a06c5d",
+-          "url": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/SHA256SUMS"
++          "bytes": 604,
++          "sha256": "90e11f2331bf20d644a7adcc5d3d4e537dd8b4591bb526795ce0a893a16b9219",
++          "url": "https://raw.githubusercontent.com/proofable/docs/bbd7ee67b8d15557b032c8724cbbc4c4f0d14bce/public/evidence/aaif/authority-at-dispatch/2026-10-08/SHA256SUMS"
+         },
+         "authority-effect-results.json": {
+-          "bytes": 5650,
+-          "sha256": "c4b35ed7c2f08dc8924979934a137a9bfd673436a4c98f89395d3d6ece7dd92f",
+-          "url": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/authority-effect-results.json"
++          "bytes": 5674,
++              "sha256": "bca06e1f2e4d414ee295ce5e1a6ee373d3f275ee5d5f2ac2ec2e865984373fa7",
++          "url": "https://raw.githubusercontent.com/proofable/docs/bbd7ee67b8d15557b032c8724cbbc4c4f0d14bce/public/evidence/aaif/authority-at-dispatch/2026-10-08/authority-effect-results.json"
+         },
+         "authority-effect-results.md": {
+-          "bytes": 4569,
+-          "sha256": "0338ff2367ef06568301bed497d2f067fd7650499b07fd6f540b69781cef9702",
+-          "url": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/authority-effect-results.md"
++          "bytes": 4100,
++          "sha256": "07d46e6d73af6388ead6ed8236d6af6c3e26eabbbbbd418e47d0ded76aa075d8",
++          "url": "https://raw.githubusercontent.com/proofable/docs/bbd7ee67b8d15557b032c8724cbbc4c4f0d14bce/public/evidence/aaif/authority-at-dispatch/2026-10-08/authority-effect-results.md"
+         },
+         "manifest.json": {
+-          "bytes": 1840,
+-          "sha256": "f0a6bc2243e753c437215476d466094ca6c7b889701b64edf221f6ddbbc8660d",
+-          "url": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/manifest.json"
++          "bytes": 5864,
++              "sha256": "9bf4e51aaac6c7807a7d9e310fac7ac1f3223737145375e2c30f55a416dffdc3",
++          "url": "https://raw.githubusercontent.com/proofable/docs/bbd7ee67b8d15557b032c8724cbbc4c4f0d14bce/public/evidence/aaif/authority-at-dispatch/2026-10-08/manifest.json"
++        },
++        "portable-proofs.json": {
++          "bytes": 36181,
++          "sha256": "786dbf30d2068aacb0df01e1c26c4b2458d381957946e8a9bc12abd5318e5485",
++          "url": "https://raw.githubusercontent.com/proofable/docs/bbd7ee67b8d15557b032c8724cbbc4c4f0d14bce/public/evidence/aaif/authority-at-dispatch/2026-10-08/portable-proofs.json"
+         },
+         "trace.jsonl": {
+-          "bytes": 2757,
+-          "sha256": "8df7ed9d49d1d6fb696a05661fd11db194db7c808719a66cadbf0f0a562cc1e2",
+-          "url": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/trace.jsonl"
++          "bytes": 4239,
++          "sha256": "96241d8409c4661f8e60cd0904e7245434f48bf5711d9c377706f29ff721a0c8",
++          "url": "https://raw.githubusercontent.com/proofable/docs/bbd7ee67b8d15557b032c8724cbbc4c4f0d14bce/public/evidence/aaif/authority-at-dispatch/2026-10-08/trace.jsonl"
++        },
++        "verify-portable-proofs.mjs": {
++          "bytes": 440,
++          "sha256": "f7eb8f74885518b3ba0d945f60500e3236a25ad569fdcc6c8e44af462eaa3248",
++          "url": "https://raw.githubusercontent.com/proofable/docs/bbd7ee67b8d15557b032c8724cbbc4c4f0d14bce/public/evidence/aaif/authority-at-dispatch/2026-10-08/verify-portable-proofs.mjs"
+         }
+       },
+       "name": "Proofable",
+diff --git a/interop/authority-unreachable-2026-10-03/implementation_records.py b/interop/authority-unreachable-2026-10-03/implementation_records.py
+index 054fbf0..24531bd 100644
+--- a/interop/authority-unreachable-2026-10-03/implementation_records.py
++++ b/interop/authority-unreachable-2026-10-03/implementation_records.py
+@@ -272,17 +272,61 @@ def read_proofable(directory: Path) -> dict[str, Any]:
+     denials = [r for r in trace if r["observed"].get("dispatch_decision") == "DENY"]
+     checks.add("proofable-denials-carry-reason", all(r["observed"].get("code") for r in denials),
+                "denied without a reason code: " + ", ".join(r["case_id"] for r in denials if not r["observed"].get("code")))
+-    # This published schema contains neither a revocation event nor dispatch ordering.
+-    # Matching a delegation hash or moving a line cannot establish the required boundary.
++    # REVIEWER PATCH (2026-10-08). The previous line hard-coded this check to False because the
++    # published schema could not carry a revocation event time or dispatch ordering. It now does:
++    # trace.jsonl -> post_dispatch_revoke.dispatch_sequence records the ordered boundary, and
++    # authority-effect-results.json -> cases[post_dispatch_revoke].temporal_revocation carries the
++    # same ordering. Observe the new fields rather than preserving the historical failure; the
++    # boundary still fails closed when any required element is absent.
++    pdr = next((r for r in trace if r["case_id"] == "post_dispatch_revoke"), None)
++    sequence = (pdr or {}).get("dispatch_sequence") or []
++    by_event = {step.get("event"): step for step in sequence}
++    revocation = by_event.get("revocation") or {}
++    next_dispatch = by_event.get("next_dispatch") or {}
++    boundary_observed = (
++        bool(sequence)
++        and bool(revocation.get("at"))                      # revocation event time
++        and next_dispatch.get("decision") == "DENY"         # required deny point reached
++        and bool(next_dispatch.get("reason"))               # refusal carries its reason
++        and {"dispatch", "original_effect"} <= set(by_event)  # both anchors present
++    )
+     revocation_detail = (
++        "trace.jsonl -> post_dispatch_revoke.dispatch_sequence records dispatch (ALLOW), the "
++        "revocation event time with in-flight status, the earlier action's platform-observed "
++        "effect, and the next dispatch refused (DENY) with reason; "
++        "authority-effect-results.json -> cases[post_dispatch_revoke].temporal_revocation carries "
++        "the same ordering, keeping the refusal separate from the already-committed effect"
++        if boundary_observed else
+         "the stated deny point is the next dispatch after revocation; the published schema "
+-        "provides no revocation event time or dispatch sequence, so that boundary is not observed"
++        "provides no complete revocation event time or dispatch sequence, so that boundary is not observed"
+     )
+-    checks.add("proofable-post-dispatch-deny-point-observed", False, revocation_detail)
++    checks.add("proofable-post-dispatch-deny-point-observed", boundary_observed, revocation_detail)
+     receipts = [r["terminal_receipt"] for r in trace if r.get("terminal_receipt")]
+     public = [r for r in receipts if r.get("visibility") != "private"]
+     if public:
+         checks.add("proofable-receipts-public", True, f"{len(public)} public receipts")
++    # REVIEWER PATCH (2026-10-08). The package now discloses portable envelopes, so the
++    # CAIP-380 check is performed here instead of skipped. Each envelope is verified
++    # independently of Proofable's runtime and SDK: the qHash is recomputed from the
++    # canonical subset and the EIP-191 signer is recovered from the published bytes.
++    proofs_spec = manifest.get("portable_proofs") or {}
++    proofs_file = proofs_spec.get("file")
++    if proofs_file and (directory / proofs_file).is_file():
++        import portable_envelope
++        envelopes = json.loads((directory / proofs_file).read_bytes())
++        by_hash = {str(e.get("qHash", "")).lower(): e for e in envelopes}
++        references = proofs_spec.get("references", [])
++        checks.add("proofable-envelope-count",
++                    len(envelopes) == proofs_spec.get("count") and len(envelopes) == len(by_hash)
++                    and all(str(r.get("qHash", "")).lower() in by_hash for r in references),
++                    f"{len(envelopes)} envelopes, {len(references)} references, "
++                    f"manifest count {proofs_spec.get('count')}")
++        invalid = [{"qHash": e.get("qHash"), "errors": verdict["errors"]}
++                   for e in envelopes if not (verdict := portable_envelope.verify(e))["valid"]]
++        checks.add("proofable-receipt-envelope-verified", not invalid and bool(envelopes),
++                    json.dumps(invalid) if invalid else
++                    f"{len(envelopes)} envelopes: qHash recomputed and EIP-191 signer recovered "
++                    "from the published bytes, independently of the Proofable SDK")
+     else:
+         checks.skip("proofable-receipt-envelope-verified",
+                     f"all {len(receipts)} terminal receipts are private; only their qHash is published, "
+diff --git a/interop/authority-unreachable-2026-10-03/portable_envelope.py b/interop/authority-unreachable-2026-10-03/portable_envelope.py
+new file mode 100644
+index 0000000..8e53f19
+--- /dev/null
++++ b/interop/authority-unreachable-2026-10-03/portable_envelope.py
+@@ -0,0 +1,110 @@
++"""Verify a Proofable CAIP-380 portable envelope offline, from the published bytes alone.
++
++This is independent of Proofable's runtime and its published SDK. It re-derives the
++canonical JSON subset (Unicode code-point key order, NFC), recomputes the SHAKE-256
++qHash, rebuilds the signer message and recovers the EIP-191 signer, then requires the
++recovered signer to equal the envelope's own `walletAddress`. Nothing is attested here:
++a passing check means the envelope is internally consistent, not that any effect,
++freshness claim or off-chain fact behind it is true.
++
++CAIP-380 profile: https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-380.md
++"""
++
++from __future__ import annotations
++
++import json
++import unicodedata
++from hashlib import shake_256
++from typing import Any
++
++SIGNER_HEADER = "Portable Proof Verification Request"
++
++
++def _string(value: str) -> str:
++    """Serialise a string as JavaScript JSON.stringify does (no ASCII escaping)."""
++    return json.dumps(unicodedata.normalize("NFC", value), ensure_ascii=False)
++
++
++def _canonical(value: Any) -> str:
++    """Return the canonical JSON of a value: object keys sorted by Unicode code point."""
++    if value is None:
++        return "null"
++    if isinstance(value, bool):
++        return "true" if value else "false"
++    if isinstance(value, (int, float)):
++        if isinstance(value, float):
++            if not value.is_integer():
++                raise ValueError("canonical JSON requires a finite JSON number")
++            return str(int(value))
++        return str(value)
++    if isinstance(value, str):
++        return _string(value)
++    if isinstance(value, list):
++        return "[" + ",".join(_canonical(item) for item in value) + "]"
++    if isinstance(value, dict):
++        entries = sorted(((unicodedata.normalize("NFC", key), item)
++                          for key, item in value.items()),
++                         key=lambda pair: [ord(character) for character in pair[0]])
++        return "{" + ",".join(f"{_string(key)}:{_canonical(item)}" for key, item in entries) + "}"
++    raise ValueError("value is not valid canonical JSON")
++
++
++def canonical_subset(envelope: dict[str, Any]) -> dict[str, Any]:
++    """The CAIP-380 canonical subset: exactly one of chain / chainId is present."""
++    has_chain = isinstance(envelope.get("chain"), str) and bool(envelope["chain"].strip())
++    has_chain_id = isinstance(envelope.get("chainId"), int) and envelope["chainId"] > 0
++    if has_chain == has_chain_id:
++        raise ValueError("envelope must contain exactly one of chain or chainId")
++    subset = {
++        "did": envelope["did"],
++        "verifierIds": envelope["verifierIds"],
++        "data": envelope["data"],
++        "signedTimestamp": envelope["signedTimestamp"],
++    }
++    if has_chain:
++        subset["chain"] = envelope["chain"].strip()
++    else:
++        subset["chainId"] = envelope["chainId"]
++    return subset
++
++
++def qhash(envelope: dict[str, Any]) -> str:
++    """Recompute the CAIP-380 qHash from the canonical subset."""
++    digest = shake_256(_canonical(canonical_subset(envelope)).encode("utf-8")).hexdigest(32)
++    return "0x" + digest
++
++
++def message(envelope: dict[str, Any]) -> str:
++    """Rebuild the exact signer message the envelope's signature commits to."""
++    subset = canonical_subset(envelope)
++    chain = subset.get("chain") if subset.get("chain") is not None else subset["chainId"]
++    components = [
++        SIGNER_HEADER,
++        "Wallet: " + str(envelope["walletAddress"]).lower(),
++        "Chain: " + str(chain),
++        "Verifiers: " + ",".join(str(entry) for entry in envelope["verifierIds"]),
++        "Data: " + _canonical(envelope["data"]),
++        "Timestamp: " + str(envelope["signedTimestamp"]),
++    ]
++    return unicodedata.normalize("NFC", "\n".join(components))
++
++
++def verify(envelope: dict[str, Any]) -> dict[str, Any]:
++    """Return the qHash and signature verdict for one envelope, with every failure named."""
++    errors: list[str] = []
++    signer = None
++    try:
++        if envelope.get("qHash") != qhash(envelope):
++            errors.append("qHash does not match the canonical subset")
++    except (KeyError, ValueError) as error:
++        errors.append("qHash could not be recomputed: " + str(error))
++    try:
++        from eth_account import Account
++        from eth_account.messages import encode_defunct
++        signer = Account.recover_message(encode_defunct(text=message(envelope)),
++                                         signature=envelope["signature"])
++    except Exception as error:  # recovery failure is a failing check, never a pass
++        errors.append("signature recovery failed: " + str(error))
++    if signer is not None and str(envelope.get("walletAddress", "")).lower() != signer.lower():
++        errors.append("recovered signer does not equal the envelope walletAddress")
++    return {"valid": not errors, "signer": signer, "errors": errors}
+diff --git a/interop/authority-unreachable-2026-10-03/test_implementation_records.py b/interop/authority-unreachable-2026-10-03/test_implementation_records.py
+index 4038633..1aeb056 100644
+--- a/interop/authority-unreachable-2026-10-03/test_implementation_records.py
++++ b/interop/authority-unreachable-2026-10-03/test_implementation_records.py
+@@ -15,8 +15,12 @@ from reader import read_run
+ RECORDS = Path(__file__).resolve().parent / "implementation-records"
+ MINTID_JSONL = "revocation-trace-testnet-20261006T073712Z.jsonl"
+ MINTID_MANIFEST = "revocation-trace-testnet-20261006T073712Z.manifest.json"
+-PROOFABLE_KNOWN_FAILURES = ["proofable-sha256sums-trace.jsonl", "proofable-manifest-trace-digest",
+-                            "proofable-denials-carry-reason", "proofable-post-dispatch-deny-point-observed"]
++# REVIEWER PATCH (2026-10-08). The previous four "known failures" were properties of the pinned
++# 2026-10-06 package: a CRLF digest mismatch, a missing reason code on a denial, and a hard-coded
++# assertion that the schema could not carry the revocation boundary. The 2026-10-08 package at
++# Proofable docs commit bbd7ee6 fixes all four and discloses portable envelopes, so the
++# expected outcome is now zero failures — and the refusal controls below still fail closed.
++PROOFABLE_KNOWN_FAILURES: list[str] = []
+ 
+ 
+ def result(row: dict, check_id: str) -> str:
+@@ -62,7 +66,8 @@ def reference_report(tmp_path_factory):
+ class TestPinnedRecords:
+     def test_vendored_bytes_match_sources(self):
+         checks = verify_sources(RECORDS)
+-        assert checks.failed() == [] and len(checks.rows) == 21
++        # 1 schema + 3 completeness + 8 Alakris + 3 MintID + 8 Proofable files.
++        assert checks.failed() == [] and len(checks.rows) == 23
+ 
+     def test_mintid_trace_rederives_every_manifest_claim(self):
+         row = read_mintid(RECORDS / "mintid")
+@@ -77,12 +82,21 @@ class TestPinnedRecords:
+         assert row["contract"]["presentationLifetime"]["inRecord"] is False
+         assert [p["requiredDenyPoint"]["boundSeconds"] for p in paths.values()] == [185, 245, 395, 395, 0]
+ 
+-    def test_proofable_package_fails_exactly_its_four_contradictions(self):
++    def test_proofable_package_fails_exactly_its_named_contradictions(self):
+         row = read_proofable(RECORDS / "proofable")
+-        assert row["failed"] == PROOFABLE_KNOWN_FAILURES
+-        digest = next(c for c in row["checks"] if c["id"] == "proofable-manifest-trace-digest")
+-        assert digest["detail"] == "published digest is the CRLF form; published bytes use LF"
+-        assert result(row, "proofable-receipt-envelope-verified") == "not-performed"
++        assert row["failed"] == PROOFABLE_KNOWN_FAILURES == []
++        assert result(row, "proofable-sha256sums-trace.jsonl") == "pass"
++        assert result(row, "proofable-manifest-trace-digest") == "pass"
++        assert result(row, "proofable-denials-carry-reason") == "pass"
++        assert result(row, "proofable-post-dispatch-deny-point-observed") == "pass"
++
++    def test_proofable_envelopes_verify_without_the_publisher_sdk(self):
++        """Every disclosed envelope must survive an independent qHash + EIP-191 check."""
++        row = read_proofable(RECORDS / "proofable")
++        assert result(row, "proofable-receipt-envelope-verified") == "pass"
++        assert result(row, "proofable-envelope-count") == "pass"
++        envelope_checks = [c for c in row["checks"] if c["id"].startswith("proofable-sha256sums-portable")]
++        assert envelope_checks and envelope_checks[0]["result"] == "pass"
+ 
+     def test_alakris_rerun_matches_this_profile(self, reference_report):
+         row = read_alakris(RECORDS / "alakris", reference_report, None)
+@@ -171,12 +185,16 @@ class TestRefusalControls:
+                    lambda events: [e for e in events if not (e["kind"] == "holder_refresh" and e["agent"] == "agent_kill_switch")])
+         assert "mintid-kill_switch:agent_kill_switch-attributed" in read_mintid(records / "mintid")["failed"]
+ 
+-    def test_crlf_trace_satisfies_the_published_digest(self, records):
+-        path = records / "proofable" / "trace.jsonl"
+-        path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
++    def test_published_trace_digest_is_the_lf_bytes(self, records):
++        """The published digests are computed over LF bytes; a CRLF rewrite must fail."""
+         row = read_proofable(records / "proofable")
+         assert result(row, "proofable-sha256sums-trace.jsonl") == "pass"
+         assert result(row, "proofable-manifest-trace-digest") == "pass"
++        path = records / "proofable" / "trace.jsonl"
++        path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
++        row = read_proofable(records / "proofable")
++        assert result(row, "proofable-sha256sums-trace.jsonl") == "fail"
++        assert result(row, "proofable-manifest-trace-digest") == "fail"
+ 
+     def test_reasoned_denials_pass(self, records):
+         path = records / "proofable" / "trace.jsonl"
+@@ -188,28 +206,65 @@ class TestRefusalControls:
+         path.write_text("".join(json.dumps(r) + "\n" for r in records_), encoding="utf-8")
+         assert result(read_proofable(records / "proofable"), "proofable-denials-carry-reason") == "pass"
+ 
+-    @pytest.mark.parametrize("position", ["before", "after"])
+-    @pytest.mark.parametrize("decision", ["ALLOW", "DENY"])
+-    def test_same_delegation_does_not_establish_revocation_order(self, records, position, decision):
++    def test_unordered_revoke_rows_do_not_establish_the_boundary(self, records):
++        """A neighbouring row, or a moved line, must never stand in for the required ordering."""
+         path = records / "proofable" / "trace.jsonl"
+         rows = [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines()]
+         post = next(r for r in rows if r["case_id"] == "post_dispatch_revoke")
+-        dispatch = {"case_id": "another_dispatch", "observed": {"dispatch_decision": decision, "code": "REVOKED"},
++        dispatch = {"case_id": "another_dispatch", "observed": {"dispatch_decision": "DENY", "code": "REVOKED"},
+                     "delegation_qHash": post["delegation_qHash"], "terminal_receipt": None}
+-        rows.insert(0 if position == "before" else len(rows), dispatch)
++        rows.insert(0, dispatch)
++        post.pop("dispatch_sequence")
+         path.write_text("".join(json.dumps(r) + "\n" for r in rows), encoding="utf-8")
+         row = read_proofable(records / "proofable")
+         assert result(row, "proofable-post-dispatch-deny-point-observed") == "fail"
+-        assert "no revocation event time or dispatch sequence" in row["contract"]["temporalRevocation"]
++        assert "no complete revocation event time" in row["contract"]["temporalRevocation"]
+ 
+-    def test_missing_delegation_hash_does_not_establish_revocation_order(self, records):
+-        def remove_hashes(rows):
+-            for row in rows:
+-                row.pop("delegation_qHash", None)
++    @pytest.mark.parametrize("event", ["revocation", "next_dispatch", "original_effect"])
++    def test_incomplete_dispatch_sequence_does_not_establish_the_boundary(self, records, event):
++        def drop_event(rows):
++            post = next(r for r in rows if r["case_id"] == "post_dispatch_revoke")
++            post["dispatch_sequence"] = [s for s in post["dispatch_sequence"] if s["event"] != event]
+             return rows
+-        edit_jsonl(records / "proofable" / "trace.jsonl", remove_hashes)
++        edit_jsonl(records / "proofable" / "trace.jsonl", drop_event)
+         assert result(read_proofable(records / "proofable"), "proofable-post-dispatch-deny-point-observed") == "fail"
+ 
++    def test_revocation_without_a_time_does_not_establish_the_boundary(self, records):
++        def strip_time(rows):
++            post = next(r for r in rows if r["case_id"] == "post_dispatch_revoke")
++            for step in post["dispatch_sequence"]:
++                if step["event"] == "revocation":
++                    step.pop("at")
++            return rows
++        edit_jsonl(records / "proofable" / "trace.jsonl", strip_time)
++        assert result(read_proofable(records / "proofable"), "proofable-post-dispatch-deny-point-observed") == "fail"
++
++    def test_next_dispatch_that_is_allowed_does_not_establish_the_boundary(self, records):
++        def allow_next(rows):
++            post = next(r for r in rows if r["case_id"] == "post_dispatch_revoke")
++            for step in post["dispatch_sequence"]:
++                if step["event"] == "next_dispatch":
++                    step["decision"] = "ALLOW"
++            return rows
++        edit_jsonl(records / "proofable" / "trace.jsonl", allow_next)
++        assert result(read_proofable(records / "proofable"), "proofable-post-dispatch-deny-point-observed") == "fail"
++
++    def test_tampered_envelope_signature_fails_verification(self, records):
++        """A modified envelope must fail the independent qHash/signature check."""
++        path = records / "proofable" / "portable-proofs.json"
++        envelopes = json.loads(path.read_bytes())
++        envelopes[0]["signature"] = "0x" + "00" * 65
++        path.write_text(json.dumps(envelopes), encoding="utf-8")
++        row = read_proofable(records / "proofable")
++        assert result(row, "proofable-receipt-envelope-verified") == "fail"
++        assert "recovered signer" in json.dumps(row).lower() or "recovery" in json.dumps(row).lower()
++
++    def test_envelope_count_must_match_the_manifest(self, records):
++        path = records / "proofable" / "portable-proofs.json"
++        envelopes = json.loads(path.read_bytes())
++        path.write_text(json.dumps(envelopes[:-1]), encoding="utf-8")
++        assert result(read_proofable(records / "proofable"), "proofable-envelope-count") == "fail"
++
+     def test_unreachable_case_is_selected_by_identity(self, records):
+         edit_json(records / "proofable" / "authority-effect-results.json",
+                   lambda document: document["cases"].reverse())

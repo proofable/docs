@@ -1,0 +1,296 @@
+diff --git a/integrations/alakris-authority-comparison/check_package.py b/integrations/alakris-authority-comparison/check_package.py
+index f1088ca..e4b3858 100644
+--- a/integrations/alakris-authority-comparison/check_package.py
++++ b/integrations/alakris-authority-comparison/check_package.py
+@@ -33,16 +33,24 @@ def main():
+             raise RuntimeError('MintID publisher bytes changed: ' + name)
+     report = proofable(ROOT / 'fixtures/proofable')
+     (results / 'proofable-author.json').write_text(json.dumps(report, indent=2) + '\n')
++    # REVIEWER PATCH (2026-10-08). The pinned 2026-10-06 package had two byte checks fail because
++    # its trace digest was computed over CRLF bytes while git stored LF. The 2026-10-08 package
++    # fixes that and discloses portable envelopes, so integrity must now be PASS. A failure here
++    # means the pinned bytes changed — investigate, never relax the expectation to force green.
+     mismatches = [c for c in report['checks'] if not c['match']]
+-    # Both SHA256SUMS and manifest assert the same trace hash. Preserve both failures.
+-    expected = 'd749cf16fe8dd599f528e21e95863b930004a0b3f0a9882695e3d3b03e8c2183'
+-    actual = '8df7ed9d49d1d6fb696a05661fd11db194db7c808719a66cadbf0f0a562cc1e2'
+-    known = len(mismatches) == 2 and all(c['file'] == 'trace.jsonl' and c['expected'] == expected and c['actual'] == actual for c in mismatches)
+-    if report['integrity'] != 'FAIL' or not known or not report['record_count_consistent']:
+-        raise RuntimeError('Pinned Proofable evidence changed; review rather than replace expected hashes')
++    if report['integrity'] != 'PASS' or mismatches or not report['record_count_consistent']:
++        raise RuntimeError('Pinned Proofable evidence changed; expected integrity PASS, got '
++                           + report['integrity'] + ' with mismatches ' + json.dumps(mismatches))
++    if not report['record_count_consistent']:
++        raise RuntimeError('Pinned Proofable evidence record count is inconsistent with its manifest')
++    signature = next(c['fields']['receipt_signature_verification'] for c in report['cases']
++                     if c['case_id'] == 'binding_veto')
++    if signature['state'] != 'measured' or signature['value']['verified'] is not True:
++        raise RuntimeError('Disclosed Proofable envelopes were not independently verified')
+     subprocess.run([sys.executable, 'create_references.py', '--lock', 'fixtures/download-lock.json', '--output', 'results/trace-reference-shapes.json'], cwd=ROOT, check=True)
+     print(json.dumps({'package_checks': 'PASS', 'mintid_author_bytes': 'PASS',
+-                      'proofable_author_bytes': 'FAIL', 'known_failure_preserved': True,
++                      'proofable_author_bytes': 'PASS', 'known_failure_resolved': True,
++                      'proofable_signatures_verified': True,
+                       'independent_comparison_completed': False}))
+ 
+ if __name__ == '__main__':
+diff --git a/integrations/alakris-authority-comparison/fetch_fixtures.py b/integrations/alakris-authority-comparison/fetch_fixtures.py
+index 6ddf44e..3986250 100644
+--- a/integrations/alakris-authority-comparison/fetch_fixtures.py
++++ b/integrations/alakris-authority-comparison/fetch_fixtures.py
+@@ -5,14 +5,19 @@ import json
+ from pathlib import Path
+ import urllib.request
+ 
+-PROOFABLE = '3a45f026fd0c06b9d1d411c053597584b6b1c3dc'
++# REVIEWER PATCH (2026-10-08). Repinned from 3a45f026/2026-10-06. The previous package's trace
++# digest was computed over CRLF bytes while git stored LF, so its published checksum could not
++# match its own bytes. The 2026-10-08 package computes every digest over the published LF bytes
++# and discloses portable envelopes, so this pin resolves to a byte-consistent package.
++PROOFABLE = 'bbd7ee67b8d15557b032c8724cbbc4c4f0d14bce'
+ MINTID = 'b678e5cd6b5736e1795fd18d497fd8e501272dcd'
+ RECORDS = ['revocation-trace-testnet-20261006T073712Z', 'revocation-trace-local-20261005T094532Z']
+ 
+ def fetch(out):
+     files = {}
+-    proof_path = 'public/evidence/aaif/authority-at-dispatch/2026-10-06/'
+-    for name in ['README.md', 'SHA256SUMS', 'manifest.json', 'trace.jsonl', 'authority-effect-results.json', 'authority-effect-results.md']:
++    proof_path = 'public/evidence/aaif/authority-at-dispatch/2026-10-08/'
++    for name in ['README.md', 'SHA256SUMS', 'manifest.json', 'trace.jsonl', 'portable-proofs.json',
++                 'verify-portable-proofs.mjs', 'authority-effect-results.json', 'authority-effect-results.md']:
+         files['proofable/' + name] = f'https://raw.githubusercontent.com/proofable/docs/{PROOFABLE}/{proof_path}{name}'
+     for record in RECORDS:
+         for suffix in ['.jsonl', '.md', '.manifest.json']:
+diff --git a/integrations/alakris-authority-comparison/portable_envelope.py b/integrations/alakris-authority-comparison/portable_envelope.py
+new file mode 100644
+index 0000000..8e53f19
+--- /dev/null
++++ b/integrations/alakris-authority-comparison/portable_envelope.py
+@@ -0,0 +1,110 @@
++"""Verify a Proofable CAIP-380 portable envelope offline, from the published bytes alone.
++
++This is independent of Proofable's runtime and its published SDK. It re-derives the
++canonical JSON subset (Unicode code-point key order, NFC), recomputes the SHAKE-256
++qHash, rebuilds the signer message and recovers the EIP-191 signer, then requires the
++recovered signer to equal the envelope's own `walletAddress`. Nothing is attested here:
++a passing check means the envelope is internally consistent, not that any effect,
++freshness claim or off-chain fact behind it is true.
++
++CAIP-380 profile: https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-380.md
++"""
++
++from __future__ import annotations
++
++import json
++import unicodedata
++from hashlib import shake_256
++from typing import Any
++
++SIGNER_HEADER = "Portable Proof Verification Request"
++
++
++def _string(value: str) -> str:
++    """Serialise a string as JavaScript JSON.stringify does (no ASCII escaping)."""
++    return json.dumps(unicodedata.normalize("NFC", value), ensure_ascii=False)
++
++
++def _canonical(value: Any) -> str:
++    """Return the canonical JSON of a value: object keys sorted by Unicode code point."""
++    if value is None:
++        return "null"
++    if isinstance(value, bool):
++        return "true" if value else "false"
++    if isinstance(value, (int, float)):
++        if isinstance(value, float):
++            if not value.is_integer():
++                raise ValueError("canonical JSON requires a finite JSON number")
++            return str(int(value))
++        return str(value)
++    if isinstance(value, str):
++        return _string(value)
++    if isinstance(value, list):
++        return "[" + ",".join(_canonical(item) for item in value) + "]"
++    if isinstance(value, dict):
++        entries = sorted(((unicodedata.normalize("NFC", key), item)
++                          for key, item in value.items()),
++                         key=lambda pair: [ord(character) for character in pair[0]])
++        return "{" + ",".join(f"{_string(key)}:{_canonical(item)}" for key, item in entries) + "}"
++    raise ValueError("value is not valid canonical JSON")
++
++
++def canonical_subset(envelope: dict[str, Any]) -> dict[str, Any]:
++    """The CAIP-380 canonical subset: exactly one of chain / chainId is present."""
++    has_chain = isinstance(envelope.get("chain"), str) and bool(envelope["chain"].strip())
++    has_chain_id = isinstance(envelope.get("chainId"), int) and envelope["chainId"] > 0
++    if has_chain == has_chain_id:
++        raise ValueError("envelope must contain exactly one of chain or chainId")
++    subset = {
++        "did": envelope["did"],
++        "verifierIds": envelope["verifierIds"],
++        "data": envelope["data"],
++        "signedTimestamp": envelope["signedTimestamp"],
++    }
++    if has_chain:
++        subset["chain"] = envelope["chain"].strip()
++    else:
++        subset["chainId"] = envelope["chainId"]
++    return subset
++
++
++def qhash(envelope: dict[str, Any]) -> str:
++    """Recompute the CAIP-380 qHash from the canonical subset."""
++    digest = shake_256(_canonical(canonical_subset(envelope)).encode("utf-8")).hexdigest(32)
++    return "0x" + digest
++
++
++def message(envelope: dict[str, Any]) -> str:
++    """Rebuild the exact signer message the envelope's signature commits to."""
++    subset = canonical_subset(envelope)
++    chain = subset.get("chain") if subset.get("chain") is not None else subset["chainId"]
++    components = [
++        SIGNER_HEADER,
++        "Wallet: " + str(envelope["walletAddress"]).lower(),
++        "Chain: " + str(chain),
++        "Verifiers: " + ",".join(str(entry) for entry in envelope["verifierIds"]),
++        "Data: " + _canonical(envelope["data"]),
++        "Timestamp: " + str(envelope["signedTimestamp"]),
++    ]
++    return unicodedata.normalize("NFC", "\n".join(components))
++
++
++def verify(envelope: dict[str, Any]) -> dict[str, Any]:
++    """Return the qHash and signature verdict for one envelope, with every failure named."""
++    errors: list[str] = []
++    signer = None
++    try:
++        if envelope.get("qHash") != qhash(envelope):
++            errors.append("qHash does not match the canonical subset")
++    except (KeyError, ValueError) as error:
++        errors.append("qHash could not be recomputed: " + str(error))
++    try:
++        from eth_account import Account
++        from eth_account.messages import encode_defunct
++        signer = Account.recover_message(encode_defunct(text=message(envelope)),
++                                         signature=envelope["signature"])
++    except Exception as error:  # recovery failure is a failing check, never a pass
++        errors.append("signature recovery failed: " + str(error))
++    if signer is not None and str(envelope.get("walletAddress", "")).lower() != signer.lower():
++        errors.append("recovered signer does not equal the envelope walletAddress")
++    return {"valid": not errors, "signer": signer, "errors": errors}
+diff --git a/integrations/alakris-authority-comparison/runner.py b/integrations/alakris-authority-comparison/runner.py
+index 2d546ba..fa1e5c0 100644
+--- a/integrations/alakris-authority-comparison/runner.py
++++ b/integrations/alakris-authority-comparison/runner.py
+@@ -73,9 +73,31 @@ def validate_report(report):
+             raise ValueError('author records cannot establish independent reproduction')
+     return report
+ 
++def portable_envelope_check(base, manifest):
++    """Independently verify every disclosed Proofable envelope from the published bytes.
++
++    REVIEWER PATCH (2026-10-08). The pinned 2026-10-06 package exposed no envelope, so signature
++    material was ``not_emitted`` and verification ``not_measured``. The 2026-10-08 package discloses
++    them, so the check is performed: the CAIP-380 qHash is recomputed and the EIP-191 signer is
++    recovered, independently of the Proofable runtime and SDK.
++    """
++    spec = manifest.get('portable_proofs') or {}
++    path = base / str(spec.get('file') or '')
++    if not spec.get('file') or not path.is_file():
++        return None
++    import portable_envelope
++    envelopes = json.loads(path.read_bytes())
++    invalid = [{'qHash': e.get('qHash'), 'errors': verdict['errors']}
++               for e in envelopes if not (verdict := portable_envelope.verify(e))['valid']]
++    return {'count': len(envelopes),
++            'signers': sorted({str(e.get('walletAddress', '')).lower() for e in envelopes}),
++            'invalid': invalid, 'valid': not invalid and bool(envelopes)}
++
++
+ def proofable(base):
+     manifest = json.loads((base / 'manifest.json').read_text())
+     trace = rows(base / 'trace.jsonl')
++    verified = portable_envelope_check(base, manifest)
+     checks = []
+     for line in (base / 'SHA256SUMS').read_text().splitlines():
+         expected, name = line.split(maxsplit=1)
+@@ -91,16 +113,21 @@ def proofable(base):
+         relevant = [r for r in trace if r['case_id'] in source_cases[case]]
+         def missing(why):
+             return field('not_emitted', reason=why)
++        sequence = next((r.get('dispatch_sequence') for r in relevant if r.get('dispatch_sequence')), None)
++        effect = next((s.get('committed_effect') for s in (sequence or []) if s.get('event') == 'original_effect'), None)
++        statuses = [r['observed'].get('status') for r in relevant if r['observed'].get('status')]
+         fields = {
+             'authority': field('measured', [r.get('delegation_qHash') for r in relevant]) if relevant else (field('not_applicable', reason='current authority evaluated locally') if case == 'unreachable' else field('not_emitted')),
+             'decision': field('measured', [r['observed'] for r in relevant]) if relevant else (field('not_applicable', reason='no remote authority dependency on this path') if case == 'unreachable' else field('not_emitted')),
+-            'dispatch': field('not_emitted', reason='explicit dispatch event/time not in public trace'),
++            # The ordered boundary now carries explicit dispatch events and times for this case.
++            'dispatch': field('measured', sequence) if sequence else field('not_emitted', reason='explicit dispatch event/time not in public trace'),
+             'platform_observation': field('measured', [{'attempt': r['case_id'], 'observation': r['observed']} for r in relevant]) if relevant else (field('not_applicable') if case == 'unreachable' else field('not_emitted')),
+-            'committed_effect': field('not_emitted', reason='public trace has platform outcomes, not target-side committed effects'),
+-            'task_outcome': field('not_emitted', reason='platform observations do not establish the target task result'),
++            # Platform-boundary outcome; NOT an independent target-side effect observation.
++            'committed_effect': field('measured', effect, reason='platform-boundary observation, not an independent target-side read') if effect else field('not_emitted', reason='public trace has platform outcomes, not target-side committed effects'),
++            'task_outcome': field('measured', statuses, reason='platform task status, not a target-side recovery measurement') if statuses else field('not_emitted', reason='platform observations do not establish the target task result'),
+             'receipt': field('measured', [{'attempt': r['case_id'], 'receipt': field('measured', r['terminal_receipt']) if r.get('terminal_receipt') else field('not_emitted', reason='no receipt exposed for this attempt')} for r in relevant]) if relevant else (field('not_applicable') if case == 'unreachable' else field('not_emitted')),
+-            'receipt_signature_material': missing('envelope, signature and signer material not in public package'),
+-            'receipt_signature_verification': field('not_measured', reason='no public envelope to verify'),
++            'receipt_signature_material': field('measured', {'envelopes': verified['count'], 'signers': verified['signers']}) if verified else missing('envelope, signature and signer material not in public package'),
++            'receipt_signature_verification': field('measured', {'verified': verified['valid'], 'invalid': verified['invalid']}, reason='qHash recomputed and EIP-191 signer recovered from published bytes, independent of the Proofable SDK') if verified else field('not_measured', reason='no public envelope to verify'),
+             'policy_digest': missing('policy version is an identifier, not a canonical digest'),
+             'revocation_latency_seconds': field('not_measured'),
+             'root_age_seconds': field('not_applicable', reason='local authority-state path'),
+diff --git a/integrations/alakris-authority-comparison/test_runner.py b/integrations/alakris-authority-comparison/test_runner.py
+index 801ec34..9111b81 100644
+--- a/integrations/alakris-authority-comparison/test_runner.py
++++ b/integrations/alakris-authority-comparison/test_runner.py
+@@ -61,14 +61,46 @@ class Checks(unittest.TestCase):
+         _,d=e.dispatch(a,10)
+         a['amount']=2
+         self.assertFalse(e.commit(a,d,11)['committed'])
+-    def test_published_proofable_stays_integrity_failed(self):
++    def test_published_proofable_package_is_integrity_pass(self):
+         p=Path('fixtures/proofable')
+         if not p.exists():
+             self.skipTest('run fetch_fixtures.py first')
+         report=proofable(p)
+-        self.assertEqual(report['integrity'],'FAIL')
+-        self.assertTrue(report['newline_diagnostic']['crlf_hash_matches_published'])
++        # REVIEWER PATCH (2026-10-08): the 2026-10-06 package failed two byte checks
++        # (CRLF digest). The 2026-10-08 package is byte-consistent, so integrity is PASS.
++        self.assertEqual(report['integrity'],'PASS')
++        self.assertFalse(report['newline_diagnostic']['crlf_hash_matches_published'])
+         self.assertEqual(next(c for c in report['cases'] if c['case_id']=='unreachable')['fields']['decision']['state'],'not_applicable')
++
++    def test_disclosed_envelopes_are_verified_independently(self):
++        p=Path('fixtures/proofable')
++        if not p.exists():
++            self.skipTest('run fetch_fixtures.py first')
++        report=proofable(p)
++        for case in report['cases']:
++            if case['case_id']=='unreachable':
++                continue
++            signature=case['fields']['receipt_signature_verification']
++            self.assertEqual(signature['state'],'measured')
++            self.assertTrue(signature['value']['verified'])
++            self.assertEqual(signature['value']['invalid'],[])
++            self.assertEqual(case['fields']['receipt_signature_material']['state'],'measured')
++        self.assertEqual(report['cases'][0]['fields']['policy_digest']['state'],'not_emitted')
++
++    def test_tampered_envelope_fails_verification(self):
++        p=Path('fixtures/proofable')
++        if not p.exists():
++            self.skipTest('run fetch_fixtures.py first')
++        import shutil
++        with tempfile.TemporaryDirectory() as d:
++            target=Path(d)/'proofable'
++            shutil.copytree(p,target)
++            envelopes=json.loads((target/'portable-proofs.json').read_text())
++            envelopes[0]['signature']='0x'+'00'*65
++            (target/'portable-proofs.json').write_text(json.dumps(envelopes))
++            report=proofable(target)
++            self.assertEqual(report['integrity'],'FAIL')
++            self.assertFalse(report['cases'][0]['fields']['receipt_signature_verification']['value']['verified'])
+     def test_mintid_outage_keeps_old_revision(self):
+         p=Path('fixtures/mintid')
+         if not p.exists():
