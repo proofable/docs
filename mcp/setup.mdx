@@ -1,13 +1,15 @@
 ---
 title: "Setup"
 sidebarTitle: "Setup"
-description: "Add the Proofable MCP endpoint to any MCP client, then connect and reuse the same proofs in each one."
+description: "Connect Proofable to an MCP client, sign in, and start with your current profile and proofs."
 icon: plug
 ---
 
 import ConnectHosts from '/snippets/connect-hosts.mdx';
 
-Give your AI the existing [Proofable setup skill](https://raw.githubusercontent.com/proofable/mcp/main/skills/proofable-setup/SKILL.md), or choose your client below.
+Choose your client below, finish sign-in, then ask: **Show my Proofable profile and the proofs I can reuse.**
+
+You can also give an agent the setup skill and let it configure a supported client:
 
 <Prompt description="Set up Proofable" actions={["copy", "cursor"]}>
   https://raw.githubusercontent.com/proofable/mcp/main/skills/proofable-setup/SKILL.md

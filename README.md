@@ -1,6 +1,6 @@
 # Proofable Docs
 
-Grant access with proof your app can check again. Set limits on what AI agents can do.
+Give AI agents real access without giving up control. Add verification and reusable proof to your app.
 
 Published site: [docs.proofable.me](https://docs.proofable.me)
 

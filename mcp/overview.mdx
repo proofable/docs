@@ -1,60 +1,55 @@
 ---
 title: "Proofable for MCP"
 sidebarTitle: "MCP"
-description: "Give AI agents identity, scoped access, trusted context, and verifiable actions through MCP."
+description: "Connect Proofable to ChatGPT, Cursor, Claude, Codex, VS Code, and any MCP client."
 icon: plug
 "og:image": "/images/og-default.png"
 "twitter:image": "/images/og-default.png"
 ---
 
-Connect one endpoint and every client reads the same profile: the proofs you already hold, the permissions each agent has, and the limits you set. Cursor, Claude, Codex, and VS Code are shortcuts.
+Connect one Proofable profile to any supported MCP client. Your agents can reuse current proofs, read their permissions, and use protected tools without carrying credentials in prompts.
 
-Connect once. The same agents, selected context, limits, and current proofs are there in every supported client.
+## Start
 
-Add `https://mcp.proofable.me/mcp` to the client, then sign in.
+Add the hosted endpoint to your MCP client and finish sign-in:
 
-Interactive hosts use OAuth. For servers, CI, and headless agents, send a server key as a Bearer token. See [Add Proofable to any MCP client](./setup).
-
-Use a marketplace plugin or registry listing when the host offers one. `npx -y @proofable/sdk setup` writes the same URL from a terminal.
+```text
+https://mcp.proofable.me/mcp
+```
 
 Then ask:
 
-> Show my Proofable profile and current proofs.
+> Show my Proofable profile and the proofs I can reuse.
 
-Proofable answers **Passed**, **Action needed**, or **Blocked**.
+Proofable returns **Passed**, **Action needed**, or **Blocked**. It reuses a current proof before starting another verification.
 
-## Next
+[Connect your client](./setup)
 
-After you connect, load your profile. Create or import an agent, or publish a listing.
+## What agents can do
 
-> Show what my agents are allowed to do.
+- Check whether you already hold the proof a task requires.
+- Show the next verification step only when a current proof is missing.
+- Load an agent's current identity, permissions, skills, and selected context.
+- Save credentials in encrypted Vault records without returning their values in chat.
+- Read the same authorized profile and proofs across supported MCP clients.
 
-Ask for a dedicated spend account only when the agent should pay from its own account.
+Call `proofable_context` once after connecting. Use the [MCP tool reference](./tools) for exact inputs and result shapes.
 
-Open **Connections** on [proofable.me](https://proofable.me) to link apps. [Connections](../connections)
+## Build with Proofable
 
-To sell: set payouts, then publish a listing. Full steps: [Add Proofable to any MCP client](./setup).
+Use the [JavaScript SDK](/sdks/javascript), [HTTP API](/api/overview), or [hosted verification](/verification/hosted) to add Proofable to your product. Servers, CI, and headless agents use [access keys](/deployment/access-keys) against the same hosted MCP endpoint.
 
-Chat on Proofable, or start a [job](/jobs) for background work.
-
-Any tool can connect to this endpoint.
-
-**Private cloud.** Point your server at the same URL. [Run Proofable in a private cloud](../deployment/private-cloud).
-
-Call `proofable_context` once after you connect. Per-tool names, fields, and order: [MCP tools](./tools).
+The [Proofable SDK on GitHub](https://github.com/proofable/sdk) includes the CLI and application examples.
 
 ## Privacy
 
-Proofable returns the result and the proof. It does not return the private data used to complete it. Proofs are private by default. The client or runtime must enforce that result.
+Proofable returns the result and its proof, not the private data used to complete the check. Proofs are private by default. Each connected client or runtime remains responsible for enforcing the returned result and permissions.
 
-What supported clients can read when authorized:
+When authorized, agents can read:
 
-- Your profile, agents, and current permissions
+- The signed-in profile and current agent permissions
 - Approved tools, skills, and selected context
-- Connected apps and custom MCP servers
-- On-demand and scheduled jobs
-- Completed checks that are still valid
-- Proofs another connected product can confirm
-- Vault context when you allow it
+- Current proofs and verification status
+- Vault record metadata without stored secret values
 
-To load an agent into a project, see [Connect agent context](../agents/runtime-mount). For a laptop, server, or confidential VM, see [Run Proofable in a private cloud](../deployment/private-cloud).
+To load one registered agent into a project, see [Connect agent context](/agents/runtime-mount).
