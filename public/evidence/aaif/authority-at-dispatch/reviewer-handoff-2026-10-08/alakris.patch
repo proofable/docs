@@ -177,6 +177,553 @@ index 0000000..8e53f19
 +    if signer is not None and str(envelope.get("walletAddress", "")).lower() != signer.lower():
 +        errors.append("recovered signer does not equal the envelope walletAddress")
 +    return {"valid": not errors, "signer": signer, "errors": errors}
+diff --git a/integrations/alakris-authority-comparison/results/proofable-author.json b/integrations/alakris-authority-comparison/results/proofable-author.json
+index 6a847e5..82649e7 100644
+--- a/integrations/alakris-authority-comparison/results/proofable-author.json
++++ b/integrations/alakris-authority-comparison/results/proofable-author.json
+@@ -1,55 +1,67 @@
+ {
+   "implementation": "Proofable",
+-  "run_id": "four-case-run-f92faf39a4ba",
++  "run_id": "authority-suite-epoch-aaif-e1217327a-20261008",
+   "evidence_custody": {
+     "producer": "Proofable author/operator",
+     "public_artifact": "sanitized trace",
+     "appraiser": "Alakris evidence runner",
+     "independent_target_observer": false
+   },
+-  "deployed_revision_claim": "f92faf39a4bae480cca3e5c07ce2c95d6ab68411",
++  "deployed_revision_claim": "e1217327a1568b39d5153686b8085471b5329cde",
+   "checks": [
+     {
+       "file": "README.md",
+-      "expected": "67dcbff2c2045f421ad8ef8dd1926f0ff967870c66570cd45575d13a127cda4a",
+-      "actual": "67dcbff2c2045f421ad8ef8dd1926f0ff967870c66570cd45575d13a127cda4a",
++      "expected": "a3da5ccb3be1bd17eae62d3b1254616bb12e9b4a42e1d99d113770ff2f63a5af",
++      "actual": "a3da5ccb3be1bd17eae62d3b1254616bb12e9b4a42e1d99d113770ff2f63a5af",
+       "match": true
+     },
+     {
+       "file": "manifest.json",
+-      "expected": "f0a6bc2243e753c437215476d466094ca6c7b889701b64edf221f6ddbbc8660d",
+-      "actual": "f0a6bc2243e753c437215476d466094ca6c7b889701b64edf221f6ddbbc8660d",
++      "expected": "895dad0324d3ca69445e2136291ff9856ed0426a845e0c8f4a0cddbb7fa930ae",
++      "actual": "895dad0324d3ca69445e2136291ff9856ed0426a845e0c8f4a0cddbb7fa930ae",
+       "match": true
+     },
+     {
+       "file": "authority-effect-results.md",
+-      "expected": "0338ff2367ef06568301bed497d2f067fd7650499b07fd6f540b69781cef9702",
+-      "actual": "0338ff2367ef06568301bed497d2f067fd7650499b07fd6f540b69781cef9702",
++      "expected": "07d46e6d73af6388ead6ed8236d6af6c3e26eabbbbbd418e47d0ded76aa075d8",
++      "actual": "07d46e6d73af6388ead6ed8236d6af6c3e26eabbbbbd418e47d0ded76aa075d8",
+       "match": true
+     },
+     {
+       "file": "authority-effect-results.json",
+-      "expected": "c4b35ed7c2f08dc8924979934a137a9bfd673436a4c98f89395d3d6ece7dd92f",
+-      "actual": "c4b35ed7c2f08dc8924979934a137a9bfd673436a4c98f89395d3d6ece7dd92f",
++      "expected": "68ba05eb4308638f20acac072a202cb2671b68514a4d77e8431c9b65c9276be3",
++      "actual": "68ba05eb4308638f20acac072a202cb2671b68514a4d77e8431c9b65c9276be3",
+       "match": true
+     },
+     {
+       "file": "trace.jsonl",
+-      "expected": "d749cf16fe8dd599f528e21e95863b930004a0b3f0a9882695e3d3b03e8c2183",
+-      "actual": "8df7ed9d49d1d6fb696a05661fd11db194db7c808719a66cadbf0f0a562cc1e2",
+-      "match": false
++      "expected": "96241d8409c4661f8e60cd0904e7245434f48bf5711d9c377706f29ff721a0c8",
++      "actual": "96241d8409c4661f8e60cd0904e7245434f48bf5711d9c377706f29ff721a0c8",
++      "match": true
++    },
++    {
++      "file": "portable-proofs.json",
++      "expected": "786dbf30d2068aacb0df01e1c26c4b2458d381957946e8a9bc12abd5318e5485",
++      "actual": "786dbf30d2068aacb0df01e1c26c4b2458d381957946e8a9bc12abd5318e5485",
++      "match": true
++    },
++    {
++      "file": "verify-portable-proofs.mjs",
++      "expected": "f7eb8f74885518b3ba0d945f60500e3236a25ad569fdcc6c8e44af462eaa3248",
++      "actual": "f7eb8f74885518b3ba0d945f60500e3236a25ad569fdcc6c8e44af462eaa3248",
++      "match": true
+     },
+     {
+       "file": "trace.jsonl",
+-      "expected": "d749cf16fe8dd599f528e21e95863b930004a0b3f0a9882695e3d3b03e8c2183",
+-      "actual": "8df7ed9d49d1d6fb696a05661fd11db194db7c808719a66cadbf0f0a562cc1e2",
+-      "match": false
++      "expected": "96241d8409c4661f8e60cd0904e7245434f48bf5711d9c377706f29ff721a0c8",
++      "actual": "96241d8409c4661f8e60cd0904e7245434f48bf5711d9c377706f29ff721a0c8",
++      "match": true
+     }
+   ],
+-  "integrity": "FAIL",
++  "integrity": "PASS",
+   "record_count_consistent": true,
+   "newline_diagnostic": {
+-    "crlf_hash_matches_published": true,
++    "crlf_hash_matches_published": false,
+     "strict_byte_check_unchanged": true
+   },
+   "cases": [
+@@ -62,7 +74,7 @@
+         "authority": {
+           "state": "measured",
+           "value": [
+-            "0xee795f450b6a6433787519aa7a87406df99f6bb27fe21952162825bfb82cafc4"
++            "0x63f238351564bb5a1072bb7dad2b2fd14ef5eeb15c74f787ea2b785d89ceb233"
+           ],
+           "reason": null
+         },
+@@ -104,9 +116,11 @@
+           "reason": "public trace has platform outcomes, not target-side committed effects"
+         },
+         "task_outcome": {
+-          "state": "not_emitted",
+-          "value": null,
+-          "reason": "platform observations do not establish the target task result"
++          "state": "measured",
++          "value": [
++            "failed"
++          ],
++          "reason": "platform task status, not a target-side recovery measurement"
+         },
+         "receipt": {
+           "state": "measured",
+@@ -116,9 +130,9 @@
+               "receipt": {
+                 "state": "measured",
+                 "value": {
+-                  "qHash": "0x11d0d791fa315322bd8490ac52b65fdf96432e5f5ac7e09f0a5a311c934bbc69",
++                  "qHash": "0xffdc0455b72732a8c6a31eb4e2861943b85dbc271fe2dfa8b18d0e85d2b33726",
+                   "status": "verified",
+-                  "visibility": "private"
++                  "visibility": "unlisted"
+                 },
+                 "reason": null
+               }
+@@ -127,14 +141,22 @@
+           "reason": null
+         },
+         "receipt_signature_material": {
+-          "state": "not_emitted",
+-          "value": null,
+-          "reason": "envelope, signature and signer material not in public package"
++          "state": "measured",
++          "value": {
++            "envelopes": 17,
++            "signers": [
++              "0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec"
++            ]
++          },
++          "reason": null
+         },
+         "receipt_signature_verification": {
+-          "state": "not_measured",
+-          "value": null,
+-          "reason": "no public envelope to verify"
++          "state": "measured",
++          "value": {
++            "verified": true,
++            "invalid": []
++          },
++          "reason": "qHash recomputed and EIP-191 signer recovered from published bytes, independent of the Proofable SDK"
+         },
+         "policy_digest": {
+           "state": "not_emitted",
+@@ -202,10 +224,10 @@
+         "authority": {
+           "state": "measured",
+           "value": [
+-            "0xbf9c4e1bd4d7173519dada35cd372e3d03619d091f192ddd4346c12ce3b38dd2",
+-            "0x077a8e04548556e0adaa5bac771766276edfe30e42075e100b82e39a7d2ecd34",
+-            "0x2f741e3111341419ecbf5be90475f5e3e9fa3125542f422f47b395e93365228e",
+-            "0x538f77ca833d2ff08571bbc4334de82e8d77969d97f6da701dddadfa0b39ae30"
++            "0x22c5c4bef227b7ca64514ae74e74bb7f55fa1f15e6aed723c01eb54ac4416d05",
++            "0xe1fd94b1a5bef3e3fb7b9347945859dde01063a7b3af539659d4377d60ca3882",
++            "0xb6eb435737aa4e592195dd7bdcecf17cf43dbb0bd82526bec8209ad27a069a3f",
++            "0x4c0fc41c165ad20067b708e6a8e71bfdf6f8686250eba967a9f69c93cdc593ea"
+           ],
+           "reason": null
+         },
+@@ -230,7 +252,7 @@
+             },
+             {
+               "dispatch_decision": "DENY",
+-              "code": null,
++              "code": "DELEGATION_PROOF_DENIED",
+               "job_created": false
+             }
+           ],
+@@ -273,7 +295,7 @@
+               "attempt": "stale_authority",
+               "observation": {
+                 "dispatch_decision": "DENY",
+-                "code": null,
++                "code": "DELEGATION_PROOF_DENIED",
+                 "job_created": false
+               }
+             }
+@@ -286,9 +308,11 @@
+           "reason": "public trace has platform outcomes, not target-side committed effects"
+         },
+         "task_outcome": {
+-          "state": "not_emitted",
+-          "value": null,
+-          "reason": "platform observations do not establish the target task result"
++          "state": "measured",
++          "value": [
++            "completed"
++          ],
++          "reason": "platform task status, not a target-side recovery measurement"
+         },
+         "receipt": {
+           "state": "measured",
+@@ -298,9 +322,9 @@
+               "receipt": {
+                 "state": "measured",
+                 "value": {
+-                  "qHash": "0x9afe5eb5ffb66b6b254465a47e71128674f83edb6a61e3ae67a5d409dc305dd9",
++                  "qHash": "0x714bec9581eba6003ffced14d8ea7bb67349217fb0335584da1b09c50bef086d",
+                   "status": "verified",
+-                  "visibility": "private"
++                  "visibility": "unlisted"
+                 },
+                 "reason": null
+               }
+@@ -333,14 +357,22 @@
+           "reason": null
+         },
+         "receipt_signature_material": {
+-          "state": "not_emitted",
+-          "value": null,
+-          "reason": "envelope, signature and signer material not in public package"
++          "state": "measured",
++          "value": {
++            "envelopes": 17,
++            "signers": [
++              "0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec"
++            ]
++          },
++          "reason": null
+         },
+         "receipt_signature_verification": {
+-          "state": "not_measured",
+-          "value": null,
+-          "reason": "no public envelope to verify"
++          "state": "measured",
++          "value": {
++            "verified": true,
++            "invalid": []
++          },
++          "reason": "qHash recomputed and EIP-191 signer recovered from published bytes, independent of the Proofable SDK"
+         },
+         "policy_digest": {
+           "state": "not_emitted",
+@@ -441,14 +473,22 @@
+           "reason": "no equivalent on this implementation path"
+         },
+         "receipt_signature_material": {
+-          "state": "not_emitted",
+-          "value": null,
+-          "reason": "envelope, signature and signer material not in public package"
++          "state": "measured",
++          "value": {
++            "envelopes": 17,
++            "signers": [
++              "0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec"
++            ]
++          },
++          "reason": null
+         },
+         "receipt_signature_verification": {
+-          "state": "not_measured",
+-          "value": null,
+-          "reason": "no public envelope to verify"
++          "state": "measured",
++          "value": {
++            "verified": true,
++            "invalid": []
++          },
++          "reason": "qHash recomputed and EIP-191 signer recovered from published bytes, independent of the Proofable SDK"
+         },
+         "policy_digest": {
+           "state": "not_emitted",
+@@ -516,7 +556,7 @@
+         "authority": {
+           "state": "measured",
+           "value": [
+-            "0x6c0083c87a6460e4bd3ffb81236ce95f7ec17976375388925acafaf794ab8c91"
++            "0xe9f62e1db0e3abd8ff5c569ffca29a929e12ba66a633c8a13ede6ffc59a74870"
+           ],
+           "reason": null
+         },
+@@ -527,15 +567,47 @@
+               "status": "completed",
+               "response": "REVIEW_OK",
+               "executor": "harness:opencode:acp:sandbox",
+-              "error": null
++              "error": null,
++              "dispatch_decision": "ALLOW",
++              "next_dispatch_decision": "DENY",
++              "code": "DELEGATION_PROOF_DENIED"
+             }
+           ],
+           "reason": null
+         },
+         "dispatch": {
+-          "state": "not_emitted",
+-          "value": null,
+-          "reason": "explicit dispatch event/time not in public trace"
++          "state": "measured",
++          "value": [
++            {
++              "step": 1,
++              "event": "dispatch",
++              "decision": "ALLOW",
++              "at": "2026-10-08T16:14:34.247Z",
++              "job_id": "a2b978d2-9269-4521-8716-71bc74d1321d"
++            },
++            {
++              "step": 2,
++              "event": "revocation",
++              "at": "2026-10-08T16:14:50.334Z",
++              "status_at_revocation": "running",
++              "observed_in_flight": true
++            },
++            {
++              "step": 3,
++              "event": "original_effect",
++              "at": "2026-10-08T16:15:57.747Z",
++              "committed_effect": "observed_at_platform"
++            },
++            {
++              "step": 4,
++              "event": "next_dispatch",
++              "at": "2026-10-08T16:16:15.865Z",
++              "decision": "DENY",
++              "job_created": false,
++              "reason": "DELEGATION_PROOF_DENIED"
++            }
++          ],
++          "reason": null
+         },
+         "platform_observation": {
+           "state": "measured",
+@@ -546,21 +618,26 @@
+                 "status": "completed",
+                 "response": "REVIEW_OK",
+                 "executor": "harness:opencode:acp:sandbox",
+-                "error": null
++                "error": null,
++                "dispatch_decision": "ALLOW",
++                "next_dispatch_decision": "DENY",
++                "code": "DELEGATION_PROOF_DENIED"
+               }
+             }
+           ],
+           "reason": null
+         },
+         "committed_effect": {
+-          "state": "not_emitted",
+-          "value": null,
+-          "reason": "public trace has platform outcomes, not target-side committed effects"
++          "state": "measured",
++          "value": "observed_at_platform",
++          "reason": "platform-boundary observation, not an independent target-side read"
+         },
+         "task_outcome": {
+-          "state": "not_emitted",
+-          "value": null,
+-          "reason": "platform observations do not establish the target task result"
++          "state": "measured",
++          "value": [
++            "completed"
++          ],
++          "reason": "platform task status, not a target-side recovery measurement"
+         },
+         "receipt": {
+           "state": "measured",
+@@ -570,9 +647,9 @@
+               "receipt": {
+                 "state": "measured",
+                 "value": {
+-                  "qHash": "0xdfda8a13f557e3575c1e0ec1464632fa685deb57ccc904988bf8eb029b15d042",
++                  "qHash": "0xcf365b8ba19fd9fd1d441abb8bbdd640f359e4eaac6b9339b622bef26f05a5de",
+                   "status": "verified",
+-                  "visibility": "private"
++                  "visibility": "unlisted"
+                 },
+                 "reason": null
+               }
+@@ -581,14 +658,22 @@
+           "reason": null
+         },
+         "receipt_signature_material": {
+-          "state": "not_emitted",
+-          "value": null,
+-          "reason": "envelope, signature and signer material not in public package"
++          "state": "measured",
++          "value": {
++            "envelopes": 17,
++            "signers": [
++              "0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec"
++            ]
++          },
++          "reason": null
+         },
+         "receipt_signature_verification": {
+-          "state": "not_measured",
+-          "value": null,
+-          "reason": "no public envelope to verify"
++          "state": "measured",
++          "value": {
++            "verified": true,
++            "invalid": []
++          },
++          "reason": "qHash recomputed and EIP-191 signer recovered from published bytes, independent of the Proofable SDK"
+         },
+         "policy_digest": {
+           "state": "not_emitted",
+diff --git a/integrations/alakris-authority-comparison/results/tests.txt b/integrations/alakris-authority-comparison/results/tests.txt
+index 07e7c4b..5c050c9 100644
+--- a/integrations/alakris-authority-comparison/results/tests.txt
++++ b/integrations/alakris-authority-comparison/results/tests.txt
+@@ -6,14 +6,16 @@ test_measured_null_rejected (test_runner.BoundaryChecks.test_measured_null_rejec
+ test_root_age_is_seconds_not_root_identity (test_runner.BoundaryChecks.test_root_age_is_seconds_not_root_identity) ... ok
+ test_action_tampering_between_dispatch_commit (test_runner.Checks.test_action_tampering_between_dispatch_commit) ... ok
+ test_author_evidence_cannot_be_independent (test_runner.Checks.test_author_evidence_cannot_be_independent) ... ok
++test_disclosed_envelopes_are_verified_independently (test_runner.Checks.test_disclosed_envelopes_are_verified_independently) ... ok
+ test_escape_rejected (test_runner.Checks.test_escape_rejected) ... ok
+ test_late_recovery_does_not_reopen (test_runner.Checks.test_late_recovery_does_not_reopen) ... ok
+ test_mintid_outage_keeps_old_revision (test_runner.Checks.test_mintid_outage_keeps_old_revision) ... ok
+ test_missing_field_cannot_be_measured_value (test_runner.Checks.test_missing_field_cannot_be_measured_value) ... ok
+ test_missing_states_not_collapsed (test_runner.Checks.test_missing_states_not_collapsed) ... ok
+ test_post_dispatch_recheck (test_runner.Checks.test_post_dispatch_recheck) ... ok
+-test_published_proofable_stays_integrity_failed (test_runner.Checks.test_published_proofable_stays_integrity_failed) ... ok
++test_published_proofable_package_is_integrity_pass (test_runner.Checks.test_published_proofable_package_is_integrity_pass) ... ok
+ test_revoked_no_effect (test_runner.Checks.test_revoked_no_effect) ... ok
++test_tampered_envelope_fails_verification (test_runner.Checks.test_tampered_envelope_fails_verification) ... ok
+ test_tampering_fails (test_runner.Checks.test_tampering_fails) ... ok
+ test_unknown_state_rejected (test_runner.Checks.test_unknown_state_rejected) ... ok
+ test_unreachable_no_effect (test_runner.Checks.test_unreachable_no_effect) ... ok
+@@ -28,6 +30,6 @@ test_reference_requires_http_uri (test_runner.ReferenceChecks.test_reference_req
+ test_released_trace_reference_shape (test_runner.ReferenceChecks.test_released_trace_reference_shape) ... ok
+ 
+ ----------------------------------------------------------------------
+-Ran 28 tests in 1.473s
++Ran 30 tests in 1.291s
+ 
+ OK
+diff --git a/integrations/alakris-authority-comparison/results/trace-reference-shapes.json b/integrations/alakris-authority-comparison/results/trace-reference-shapes.json
+index 1c32779..f1cbc38 100644
+--- a/integrations/alakris-authority-comparison/results/trace-reference-shapes.json
++++ b/integrations/alakris-authority-comparison/results/trace-reference-shapes.json
+@@ -3,9 +3,9 @@
+     "file": "proofable/README.md",
+     "reference": {
+       "rel": "behavior-trace",
+-      "id": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/README.md",
+-      "resolver": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/README.md",
+-      "digest": "sha256:67dcbff2c2045f421ad8ef8dd1926f0ff967870c66570cd45575d13a127cda4a"
++      "id": "https://raw.githubusercontent.com/proofable/docs/4ceb58b68784266be73957c0727bbbf1477bf25b/public/evidence/aaif/authority-at-dispatch/2026-10-08/README.md",
++      "resolver": "https://raw.githubusercontent.com/proofable/docs/4ceb58b68784266be73957c0727bbbf1477bf25b/public/evidence/aaif/authority-at-dispatch/2026-10-08/README.md",
++      "digest": "sha256:a3da5ccb3be1bd17eae62d3b1254616bb12e9b4a42e1d99d113770ff2f63a5af"
+     },
+     "reference_shape_validated": true,
+     "signature_verification": "not_measured",
+@@ -16,9 +16,9 @@
+     "file": "proofable/SHA256SUMS",
+     "reference": {
+       "rel": "behavior-trace",
+-      "id": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/SHA256SUMS",
+-      "resolver": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/SHA256SUMS",
+-      "digest": "sha256:3ddf1e631c23f5b26442a06b57d153b9976bddbc6721cbef40b296ff81a06c5d"
++      "id": "https://raw.githubusercontent.com/proofable/docs/4ceb58b68784266be73957c0727bbbf1477bf25b/public/evidence/aaif/authority-at-dispatch/2026-10-08/SHA256SUMS",
++      "resolver": "https://raw.githubusercontent.com/proofable/docs/4ceb58b68784266be73957c0727bbbf1477bf25b/public/evidence/aaif/authority-at-dispatch/2026-10-08/SHA256SUMS",
++      "digest": "sha256:db7c2dbdccb259b617be9dffb624633810950a72faf972004d7b3e0b2196df2f"
+     },
+     "reference_shape_validated": true,
+     "signature_verification": "not_measured",
+@@ -29,9 +29,9 @@
+     "file": "proofable/manifest.json",
+     "reference": {
+       "rel": "behavior-trace",
+-      "id": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/manifest.json",
+-      "resolver": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/manifest.json",
+-      "digest": "sha256:f0a6bc2243e753c437215476d466094ca6c7b889701b64edf221f6ddbbc8660d"
++      "id": "https://raw.githubusercontent.com/proofable/docs/4ceb58b68784266be73957c0727bbbf1477bf25b/public/evidence/aaif/authority-at-dispatch/2026-10-08/manifest.json",
++      "resolver": "https://raw.githubusercontent.com/proofable/docs/4ceb58b68784266be73957c0727bbbf1477bf25b/public/evidence/aaif/authority-at-dispatch/2026-10-08/manifest.json",
++      "digest": "sha256:895dad0324d3ca69445e2136291ff9856ed0426a845e0c8f4a0cddbb7fa930ae"
+     },
+     "reference_shape_validated": true,
+     "signature_verification": "not_measured",
+@@ -42,9 +42,35 @@
+     "file": "proofable/trace.jsonl",
+     "reference": {
+       "rel": "behavior-trace",
+-      "id": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/trace.jsonl",
+-      "resolver": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/trace.jsonl",
+-      "digest": "sha256:8df7ed9d49d1d6fb696a05661fd11db194db7c808719a66cadbf0f0a562cc1e2"
++      "id": "https://raw.githubusercontent.com/proofable/docs/4ceb58b68784266be73957c0727bbbf1477bf25b/public/evidence/aaif/authority-at-dispatch/2026-10-08/trace.jsonl",
++      "resolver": "https://raw.githubusercontent.com/proofable/docs/4ceb58b68784266be73957c0727bbbf1477bf25b/public/evidence/aaif/authority-at-dispatch/2026-10-08/trace.jsonl",
++      "digest": "sha256:96241d8409c4661f8e60cd0904e7245434f48bf5711d9c377706f29ff721a0c8"
++    },
++    "reference_shape_validated": true,
++    "signature_verification": "not_measured",
++    "assurance": "public_vendor_log",
++    "trace_record_emitted": false
++  },
++  {
++    "file": "proofable/portable-proofs.json",
++    "reference": {
++      "rel": "behavior-trace",
++      "id": "https://raw.githubusercontent.com/proofable/docs/4ceb58b68784266be73957c0727bbbf1477bf25b/public/evidence/aaif/authority-at-dispatch/2026-10-08/portable-proofs.json",
++      "resolver": "https://raw.githubusercontent.com/proofable/docs/4ceb58b68784266be73957c0727bbbf1477bf25b/public/evidence/aaif/authority-at-dispatch/2026-10-08/portable-proofs.json",
++      "digest": "sha256:786dbf30d2068aacb0df01e1c26c4b2458d381957946e8a9bc12abd5318e5485"
++    },
++    "reference_shape_validated": true,
++    "signature_verification": "not_measured",
++    "assurance": "public_vendor_log",
++    "trace_record_emitted": false
++  },
++  {
++    "file": "proofable/verify-portable-proofs.mjs",
++    "reference": {
++      "rel": "behavior-trace",
++      "id": "https://raw.githubusercontent.com/proofable/docs/4ceb58b68784266be73957c0727bbbf1477bf25b/public/evidence/aaif/authority-at-dispatch/2026-10-08/verify-portable-proofs.mjs",
++      "resolver": "https://raw.githubusercontent.com/proofable/docs/4ceb58b68784266be73957c0727bbbf1477bf25b/public/evidence/aaif/authority-at-dispatch/2026-10-08/verify-portable-proofs.mjs",
++      "digest": "sha256:f7eb8f74885518b3ba0d945f60500e3236a25ad569fdcc6c8e44af462eaa3248"
+     },
+     "reference_shape_validated": true,
+     "signature_verification": "not_measured",
+@@ -55,9 +81,9 @@
+     "file": "proofable/authority-effect-results.json",
+     "reference": {
+       "rel": "behavior-trace",
+-      "id": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/authority-effect-results.json",
+-      "resolver": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/authority-effect-results.json",
+-      "digest": "sha256:c4b35ed7c2f08dc8924979934a137a9bfd673436a4c98f89395d3d6ece7dd92f"
++      "id": "https://raw.githubusercontent.com/proofable/docs/4ceb58b68784266be73957c0727bbbf1477bf25b/public/evidence/aaif/authority-at-dispatch/2026-10-08/authority-effect-results.json",
++      "resolver": "https://raw.githubusercontent.com/proofable/docs/4ceb58b68784266be73957c0727bbbf1477bf25b/public/evidence/aaif/authority-at-dispatch/2026-10-08/authority-effect-results.json",
++      "digest": "sha256:68ba05eb4308638f20acac072a202cb2671b68514a4d77e8431c9b65c9276be3"
+     },
+     "reference_shape_validated": true,
+     "signature_verification": "not_measured",
+@@ -68,9 +94,9 @@
+     "file": "proofable/authority-effect-results.md",
+     "reference": {
+       "rel": "behavior-trace",
+-      "id": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/authority-effect-results.md",
+-      "resolver": "https://raw.githubusercontent.com/proofable/docs/3a45f026fd0c06b9d1d411c053597584b6b1c3dc/public/evidence/aaif/authority-at-dispatch/2026-10-06/authority-effect-results.md",
+-      "digest": "sha256:0338ff2367ef06568301bed497d2f067fd7650499b07fd6f540b69781cef9702"
++      "id": "https://raw.githubusercontent.com/proofable/docs/4ceb58b68784266be73957c0727bbbf1477bf25b/public/evidence/aaif/authority-at-dispatch/2026-10-08/authority-effect-results.md",
++      "resolver": "https://raw.githubusercontent.com/proofable/docs/4ceb58b68784266be73957c0727bbbf1477bf25b/public/evidence/aaif/authority-at-dispatch/2026-10-08/authority-effect-results.md",
++      "digest": "sha256:07d46e6d73af6388ead6ed8236d6af6c3e26eabbbbbd418e47d0ded76aa075d8"
+     },
+     "reference_shape_validated": true,
+     "signature_verification": "not_measured",
 diff --git a/integrations/alakris-authority-comparison/runner.py b/integrations/alakris-authority-comparison/runner.py
 index 2d546ba..fa1e5c0 100644
 --- a/integrations/alakris-authority-comparison/runner.py
