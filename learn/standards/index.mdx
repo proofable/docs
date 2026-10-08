@@ -7,10 +7,10 @@ icon: diagram-project
 
 Proofable does not replace your sign-in, policy engine, agent runtime, or processor. It records results those systems can check.
 
-Wallet-signed checks use the [CAIP-380](/learn/standards/caip-380) format. The [Technical Whitepaper](/whitepaper#standards-and-interoperability) covers the architecture.
+Wallet-signed checks and Proofable-signed outcome statements use the [CAIP-380](/learn/standards/caip-380) format. The [Technical Whitepaper](/whitepaper#standards-and-interoperability) covers the architecture.
 
 <Note>
-A signed CAIP-380 request proves who signed and that the request was not changed. A Proofable proof records the check result and whether it is still current. Those are related, not the same.
+A signed CAIP-380 envelope proves who signed and that the statement was not changed. Proofable records the check result and whether it is still current. Those are related, not the same.
 </Note>
 
 ## How Proofable uses these standards
@@ -18,7 +18,7 @@ A signed CAIP-380 request proves who signed and that the request was not changed
 | Standard | What it provides | How Proofable uses it | Status | See |
 | --- | --- | --- | --- | --- |
 | CAIP-2 / CAIP-10 | Network and account identifiers | Accounts, agents, and profiles use the same chain and account IDs | Available | [Portable proofs](/learn/standards/caip-380), [Discover agents](/agents/named-agent-card) |
-| CAIP-380 Portable Proof | A wallet-signed request format with a stable proof ID | Wallet-signed Proofable checks use this format. Other signed-in checks still create Proofable proofs | Draft | [CAIP-380 spec](https://standards.chainagnostic.org/CAIPs/caip-380), [Portable proofs](/learn/standards/caip-380), [Examples](https://github.com/proofable/sdk/tree/main/examples/caip-380) |
+| CAIP-380 Portable Proof | A wallet-signed request format with a stable proof ID | Wallet-signed Proofable checks use this format; Proofable also signs statements about its own results | Draft | [CAIP-380 spec](https://standards.chainagnostic.org/CAIPs/caip-380), [Portable proofs](/learn/standards/caip-380), [Examples](https://github.com/proofable/sdk/tree/main/examples/caip-380) |
 | MCP | Tools and context for any MCP client | Hosted MCP carries profile, proofs, listings, permissions, and checks before sensitive tools run | Available | [MCP setup](/mcp/setup) |
 | OAuth / OIDC | Sign-in for people and MCP clients | Hosted MCP and app Connect | Available | [MCP setup](/mcp/setup) |
 | ACP | Client to an agent session | Optional self-hosted session (OpenCode, Hermes, Claude ACP). Hosted jobs stay on Proofable | Works with | [Private cloud agents](/deployment/private-cloud) |

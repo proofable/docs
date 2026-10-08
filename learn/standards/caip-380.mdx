@@ -5,7 +5,7 @@ description: "Move a verified result between apps without repeating the check, u
 icon: file-signature
 ---
 
-CAIP-380 is an open [ChainAgnostic](https://standards.chainagnostic.org/CAIPs/caip-380) standard at **Draft** status. Proofable is a reference implementation. This page describes the portable envelope emitted for wallet-signed Proofable verification requests. See [Standards & interoperability](/learn/standards) for how Proofable uses this format with other protocols, and the [whitepaper](/whitepaper#standards-and-interoperability) for the architecture.
+CAIP-380 is an open [ChainAgnostic](https://standards.chainagnostic.org/CAIPs/caip-380) standard at **Draft** status. Proofable is a reference implementation. This page describes the portable envelope Proofable emits: a signed request from a wallet, or a Proofable-signed statement about its own result. See [Standards & interoperability](/learn/standards) for how Proofable uses this format with other protocols, and the [whitepaper](/whitepaper#standards-and-interoperability) for the architecture.
 
 The CAIP-380 specification text in this document is released under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/). Reference implementation code, schemas, and fixtures elsewhere in this repository are Apache-2.0.
 
@@ -55,13 +55,11 @@ Same as [Signing format](../../verification/signing-format).
 
 ## What the envelope proves
 
-The wallet signature and `qHash` prove the integrity and signer authorization of the request envelope. They do not, by themselves, prove that a particular verifier ran or that Proofable produced a result. A Proofable portable proof adds verifier results and status around that request anchor.
-
-Session-authorized and service-authorized verification can still produce Proofable proofs, but those results are not CAIP-380 envelopes because they do not contain a verified wallet signature. Creation responses use `receipt.format: "caip-380-envelope"` only for qualifying envelopes and `receipt.format: "neus-receipt"` otherwise (legacy response field retained for compatibility).
+The signature and `qHash` prove the integrity of the envelope and identify who signed it. A user wallet signs its own verification request; Proofable signs a statement it produced itself, such as an authority decision or job outcome. The proof owner and the envelope signer can be different accounts, and neither signature proves an effect outside the statement the signer actually made.
 
 ## Offline verification
 
-Keep `portableProof` from the verification creation response. Proofable does not persist the complete request envelope by default.
+Proofable stores the envelope with its proof record. The owner can retrieve it by exact `qHash`; anonymous exact-`qHash` reads include it only when the proof is public and the owner enables portable-proof disclosure. Disclosure can change without changing `qHash` or the signature.
 
 ```javascript
 import { verifyPortableProofEnvelope } from '@proofable/sdk';

@@ -369,6 +369,7 @@
       },
       "ReceiptDescriptor": {
         "type": "object",
+        "description": "New signed issuance uses caip-380-envelope. The neus-receipt value remains only for historical and not-yet-migrated response compatibility.",
         "required": [
           "format",
           "portable"
@@ -389,7 +390,7 @@
       },
       "PortableProofEnvelope": {
         "type": "object",
-        "description": "Complete wallet-signed request envelope returned to the creator. Retain it for offline verification; it is not available from public proof lookup by default.",
+        "description": "Complete signed Proofable envelope. The signer may be a user wallet or the Proofable service issuing its own statement; the proof owner may differ. Owner exact-qHash reads return it. Anonymous exact-qHash reads return it only when the proof is public and portable disclosure is enabled.",
         "required": [
           "qHash",
           "did",
@@ -3800,6 +3801,19 @@
                 "true",
                 "yes"
               ]
+            }
+          },
+          {
+            "name": "includePortableProof",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true"
+              ],
+              "description": "Return a stored envelope for the owner, or for an explicitly disclosed public proof."
             }
           },
           {
