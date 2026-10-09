@@ -17,6 +17,25 @@ Published APIs and verifier schemas may change between minor versions. Breaking 
 </Note>
 
 <Update
+  label="October 9, 2026"
+  description="v0.1.5"
+  tags={["SDK", "Docs"]}
+  rss={{
+    title: "Proofable SDK v0.1.5",
+    description: "Proofable naming in user-visible strings, the canonical 0.1.6 skills, and typed portable proof fields."
+  }}
+>
+## Proofable naming, current skills, typed portable proof
+
+`@proofable/sdk@0.1.5` carries the main-line fixes since 0.1.4. The `personal_sign` wallet error now names Proofable instead of NEUS, the CLI `--live` help no longer assumes an IDE, and the packaged skills match the canonical `proofable/mcp` 0.1.6 set. The mounted runtime bundle drops the dead `delegation.skills` field, and `types.d.ts` declares `portableProof` and `options.disclosePortableProof`.
+
+```bash
+npm install @proofable/sdk@0.1.5
+```
+
+</Update>
+
+<Update
   label="October 8, 2026"
   description="v0.1.6"
   tags={["MCP", "Docs"]}
@@ -29,7 +48,7 @@ Published APIs and verifier schemas may change between minor versions. Breaking 
 
 `@proofable/mcp@0.1.6` gives the ChatGPT and Codex plugin a single canonical listing. The short and long descriptions were previously copied into the manifest and each submission bundle, and the copies had drifted apart; the plugin now reads **Identity, access, and proof for AI agents**, owned by one source and checked in CI.
 
-The SDK and MCP also version independently now. `@proofable/sdk@0.1.4` and `@proofable/mcp@0.1.6` are both current; a change to one does not force the other's version, so a plugin listing update no longer drags the packages.
+The SDK and MCP also version independently now. `@proofable/sdk@0.1.5` and `@proofable/mcp@0.1.6` are both current; a change to one does not force the other's version, so a plugin listing update no longer drags the packages.
 
 ```bash
 npm install @proofable/mcp@0.1.6
