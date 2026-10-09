@@ -1,6 +1,6 @@
 # Proofable Docs
 
-Give AI agents real access without giving up control. Add verification and reusable proof to your app.
+Give AI agents identity, scoped access, and proof of what they did. Add verification and reusable proof to your app.
 
 Published site: [docs.proofable.me](https://docs.proofable.me)
 
