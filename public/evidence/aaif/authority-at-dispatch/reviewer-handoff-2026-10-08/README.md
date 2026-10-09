@@ -8,7 +8,7 @@ to their repositories.
 
 | | |
 | --- | --- |
-| Evidence commit | [`proofable/docs` `bbd7ee67b8d15557b032c8724cbbc4c4f0d14bce`](https://github.com/proofable/docs/tree/bbd7ee67b8d15557b032c8724cbbc4c4f0d14bce/public/evidence/aaif/authority-at-dispatch/2026-10-08) |
+| Evidence commit | [`proofable/docs` `9851059900e29ba701bb0f4df2bf89a2107f430c`](https://github.com/proofable/docs/tree/9851059900e29ba701bb0f4df2bf89a2107f430c/public/evidence/aaif/authority-at-dispatch/2026-10-08) |
 | Path | `public/evidence/aaif/authority-at-dispatch/2026-10-08/` |
 | Deployed revision | `e1217327a1568b39d5153686b8085471b5329cde` |
 | Run | eight-case authority suite plus one ordered post-revocation probe |
@@ -22,7 +22,7 @@ so a reader re-hashing the committed bytes always agrees.
 
 Pinned revision: `c805406636f23e445a186d4b58cf15c54f958cdd`.
 
-- Repins `SOURCES.json` to the `bbd7ee6` package and its exact content hashes.
+- Repins `SOURCES.json` to the `9851059` package and its exact content hashes.
 - Replaces the reader check that previously hard-coded the post-revocation boundary as unobserved
   with an actual observation of the new `dispatch_sequence` (revocation time, the following `DENY`,
   its reason, and both anchors).
@@ -37,7 +37,7 @@ Pinned revision: `c805406636f23e445a186d4b58cf15c54f958cdd`.
 
 Pinned revision: `8598d1028bf6c0986c676829fe906f72d63363e0`.
 
-- Repins the evidence in `fetch_fixtures.py` and `check_package.py` to the `bbd7ee6` package.
+- Repins the evidence in `fetch_fixtures.py` and `check_package.py` to the `9851059` package.
 - Resolves the two prior review blockers: every one of the 14 required fields now carries an explicit
   `state` and `reason`, and the package's lint gate is satisfied.
 - Performs the disclosed-envelope verification and enforces it: `check_package.py` fails loudly if

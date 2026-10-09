@@ -8,14 +8,14 @@ Proofable's implementation evidence for the authority/effect comparison associat
 | | |
 | --- | --- |
 | **Current packet** | [`2026-10-08/`](./2026-10-08/) — deployed revision `e1217327a1568b39d5153686b8085471b5329cde` |
-| Evidence commit | [`proofable/docs` `bbd7ee6`](https://github.com/proofable/docs/tree/bbd7ee67b8d15557b032c8724cbbc4c4f0d14bce/public/evidence/aaif/authority-at-dispatch/2026-10-08) |
+| Evidence commit | [`proofable/docs` `9851059`](https://github.com/proofable/docs/tree/9851059900e29ba701bb0f4df2bf89a2107f430c/public/evidence/aaif/authority-at-dispatch/2026-10-08) |
 | Reviewer handoff | [`reviewer-handoff-2026-10-08/`](./reviewer-handoff-2026-10-08/) — minimal patches so the upstream reader implementations appraise this packet |
 | Historical | [`2026-10-06/`](./2026-10-06/) — superseded; its trace digest could not match its own bytes |
 
-## What each packet contains
+## What the current packet contains
 
-Eight sanitized trace records, a machine-readable manifest, the results under the shared
-authority/effect contract, the disclosed CAIP-380 portable envelopes, an offline verifier, and
+Six sanitized trace records, a machine-readable manifest, the results under the shared
+authority/effect contract, the 11 disclosed CAIP-380 portable envelopes, an offline verifier, and
 `SHA256SUMS`. Every file is LF-only, and every digest is computed over the published bytes, so
 `sha256sum -c SHA256SUMS` succeeds on the committed files.
 
