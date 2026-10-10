@@ -12,13 +12,15 @@ Call **`proofable_context`** once, then pick the tool for the job.
 | List what you can verify | `proofable_verifiers_catalog` | Required inputs and supported networks. |
 | Reuse a proof | `proofable_proofs_check` | Read-only. Reports whether a current proof already satisfies the request. |
 | Finish what's missing | `proofable_verify_or_guide` | Reuses a proof, or returns the next step. |
-| Create or refresh a proof | `proofable_verify` | Creates the proof when a new one is needed. |
+| Create a proof in-session | `proofable_verify` | Creates the proof when the signed-in account can authorize it. |
+| Prepare an outside signature | `proofable_verify_prepare` | Returns the exact signing string and timestamp; creates no proof. |
+| Submit an outside signature | `proofable_verify_submit` | Creates the proof from a signed prepared check. |
 | Read a proof | `proofable_proofs_get` | Current proof records and status. |
 | Update or review a proof | `proofable_proofs_update` | Change title/tags, vote, or comment on the same proof. |
 | Create or import an agent | `proofable_agent_create` | Links the agent to your profile. Optional separate spend account and controls. Pass an existing account address for dedicated spend. |
 | Confirm the agent is ready | `proofable_agent_link` | Identity and the permissions that account needs. |
 | Load the agent | `proofable_agent_mount` | Identity, permissions, skills, and current settings. |
-| Store a secret | `proofable_secret_create` | Encrypted Vault secret. |
+| Store or replace a secret | `proofable_secret_create` | Encrypted Vault secret; the same alias replaces its prior value. |
 | List secrets | `proofable_secret_list` | Stored names and details. Never the secret itself. |
 | Revoke a secret | `proofable_secret_revoke` | Removes a stored secret by proof ID. |
 
@@ -44,7 +46,7 @@ Pro adds only the four tools needed to run and manage jobs. Product connections,
 | Tool | Address field | Verifiers / filters |
 |------|---------------|---------------------|
 | `proofable_proofs_check` | `wallet` | `verifiers` |
-| `proofable_verify`, `proofable_verify_or_guide` | `walletAddress` | `verifierIds` |
+| `proofable_verify`, `proofable_verify_prepare`, `proofable_verify_submit`, `proofable_verify_or_guide` | `walletAddress` | `verifierIds` |
 | `proofable_proofs_get` | `identifier` | optional `tags` (comma-separated proof tags) |
 | `proofable_proofs_update` | `qHash` (proof ID) | optional metadata, `vote`, or `comment` |
 
