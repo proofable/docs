@@ -194,6 +194,14 @@
   },
   "redirects": [
     {
+      "source": "/openapi.json",
+      "destination": "https://api.proofable.me/openapi.json"
+    },
+    {
+      "source": "/api/openapi.json",
+      "destination": "https://api.proofable.me/openapi.json"
+    },
+    {
       "source": "/integration",
       "destination": "/integrations/server"
     },
