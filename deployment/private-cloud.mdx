@@ -49,7 +49,7 @@ The agent's permissions and proofs still live in Proofable. Confidential compute
 
 ### Phala dstack
 
-[dstack](https://phala.com/dstack) runs a Docker Compose app inside an Intel TDX confidential VM. The TDX quote covers the full compose hash, and keys are released only after attestation passes. Proofable already uses Phala-backed confidential inference for hosted AI.
+[dstack](https://phala.com/dstack) runs a Docker Compose app inside an Intel TDX confidential VM. The TDX quote covers the full compose hash, and keys are released only after attestation passes. Proofable's hosted AI already runs only on confidential models: every call goes through RedPill's attested gateway, which runs on Phala, to a model inside a TEE.
 
 ```bash
 npx phala deploy
