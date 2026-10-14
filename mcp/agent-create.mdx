@@ -54,11 +54,11 @@ Pass an existing **`agentWallet`**. The agent account signs identity. The approv
 
 When the signed-in account does not control that key:
 
-1. Sign and submit the returned identity step with the agent key.
-2. Repeat **`proofable_agent_create`** unchanged.
+1. Sign and submit the returned identity step with the agent key. **`proofable_verify`** returns the identity **`qHash`**.
+2. Repeat **`proofable_agent_create`** with the same arguments plus **`identityQHash`** set to that value. The returned step carries this call as **`thenCall`**.
 3. The approving account completes permissions in-session or through the returned hosted URL.
 
-A controller session cannot self-attest for a different agent account, so identity always comes first.
+A controller session cannot self-attest for a different agent account, so identity always comes first. The identity record lives on the agent account, which no permission names yet; **`identityQHash`** is how the approving session finds it, and the permission is recorded only after the identity exists. **`proofable_agent_link`** accepts **`identityQHash`** for the same reason.
 
 ## What each result means
 
