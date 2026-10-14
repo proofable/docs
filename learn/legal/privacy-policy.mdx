@@ -4,7 +4,7 @@ description: How Proofable collects, uses, protects, and shares personal informa
 icon: shield
 ---
 
-Effective date: July 26, 2026. Last updated: August 9, 2026.
+Effective date: July 26, 2026. Last updated: October 13, 2026.
 
 This Privacy Policy explains how NEUS Network, Inc. ("Proofable," "we," "us," or "our") handles personal information when you use the Proofable website, application, APIs, hosted Model Context Protocol (MCP) service, verification services, and related products (collectively, the "Service").
 
@@ -49,15 +49,15 @@ We use account credentials and other sensitive personal information only to prov
 
 Signing in with Google and connecting Google as an agent capability are separate choices:
 
-- **Google sign-in** requests basic identity information, such as your Google account identifier, name, profile image, and email address, to authenticate you and link the sign-in method to your Proofable account.
-- **Google connection** requests `Gmail read-only` and `Google Drive read-only` access. This permits Proofable to retrieve Gmail messages and Drive files, including Google Sheets files, only when you ask an assistant or agent to use that connection. Proofable does not request permission to send email, modify mail, or edit or delete Drive files through this connection.
+- **Google sign-in** requests only your Google account identifier and email address (`openid` and `email`) to authenticate you and link the sign-in method to your Proofable account.
+- **Google connection** (for example Gmail, Google Drive, or Google Calendar) is made through Composio, our connection provider. Google's consent screen shows the exact access requested. Proofable uses the connection only when you ask an assistant or agent to use it.
 
 Proofable handles Google user data as follows:
 
 - **Access:** Proofable accesses data only through the permissions you approve and only to provide the user-facing feature you request.
 - **Use:** Retrieved data is used to answer your request, perform the tool action, and show or save the result in your private Proofable session or proof when that feature is enabled.
-- **Storage:** OAuth tokens are stored as encrypted private records. Retrieved content may be retained in a private chat, job, or execution proof if it forms part of that record.
-- **Sharing:** Data may be processed by the Proofable hosting stack and, when needed to answer your request, by the hosted AI provider or the AI provider you selected. It is not shared for advertising or unrelated purposes.
+- **Storage:** Composio stores and refreshes the connection tokens; Proofable stores a reference to your connection. Retrieved content may be retained in a private chat, job, or execution proof if it forms part of that record.
+- **Sharing:** Data may be processed by Composio, the Proofable hosting stack and, when needed to answer your request, by the hosted AI provider or the AI provider you selected. It is not shared for advertising or unrelated purposes.
 - **AI training:** Proofable does not use raw or derived Google Workspace data to train or improve a generalized artificial-intelligence or machine-learning model.
 - **Hosted model isolation:** When you use Proofable-hosted assistant inference (the Default and Advanced tiers), Proofable sends the model request through RedPill's confidential-computing gateway. Proofable requires a verified serving path and, for each completed model call, checks the gateway identity and the signed receipt's exact request and response hashes. When the gateway forwards to a separate model host, Proofable also checks the cited serving-session record, its evidence digest, claims, and channel binding. The chat shows **TEE verified** only when every model call that contributed to the answer passed the checks that apply to its serving path. This verifies the recorded processing path; it does not mean the browser-to-model request is end-to-end encrypted. Proofable-side retention of the conversation or proof is separate and described above. When you supply your own AI provider key (bring-your-own-key), Proofable sends your request to the provider you selected. The same **TEE verified** checks can apply when that provider is RedPill's verified gateway; they do not apply to other bring-your-own-key providers. The selected provider's terms and privacy policy govern its processing.
 - **Control:** You can disconnect Google in Proofable. Proofable removes the local connection and attempts provider-side revocation. You can also revoke access from your [Google Account connections](https://myaccount.google.com/connections).
@@ -70,11 +70,11 @@ The use of raw or derived user data received from Google Workspace APIs will adh
 
 Proofable may offer sign-in or connected-account access from providers such as Microsoft and GitHub.
 
-- A **Microsoft connection** may request basic identity information plus read-only access to Outlook mail and OneDrive files.
-- A **GitHub connection** may request profile, organization, repository, and file access. GitHub's `repo` permission can cover private repositories when you approve it.
+- **Microsoft sign-in** requests basic identity information (`openid`, `profile`, `email`). **GitHub sign-in** requests your profile and organization membership (`read:user`, `read:org`).
+- Access to data in those accounts, such as Outlook mail, OneDrive files, or GitHub repositories, is made through Composio. The provider's consent screen shows the exact access requested. GitHub's `repo` permission can cover private repositories when you approve it.
 - Other sign-in providers may supply the account identifier and basic profile information shown on their consent screen.
 
-Proofable stores the granted permissions and encrypted connection credential. It uses the connection only when you request the related feature. Disconnecting removes the Proofable connection and, where supported, requests revocation from the provider. You can also revoke access in the provider's account settings.
+Proofable stores the granted permissions and a reference to the connection; Composio stores the connection credential. It uses the connection only when you request the related feature. Disconnecting removes the Proofable connection and, where supported, requests revocation from the provider. You can also revoke access in the provider's account settings.
 
 You may add a remote MCP service or your own API key for an AI or tool provider. In that case, Proofable sends the information needed for your request directly to the service you selected. When you connect a provider with your own key and then ask an assistant to use Google Workspace data in that turn, you direct the transfer of that data to the provider you selected. That provider's terms and privacy policy apply, and you are responsible for confirming the provider's terms permit your intended use of the data. Proofable does not control and is not responsible for how a third-party provider processes data you send to it with your own key.
 
@@ -120,6 +120,7 @@ Our principal provider roles are:
 | **Cloudflare** | Domain and network protection and, on forms where enabled, Turnstile abuse prevention |
 | **RedPill and its confidential-computing infrastructure** | Proofable-hosted AI inference for prompts and relevant context |
 | **Google, Microsoft, GitHub, and user-selected providers** | Authentication or connected-account data requested by the user |
+| **Composio** | Connected-account authorization, token storage and refresh, and tool calls to connected apps you ask an assistant or agent to use |
 | **Stripe** | Card payments, subscriptions, creator payout onboarding, fraud controls, and legally required payment records |
 | **Resend** | Transactional email, support delivery, and newsletters requested by the user |
 | **Reown / WalletConnect and wallet providers** | Wallet connection and wallet-request routing |
