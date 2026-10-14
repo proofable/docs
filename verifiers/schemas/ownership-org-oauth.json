@@ -9,14 +9,15 @@
       "type": "string"
     },
     "internalSocialToken": {
-      "description": "Opaque token from the hosted org sign-in session; not your app API key.",
+      "description": "Opaque token from the hosted org sign-in or work-email code session; not your app API key.",
       "type": "string"
     },
     "provider": {
-      "description": "Identity provider for workspace or org sign-in.",
+      "description": "How the work email is confirmed: Google Workspace or Microsoft sign-in, or email (a one-time code sent to the work address).",
       "enum": [
         "google",
-        "microsoft"
+        "microsoft",
+        "email"
       ],
       "type": "string"
     },
