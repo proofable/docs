@@ -156,14 +156,14 @@ async function setup() {
   if (res?.linked !== true) {
     throw new Error(`Agent setup did not complete on this service revision (${JSON.stringify({ status: res?.status, next_action: res?.next_action, error: res?.error }).slice(0, 200)}). Rerun setup; if it repeats, the deployed service predates identity-first setup (proofable_agent_create identityQHash).`);
   }
+  // The link is the registration record: it names the identity proof and the grant this account
+  // holds for the agent. It is a public hosted tool for every account; the agent listing tool is
+  // not exposed to ordinary accounts (observed 2026-10-15), and proofable_context lists only
+  // agents that currently hold an active grant.
   const link = await tool('proofable_agent_link', { agentWallet: agent, agentId: AGENT_ID, ...(identityQHash ? { identityQHash } : {}) });
-  // The identity list is the registration record. proofable_context lists only agents that
-  // currently hold an active grant, and this agent receives its grants per case at run time, so
-  // reading context here reported a registered agent as missing (observed 2026-10-14).
-  const listed = await tool('proofable_agents_list', { limit: 100 });
-  const live = (listed?.identities || []).find((a) => a.agentId === AGENT_ID && lower(a.agentWallet) === agent) || null;
-  console.log(JSON.stringify({ operator, controller, agentId: AGENT_ID, agentWallet: agent, linked: link?.linked ?? null, agentRegistered: Boolean(live), identityQHash: live?.qHash || null, revision: await deployedRevision() }, null, 2));
-  if (!live) throw new Error(`No agent identity named ${AGENT_ID} for wallet ${agent} is registered on this account; rerun setup.`);
+  const live = link?.linked === true && QHASH.test(String(link?.proofs?.identity?.qHash || '')) ? link.proofs.identity : null;
+  console.log(JSON.stringify({ operator, controller, agentId: AGENT_ID, agentWallet: agent, linked: link?.linked ?? null, agentRegistered: Boolean(live), identityQHash: live?.qHash || null, delegationQHash: link?.proofs?.delegation?.qHash || null, revision: await deployedRevision() }, null, 2));
+  if (!live) throw new Error(`No agent identity named ${AGENT_ID} for wallet ${agent} is linked to this account; rerun setup.`);
 }
 
 // ── per-run primitives (same calls the Proofable suite makes) ───────────────────────────
