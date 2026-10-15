@@ -5,7 +5,7 @@ description: "Move a verified result between apps without repeating the check, u
 icon: file-signature
 ---
 
-CAIP-380 is an open [ChainAgnostic](https://standards.chainagnostic.org/CAIPs/caip-380) standard at **Draft** status. Proofable is a reference implementation. This page describes the portable envelope Proofable emits: a signed request from a wallet, or a Proofable-signed statement about its own result. See [Standards & interoperability](/learn/standards) for how Proofable uses this format with other protocols, and the [whitepaper](/whitepaper#standards-and-interoperability) for the architecture.
+CAIP-380 is an open [ChainAgnostic](https://standards.chainagnostic.org/CAIPs/caip-380) standard at **Draft** status. Proofable is a reference implementation. This page describes the portable envelope Proofable emits: a signed request from a wallet, or a Proofable-signed statement about its own result. See [Standards & interoperability](/learn/standards) for how Proofable uses this format with other protocols, and the [whitepaper](/whitepaper#6-standards-and-interoperability) for the architecture.
 
 The CAIP-380 specification text in this document is released under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/). Reference implementation code, schemas, and fixtures elsewhere in this repository are Apache-2.0.
 
@@ -57,6 +57,8 @@ Same as [Signing format](../../verification/signing-format).
 
 The signature and `qHash` prove the integrity of the envelope and identify who signed it. A user wallet signs its own verification request; Proofable signs a statement it produced itself, such as an authority decision or job outcome. The proof owner and the envelope signer can be different accounts, and neither signature proves an effect outside the statement the signer actually made.
 
+To confirm Proofable issued a record and that it is still current, read it by exact `qHash` with `GET /api/v1/proofs/{qHash}`, within the visibility its owner set. This works for every proof, with or without an envelope.
+
 ## Offline verification
 
 Proofable stores the envelope with its proof record. The owner can retrieve it by exact `qHash`; anonymous exact-`qHash` reads include it only when the proof is public and the owner enables portable-proof disclosure. Disclosure can change without changing `qHash` or the signature.
@@ -94,4 +96,4 @@ Proofable rejects a new request if `signedTimestamp` is older than 5 minutes or 
 
 [CAIP-380 (ChainAgnostic)](https://standards.chainagnostic.org/CAIPs/caip-380). Status: Draft. Proofable is the reference implementation.
 
-CAIP-380 is at Draft status in the official CASA registry. Per [CAIP-1](https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-1.md) the lifecycle is `Draft → Review → Last Call → Final` (there is no "Accepted" rung). Advancing it requires editor advancement and, for the cryptographic profile, a second independent implementation. See [Standards & interoperability](/learn/standards) and the [whitepaper](/whitepaper#standards-and-interoperability).
+CAIP-380 is at Draft status in the official CASA registry. Per [CAIP-1](https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-1.md) the lifecycle is `Draft → Review → Last Call → Final` (there is no "Accepted" rung). Advancing it requires editor advancement and, for the cryptographic profile, a second independent implementation. See [Standards & interoperability](/learn/standards) and the [whitepaper](/whitepaper#6-standards-and-interoperability).
