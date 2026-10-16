@@ -18,7 +18,7 @@ Trust decisions still reset at application boundaries.
 
 People repeatedly prove control of accounts, domains, wallets, credentials, and assets. AI agents increasingly act across multiple tools and systems using credentials that reveal little about who authorized them, what they may do, or whether that authority is still current.
 
-Proofable turns completed identity, ownership, risk, eligibility, and authority checks into **portable proofs** that other systems can evaluate under their own policy.
+Proofable is the proof layer for apps and AI agents. It turns completed identity, ownership, risk, eligibility, and authority checks into **portable proofs** that other systems can evaluate under their own policy.
 
 Before a protected action, a Proofable gate evaluates the relevant proofs, their current lifecycle state, and the authority attached to the request. If required proof is missing, stale, expired, revoked, or outside its permitted scope, the action is denied or routed through the required verification or approval flow.
 
@@ -227,6 +227,8 @@ Integrators remain responsible for those controls and for ensuring that protecte
 
 Proofable uses existing standards for account identifiers, signatures, agent discovery, tool access, and payments instead of redefining those layers.
 
+Portable Proof began with a simple premise: a verified result should not die inside the system that produced it. Proofable extends that primitive through identity, authority, execution, and outcomes so trust can move with an agent across systems.
+
 ### CAIP-380 Portable Proof
 
 [CAIP-380](/learn/standards/caip-380) defines a canonical signed envelope for portable wallet verification requests [1].
@@ -271,6 +273,8 @@ The relying party still evaluates accepted proofs and local policy before allowi
 See [Standards & interoperability](/learn/standards) for current implementation details and references.
 
 ## 7. Applications and implementation
+
+Every agent gets an identity of its own, the context it needs, clear limits on what it can do, and proof of what happened. Those controls stay with the agent across models, tools, runtimes, and MCP.
 
 The same proof-and-gate model applies across browser flows, backend services, agent runtimes, marketplaces, and payment boundaries.
 
