@@ -11,7 +11,14 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Added
 
+- **Benchmarks page.** [docs.proofable.me/benchmarks](https://docs.proofable.me/benchmarks) lists what Proofable has measured, what each number was measured on, and how to check it without an account.
+- **Changelog entries for `@proofable/mcp` 0.1.7 and `@proofable/sdk` 0.1.6.**
 - **Eligibility clause in the Terms of Use.** Section 4 states the minimum age and the capacity to contract. The Terms had no eligibility or age statement before.
+
+### Changed
+
+- **Authority at dispatch reads as a table of eight cases**, each linked to its public signed record, with the limits stated once. Reviewers get Pro at no cost to run the reproduce kit.
+- **Superseded evidence packets removed from `main`.** The October 6 packet and the six-case October 8 packet remain at their pinned commits (`3a45f02`, `9851059`), which the working-group tools read. The reviewer-handoff patch folders are removed.
 
 ### Fixed
 

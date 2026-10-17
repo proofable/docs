@@ -6,8 +6,8 @@ description: "What Proofable has measured, what each number was measured on, and
 Proofable lets a person or an AI agent take a real action under a limited, current permission,
 and leaves a signed record anybody can check afterwards without asking us.
 
-This page lists everything we have measured so far, and each number says what it was measured on.
-None of it is a model-capability score or a ranking. Last measured 2026-10-17.
+Each number below says what it was measured on. These measure Proofable itself, not AI models.
+Last measured 2026-10-17.
 
 ## The three things we measured
 
@@ -16,14 +16,14 @@ None of it is a model-capability score or a ranking. Last measured 2026-10-17.
 We ran eight situations that cover the ways permission can go wrong: the grant was revoked; the
 grant expired; the action was outside what the grant allows; the person who has to approve could
 not be reached; the approval arrived too late. Each one either completed and left a signed record,
-or was refused with a reason and no executor was ever assigned.
+or was refused with a reason and no executor was ever assigned. Every record is public:
+[open the eight cases](/use-cases/authority-at-dispatch).
 
 | What we counted | Number |
 | --- | --- |
 | Situations that ended the way the contract says | 8 of 8 |
 | Signed records that check offline, without our code | 15 |
-| Same situations rerun from scratch by a fresh operator agent | 8 of 8 |
-| Slowest single situation in the rerun | 121 s |
+| Same situations rerun with the public kit on a fresh account | 8 of 8 |
 
 Proofable ran this itself. Anyone with a Pro account can rerun the same eight situations against
 the live service under their own account and keys, and the records they produce are theirs.
@@ -62,9 +62,6 @@ later party only has to check the signed record.
 
 ## What we have not measured
 
-Stated rather than left blank, because an empty space in a measurement is the easiest place to
-mislead.
-
 - revocation latency
 - target-side effect by an independent witness
 
@@ -72,7 +69,7 @@ mislead.
 
 The records are in the public
 [proofable/docs repository](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch).
-Reading and verifying them needs no account. To check the eight-case packet offline:
+Reading and verifying them needs no account. To check all 15 signed records offline:
 
 ```sh
 git clone https://github.com/proofable/docs
@@ -84,4 +81,3 @@ node verify-portable-proofs.mjs
 
 To rerun the eight situations on the live service under your own Pro account, use the
 [reproduce kit](/use-cases/authority-at-dispatch#run-it-yourself).
-

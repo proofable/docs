@@ -13,8 +13,8 @@ records.
 
 - Node.js 20 or later.
 - A Proofable **Pro** account. Background jobs, approvals and the isolated computer are Pro
-  features. Working-group operators can ask for a sponsored review account on
-  [#13](https://github.com/aaif/wg-identity-and-trust/issues/13).
+  features. Reviewers get Pro at no cost: email [dev@proofable.me](mailto:dev@proofable.me) with
+  your account handle.
 - A profile access key (`npk_…`) for that account: run `npx -y @proofable/sdk setup`, or create
   one under the account's access keys. Keep it out of chat and out of version control.
 

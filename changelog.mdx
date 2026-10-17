@@ -17,6 +17,44 @@ Published APIs and verifier schemas may change between minor versions. Breaking 
 </Note>
 
 <Update
+  label="October 12, 2026"
+  description="v0.1.6"
+  tags={["SDK"]}
+  rss={{
+    title: "Proofable SDK v0.1.6",
+    description: "Delegation lookup fails closed for named agents, and the packaged skills match MCP 0.1.7."
+  }}
+>
+## Named-agent delegation fails closed
+
+`@proofable/sdk@0.1.6` no longer selects a delegation for a named agent unless the delegation names that agent. Mounted-agent bundles drop the unused `effectiveRuntime` field, so the host that runs the agent picks its own runtime. The packaged skills now match `@proofable/mcp@0.1.7`, including the external-signer prepare-and-submit flow.
+
+```bash
+npm install @proofable/sdk@0.1.6
+```
+
+</Update>
+
+<Update
+  label="October 10, 2026"
+  description="v0.1.7"
+  tags={["MCP"]}
+  rss={{
+    title: "Proofable MCP v0.1.7",
+    description: "One listing description across every marketplace."
+  }}
+>
+## One listing description everywhere
+
+`@proofable/mcp@0.1.7` uses one description across OpenAI, the MCP Registry, npm, Claude, Cursor, and Codex: "Context and control for any AI," followed by the identity, access, tools, and proof details. Earlier releases carried different copy on each platform.
+
+```bash
+npm install @proofable/mcp@0.1.7
+```
+
+</Update>
+
+<Update
   label="October 9, 2026"
   description="v0.1.5"
   tags={["SDK", "Docs"]}
