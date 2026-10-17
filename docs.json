@@ -71,7 +71,7 @@
         "groups": [
           {
             "group": "Overview",
-            "pages": ["index", "pricing", "security", "enterprise", "migrate"]
+            "pages": ["index", "benchmarks", "pricing", "security", "enterprise", "migrate"]
           },
           {
             "group": "Use cases",
