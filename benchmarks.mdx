@@ -1,35 +1,31 @@
 ---
 title: "Benchmarks"
-description: "What Proofable stops, what each check costs, and how to verify every result yourself."
+description: "What Proofable stops, what a check costs, and how to verify every result yourself."
 ---
 
-Proofable checks what an AI agent is allowed to do before it acts, and signs a record of every
-decision that anyone can verify. Last measured 2026-10-17.
+Measured on the live service and inside a real coding agent. Last measured October 17, 2026.
 
-## Agents cannot act without current permission
+| Result | Measured on |
+|---|---|
+| Every action without current permission was refused before it ran | 8 cases on the live service |
+| 4.8 ms per check | 98 decisions inside a coding agent |
+| 4 ms to verify a record later, with no account and no AI model | A live record, checked offline |
 
-On the live service, we tried each way an agent's permission can fail:
+## Refused before it runs
 
-- the permission was revoked, or had expired
-- the action was outside what the permission allows
-- a person had to approve and never answered, or answered too late
-- the permission was revoked while a job was running
+We tried each way an agent's permission can fail: revoked, expired, outside its scope, waiting on a
+person who never answers, and revoked while a job runs. Valid permission ran normally. Each case is
+a public signed record: [see all eight](/use-cases/authority-at-dispatch).
 
-Every action without current permission was refused before it ran. When permission was revoked
-mid-job, the next action was refused and the record shows what had already happened. Two
-controls with valid permission ran normally. All 8 cases behaved as specified, and each decision is a
-public signed record: [see the eight cases](/use-cases/authority-at-dispatch). These records are
-part of the [AAIF Identity & Trust working-group comparison](https://github.com/aaif/wg-identity-and-trust/issues/13).
+## 4.8 ms per check
 
-## Each check adds 4.8 ms
+Inside a real coding agent on five tasks, the check made 98 decisions and added 467 ms in
+total. It refused nothing, so no task was stopped by it.
 
-Inside a real coding agent working on five tasks, the check made 98 decisions and added
-4.8 ms to each, 467 ms in total. It refused nothing, so no task was stopped by it.
+## Verifying later is free
 
-## Verifying a result later is free
-
-Producing a result takes as long as the work, 37 s here. After that, anyone can verify
-its signed record offline in 4 ms, with no account and no AI model.
+Producing a result costs the work itself, 37 s here. Anyone can then verify its record offline
+in 4 ms, with no account and no AI model.
 
 ## Verify it yourself
 
@@ -41,11 +37,13 @@ npm install @proofable/sdk@0.1.6
 node verify-portable-proofs.mjs
 ```
 
-To run the eight cases on your own account, use the
-[reproduce kit](/use-cases/authority-at-dispatch#run-it-yourself).
+To run the cases on your own account, use the [reproduce kit](/use-cases/authority-at-dispatch#run-it-yourself).
 
 ## Not measured yet
 
-- A rerun of the eight cases by an independent operator
+- A rerun by an independent operator
 - How long a revocation takes to reach the check
-- The effect at the target system, as seen by an independent witness
+- The effect at the target system, seen by an independent witness
+
+These records are part of the
+[AAIF Identity & Trust working-group comparison](https://github.com/aaif/wg-identity-and-trust/issues/13).

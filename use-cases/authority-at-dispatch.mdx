@@ -1,27 +1,30 @@
 ---
-title: "Authority at dispatch"
-sidebarTitle: "Authority at dispatch"
-description: "What Proofable does when an agent's permission is missing, revoked, expired, or waiting on a person, with a public signed record for every case."
+title: "Eight live cases, every record public"
+sidebarTitle: "Live evidence"
+description: "Eight ways an agent's permission can fail on the live service, what Proofable did each time, and the signed record you can check."
 icon: shield-halved
 ---
 
-Before an agent's job runs, Proofable checks that the agent holds current permission for it. If it
-does not, the job is refused before anything runs. Every decision is a signed record anyone can open.
+We ran each case on production on October 8, 2026. Open a case to see its signed record.
 
-## The eight cases
+```text
+Agent        review-agent
+Action       run_command
+Permission   not granted
+Decision     Refused before it ran
+Record       signed, public
+```
 
-Run on the live service on October 8, 2026. Each link opens the public record.
-
-| Case | Result | Record |
-|---|---|---|
-| Permission granted | Ran and completed | [open](https://proofable.me/proof/0x64f293e61b826e03bd1de6564fc2db8cec0f50390bafc8bdf162ec9961262fca) |
-| Action outside the permission | Refused before it ran | [open](https://proofable.me/proof/0xffdc0455b72732a8c6a31eb4e2861943b85dbc271fe2dfa8b18d0e85d2b33726) |
-| Needs approval, approved | Held until approved, then ran | [open](https://proofable.me/proof/0xe662eaa54a5e3d7875827794d6a69b4e86973fee49cfa71e555f821d5ed28c35) |
-| Needs approval, nobody answers | Never ran; a late approval was refused | [open](https://proofable.me/proof/0x6c53cb0005c9dc30fde5bb1bd06860d74ae51790be3869a6605bfc9f71e01954) |
-| Permission revoked | Refused; no job created | [open](https://proofable.me/proof/0x8a3e5ff89c8a86423bae61db96c9732f319a6f6cdb34f4bde560c90d25366c95) |
-| Permission expired | Refused; no job created | [open](https://proofable.me/proof/0xf1880cba0876acc2364e31892b261a47299c0a70177b61b32d465fcd1b61447a) |
-| Revoked permission reused | Refused every time | [open](https://proofable.me/proof/0x1d987781eb519337fa9e62043831ee187340f6e589f217b16b99ed98be5acfbc) |
-| Permission revoked mid-job | The running step finished; the next one was refused | [open](https://proofable.me/proof/0x05ef986ee3817a6fd56b327b1de3523ab7f65c11c4ff386d34c16f93d11c0045) |
+| Case | What happened |
+|---|---|
+| [Permission granted](https://proofable.me/proof/0x64f293e61b826e03bd1de6564fc2db8cec0f50390bafc8bdf162ec9961262fca) | Ran and completed |
+| [Action outside the permission](https://proofable.me/proof/0xffdc0455b72732a8c6a31eb4e2861943b85dbc271fe2dfa8b18d0e85d2b33726) | Refused before it ran |
+| [Needs approval, approved](https://proofable.me/proof/0xe662eaa54a5e3d7875827794d6a69b4e86973fee49cfa71e555f821d5ed28c35) | Held until approved, then ran |
+| [Needs approval, nobody answers](https://proofable.me/proof/0x6c53cb0005c9dc30fde5bb1bd06860d74ae51790be3869a6605bfc9f71e01954) | Never ran; a late approval was refused |
+| [Permission revoked](https://proofable.me/proof/0x8a3e5ff89c8a86423bae61db96c9732f319a6f6cdb34f4bde560c90d25366c95) | Refused; no job created |
+| [Permission expired](https://proofable.me/proof/0xf1880cba0876acc2364e31892b261a47299c0a70177b61b32d465fcd1b61447a) | Refused; no job created |
+| [Revoked permission reused](https://proofable.me/proof/0x1d987781eb519337fa9e62043831ee187340f6e589f217b16b99ed98be5acfbc) | Refused every time |
+| [Revoked mid-job](https://proofable.me/proof/0x05ef986ee3817a6fd56b327b1de3523ab7f65c11c4ff386d34c16f93d11c0045) | The running step finished; the next was refused |
 
 ## Verify it yourself
 
@@ -38,9 +41,8 @@ node verify-portable-proofs.mjs
 ## Run it yourself
 
 The [reproduce kit](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/reproduce)
-runs the same eight cases on the live service under your own account, and the records it writes are
-yours. Jobs need Pro. Reviewers get 30 days free: email [dev@proofable.me](mailto:dev@proofable.me)
-with your account handle.
+runs the same cases on the live service under your own account. Jobs need Pro; reviewers get 30 days
+free from [dev@proofable.me](mailto:dev@proofable.me).
 
 ```sh
 npm install
@@ -53,9 +55,9 @@ node aad.mjs verify runs/<run-id>
 
 ## Not measured yet
 
-- A rerun of these cases by an independent operator
+- A rerun by an independent operator
 - How long a revocation takes to reach the check
-- The effect at the target system, as seen by an independent witness
+- The effect at the target system, seen by an independent witness
 
 These records are part of the
 [AAIF Identity & Trust working-group comparison](https://github.com/aaif/wg-identity-and-trust/issues/13).
