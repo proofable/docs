@@ -1,75 +1,37 @@
 ---
 title: "Benchmarks"
-description: "What Proofable has measured, what each number was measured on, and how to check it yourself."
+description: "What Proofable stops, what each check costs, and how to verify every result yourself."
 ---
 
-Proofable lets a person or an AI agent take a real action under a limited, current permission,
-and leaves a signed record anybody can check afterwards without asking us.
+Proofable checks what an AI agent is allowed to do before it acts, and signs a record of every
+decision that anyone can verify. Last measured 2026-10-17.
 
-Each number below says what it was measured on. These measure Proofable itself, not AI models.
-Last measured 2026-10-17.
+## Agents cannot act without current permission
 
-## The three things we measured
+On the live service, we tried each way an agent's permission can fail:
 
-### 1. Real actions, on the live service
+- the permission was revoked, or had expired
+- the action was outside what the permission allows
+- a person had to approve and never answered, or answered too late
+- the permission was revoked while a job was running
 
-We ran eight situations that cover the ways permission can go wrong: the grant was revoked; the
-grant expired; the action was outside what the grant allows; the person who has to approve could
-not be reached; the approval arrived too late. Each one either completed and left a signed record,
-or was refused with a reason and no executor was ever assigned. Every record is public:
-[open the eight cases](/use-cases/authority-at-dispatch).
+Every action without current permission was refused before it ran. When permission was revoked
+mid-job, the next action was refused and the record shows what had already happened. Two
+controls with valid permission ran normally. All 8 cases behaved as specified, and each decision is a
+public signed record: [see the eight cases](/use-cases/authority-at-dispatch). These records are
+part of the [AAIF Identity & Trust working-group comparison](https://github.com/aaif/wg-identity-and-trust/issues/13).
 
-| What we counted | Number |
-| --- | --- |
-| Situations that ended the way the contract says | 8 of 8 |
-| Signed records that check offline, without our code | 15 |
-| Same situations rerun with the public kit on a fresh account | 8 of 8 |
+## Each check adds 4.8 ms
 
-Proofable ran this itself. Anyone with a Pro account can rerun the same eight situations against
-the live service under their own account and keys, and the records they produce are theirs.
+Inside a real coding agent working on five tasks, the check made 98 decisions and added
+4.8 ms to each, 467 ms in total. It refused nothing, so no task was stopped by it.
 
-Reviewed outside Proofable: the AAIF Identity & Trust working group's shared reader checks the
-six-case packet from the same run and passes it
-([reader change](https://github.com/probityai/agent-evidence-observer/pull/88),
-[working-group thread](https://github.com/aaif/wg-identity-and-trust/issues/13)). That is an offline
-check of the published records, not an independent live run.
+## Verifying a result later is free
 
-### 2. The permission check costs a few milliseconds
+Producing a result takes as long as the work, 37 s here. After that, anyone can verify
+its signed record offline in 4 ms, with no account and no AI model.
 
-The same five coding tasks, the same model, the same environment and the same grader, run twice:
-once with our permission check in the loop and once without it. Only the check differed.
-
-| What we counted | With the check | Without it |
-| --- | --- | --- |
-| Times the check made a decision | 98 | not applicable |
-| Actions the check refused | 0 | not applicable |
-| Total time the check added | 467 ms | 0 |
-| Average time per decision | 4.8 ms | not applicable |
-
-The check refused nothing on these five tasks, so no task was stopped by it. Tasks solved were 1 with the check and 2 without it. Five tasks at one attempt each is too small a sample to compare task success in either direction, so this run measures the cost of each decision and nothing more.
-
-### 3. Checking a result a second time is nearly free
-
-The first time a result is produced, it costs whatever the work costs. Every time after that, a
-later party only has to check the signed record.
-
-| What a later party pays | Cost |
-| --- | --- |
-| Produce the result once (grant, action, record) | 37 s |
-| Read the record online, no account needed | 0.18 s |
-| Check the signature offline, no account needed | 4 ms |
-| Model tokens spent on a later check | 0 |
-
-## What we have not measured
-
-- revocation latency
-- target-side effect by an independent witness
-
-## Check it yourself
-
-The records are in the public
-[proofable/docs repository](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch).
-Reading and verifying them needs no account. To check all 15 signed records offline:
+## Verify it yourself
 
 ```sh
 git clone https://github.com/proofable/docs
@@ -79,5 +41,11 @@ npm install @proofable/sdk@0.1.6
 node verify-portable-proofs.mjs
 ```
 
-To rerun the eight situations on the live service under your own Pro account, use the
+To run the eight cases on your own account, use the
 [reproduce kit](/use-cases/authority-at-dispatch#run-it-yourself).
+
+## Not measured yet
+
+- A rerun of the eight cases by an independent operator
+- How long a revocation takes to reach the check
+- The effect at the target system, as seen by an independent witness

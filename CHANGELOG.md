@@ -17,7 +17,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Changed
 
-- **Authority at dispatch reads as a table of eight cases**, each linked to its public signed record, with the limits stated once. Reviewers get Pro at no cost to run the reproduce kit.
+- **Authority at dispatch reads as a table of eight cases**, each linked to its public signed record, with what is not measured yet stated once. Reviewers get 30 days of Pro free to run the reproduce kit.
 - **Superseded evidence packets removed from `main`.** The October 6 packet and the six-case October 8 packet remain at their pinned commits (`3a45f02`, `9851059`), which the working-group tools read. The reviewer-handoff patch folders are removed.
 
 ### Fixed
