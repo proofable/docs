@@ -35,14 +35,16 @@ not silent. Receipts are private by default.
 Stated plainly, because the group's value is in the comparison, not in a perfect row.
 
 <AccordionGroup>
-  <Accordion title="Remote authority unreachable is not yet exercised">
-    The engine has a fail-closed gateway branch, but Proofable has **not run** the
-    verifier-or-remote-authority-unreachable case live. Proofable's result for that specific case is
-    **unknown** until it is run with the group.
+  <Accordion title="Remote authority unreachable does not apply to this path">
+    Proofable checks current authority state locally at dispatch, so this path has no remote
+    authorization service that could become unreachable. The packet records the case as **not
+    applicable to the current path**. The engine has a fail-closed gateway branch for a remote
+    authority, and that branch has **not been run live**.
   </Accordion>
   <Accordion title="Self-operated, no independent peer witness">
     The run is self-custodied: an ordinary non-admin Pro review tenant drives it with a dedicated
-    agent. There is no independent peer witness and no second tenant on the public surface.
+    agent. There is no independent peer witness and no second tenant on the public surface. The
+    reproduce kit below lets another operator run the same cases; no independent run is published yet.
   </Accordion>
   <Accordion title="Committed effect and recovery are the relying party's fields">
     After a decision, committed effect, retries and recovery belong to the relying party. Proofable
@@ -57,23 +59,49 @@ Stated plainly, because the group's value is in the comparison, not in a perfect
 
 ## Evidence
 
-The run records are versioned in the public `proofable/docs` repository and reachable without an
-account:
+The current packet is run `aaif-e1217327a-20261008` on live production, protocol revision
+`e1217327a`. It holds all eight suite cases, with 15 signed envelopes that anyone can verify offline
+and checksums over the published bytes. No account is needed to read or check it.
 
-- [Reviewer packet (README, manifest, trace, checksums)](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/2026-10-05)
-- [Manifest (raw)](https://raw.githubusercontent.com/proofable/docs/main/public/evidence/aaif/authority-at-dispatch/2026-10-05/manifest.json)
+| Scenario | Result |
+|---|---|
+| Binding veto | **Supported.** The protected action is refused before an executor is assigned. |
+| Revoked or stale authority | **Supported.** Revoked grants are denied; the never-revoked control is accepted. |
+| Human approver unavailable | **Supported.** The job is held with no executor, the hold ends without execution, and a late approval is refused. |
+| Remote authority unreachable | **Not applicable to the current path.** See Known gaps. |
+| Revocation after dispatch | **Supported.** The earlier effect and the refused next dispatch are recorded separately. |
 
-Each record carries the pinned protocol revision, the exact command, and the trace field. Custody is
-`SELF`; receipts are private and referenced only by their private-visibility qHash. This packet is
-bounded implementation evidence, not a matched or certified result.
+- [Reviewer packet (README, results, trace, envelopes, checksums)](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/2026-10-08-eight-case)
+- [Results table](https://github.com/proofable/docs/blob/main/public/evidence/aaif/authority-at-dispatch/2026-10-08-eight-case/authority-effect-results.md)
+- [Manifest (raw)](https://raw.githubusercontent.com/proofable/docs/main/public/evidence/aaif/authority-at-dispatch/2026-10-08-eight-case/manifest.json)
+
+To check the packet yourself, run these in the packet folder:
+
+```sh
+sha256sum -c SHA256SUMS
+npm install @proofable/sdk@0.1.6
+node verify-portable-proofs.mjs
+```
+
+Custody is `SELF`: Proofable ran it under a non-admin review profile. The disclosed envelopes are
+signed by the Proofable service wallet, and the controller is the subject of each statement.
+Revocation latency was not measured. This packet is bounded implementation evidence, not a matched
+or certified result.
 
 ## Run it yourself
 
-The live authority suite runs through the hosted MCP surface:
+The [reproduce kit](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/reproduce)
+runs the same eight cases against the live hosted service under your own Pro account, agent wallet
+and grants, then checks every record offline. You keep custody of everything it writes, and
+Proofable never sees your agent key. From the kit folder:
 
 ```sh
-node --env-file=.env runners/aaif/harness-state.mjs prod
-node --env-file=.env runners/aaif/authority-suite.mjs <case|list>
+npm install
+export PROOFABLE_ACCESS_KEY=npk_...
+export AAD_OPERATOR="Your Organization"
+node aad.mjs setup
+node aad.mjs run
+node aad.mjs verify runs/<run-id>
 ```
 
 Cases: `hosted_allow`, `binding_veto`, `approval_reachable`, `approval_unavailable`,
