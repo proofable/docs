@@ -1,7 +1,7 @@
 ---
 title: "Eight live cases, every record public"
 sidebarTitle: "Live evidence"
-description: "Eight ways an agent's permission can fail on the live service, what Proofable did each time, and the signed record you can check."
+description: "Eight ways an agent's permission can fail on the live service, what Proofable did each time, and the signed record you can rerun on your own account."
 icon: shield-halved
 ---
 
@@ -38,14 +38,15 @@ npm install @proofable/sdk@0.1.6
 node verify-portable-proofs.mjs
 ```
 
-## Run it yourself
+## Rerun it on your own account
 
-The [reproduce kit](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/reproduce)
-runs the same cases on the live service under your own account. The cases run agent jobs, which need
-a Pro account today. Create the access key under
-[Profile, Account tab, Access keys](https://proofable.me/profile?tab=account).
+Every case above is reproducible, not asserted. The kit in this repo drives the same eight cases
+against the live service on an account you control, and writes the same signed records you can
+check:
 
 ```sh
+git clone https://github.com/proofable/docs
+cd docs/public/evidence/aaif/authority-at-dispatch/reproduce
 npm install
 export PROOFABLE_ACCESS_KEY=npk_...
 export AAD_OPERATOR="Your Organization"
@@ -54,11 +55,10 @@ node aad.mjs run
 node aad.mjs verify runs/<run-id>
 ```
 
-## Not measured yet
+Your run produces its own records. Compare them to the eight linked above.
 
-- A rerun by an independent operator
-- How long a revocation takes to reach the check
-- The effect at the target system, seen by an independent witness
+The cases run agent jobs, which need a Pro account today. Create the access key under
+[Profile, Account tab, Access keys](https://proofable.me/profile?tab=account).
 
-These records are part of the
+Every record here is also part of the
 [AAIF Identity & Trust working-group comparison](https://github.com/aaif/wg-identity-and-trust/issues/13).

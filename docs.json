@@ -194,6 +194,10 @@
   },
   "redirects": [
     {
+      "source": "/benchmarks",
+      "destination": "/use-cases/authority-at-dispatch"
+    },
+    {
       "source": "/openapi.json",
       "destination": "https://api.proofable.me/openapi.json"
     },

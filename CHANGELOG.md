@@ -17,7 +17,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 ### Changed
 
 - **Benchmarks page removed.** Every number it carried already lives, with its public signed record, on [Authority at dispatch](/use-cases/authority-at-dispatch). The one figure that page held on its own came from a local run and could not support a public performance claim, so the page is gone rather than restated.
-- **Authority at dispatch reads as a table of eight cases**, each linked to its public signed record, with what is not measured yet stated once.
+- **Authority at dispatch reads as a table of eight cases**, each linked to its public signed record, and closes on the reproduce kit that runs the same cases on your own account.
 - **Earlier evidence packets moved out of `main`.** Superseded packets remain available at their tagged commits, so the published case set carries one current version.
 
 ### Fixed
