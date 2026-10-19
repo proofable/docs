@@ -1,15 +1,14 @@
 # Run the authority-at-dispatch cases yourself
 
-This kit runs Proofable's eight permission cases against the live service under your own account,
-then verifies every record offline. Everything it writes stays on your machine and belongs to you.
+This kit runs Proofable's eight permission cases against the live service, then verifies every
+record offline.
 
 ## What you need
 
 - Node.js 20 or later
-- A Proofable account with Pro. Jobs need Pro. Reviewers get 30 days free: email
-  [dev@proofable.me](mailto:dev@proofable.me) with your account handle.
-- An access key for that account (`npk_…`): run `npx -y @proofable/sdk setup`, or create one under
-  your account's access keys. Keep it out of chat and version control.
+- An access key (`npk_…`). Reviewers: ask and we send one, valid for 30 days. It belongs to a
+  Proofable test account; the agent wallet and the run folder are created on your machine. Keep the
+  key out of chat and version control.
 
 ## Run it
 
@@ -41,8 +40,8 @@ with `node aad.mjs cases`.
 
 ## Not measured
 
-How long a revocation takes to reach the check. Effects are recorded as the service observed them;
-to watch the target yourself, point the `post_dispatch_revoke` step at a system you control.
+How long a revocation takes to reach the check, and the effect at the target: effects are recorded
+as the service observed them.
 
 ## Settings
 
@@ -50,6 +49,7 @@ to watch the target yourself, point the `post_dispatch_revoke` step at a system 
 | --- | --- | --- |
 | `PROOFABLE_ACCESS_KEY` | required | your access key |
 | `AAD_OPERATOR` | required | your name or organization, recorded in every record |
+| `AAD_AGENT_ID` | `aaif-authority-review` | review agent id; give each reviewer sharing an account their own |
 | `AAD_RUN_ID` | `aad-<timestamp>` | run folder name |
 | `AAD_APPROVAL_HOLD_MS` | `0` | how long an approval stays unanswered before the hold ends |
 | `AAD_REVOKE_AFTER_MS` | `12000` | delay before the mid-job revocation |

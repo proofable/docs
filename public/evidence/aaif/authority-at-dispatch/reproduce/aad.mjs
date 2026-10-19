@@ -2,10 +2,9 @@
 /**
  * Authority-at-dispatch reproduction kit (AAIF Identity & Trust #13).
  *
- * Runs the eight Proofable authority cases against the live hosted MCP service under YOUR
- * OWN Proofable account, agent wallet and grants, and writes the records you hold custody of.
- * Nothing here is Proofable-operated: the access key, the controller, the agent wallet and
- * the run directory are the operator's.
+ * Runs the eight Proofable authority cases against the live hosted MCP service under the
+ * account the access key belongs to, with an agent wallet created on this machine, and writes
+ * the records to a run directory you hold custody of.
  *
  *   node aad.mjs setup                 register your review agent and its delegation
  *   node aad.mjs run [case ...]        run all cases (default) or the named ones
@@ -13,7 +12,7 @@
  *   node aad.mjs cases                 list the cases
  *
  * Environment (see README.md):
- *   PROOFABLE_ACCESS_KEY   npk_… profile access key of the operator's Pro account (required)
+ *   PROOFABLE_ACCESS_KEY   npk_… access key (required)
  *   AAD_OPERATOR           who ran this, recorded as custodian (required for setup/run)
  *   AAD_AGENT_ID           review agent id (default aaif-authority-review)
  *   AAD_RUN_ID             run id (default aad-<utc timestamp>)
@@ -421,7 +420,7 @@ async function run(selected) {
     contractId: CONTRACT_ID,
     run_id: runId,
     operator,
-    custody: `OPERATOR: ${operator} (own Proofable account, own agent wallet, own grants)`,
+    custody: `OPERATOR: ${operator} (agent wallet and run records on this machine; controller account ${controller})`,
     product_revision: revision,
     mcp_url: MCP_URL,
     delegationRoot: `did:pkh:${GRANT_CHAIN}:${controller}`,
