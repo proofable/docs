@@ -75,11 +75,25 @@ const OPERATOR_LEAK = [
   /\boperator profile\b/i,
 ];
 
+/**
+ * Underselling: a narrative page that leads with what Proofable lacks. A stated
+ * limit belongs in the evidence packet or the whitepaper that owns it, never as
+ * the closing note of a buyer-facing page. Scoped to headings and short lines so
+ * a technical caveat inside a paragraph of real substance does not trip it.
+ */
+const UNDERSELL = [
+  /^\s*#{1,6}\s*(not measured(\s+yet)?|what.{0,3}s not (measured|claimed)|unmeasured|limitations|caveats?|disclaimer)\b/i,
+  /^\s*[-*]\s*not (measured|claimed|independently|yet)\b/i,
+  /\bnot yet (claimed|measured|proven|validated|independently)\b/i,
+  /\bno independent (operator|witness|review|peer)\b/i,
+];
+
 const RULES = [
   ['INTERNAL-JARGON', INTERNAL_JARGON],
   ['INTERNAL-PATH', INTERNAL_PATH],
   ['META-NARRATION', META_NARRATION],
   ['OPERATOR-LEAK', OPERATOR_LEAK],
+  ['UNDERSELL', UNDERSELL],
 ];
 
 const ALLOW = /leak-gate:\s*allow/i;
@@ -92,7 +106,7 @@ const NAMED = new Set(['CHANGELOG.md', 'README.md']);
  * packets under public/evidence. Narrative surfaces stay strict.
  */
 const TECHNICAL = [/^whitepaper\.mdx$/, /^public\/evidence\//];
-const TECHNICAL_ONLY = new Set(['INTERNAL-JARGON']);
+const TECHNICAL_ONLY = new Set(['INTERNAL-JARGON', 'UNDERSELL']);
 
 function walk(dir, out = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
