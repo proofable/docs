@@ -11,12 +11,12 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Added
 
-- **Benchmarks page.** [docs.proofable.me/benchmarks](https://docs.proofable.me/benchmarks) lists what Proofable has measured, what each number was measured on, and how to check it without an account.
 - **Changelog entries for `@proofable/mcp` 0.1.7 and `@proofable/sdk` 0.1.6.**
 - **Eligibility clause in the Terms of Use.** Section 4 states the minimum age and the capacity to contract. The Terms had no eligibility or age statement before.
 
 ### Changed
 
+- **Benchmarks page removed.** Every number it carried already lives, with its public signed record, on [Authority at dispatch](/use-cases/authority-at-dispatch). The one figure that page held on its own was a local permission-check run on five tasks, which cannot support a public performance claim, so the page is gone rather than restated.
 - **Authority at dispatch reads as a table of eight cases**, each linked to its public signed record, with what is not measured yet stated once.
 - **Superseded evidence packets removed from `main`.** The October 6 packet and the six-case October 8 packet remain at their pinned commits (`3a45f02`, `9851059`), which the working-group tools read. The reviewer-handoff patch folders are removed.
 
