@@ -3,13 +3,12 @@ title: "Benchmarks"
 description: "What Proofable stops, what a check costs, and how to verify every result yourself."
 ---
 
-Measured on the live service and inside a real coding agent. Last measured October 17, 2026.
+Proofable ran every result on this page itself. Each one names where it was measured. Last measured October 17, 2026.
 
 | Result | Measured on |
 |---|---|
 | Every action without current permission was refused before it ran | 8 cases on the live service |
-| 4.8 ms per check | 98 decisions inside a coding agent |
-| 4 ms to verify a record later, with no account and no AI model | A live record, checked offline |
+| 4 ms to verify a record later, with no account and no AI model | Median of 10 offline checks of one record from the live service |
 
 ## Refused before it runs
 
@@ -17,15 +16,24 @@ We tried each way an agent's permission can fail: revoked, expired, outside its 
 person who never answers, and revoked while a job runs. Valid permission ran normally. Each case is
 a public signed record: [see all eight](/use-cases/authority-at-dispatch).
 
-## 4.8 ms per check
+## Permission check inside a coding agent
 
-Inside a real coding agent on five tasks, the check made 98 decisions and added 467 ms in
-total. It refused nothing, so no task was stopped by it.
+Measured October 1, 2026 on five Terminal-Bench 2.0 tasks, one attempt each. This run used a local
+copy of Proofable's permission-check code inside the agent's own process, with one fixed permission
+that allows running commands. It made no call to the live service and produced no signed record.
+
+The check made 98 decisions and added 467 ms in total, about 5 ms per decision on average. The timer
+used here ticks about every 15.6 ms, so the figure is an average over all 98 decisions and cannot
+time a single call. The check refused nothing, so no task was stopped by it. With the check on, the
+agent solved 1 of 5 tasks; with it off, 2 of 5. Five tasks at one attempt each are too few to tell
+whether the check changes how many tasks get solved.
 
 ## Verifying later is free
 
-Producing a result costs the work itself, 37 s here. Anyone can then verify its record offline
-in 4 ms, with no account and no AI model.
+On October 17, 2026, producing one result on the live service took 2.79 s of job time and 2,426 AI
+tokens. The full kit case around it, including granting the permission, took 37 s. Anyone can then
+verify the result's record offline in 4 ms, the median of 10 checks on one record, with no account
+and no AI model.
 
 ## Verify it yourself
 
@@ -37,7 +45,8 @@ npm install @proofable/sdk@0.1.6
 node verify-portable-proofs.mjs
 ```
 
-To run the cases on your own account, use the [reproduce kit](/use-cases/authority-at-dispatch#run-it-yourself).
+To rerun the live cases on your own account, use the [reproduce kit](/use-cases/authority-at-dispatch#run-it-yourself).
+The cases run agent jobs, which need a Pro account today.
 
 ## Not measured yet
 

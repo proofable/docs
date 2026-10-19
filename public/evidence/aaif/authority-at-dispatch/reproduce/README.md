@@ -6,9 +6,10 @@ record offline.
 ## What you need
 
 - Node.js 20 or later
-- An access key (`npk_…`). Reviewers: ask and we send one, valid for 30 days. It belongs to a
-  Proofable test account; the agent wallet and the run folder are created on your machine. Keep the
-  key out of chat and version control.
+- An access key (`npk_…`) from your own Proofable account: open
+  [Profile, Account tab, Access keys](https://proofable.me/profile?tab=account) and create one. The
+  cases run agent jobs, which need a Pro account today. The agent wallet and the run folder are
+  created on your machine. Keep the key out of chat and version control.
 
 ## Run it
 
