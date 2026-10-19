@@ -22,12 +22,12 @@ Published APIs and verifier schemas may change between minor versions. Breaking 
   tags={["SDK"]}
   rss={{
     title: "Proofable SDK v0.1.6",
-    description: "Delegation lookup fails closed for named agents, and the packaged skills match MCP 0.1.7."
+    description: "A mounted agent only uses the delegation that names it, and the packaged skills match MCP 0.1.7."
   }}
 >
-## Named-agent delegation fails closed
+## A named agent uses only its own delegation
 
-`@proofable/sdk@0.1.6` no longer selects a delegation for a named agent unless the delegation names that agent. Mounted-agent bundles drop the unused `effectiveRuntime` field, so the host that runs the agent picks its own runtime. The packaged skills now match `@proofable/mcp@0.1.7`, including the external-signer prepare-and-submit flow.
+`@proofable/sdk@0.1.6` will not apply a delegation to a named agent unless that delegation names the agent. A mounted agent no longer carries an unused runtime field, so the host that runs it picks its own runtime. The packaged skills now match `@proofable/mcp@0.1.7`, including the external-signer prepare-and-submit flow.
 
 ```bash
 npm install @proofable/sdk@0.1.6
@@ -65,7 +65,7 @@ npm install @proofable/mcp@0.1.7
 >
 ## Proofable naming, current skills, typed portable proof
 
-`@proofable/sdk@0.1.5` carries the main-line fixes since 0.1.4. The `personal_sign` wallet error now names Proofable instead of NEUS, the CLI `--live` help no longer assumes an IDE, and the packaged skills match the canonical `proofable/mcp` 0.1.6 set. The mounted runtime bundle drops the dead `delegation.skills` field, and `types.d.ts` declares `portableProof` and `options.disclosePortableProof`.
+`@proofable/sdk@0.1.5` carries the fixes since 0.1.4. The `personal_sign` wallet error now names Proofable instead of NEUS, the CLI `--live` help no longer assumes an IDE, and the packaged skills match the `proofable/mcp` 0.1.6 set. A mounted agent no longer carries an unused skills field, and `types.d.ts` declares `portableProof` and `options.disclosePortableProof`.
 
 ```bash
 npm install @proofable/sdk@0.1.5
@@ -100,12 +100,12 @@ npm install @proofable/mcp@0.1.6
   tags={["SDK", "Docs", "Agents"]}
   rss={{
     title: "Proofable SDK v0.1.4",
-    description: "Delegated runtime mounts fail closed when the permission carries no explicit allow-list."
+    description: "A delegation with no listed actions grants nothing, so an agent can only do what you listed."
   }}
 >
-## Delegated mounts fail closed without an allow-list
+## A delegation with no actions grants nothing
 
-`@proofable/sdk@0.1.4` makes an empty or missing `allowedActions` list grant nothing for a delegated permission, matching the hosted contract. A delegated host action is denied with `ACTION_NOT_ALLOWED`; controller-owned mounts keep their existing behavior. See [Run your first guarded action](/mcp/guarded-action).
+`@proofable/sdk@0.1.4` makes an empty or missing `allowedActions` list grant nothing to a delegated agent, matching the hosted contract. A delegated host action is denied with `ACTION_NOT_ALLOWED`; mounts you own keep their existing behavior. See [Run your first guarded action](/mcp/guarded-action).
 
 ```bash
 npm install @proofable/sdk@0.1.4
@@ -141,12 +141,12 @@ Reuse is the point of a portable proof, so checking one is free and rate-limited
   tags={["SDK", "API", "Docs", "MCP", "Agents"]}
   rss={{
     title: "Proofable v0.1.2",
-    description: "Agent delegation follows the canonical action contract. Explicit allow-lists, bounded spend, and origin limits replace scopes."
+    description: "Agent authority is what its delegation lists: explicit actions, bounded spend, and origin limits replace scopes."
   }}
 >
-## Canonical delegation actions
+## Agent authority, listed explicitly
 
-An agent's authority is what its delegation lists, not a scope string. `allowedActions` minus `deniedActions` is the grant, and an empty allow-list grants nothing.
+An agent's authority is what its delegation lists, not a scope string. `allowedActions` minus `deniedActions` is the grant, and a delegation with no listed actions grants nothing.
 
 - Delegations require `allowedActions` and only accept canonical action names.
 - Spend authority is bounded: `make_payment` needs `allowedPaymentTypes` and `maxSpend` together.
@@ -183,7 +183,7 @@ GitHub, npm, the MCP Registry, and product pages no longer repeat the product li
 - MCP package and registry: Give AI agents identity, scoped access, trusted context, and verifiable actions through MCP.
 - SDK package: SDK and CLI for verification gates, reusable proof, and agent permissions.
 - Docs: Docs for verification, gates, proofs, agents, and MCP.
-- The category stays the remembered brand: The trust harness for AI.
+- The category line stays the remembered brand: The trust harness for AI.
 - Release notes now summarize the predecessor `@neus` releases in one readable [history section](#history).
 
 ```bash

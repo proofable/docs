@@ -54,7 +54,7 @@ For the permission above, `send_message` returns:
 }
 ```
 
-`read_proofs` returns `ACTION_ALLOWED`. A delegated permission with an empty or missing `allowedActions` list grants no actions. An expired or missing permission fails closed. An irreversible action returns `HUMAN_APPROVAL_REQUIRED` when the permission requires approval.
+`read_proofs` returns `ACTION_ALLOWED`. A delegated permission with an empty or missing `allowedActions` list grants no actions. An expired or missing permission grants nothing. An irreversible action returns `HUMAN_APPROVAL_REQUIRED` when the permission requires approval.
 
 ## Decision order
 

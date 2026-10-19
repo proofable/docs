@@ -16,9 +16,9 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Changed
 
-- **Benchmarks page removed.** Every number it carried already lives, with its public signed record, on [Authority at dispatch](/use-cases/authority-at-dispatch). The one figure that page held on its own was a local permission-check run on five tasks, which cannot support a public performance claim, so the page is gone rather than restated.
+- **Benchmarks page removed.** Every number it carried already lives, with its public signed record, on [Authority at dispatch](/use-cases/authority-at-dispatch). The one figure that page held on its own came from a local run and could not support a public performance claim, so the page is gone rather than restated.
 - **Authority at dispatch reads as a table of eight cases**, each linked to its public signed record, with what is not measured yet stated once.
-- **Superseded evidence packets removed from `main`.** The October 6 packet and the six-case October 8 packet remain at their pinned commits (`3a45f02`, `9851059`), which the working-group tools read. The reviewer-handoff patch folders are removed.
+- **Earlier evidence packets moved out of `main`.** Superseded packets remain available at their tagged commits, so the published case set carries one current version.
 
 ### Fixed
 
@@ -34,7 +34,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Changed
 
-- **Agent delegation follows the canonical action contract.** The public OpenAPI spec and verifier schemas document `allowedActions` (required, never empty), `deniedActions`, `allowedPaymentTypes`, and `allowedOrigins`; the legacy `scope` and `permissions` fields are removed. Spend delegations require `allowedPaymentTypes` and `maxSpend` together.
+- **Agent authority is listed explicitly in the public contract.** The public OpenAPI spec and verifier schemas document `allowedActions` (required, never empty), `deniedActions`, `allowedPaymentTypes`, and `allowedOrigins`; the legacy `scope` and `permissions` fields are removed. Spend delegations require `allowedPaymentTypes` and `maxSpend` together.
 
 ## [0.1.1] - 2026-09-13
 

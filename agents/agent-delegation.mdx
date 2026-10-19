@@ -120,7 +120,7 @@ await client.verify({
 | `runtimePolicy` | No | Provider/model limits and human-approval requirement |
 | `approvalPolicy` | No | Approval requirements for new claims or content |
 
-The protocol accepts canonical action strings only in **`allowedActions`** and **`deniedActions`**. `deniedActions` always wins over `allowedActions`, and an empty allow-list grants nothing.
+The protocol accepts action strings only in **`allowedActions`** and **`deniedActions`**. `deniedActions` always wins over `allowedActions`, and a delegation with no listed actions grants nothing.
 
 ## Human approval pattern
 

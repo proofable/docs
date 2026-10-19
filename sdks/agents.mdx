@@ -95,14 +95,14 @@ if (!decision.allowed) {
 |---|---|---|
 | `ACTION_ALLOWED` | `allowed` | The permission allows the action. |
 | `ACTION_DENIED` | `denied` | The action is on the deny list. |
-| `ACTION_NOT_ALLOWED` | `denied` | An allow list exists and the action is not on it. |
+| `ACTION_NOT_ALLOWED` | `denied` | The permission lists allowed actions and this one is not on the list. |
 | `HUMAN_APPROVAL_REQUIRED` | `approval_required` | An irreversible action needs a person to approve. |
 | `PERMISSION_EXPIRED` | `denied` | The permission proof has expired. |
 | `PERMISSION_REQUIRED` | `denied` | No current permission proof is loaded. |
 | `MOUNT_REQUIRED` | `denied` | No agent bundle was passed. |
 | `ACTION_REQUIRED` | `denied` | No action name was passed. |
 
-The deny list applies first, then the allow list, then approval. The SDK evaluates one action. Your host owns the tool call and must stop it when `allowed` is `false`.
+A denial is applied first, then the allowed list, then approval. The SDK evaluates one action. Your host owns the tool call and must stop it when `allowed` is `false`.
 
 ## Load the permission bundle
 

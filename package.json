@@ -12,8 +12,9 @@
     "lint:markdown": "npx --yes markdownlint-cli2@0.18.1 --config .markdownlint-cli2.jsonc",
     "lint:routes": "node scripts/validate-doc-routes.mjs",
     "lint:copy": "node scripts/validate-doc-copy.mjs",
+    "lint:public-surface": "node scripts/validate-public-surface.mjs",
     "lint:openapi": "npx --yes @redocly/cli@2.14.1 lint openapi/public-api.json",
-    "validate": "npm run lint:markdown && npm run lint:routes && npm run lint:copy && npm run lint:openapi"
+    "validate": "npm run lint:markdown && npm run lint:routes && npm run lint:copy && npm run lint:public-surface && npm run lint:openapi"
   }
 }
 
