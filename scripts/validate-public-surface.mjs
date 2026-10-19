@@ -67,6 +67,26 @@ const META_NARRATION = [
   /\bthe same files passed on Linux CI\b/i,
 ];
 
+/**
+ * How we build and validate the artifact — build scripts, CI wiring, checksum
+ * pins, branch movement. Never belongs in a CHANGELOG: a changelog entry states
+ * what the release does for the reader, never our internal tooling. A README or
+ * a contributing page legitimately names commands a developer runs, so this set
+ * is applied to changelogs only.
+ */
+const CHANGELOG_NARRATION = [
+  /\bchecked in CI\b/i,
+  /\bCI verifies\b/i,
+  /\bvalidation (fails|now (compares|fails))\b/i,
+  /\b(validate|sync|publisher|publish)[a-z-]*\s+(workflow|script|check)\b/i,
+  /\bnpm run [a-z:]+/i,
+  /\bscripts\/[a-z0-9-]+\.mjs\b/i,
+  /\b(source|canonical|this) (manifest|copy|pair)\b/i,
+  /\bregenerated from (it|the source)\b/i,
+  /\bmoved out of `?main`?\b/i,
+  /\bchecksum\b/i,
+];
+
 /** The operator's private context. */
 const OPERATOR_LEAK = [
   /\bACTIVE_GOAL\b/,
@@ -139,12 +159,15 @@ const failures = [];
 for (const file of walk(ROOT)) {
   const rel = path.relative(ROOT, file).split(path.sep).join('/');
   const technical = TECHNICAL.some((p) => p.test(rel));
+  const isChangelog = /(^|\/)CHANGELOG\.md$/i.test(rel) || /(^|\/)changelog\.mdx$/i.test(rel);
   const lines = stripFences(fs.readFileSync(file, 'utf8'));
   lines.forEach((line, i) => {
     if (!line.trim() || ALLOW.test(line)) return;
     for (const [code, patterns] of RULES) {
       if (technical && TECHNICAL_ONLY.has(code)) continue;
-      for (const pattern of patterns) {
+      const active =
+        isChangelog && code === 'META-NARRATION' ? [...patterns, ...CHANGELOG_NARRATION] : patterns;
+      for (const pattern of active) {
         const match = line.match(pattern);
         if (match) {
           failures.push({ rel, line: i + 1, code, hit: match[0], text: line.trim().slice(0, 120) });

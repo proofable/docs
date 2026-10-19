@@ -18,7 +18,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 - **Benchmarks page removed.** Every number it carried already lives, with its public signed record, on [Authority at dispatch](/use-cases/authority-at-dispatch). The one figure that page held on its own came from a local run and could not support a public performance claim, so the page is gone rather than restated.
 - **Authority at dispatch reads as a table of eight cases**, each linked to its public signed record, and closes on the reproduce kit that runs the same cases on your own account.
-- **Earlier evidence packets moved out of `main`.** Superseded packets remain available at their tagged commits, so the published case set carries one current version.
+- **One current version of the public case set.** Superseded evidence packets are no longer carried alongside the current one, so a reader finds a single up-to-date set.
 
 ### Fixed
 
@@ -50,7 +50,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 - **Builder docs lead with inline gates.** `defineGate` and subject `gateCheck` first; a published `gateId` is optional.
 - **Pay-per-call documents x402** on both `GET` and `POST /api/v1/proofs/check`, plus verification and access-grant.
 - Use-case examples use generic agent names.
-- Contributor and verifier-proposal pages describe this repository only, with `npm run validate` as the public check.
+- Contributor and verifier-proposal pages describe this repository only, so a reader knows which surface they are on.
 
 ## [0.1.0] - 2026-09-06
 
