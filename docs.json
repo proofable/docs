@@ -735,7 +735,7 @@
     "options": [
       {
         "title": "View pricing",
-        "description": "Start with a free plan. Upgrade to Pro for more features.",
+        "description": "Start free with 500 credits a month and jobs included. Pro adds the Advanced models and more credits.",
         "icon": "tags",
         "href": "/pricing"
       },

@@ -6,16 +6,27 @@ icon: clock
 
 A job is agent work that keeps running after you leave. It runs as the same agent, under the same permissions, with the same connected apps.
 
-Jobs run on every plan, on your credits. Chat with hosted AI and bringing your own model key are available on every plan. [Pricing](/pricing)
+Jobs run on every plan, on your credits, and so does the hosted computer. Chat with hosted AI and bringing your own model key are available on every plan. [Pricing](/pricing)
 
 ## Hosted AI tiers
 
-| Tier | Plan | Credit rate |
+| Tier | Plan | Credits per 1,000 tokens |
 |---|---|---|
-| Default | Every plan | 1x |
-| Advanced | Every plan | 2x |
+| Default | Every plan | 1 |
+| Advanced | Pro, Partner and Enterprise | 2 |
+| Your own model key | Every plan | 0 |
 
-Bring your own model key and the credit rate stays 1x on any plan. [Pricing](/pricing)
+On Free, a job that asks for Advanced is refused before it is accepted; run it on Default or on your own key. [Pricing](/pricing)
+
+## What a run costs
+
+| Part | Credits |
+|---|---|
+| Each run, on any model or key | 1 |
+| Hosted AI tokens | By tier, above |
+| Hosted computer or job machine | 2 per vCPU for each started minute |
+
+A run needs a balance to start. A run whose balance runs out waits and continues when credits are added or the monthly allowance renews.
 
 ## Start a job
 
