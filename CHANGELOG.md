@@ -17,7 +17,12 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Changed
 
+<<<<<<< HEAD
 - **One Evidence page.** [Evidence](/evidence) opens on five results: a reused result about 750 times faster than redoing it, 48 of 48 AgentGovBench scenarios beside the agent tools teams already use, every unauthorized action stopped in 8 of 8 live tests, 6 of 6 data-theft attempts refused by a scoped permission in the prompt injection test, and 150 of 150 forged records caught. Its charts switch to a stacked layout on phones. Each result links to its signed record and a way to check or rerun it, and security reviewers get the OWASP, EU AI Act, NIST and CAIP-380 mapping in one section. `/benchmarks` and `/use-cases/authority-at-dispatch` now open it.
+=======
+- **Jobs and the hosted computer on every plan; Advanced on Pro.** [Jobs](/jobs) and [Pricing](/pricing) list what a run costs: 1 credit per run on any model or key, hosted tokens by tier, and 2 credits per vCPU for each started minute of a hosted machine. The Advanced hosted tier is on Pro, Partner and Enterprise; any model runs on your own key on every plan.
+- **One Evidence page.** [Evidence](/evidence) opens on four charted results: every unauthorized action stopped in 8 of 8 live tests, 150 of 150 forged records caught, a reused result about 750 times faster than redoing it, and 48 of 48 AgentGovBench scenarios. Each result links to its signed record and a way to check or rerun it, and security reviewers get the OWASP, EU AI Act, NIST and CAIP-380 mapping in one section. `/benchmarks` and `/use-cases/authority-at-dispatch` now open it.
+>>>>>>> 817580e (Jobs and the hosted computer run on credits on every plan; Advanced is on Pro.)
 - **Two checks you can run on the published records.** `public/evidence/checks/tamper-check.mjs` forges each signed record ten ways and confirms every copy is rejected offline; `reuse-check.mjs` times reading and verifying a finished result with no account.
 - **One current version of the public case set.** Superseded evidence packets are no longer carried alongside the current one, so a reader finds a single up-to-date set.
 - **Jobs run on credits on every plan.** [MCP tools](/mcp/tools) lists the job tools, including `proofable_job_decide`, for every signed-in plan, and the team-agents and reproduce guides no longer say jobs need Pro.
