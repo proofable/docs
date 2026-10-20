@@ -116,5 +116,6 @@ const reward = await client.fulfillGate({
 | `paymentCheckoutSessionId` | Card payment |
 | `paymentTxHash` | USDC payment |
 | `accessGrant` | When the gate requests access to the buyer's connected account |
+| `serviceParameters` | For an AI service listing: the buyer's values for its `serviceInputs`, each up to 512 characters |
 
 A payment is bound to one gate and proof and cannot be reused (`409 PAYMENT_ALREADY_USED`). The full sequence is in [Gate checkout](/gates/checkout).
