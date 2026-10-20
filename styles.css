@@ -1113,6 +1113,19 @@ a.card:hover {
   }
 }
 
+/* Evidence charts ship a wide and a stacked variant; phones get the stacked one so labels stay legible. */
+@media (max-width: 639px) {
+  .mdx-content img[src*="/images/evidence/"]:not([src*="-stacked-"]) {
+    display: none !important;
+  }
+}
+
+@media (min-width: 640px) {
+  .mdx-content img[src*="/images/evidence/"][src*="-stacked-"] {
+    display: none !important;
+  }
+}
+
 /*
   Mobile docs shell (NEU-262).
   Mintlify keeps a fixed two-row header (logo row + hamburger/title chip).
