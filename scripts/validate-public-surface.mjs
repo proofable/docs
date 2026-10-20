@@ -521,8 +521,9 @@ export function scanText(rel, text, kind, ext, options = {}) {
   }
   const extraRules = options.extraRules || {};
   const classRules = options.classRules || CLASS_RULES;
+  const sourceLines = text.split('\n');
   for (const u of units) {
-    if (!u.text.trim() || ALLOW.test(u.text)) continue;
+    if (!u.text.trim() || ALLOW.test(u.text) || ALLOW.test(sourceLines[u.line - 1] || '')) continue;
     const codes = classRules[u.cls] || [];
     for (const code of codes) {
       let patterns = RULES[code] || [];
