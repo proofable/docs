@@ -40,6 +40,10 @@ The same schema is published on every public operation in [Proofable OpenAPI](ht
 | `RATE_LIMIT_EXCEEDED` | Too many requests | Back off and retry after `Retry-After` |
 | `INSUFFICIENT_CREDITS` | The account paying needs more credits | Add credits, or pay the call with x402 and retry |
 | `PAYMENT_ALREADY_USED` | A payment was already bound to this gate or proof | Do not reuse payment evidence across checkouts |
+| `SERVICE_PARAMETER_REQUIRED` | An AI service order is missing a required input | Send a value for every required entry in the listing's `serviceInputs` |
+| `SERVICE_PARAMETER_TOO_LONG` | An AI service input is over 512 characters | Shorten the value and retry |
+| `SERVICE_JOB_UNAVAILABLE` | The order's run could not start | Retry the same fulfill call in a moment. The order and any payment are kept |
+| `SERVICE_JOB_RECONCILIATION_REQUIRED` | A paid order's run needs support before it can restart | Contact support with the receipt `qHash`. Do not pay again |
 
 ## HTTP Status Codes
 

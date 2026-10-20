@@ -4117,7 +4117,7 @@
       "post": {
         "operationId": "fulfillGate",
         "summary": "Deliver the gate reward after verification and payment",
-        "description": "Post-verify reward delivery. Requires a verified proof (qHash) for the caller wallet. Paid gates also require paymentCheckoutSessionId (Stripe) or paymentTxHash (USDC). Returns the fulfillment payload and optional rewardProof / rewardPack. Payments are bound to a single gateId + qHash pair. Reuse returns 409 PAYMENT_ALREADY_USED.",
+        "description": "Post-verify reward delivery. Requires a verified proof (qHash) for the caller wallet. Paid gates also require paymentCheckoutSessionId (Stripe) or paymentTxHash (USDC). Returns the fulfillment payload and optional rewardProof / rewardPack. Payments are bound to a single gateId + qHash pair. Reuse returns 409 PAYMENT_ALREADY_USED. For an AI service listing, send the buyer's values for the listing's serviceInputs as serviceParameters. The order unlocks as access_granted with no value, the response carries serviceJob, and the answer appears on the buyer's receipt at meta.marketplace.serviceJob.result when the run finishes.",
         "tags": [
           "Gates"
         ],
@@ -4133,12 +4133,141 @@
             }
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "qHash"
+                ],
+                "properties": {
+                  "qHash": {
+                    "type": "string",
+                    "pattern": "^0x[a-fA-F0-9]{64}$",
+                    "description": "Verified proof for this checkout."
+                  },
+                  "walletAddress": {
+                    "type": "string",
+                    "description": "Wallet bound to the proof. Required without a session."
+                  },
+                  "paymentCheckoutSessionId": {
+                    "type": "string",
+                    "description": "Card checkout session for a paid gate."
+                  },
+                  "paymentTxHash": {
+                    "type": "string",
+                    "description": "USDC payment transaction for a paid gate."
+                  },
+                  "accessGrant": {
+                    "type": "object",
+                    "description": "Buyer-approved access when the gate snapshot includes requestedAccess."
+                  },
+                  "serviceParameters": {
+                    "type": "array",
+                    "description": "The buyer's values for an AI service listing's serviceInputs.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "value"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": "string",
+                          "maxLength": 512
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Fulfillment result"
+            "description": "Fulfillment result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "gateId": {
+                          "type": "string"
+                        },
+                        "qHash": {
+                          "type": "string"
+                        },
+                        "fulfillment": {
+                          "type": "object",
+                          "properties": {
+                            "delivery": {
+                              "type": "string",
+                              "enum": [
+                                "access_granted",
+                                "redirect",
+                                "download",
+                                "reveal"
+                              ]
+                            },
+                            "type": {
+                              "type": "string"
+                            },
+                            "value": {
+                              "type": "string"
+                            },
+                            "label": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            }
+                          }
+                        },
+                        "successReturnUrl": {
+                          "type": "string"
+                        },
+                        "serviceJob": {
+                          "type": "object",
+                          "description": "The run an AI service order started.",
+                          "properties": {
+                            "jobId": {
+                              "type": "string"
+                            },
+                            "qHash": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "status": {
+                              "type": "string",
+                              "nullable": true
+                            },
+                            "proofUrl": {
+                              "type": "string",
+                              "nullable": true
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
           },
           "400": {
-            "description": "Invalid request, proof not verified, or gate misconfigured"
+            "description": "Invalid request, proof not verified, or gate misconfigured. An AI service order returns SERVICE_PARAMETER_REQUIRED when a required input is missing and SERVICE_PARAMETER_TOO_LONG when an input is over 512 characters."
           },
           "401": {
             "description": "Authentication required",
@@ -4190,7 +4319,7 @@
             }
           },
           "503": {
-            "description": "Fulfillment temporarily unavailable"
+            "description": "Fulfillment temporarily unavailable. An AI service order returns SERVICE_JOB_UNAVAILABLE when its run could not start, and SERVICE_JOB_RECONCILIATION_REQUIRED when a paid order needs support before it can restart."
           }
         }
       }
