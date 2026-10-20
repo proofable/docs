@@ -26,7 +26,7 @@ When signed in, **omit `walletAddress`**. The tool uses your profile account fro
 | `chain` | No | CAIP-2 chain when needed |
 | `signedTimestamp` | No | Optional timestamp for direct creation or preparation |
 | `options.returnUrl` | No | Where to send the user if a hosted step is needed |
-| `options.publishToHub` | No | Record the proof on the hub chain. Offchain by default. Does not change who can see the proof. |
+| `options.publishToHub` | No | Record the proof on the hub chain. Offchain by default. Does not change who can see the proof. A background job's request is refused with `JOB_ONCHAIN_PUBLISH_DENIED`. |
 
 ```json
 { "verifierIds": ["ownership-basic"], "data": { "content": "Hello Proofable" } }
