@@ -4,3 +4,11 @@ node_modules/
 .tmp-docs-manifest.json
 *.log
 
+
+# Proofable operator mount artifacts (private; never publish)
+.claude/
+.cursor/
+.hermes/
+.proofable/
+AGENTS.md
+CLAUDE.md

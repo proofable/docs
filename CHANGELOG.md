@@ -22,7 +22,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Fixed
 
-- **Terms of Use: wrong legal entity in the limitation of liability.** "Proofable NETWORK, INC." corrected to NEUS Network, Inc.
+- **Terms of Use: the limitation of liability now names the correct legal entity.**
 - **Terms of Use: the privacy section contradicted the Privacy Policy.** Section 6 now points at the Privacy Policy as authoritative and lists the categories it documents.
 - **Privacy Policy: retention bound.** Records held only for operating, securing, or auditing the Service are removed within 24 months of account closure, outside records kept by law, by an open dispute, or on a public network.
 
