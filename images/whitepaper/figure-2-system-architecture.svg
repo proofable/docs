@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
-  <title id="title">Proofable system architecture</title>
+  <title id="title">NEUS system architecture</title>
   <desc id="desc">Integration surfaces send authenticated requests to the verification engine. Modular verifiers produce saved results. Gates evaluate current receipts before protected actions.</desc>
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
@@ -27,7 +27,13 @@
   <rect x="72" y="424" width="252" height="76" rx="12" class="box"/>
   <text x="198" y="470" text-anchor="middle" class="sh navy">MCP</text>
 
-  <path d="M324 324 H400" class="line"/>
+  <!-- One arrow per integration surface. All four converge on the engine's left-edge
+       midpoint (400,324): the figure's claim is that every surface feeds ONE engine,
+       so a single convergence point is the correct reading. -->
+  <path d="M324 186 H362 V324 H400" class="line"/>
+  <path d="M324 278 H362 V324 H400" class="line"/>
+  <path d="M324 370 H362 V324 H400" class="line"/>
+  <path d="M324 462 H362 V324 H400" class="line"/>
 
   <text x="400" y="126" class="caps muted">VERIFICATION ENGINE</text>
   <rect x="400" y="148" width="590" height="352" rx="18" class="strong"/>
@@ -41,7 +47,7 @@
   <text x="695" y="407" text-anchor="middle" class="sh navy">Normalize + persist</text>
   <text x="695" y="433" text-anchor="middle" class="s muted">receipt ID, subject index, outcome, visibility, expiry, status</text>
 
-  <path d="M990 324 H1066" class="line"/>
+  <path d="M990 324 H1030 V228 H1066" class="line"/>
 
   <text x="1066" y="126" class="caps muted">ENFORCEMENT</text>
   <rect x="1066" y="148" width="302" height="160" rx="16" class="accent"/>

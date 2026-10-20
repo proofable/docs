@@ -28,10 +28,12 @@
   <text x="100" y="526" class="b ink">• controller + exact agent binding</text>
   <text x="100" y="558" class="b ink">• allowed and denied actions</text>
   <text x="100" y="590" class="b ink">• scope, spend cap, expiry, approval</text>
-  <text x="100" y="631" class="s muted">Explicit denial overrides any allowance.</text>
+  <text x="100" y="631" class="s muted">Explicit denial wins over general allowance.</text>
 
-  <path d="M450 250 H586 V324" class="line"/>
-  <path d="M450 552 H586 V396" class="line"/>
+  <path d="M450 250 H518 V360 H590" class="line"/>
+  <path d="M450 552 H518 V360 H590" class="line"/>
+  <text x="524" y="348" class="s muted">identity</text>
+  <text x="524" y="384" class="s muted">authority</text>
 
   <rect x="590" y="254" width="330" height="212" rx="18" class="good"/>
   <text x="755" y="302" text-anchor="middle" class="sh navy">Runtime gate</text>

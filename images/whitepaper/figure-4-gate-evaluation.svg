@@ -43,7 +43,11 @@
   <text x="174" y="568" class="b ink">Apply action scope, explicit denials, resource and environment constraints,</text>
   <text x="174" y="595" class="b ink">spend limits, and approval policy</text>
 
-  <path d="M1000 390 H1062" class="line"/>
+  <!-- One arrow per outcome. Each leaves the pipeline's right edge (x=1000) at the
+       outcome box's own vertical midpoint and lands exactly on that box's left edge. -->
+  <path d="M1000 199 H1066" class="line"/>
+  <path d="M1000 380 H1066" class="line"/>
+  <path d="M1000 571 H1066" class="line"/>
   <rect x="1066" y="128" width="304" height="142" rx="16" class="good"/>
   <text x="1218" y="175" text-anchor="middle" class="sh navy">Allow</text>
   <text x="1218" y="210" text-anchor="middle" class="b ink">policy satisfied</text>

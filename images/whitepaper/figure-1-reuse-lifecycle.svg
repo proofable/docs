@@ -49,8 +49,11 @@
   <text x="1240" y="205" text-anchor="middle" class="b ink">execute only after</text>
   <text x="1240" y="230" text-anchor="middle" class="s muted">an acceptable decision</text>
 
-  <path d="M435 256 V328 H695 V260" class="line"/>
-  <text x="555" y="317" text-anchor="middle" class="s muted">no acceptable current receipt</text>
+  <!-- Missing/stale branch: Check (box 2) sends the request to Verify (box 3).
+       Routed below the row, then up into Verify's bottom-edge midpoint (695,256),
+       so it reads as a branch rather than a line passing under the pipeline. -->
+  <path d="M435 256 V300 H695 V256" class="line"/>
+  <text x="470" y="294" class="s muted">missing or stale</text>
 
   <path d="M955 256 V338" class="line"/>
   <rect x="772" y="342" width="366" height="126" rx="14" class="bad"/>
