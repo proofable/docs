@@ -1,166 +1,122 @@
 ---
 title: "Evidence"
 sidebarTitle: "Evidence"
-description: "See how Proofable held up in live tests, with a signed record behind every result that you can open, verify offline or rerun yourself."
+description: "How much agent time and spend Proofable saves, and what it stops, measured against the same work done without it."
 icon: certificate
 ---
 
-These tests show that Proofable stops agent actions nobody allowed before they run, and keeps a signed record of every decision that anyone can check.
+Agents pay again for work that is already done: a result they produced earlier, or one another agent handed them. With Proofable, every finished result carries a signed receipt, so the next agent checks it in milliseconds instead of paying to redo it.
 
-[Check your own agent tools](https://proofable.me/prove), the MCP servers your agents connect to.
+## What it saves you
 
-## Results
+<img className="block dark:hidden" src="/images/evidence/save-reuse-light.svg" alt="750 times faster to check a Proofable receipt than to redo the job: redoing it took 2.79 seconds, checking the receipt took 3.7 milliseconds." />
+<img className="hidden dark:block" src="/images/evidence/save-reuse-dark.svg" alt="750 times faster to check a Proofable receipt than to redo the job: redoing it took 2.79 seconds, checking the receipt took 3.7 milliseconds." />
 
-### Every unauthorized action stopped before it ran
+One finished agent job on the live service, timed October 20, 2026. Redoing it also used 2,426 AI tokens, and checking it used none.
 
-8 of 8 live tests passed on the production service. The six actions the agent wasn't allowed to take never ran, and the two allowed actions did.
+## What it stops
 
-<img className="block dark:hidden" src="/images/evidence/eight-tests-light.svg" alt="Eight live tests on October 8, 2026. The six actions that were not allowed were all stopped before they ran. The granted action and the action a person approved both ran." />
-<img className="hidden dark:block" src="/images/evidence/eight-tests-dark.svg" alt="Eight live tests on October 8, 2026. The six actions that were not allowed were all stopped before they ran. The granted action and the action a person approved both ran." />
+<img className="block dark:hidden" src="/images/evidence/stop-governance-light.svg" alt="48 of 48 agent governance scenarios handled correctly by Proofable, against 28 for a gate that allows everything and 13 with no governance." />
+<img className="hidden dark:block" src="/images/evidence/stop-governance-dark.svg" alt="48 of 48 agent governance scenarios handled correctly by Proofable, against 28 for a gate that allows everything and 13 with no governance." />
 
-### Forged records caught
+The open AgentGovBench scenario library, run October 17, 2026 against the policy code the live service runs.
 
-The signature check caught 150 of 150. A check that only looks for the right format caught 0 of 150, because every forged copy was still well-formed.
+On the live service itself, all eight permission tests passed. Every action outside the agent's permission was stopped before it ran, and the actions it was allowed to take ran.
 
-<img className="block dark:hidden" src="/images/evidence/forgeries-light.svg" alt="Bar chart: the signature check caught 150 of 150 forged copies. A check that only reads the format caught 0 of 150." />
-<img className="hidden dark:block" src="/images/evidence/forgeries-dark.svg" alt="Bar chart: the signature check caught 150 of 150 forged copies. A check that only reads the format caught 0 of 150." />
+## Test it in a minute
 
-### Reusing a result instead of redoing it
-
-Reusing a finished result took 3.7 ms against 2.79 s to redo the job, about 750 times faster, at zero AI cost. Redoing it used 2,426 AI tokens and reusing it used none.
-
-<img className="block dark:hidden" src="/images/evidence/reuse-light.svg" alt="Bar chart: redoing the job took 2.79 seconds and 2,426 AI tokens. Reusing the finished result took 3.7 milliseconds and 0 AI tokens." />
-<img className="hidden dark:block" src="/images/evidence/reuse-dark.svg" alt="Bar chart: redoing the job took 2.79 seconds and 2,426 AI tokens. Reusing the finished result took 3.7 milliseconds and 0 AI tokens." />
-
-### Open governance scenarios (AgentGovBench)
-
-Proofable passed 48 of 48, against 28 for a permissive gate and 13 with no governance. The run tested the decision logic the service runs by calling it directly.
-
-<img className="block dark:hidden" src="/images/evidence/agentgovbench-light.svg" alt="Bar chart: on 48 AgentGovBench scenarios, Proofable passed 48, a gate that allows everything passed 28, and no governance passed 13." />
-<img className="hidden dark:block" src="/images/evidence/agentgovbench-dark.svg" alt="Bar chart: on 48 AgentGovBench scenarios, Proofable passed 48, a gate that allows everything passed 28, and no governance passed 13." />
-
-<Accordion title="For security reviewers">
-  Each result maps to the published control it gives evidence for. None of these mappings is a certification or a compliance opinion.
-
-  | Result | Maps to | Check it |
-  |---|---|---|
-  | An action outside the permission, or under a revoked, expired or reused revoked permission, was stopped before it ran; the granted action ran. 5 of 5 | OWASP Top 10 for Agentic Applications 2026: ASI03 Identity and Privilege Abuse, ASI02 Tool Misuse | [Live tests](#the-eight-live-tests) |
-  | An action that needs approval was held until approved; with no answer it never ran, and a late approval was refused. 2 of 2 | EU AI Act Article 14, human oversight (mapping only) | [Live tests](#the-eight-live-tests) |
-  | A permission revoked mid-job: the running step finished and the next step was stopped. 1 of 1 | OWASP ASI10 Rogue Agents | [Live tests](#the-eight-live-tests) |
-  | 15 of 15 signed decision records verify offline, with no account | EU AI Act Article 12, record-keeping (mapping only); NIST NCCoE Software and AI Agent Identity and Authorization project, auditing (concept paper, February 2026) | [Verify offline](#verify-the-records-offline) |
-  | 150 of 150 forged copies rejected across ten kinds of forgery; 15 of 15 genuine records accepted; a check that only reads the format accepts all 150 | OWASP ASI07 Insecure Inter-Agent Communication | [Forge a record](#forge-a-record) |
-  | A finished result verified offline in 3.7 ms with zero AI tokens and no account; producing it took 2.79 s and 2,426 tokens | CAIP-380 Portable Proof | [Reuse a result](#reuse-a-result) |
-  | AgentGovBench: 48 of 48, against 28 for a gate that allows everything and 13 with no governance | NIST AI RMF GOVERN-1.1, 1.2, 1.4; MAP-2.1, 4.1; MEASURE-2.3, 2.6, 2.7; MANAGE-2.1, 2.2, 4.1 (the controls tagged on the scenarios) | [Method](#how-the-agentgovbench-run-works) |
-
-  The frameworks: [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/), the [EU AI Act](https://eur-lex.europa.eu/eli/reg/2024/1689/oj), the [NIST AI RMF](https://www.nist.gov/itl/ai-risk-management-framework), the [NIST NCCoE agent identity and authorization project](https://www.nccoe.nist.gov/projects/software-and-ai-agent-identity-and-authorization) and [CAIP-380](https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-380.md).
-</Accordion>
-
-## Check it yourself
-
-Every result above links to a signed record. Open it in a browser with no account, verify it offline with the public SDK, or rerun the tests against the live service on your own account and compare.
-
-### The eight live tests
-
-We ran each test on the live service on October 8, 2026, with a dedicated agent under its own fixed permission. Open a test to see its signed record.
-
-| Test | What happened |
-|---|---|
-| [Permission granted](https://proofable.me/proof/0x64f293e61b826e03bd1de6564fc2db8cec0f50390bafc8bdf162ec9961262fca) | Ran and completed |
-| [Action outside the permission](https://proofable.me/proof/0xffdc0455b72732a8c6a31eb4e2861943b85dbc271fe2dfa8b18d0e85d2b33726) | Stopped before it ran |
-| [Needs approval, approved](https://proofable.me/proof/0xe662eaa54a5e3d7875827794d6a69b4e86973fee49cfa71e555f821d5ed28c35) | Held until approved, then ran |
-| [Needs approval, nobody answers](https://proofable.me/proof/0x6c53cb0005c9dc30fde5bb1bd06860d74ae51790be3869a6605bfc9f71e01954) | Never ran; a late approval was refused |
-| [Permission revoked](https://proofable.me/proof/0x8a3e5ff89c8a86423bae61db96c9732f319a6f6cdb34f4bde560c90d25366c95) | Stopped; no job created |
-| [Permission expired](https://proofable.me/proof/0xf1880cba0876acc2364e31892b261a47299c0a70177b61b32d465fcd1b61447a) | Stopped; no job created |
-| [Revoked permission reused](https://proofable.me/proof/0x1d987781eb519337fa9e62043831ee187340f6e589f217b16b99ed98be5acfbc) | Stopped every time |
-| [Revoked mid-job](https://proofable.me/proof/0x05ef986ee3817a6fd56b327b1de3523ab7f65c11c4ff386d34c16f93d11c0045) | The running step finished; the next was stopped |
-
-The record for the second test shows:
-
-```text
-Agent        proofable-authority-review
-Action       run_command
-Permission   not granted
-Decision     Stopped before it ran
-Record       signed, public
-```
-
-### Verify the records offline
-
-Check all 15 signed records from the eight tests offline, with no account:
+Time a reuse on your own machine, with no account and no API key:
 
 ```sh
-git clone https://github.com/proofable/docs
-cd docs/public/evidence/aaif/authority-at-dispatch/2026-10-08-eight-case
-sha256sum -c SHA256SUMS
-npm install @proofable/sdk@0.1.6
-node verify-portable-proofs.mjs
-```
-
-### Forge a record
-
-This check takes the same 15 signed records, forges each one ten ways, and verifies every copy offline. Every genuine record must pass and every forged copy must fail.
-
-```sh
+git clone --depth 1 https://github.com/proofable/docs
 cd docs/public/evidence/checks
 npm install
-node tamper-check.mjs
-```
-
-| Forgery | Copies | Caught |
-|---|---:|---:|
-| Edit the content | 15 | 15 |
-| Swap the owner | 15 | 15 |
-| Impersonate the signer | 15 | 15 |
-| Backdate the timestamp | 15 | 15 |
-| Change the chain | 15 | 15 |
-| Upgrade the check type | 15 | 15 |
-| Redirect the reference | 15 | 15 |
-| Flip one signature bit | 15 | 15 |
-| Replay another record's id | 15 | 15 |
-| Transplant another signature | 15 | 15 |
-| **Total** | **150** | **150** |
-
-Every forged copy is still well-formed, so a check that only reads the format accepts all 150. The signature check rejects all 150 and accepts all 15 genuine records.
-
-### Reuse a result
-
-[This record](https://proofable.me/proof/0xcf67dcc3cc9c203136daf9905a422601652fd76cce437e2cbf56967e3a8117e6) is a finished agent job from the public kit. Producing it took 2.79 s and 2,426 AI tokens. Anyone can read it by its id and verify its signature, with no account:
-
-```sh
-cd docs/public/evidence/checks
 node reuse-check.mjs
 ```
 
-Measured on October 20, 2026, it verified offline in 3.7 ms (median of 10 runs) with zero AI tokens. That is about 750 times faster than producing the result again.
+It reads a finished agent job by its id, verifies the signed receipt locally, and prints the time and the AI tokens used. Expect a few milliseconds and zero tokens. Pass any public record id to time that record instead.
 
-### How the AgentGovBench run works
+To put receipts on your own agents' work, [get started](/).
 
-[AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) is an open library of 48 agent-governance scenarios in eight areas: audit completeness, cross-tenant isolation, delegation provenance, fail-mode discipline, identity propagation, per-user policy, rate limits and scope inheritance. Each scenario is tagged with the NIST AI RMF controls it tests.
+## Details for reviewers
 
-We ran the library at commit `e0ce93a` against the exact policy code the live service runs, matched to it by hash, next to two comparison setups. The run called that code directly, so it measures the decision logic rather than the hosted service end to end. Last run: October 17, 2026.
+<AccordionGroup>
+  <Accordion title="The reuse timing">
+    [This record](https://proofable.me/proof/0xcf67dcc3cc9c203136daf9905a422601652fd76cce437e2cbf56967e3a8117e6) is a finished agent job from the live service. Producing it took 2.79 s and 2,426 AI tokens. On October 20, 2026, verifying its signature offline took 3.7 ms, the median of ten runs, with no account and no AI tokens. The command in [Test it in a minute](#test-it-in-a-minute) repeats the measurement.
+  </Accordion>
 
-| Setup | Scenarios passed |
-|---|---|
-| Proofable policy engine | 48 of 48 |
-| A gate that allows everything | 28 of 48 |
-| No governance | 13 of 48 |
+  <Accordion title="The eight live tests">
+    We ran each test on the live service on October 8, 2026, with a dedicated agent under its own fixed permission. Each link opens that test's signed record.
 
-### Rerun the live tests on your own account
+    | Test | What happened |
+    |---|---|
+    | [Permission granted](https://proofable.me/proof/0x64f293e61b826e03bd1de6564fc2db8cec0f50390bafc8bdf162ec9961262fca) | Ran and completed |
+    | [Action outside the permission](https://proofable.me/proof/0xffdc0455b72732a8c6a31eb4e2861943b85dbc271fe2dfa8b18d0e85d2b33726) | Stopped before it ran |
+    | [Needs approval, approved](https://proofable.me/proof/0xe662eaa54a5e3d7875827794d6a69b4e86973fee49cfa71e555f821d5ed28c35) | Held until approved, then ran |
+    | [Needs approval, nobody answers](https://proofable.me/proof/0x6c53cb0005c9dc30fde5bb1bd06860d74ae51790be3869a6605bfc9f71e01954) | Never ran; a late approval was refused |
+    | [Permission revoked](https://proofable.me/proof/0x8a3e5ff89c8a86423bae61db96c9732f319a6f6cdb34f4bde560c90d25366c95) | Stopped; no job created |
+    | [Permission expired](https://proofable.me/proof/0xf1880cba0876acc2364e31892b261a47299c0a70177b61b32d465fcd1b61447a) | Stopped; no job created |
+    | [Revoked permission reused](https://proofable.me/proof/0x1d987781eb519337fa9e62043831ee187340f6e589f217b16b99ed98be5acfbc) | Stopped every time |
+    | [Revoked mid-job](https://proofable.me/proof/0x05ef986ee3817a6fd56b327b1de3523ab7f65c11c4ff386d34c16f93d11c0045) | The running step finished; the next was stopped |
 
-The kit drives the same eight tests against the live service on an account you control and writes signed records you can compare with the ones above:
+    To rerun the same eight tests on a Pro account you control, create an access key under [Profile, Account tab, Access keys](https://proofable.me/profile?tab=account), then:
 
-```sh
-git clone https://github.com/proofable/docs
-cd docs/public/evidence/aaif/authority-at-dispatch/reproduce
-npm install
-export PROOFABLE_ACCESS_KEY=npk_...
-export AAD_OPERATOR="Your Organization"
-node aad.mjs setup
-node aad.mjs run
-node aad.mjs verify runs/<run-id>
-```
+    ```sh
+    git clone --depth 1 https://github.com/proofable/docs
+    cd docs/public/evidence/aaif/authority-at-dispatch/reproduce
+    npm install
+    export PROOFABLE_ACCESS_KEY=npk_...
+    export AAD_OPERATOR="Your Organization"
+    node aad.mjs setup
+    node aad.mjs run
+    node aad.mjs verify runs/<run-id>
+    ```
 
-The tests run agent jobs on a Pro account. Create the access key under
-[Profile, Account tab, Access keys](https://proofable.me/profile?tab=account).
+    The same records are part of the [AAIF Identity & Trust working-group comparison](https://github.com/aaif/wg-identity-and-trust/issues/13) at the Linux Foundation.
+  </Accordion>
 
-The same records are part of the [AAIF Identity & Trust working-group comparison](https://github.com/aaif/wg-identity-and-trust/issues/13) at the Linux Foundation.
+  <Accordion title="Verify every record offline">
+    The eight tests produced 15 signed records. Check all of them on your machine, with no account:
+
+    ```sh
+    git clone --depth 1 https://github.com/proofable/docs
+    cd docs/public/evidence/aaif/authority-at-dispatch/2026-10-08-eight-case
+    sha256sum -c SHA256SUMS
+    npm install @proofable/sdk@0.1.6
+    node verify-portable-proofs.mjs
+    ```
+  </Accordion>
+
+  <Accordion title="Try to fake a record">
+    This check takes the 15 real records and changes each one ten ways, such as editing the content, swapping the owner or flipping one bit of the signature. Then it verifies every copy. All 150 changed copies fail and all 15 real records pass. A check that only looks at the format would accept every changed copy.
+
+    ```sh
+    git clone --depth 1 https://github.com/proofable/docs
+    cd docs/public/evidence/checks
+    npm install
+    node tamper-check.mjs
+    ```
+  </Accordion>
+
+  <Accordion title="How the AgentGovBench run works">
+    [AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) is an open library of 48 agent-governance scenarios in eight areas: audit completeness, cross-tenant isolation, delegation provenance, fail-mode discipline, identity propagation, per-user policy, rate limits and scope inheritance. Each scenario is tagged with the NIST AI RMF controls it tests.
+
+    We ran the library at commit `e0ce93a` against the exact policy code the live service runs, matched to it by hash, next to a gate that allows everything and no governance at all. The run called that code directly, so it measures the decision logic rather than the hosted service end to end. Last run: October 17, 2026.
+  </Accordion>
+
+  <Accordion title="Standards each result maps to">
+    Each result maps to the published control it gives evidence for. None of these mappings is a certification or a compliance opinion.
+
+    | Result | Maps to | Details |
+    |---|---|---|
+    | An action outside the permission, or under a revoked, expired or reused revoked permission, was stopped before it ran; the granted action ran. 5 of 5 | OWASP Top 10 for Agentic Applications 2026: ASI03 Identity and Privilege Abuse, ASI02 Tool Misuse | The eight live tests |
+    | An action that needs approval was held until approved; with no answer it never ran, and a late approval was refused. 2 of 2 | EU AI Act Article 14, human oversight (mapping only) | The eight live tests |
+    | A permission revoked mid-job: the running step finished and the next step was stopped. 1 of 1 | OWASP ASI10 Rogue Agents | The eight live tests |
+    | 15 of 15 signed decision records verify offline, with no account | EU AI Act Article 12, record-keeping (mapping only); NIST NCCoE Software and AI Agent Identity and Authorization project, auditing (concept paper, February 2026) | Verify every record offline |
+    | 150 of 150 changed copies rejected across ten kinds of forgery; 15 of 15 real records accepted; a check that only reads the format accepts all 150 | OWASP ASI07 Insecure Inter-Agent Communication | Try to fake a record |
+    | A finished result verified offline in 3.7 ms with zero AI tokens and no account; producing it took 2.79 s and 2,426 tokens | CAIP-380 Portable Proof | The reuse timing |
+    | AgentGovBench: 48 of 48, against 28 for a gate that allows everything and 13 with no governance | NIST AI RMF GOVERN-1.1, 1.2, 1.4; MAP-2.1, 4.1; MEASURE-2.3, 2.6, 2.7; MANAGE-2.1, 2.2, 4.1 (the controls tagged on the scenarios) | How the AgentGovBench run works |
+
+    The frameworks: [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/), the [EU AI Act](https://eur-lex.europa.eu/eli/reg/2024/1689/oj), the [NIST AI RMF](https://www.nist.gov/itl/ai-risk-management-framework), the [NIST NCCoE agent identity and authorization project](https://www.nccoe.nist.gov/projects/software-and-ai-agent-identity-and-authorization) and [CAIP-380](https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-380.md).
+  </Accordion>
+</AccordionGroup>
