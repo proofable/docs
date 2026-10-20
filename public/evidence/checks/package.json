@@ -1,0 +1,17 @@
+{
+  "name": "proofable-evidence-checks",
+  "private": true,
+  "description": "Check Proofable's published evidence yourself: forge signed records and confirm each copy is rejected, and time the reuse of a finished result.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "tamper": "node tamper-check.mjs",
+    "reuse": "node reuse-check.mjs"
+  },
+  "dependencies": {
+    "@proofable/sdk": "0.1.6"
+  }
+}

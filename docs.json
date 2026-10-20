@@ -71,7 +71,7 @@
         "groups": [
           {
             "group": "Overview",
-            "pages": ["index", "pricing", "security", "enterprise", "migrate"]
+            "pages": ["index", "pricing", "security", "evidence", "enterprise", "migrate"]
           },
           {
             "group": "Use cases",
@@ -82,7 +82,6 @@
               "use-cases/gate-access",
               "use-cases/prove-what-happened",
               "use-cases/control-agent-actions",
-              "use-cases/authority-at-dispatch",
               "use-cases/build-a-platform"
             ]
           },
@@ -195,7 +194,11 @@
   "redirects": [
     {
       "source": "/benchmarks",
-      "destination": "/use-cases/authority-at-dispatch"
+      "destination": "/evidence"
+    },
+    {
+      "source": "/use-cases/authority-at-dispatch",
+      "destination": "/evidence"
     },
     {
       "source": "/openapi.json",

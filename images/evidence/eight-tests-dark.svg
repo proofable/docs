@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="440" viewBox="0 0 600 440" role="img" aria-labelledby="t d">
+  <title id="t">Eight live tests: every action that was not allowed was stopped</title>
+  <desc id="d">Eight tests on the live production service on October 8, 2026. The two allowed actions ran: a granted permission, and an action a person approved. The six actions that were not allowed were stopped before they ran: an action outside the permission, an approval nobody gave, a revoked permission, an expired permission, a revoked permission tried again, and the next step after a mid-job revoke.</desc>
+  <rect x="0.5" y="0.5" width="599" height="439" rx="12" fill="#141416" stroke="#2A2A2E"/>
+  <g font-family="Geist, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+    <text x="24" y="40" font-size="15" font-weight="400" fill="#B9BABD" text-anchor="start">Eight live tests on the production service, October 8, 2026</text>
+    <rect x="24" y="62" width="271" height="72" rx="8" fill="#1C1C1F"/>
+    <circle cx="54" cy="98" r="13" fill="#6B6F77"/>
+    <path d="M50.5 92L60 98L50.5 104Z" fill="#F5F5F5"/>
+    <text x="80" y="93" font-size="16" font-weight="500" fill="#F5F5F5" text-anchor="start">Permission granted</text>
+    <text x="80" y="115" font-size="15" font-weight="400" fill="#B9BABD" text-anchor="start">Ran</text>
+    <rect x="305" y="62" width="271" height="72" rx="8" fill="#1C1C1F"/>
+    <circle cx="335" cy="98" r="13" fill="#98C0EF"/>
+    <rect x="330" y="93" width="10" height="10" rx="1.5" fill="#0B1220"/>
+    <text x="361" y="93" font-size="16" font-weight="500" fill="#F5F5F5" text-anchor="start">Outside the permission</text>
+    <text x="361" y="115" font-size="15" font-weight="400" fill="#B9BABD" text-anchor="start">Stopped before it ran</text>
+    <rect x="24" y="144" width="271" height="72" rx="8" fill="#1C1C1F"/>
+    <circle cx="54" cy="180" r="13" fill="#6B6F77"/>
+    <path d="M50.5 174L60 180L50.5 186Z" fill="#F5F5F5"/>
+    <text x="80" y="175" font-size="16" font-weight="500" fill="#F5F5F5" text-anchor="start">Approved by a person</text>
+    <text x="80" y="197" font-size="15" font-weight="400" fill="#B9BABD" text-anchor="start">Held, then ran</text>
+    <rect x="305" y="144" width="271" height="72" rx="8" fill="#1C1C1F"/>
+    <circle cx="335" cy="180" r="13" fill="#98C0EF"/>
+    <rect x="330" y="175" width="10" height="10" rx="1.5" fill="#0B1220"/>
+    <text x="361" y="175" font-size="16" font-weight="500" fill="#F5F5F5" text-anchor="start">Nobody approved</text>
+    <text x="361" y="197" font-size="15" font-weight="400" fill="#B9BABD" text-anchor="start">Never ran</text>
+    <rect x="24" y="226" width="271" height="72" rx="8" fill="#1C1C1F"/>
+    <circle cx="54" cy="262" r="13" fill="#98C0EF"/>
+    <rect x="49" y="257" width="10" height="10" rx="1.5" fill="#0B1220"/>
+    <text x="80" y="257" font-size="16" font-weight="500" fill="#F5F5F5" text-anchor="start">Permission revoked</text>
+    <text x="80" y="279" font-size="15" font-weight="400" fill="#B9BABD" text-anchor="start">Stopped before it ran</text>
+    <rect x="305" y="226" width="271" height="72" rx="8" fill="#1C1C1F"/>
+    <circle cx="335" cy="262" r="13" fill="#98C0EF"/>
+    <rect x="330" y="257" width="10" height="10" rx="1.5" fill="#0B1220"/>
+    <text x="361" y="257" font-size="16" font-weight="500" fill="#F5F5F5" text-anchor="start">Permission expired</text>
+    <text x="361" y="279" font-size="15" font-weight="400" fill="#B9BABD" text-anchor="start">Stopped before it ran</text>
+    <rect x="24" y="308" width="271" height="72" rx="8" fill="#1C1C1F"/>
+    <circle cx="54" cy="344" r="13" fill="#98C0EF"/>
+    <rect x="49" y="339" width="10" height="10" rx="1.5" fill="#0B1220"/>
+    <text x="80" y="339" font-size="16" font-weight="500" fill="#F5F5F5" text-anchor="start">Revoked, then tried again</text>
+    <text x="80" y="361" font-size="15" font-weight="400" fill="#B9BABD" text-anchor="start">Stopped every time</text>
+    <rect x="305" y="308" width="271" height="72" rx="8" fill="#1C1C1F"/>
+    <circle cx="335" cy="344" r="13" fill="#98C0EF"/>
+    <rect x="330" y="339" width="10" height="10" rx="1.5" fill="#0B1220"/>
+    <text x="361" y="339" font-size="16" font-weight="500" fill="#F5F5F5" text-anchor="start">Revoked mid-job</text>
+    <text x="361" y="361" font-size="15" font-weight="400" fill="#B9BABD" text-anchor="start">Next step stopped</text>
+    <circle cx="37" cy="409" r="13" fill="#98C0EF"/>
+    <rect x="32" y="404" width="10" height="10" rx="1.5" fill="#0B1220"/>
+    <text x="58" y="414" font-size="15" font-weight="400" fill="#F5F5F5" text-anchor="start">Not allowed, so it was stopped</text>
+    <circle cx="314" cy="409" r="13" fill="#6B6F77"/>
+    <path d="M310.5 403L320 409L310.5 415Z" fill="#F5F5F5"/>
+    <text x="335" y="414" font-size="15" font-weight="400" fill="#F5F5F5" text-anchor="start">Allowed, so it ran</text>
+  </g>
+</svg>

@@ -16,8 +16,8 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Changed
 
-- **Benchmarks page removed.** Every number it carried already lives, with its public signed record, on [Authority at dispatch](/use-cases/authority-at-dispatch). The one figure that page held on its own came from a local run and could not support a public performance claim, so the page is gone rather than restated.
-- **Authority at dispatch reads as a table of eight cases**, each linked to its public signed record, and closes on the reproduce kit that runs the same cases on your own account.
+- **One Evidence page.** [Evidence](/evidence) opens on four charted results: every unauthorized action stopped in 8 of 8 live tests, 150 of 150 forged records caught, a reused result about 750 times faster than redoing it, and 48 of 48 AgentGovBench scenarios. Each result links to its signed record and a way to check or rerun it, and security reviewers get the OWASP, EU AI Act, NIST and CAIP-380 mapping in one section. `/benchmarks` and `/use-cases/authority-at-dispatch` now open it.
+- **Two checks you can run on the published records.** `public/evidence/checks/tamper-check.mjs` forges each signed record ten ways and confirms every copy is rejected offline; `reuse-check.mjs` times reading and verifying a finished result with no account.
 - **One current version of the public case set.** Superseded evidence packets are no longer carried alongside the current one, so a reader finds a single up-to-date set.
 
 ### Fixed
