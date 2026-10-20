@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="338" viewBox="0 0 600 338" role="img" aria-labelledby="t d">
+  <title id="t">AgentGovBench: popular agent tools against Proofable</title>
+  <desc id="d">On the earlier 48-scenario AgentGovBench library, Proofable passed 48. Claude Code with ACP hooks passed 43 and Cursor with ACP 37. Claude Code, Codex CLI and Cursor on their own passed 13 each.</desc>
+  <rect x="0.5" y="0.5" width="599" height="337" rx="12" fill="#141416" stroke="#2A2A2E"/>
+  <g font-family="Geist, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+    <text x="24" y="40" font-size="15" font-weight="400" fill="#B9BABD" text-anchor="start">Earlier library, maintainers' published results for agent tools</text>
+    <text x="24" y="84" font-size="17" font-weight="400" fill="#F5F5F5" text-anchor="start">Proofable</text>
+    <text x="576" y="84" font-size="17" font-weight="600" fill="#F5F5F5" text-anchor="end">48 of 48</text>
+    <rect x="24" y="94" width="552" height="20" rx="4" fill="#26262A"/>
+    <path d="M24 94H572Q576 94 576 98V110Q576 114 572 114H24Z" fill="#98C0EF"/>
+    <text x="24" y="150" font-size="17" font-weight="400" fill="#F5F5F5" text-anchor="start">Claude Code or Codex CLI with ACP hooks</text>
+    <text x="576" y="150" font-size="17" font-weight="600" fill="#F5F5F5" text-anchor="end">43 of 48</text>
+    <rect x="24" y="160" width="552" height="20" rx="4" fill="#26262A"/>
+    <path d="M24 160H514.5Q518.5 160 518.5 164V176Q518.5 180 514.5 180H24Z" fill="#6B6F77"/>
+    <text x="24" y="216" font-size="17" font-weight="400" fill="#F5F5F5" text-anchor="start">Cursor with ACP over MCP</text>
+    <text x="576" y="216" font-size="17" font-weight="600" fill="#F5F5F5" text-anchor="end">37 of 48</text>
+    <rect x="24" y="226" width="552" height="20" rx="4" fill="#26262A"/>
+    <path d="M24 226H445.5Q449.5 226 449.5 230V242Q449.5 246 445.5 246H24Z" fill="#6B6F77"/>
+    <text x="24" y="282" font-size="17" font-weight="400" fill="#F5F5F5" text-anchor="start">Claude Code, Codex CLI or Cursor on their own</text>
+    <text x="576" y="282" font-size="17" font-weight="600" fill="#F5F5F5" text-anchor="end">13 of 48</text>
+    <rect x="24" y="292" width="552" height="20" rx="4" fill="#26262A"/>
+    <path d="M24 292H169.5Q173.5 292 173.5 296V308Q173.5 312 169.5 312H24Z" fill="#6B6F77"/>
+  </g>
+</svg>
