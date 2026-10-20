@@ -5,7 +5,7 @@
     "version": "1.3.9",
     "description": "Public HTTP API for Proofable integrators.\n\nRecommended integration order (simplest first):\n1. Browser: VerifyGate widget or hosted verify at https://proofable.me/verify (wallet, passkey, and OAuth handled by Proofable).\n2. JavaScript: `@proofable/sdk` `client.verify()` signs and submits for signature-based verifiers; use VerifyGate for hosted/interactive verifiers.\n3. Server gate checks: `GET /api/v1/proofs/check` with `gateId` or criteria before granting access.\n4. Raw HTTP: two-phase signing below only when you cannot use the SDK or hosted flows.\n\nRaw HTTP verification uses POST /api/v1/verification/standardize → sign signerString → POST /api/v1/verification with the same body plus signature. Session-authenticated callers may skip the signature when a valid session is present.\n\nUse your deployment base URL (for example https://api.proofable.me). Some verifiers require pro access. Administrative endpoints are not included in this specification.\n\nVersioning: public HTTP is `/api/v1` on https://api.proofable.me. Breaking changes ship as a new path version. The current public surface stays `/api/v1`. Deprecations are announced in the public changelog. Retired paths will send `Deprecation` and `Sunset` headers.\n\nMachine-readable spec: https://api.proofable.me/openapi.json\nTyped errors use the ErrorResponse object (`success`, `error.code`, `error.message`). See https://docs.proofable.me/api/errors.",
     "license": {
-      "name": "Proprietary — all rights reserved",
+      "name": "Proprietary. All rights reserved.",
       "url": "https://proofable.me/legal/terms-of-use"
     }
   },
@@ -919,7 +919,7 @@
             "pattern": "^[a-z0-9][a-z0-9._-]{1,30}[a-z0-9]$",
             "minLength": 3,
             "maxLength": 32,
-            "description": "Stable handle for this identity within `namespace` (lowercase alphanumeric, dots, hyphens, underscores; 3–32 chars)."
+            "description": "Stable handle for this identity within `namespace` (lowercase alphanumeric, dots, hyphens, underscores; 3 to 32 chars)."
           },
           "namespace": {
             "type": "string",

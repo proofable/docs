@@ -21,7 +21,7 @@
       "type": "string"
     },
     "pseudonymId": {
-      "description": "Stable handle for this identity within `namespace` (lowercase alphanumeric, dots, hyphens, underscores; 3–32 chars).",
+      "description": "Stable handle for this identity within `namespace` (lowercase alphanumeric, dots, hyphens, underscores; 3 to 32 chars).",
       "maxLength": 32,
       "minLength": 3,
       "pattern": "^[a-z0-9][a-z0-9._-]{1,30}[a-z0-9]$",

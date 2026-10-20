@@ -5,7 +5,7 @@ node_modules/
 *.log
 
 
-# Proofable operator mount artifacts (private; never publish)
+# Local mount output (never published)
 .claude/
 .cursor/
 .hermes/
