@@ -4,7 +4,7 @@ description: "Pick the auth path for your caller: browser sign-in for interactiv
 icon: lock
 ---
 
-Interactive MCP clients sign in through the host. Register `https://mcp.proofable.me/mcp` — it answers an uncredentialed handshake with `401` + `WWW-Authenticate`, which starts the browser sign-in your client opens. The host runs OAuth 2.0 with PKCE and can refresh the session for up to 30 days.
+Interactive MCP clients sign in through the host. Register `https://mcp.proofable.me/mcp`. It answers an uncredentialed handshake with `401` + `WWW-Authenticate`, which starts the browser sign-in your client opens. The host runs OAuth 2.0 with PKCE and can refresh the session for up to 30 days.
 
 For servers, CI, and environments that cannot open a browser, use a durable server key against the same `https://mcp.proofable.me/mcp` endpoint. Both paths reach the same Proofable profile and the same OAuth resource audience.
 
@@ -34,7 +34,7 @@ GET https://proofable.me/.well-known/oauth-authorization-server
 → Authenticated MCP session (Bearer on protected MCP requests)
 ```
 
-`https://mcp.proofable.me/mcp` is the **single canonical endpoint**. Any request without a usable credential — including `initialize` — returns `401` + `WWW-Authenticate` (RFC 9728 §5.1), which is the challenge that starts host OAuth (DCR + PKCE + token exchange). A valid Bearer unlocks the full advertised tier, and `tools/call` runs the applicable tool surface. Access keys and OAuth use the same URL. An expired or invalid Bearer also receives `401` + `WWW-Authenticate` once, so OAuth-capable hosts silently refresh.
+`https://mcp.proofable.me/mcp` is the **single canonical endpoint**. Any request without a usable credential, including `initialize`, returns `401` + `WWW-Authenticate` (RFC 9728 §5.1), which is the challenge that starts host OAuth (DCR + PKCE + token exchange). A valid Bearer opens the full advertised tier, and `tools/call` runs the applicable tool surface. Access keys and OAuth use the same URL. An expired or invalid Bearer also receives `401` + `WWW-Authenticate` once, so OAuth-capable hosts silently refresh.
 
 For full OAuth mechanics, see [MCP OAuth](./oauth).
 
@@ -105,7 +105,7 @@ HTTP/1.1 401 Unauthorized
 WWW-Authenticate: Bearer resource_metadata="https://mcp.proofable.me/mcp/.well-known/oauth-protected-resource", scope="neus:core neus:profile neus:secrets"
 ```
 
-Any request without a credential — including `initialize` — returns the `401` + `WWW-Authenticate` challenge on `/mcp`, which is what hosts act on to open Connect. Stateless streamable HTTP has no GET SSE stream: GET and DELETE on `/mcp` return **405** with no `WWW-Authenticate`, so a GET probe is not a sign-in prompt.
+Any request without a credential, including `initialize`, returns the `401` + `WWW-Authenticate` challenge on `/mcp`, which is what hosts act on to open Connect. Stateless streamable HTTP has no GET SSE stream: GET and DELETE on `/mcp` return **405** with no `WWW-Authenticate`, so a GET probe is not a sign-in prompt.
 
 ## Interactive verification flows
 
