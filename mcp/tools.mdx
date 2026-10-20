@@ -24,15 +24,16 @@ Call **`proofable_context`** once, then pick the tool for the job.
 | List secrets | `proofable_secret_list` | Stored names and details. Never the secret itself. |
 | Revoke a secret | `proofable_secret_revoke` | Removes a stored secret by proof ID. |
 
-## Pro job tools
+## Job tools
 
-Pro adds only the four tools needed to run and manage jobs. Product connections, research, model settings, sandbox execution, and private sessions stay in the Proofable app.
+Signed-in connections get the job tools on every plan. Each run uses your credits and stays within the permissions on your profile. `tools/list` returns the full set your connection can call.
 
 | Job | Tool | What it does |
 |---|---|---|
 | Start work | `proofable_job_create` | Run agent work now or on a schedule. |
 | List work | `proofable_job_list` | List jobs available to the signed-in profile. |
 | Inspect work | `proofable_job_get` | Read one job and its latest run state. |
+| Approve a step | `proofable_job_decide` | Approve or deny a run that is waiting for approval. |
 | Stop work | `proofable_job_cancel` | Cancel a run or recurring schedule. |
 
 | Topic | Detail |

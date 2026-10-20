@@ -8,7 +8,7 @@ record offline.
 - Node.js 20 or later
 - An access key (`npk_…`) from your own Proofable account: open
   [Profile, Account tab, Access keys](https://proofable.me/profile?tab=account) and create one. The
-  cases run agent jobs, which need a Pro account today. The agent wallet and the run folder are
+  cases run agent jobs, which use your account's credits on any plan. The agent wallet and the run folder are
   created on your machine. Keep the key out of chat and version control.
 
 ## Run it

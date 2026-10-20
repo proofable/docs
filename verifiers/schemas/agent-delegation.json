@@ -15,8 +15,10 @@
       "type": "string"
     },
     "agentId": {
+      "description": "Stable agent id: 1-128 letters, digits, hyphens or underscores. It addresses the agent page at /agent/<agentId>.",
       "maxLength": 128,
       "minLength": 1,
+      "pattern": "^[A-Za-z0-9_-]{1,128}$",
       "type": "string"
     },
     "agentWallet": {
