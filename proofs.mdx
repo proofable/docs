@@ -45,7 +45,7 @@ Unlisted proofs are public to anyone who has the proof ID. To share a private pr
 
 Proofs are stored offchain by default. A blockchain record is optional: request it with `options.publishToHub: true` or `targetChains`. IPFS pinning is optional with `enableIpfs: true`. Neither changes who can read the proof, and neither replaces a status check.
 
-A background job cannot request a blockchain record. Nobody is present to ask, and its prompt or a page it reads can carry injected instructions, so a job's proof write that asks for one is refused with `JOB_ONCHAIN_PUBLISH_DENIED`. Publish from your own signed-in session instead.
+A background job keeps its proofs private and offchain. Nobody is present to ask, and its prompt or a page it reads can carry injected instructions, so a job's request for a blockchain record, a public or link-only proof, or a visibility change is refused (`JOB_ONCHAIN_PUBLISH_DENIED`, `JOB_PUBLIC_PROOF_DENIED`, `JOB_VISIBILITY_CHANGE_DENIED`). Publish from your own signed-in session instead.
 
 ## Reuse
 

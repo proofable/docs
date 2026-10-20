@@ -13,7 +13,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 - **Changelog entries for `@proofable/mcp` 0.1.7 and `@proofable/sdk` 0.1.6.**
 - **Eligibility clause in the Terms of Use.** Section 4 states the minimum age and the capacity to contract. The Terms had no eligibility or age statement before.
-- **Background jobs and blockchain records.** [Proofs](/proofs) and [`proofable_verify`](/mcp/verify) say that a background job cannot request a blockchain record; the request is refused with `JOB_ONCHAIN_PUBLISH_DENIED`.
+- **Background jobs keep proofs private and offchain.** [Proofs](/proofs) says that a background job's request for a blockchain record, a public or link-only proof, or a visibility change is refused with `JOB_ONCHAIN_PUBLISH_DENIED`, `JOB_PUBLIC_PROOF_DENIED` or `JOB_VISIBILITY_CHANGE_DENIED`.
 
 ### Changed
 
