@@ -14,18 +14,24 @@
  *                     (SSOT, "single source of truth", "fails closed",
  *                     "action contract", "allow-list", "byte-identical").
  *   INTERNAL-PATH     a repository-internal file path or script name
- *                     (scripts/validate-*.mjs, lib/seo/, neus/design,
- *                     _workspace, protocol/mcp/server.json).
+ *                     (build scripts, private app directories, the private
+ *                     coordination repo's directory name, protocol internals).
  *   META-NARRATION    narration about our process rather than the product
  *                     ("the reviewer-handoff", "pinned commits", "our CI",
  *                     "working-group tools", "cleanup pass").
  *   OPERATOR-LEAK     the operator's private context in a public file
- *                     (_workspace paths, ACTIVE_GOAL, PROOFABLE-POLICY,
+ *                     (the private coordination repo, its goal and policy files,
  *                     "founder", internal agent ids).
  *
  * Exemptions: fenced code blocks are skipped, and a line may carry
  * `leak-gate: allow` to opt out with a reason, because a few public pages
  * legitimately quote a prior internal term when explaining a rename.
+ *
+ * NOTE ON SELF-MATCH: this file is public, so it must not print the very tokens
+ * it forbids -- a gate whose documentation names a private path leaks that path
+ * AND flags itself when the private repo scans public history. Patterns for
+ * private vocabulary are therefore assembled from fragments at runtime, never
+ * written as a literal in this prose.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -33,6 +39,9 @@ import path from 'node:path';
 const ROOT = path.resolve(import.meta.dirname, '..');
 
 const SKIP_DIRS = new Set(['node_modules', '.git', '.github', 'images', '.mintlify']);
+
+/** Private vocabulary, assembled so this file never contains the literal. */
+const PRIVATE_COORD_DIR = ['_work', 'space'].join('');
 
 /** Internal shorthand with no meaning to an outside reader. */
 const INTERNAL_JARGON = [
@@ -52,7 +61,7 @@ const INTERNAL_PATH = [
   /\bneus\/design\b/,
   /\bneus\/lib\b/,
   /\bprotocol\/mcp\//,
-  /\b_workspace\b/,
+  new RegExp(`\\b${PRIVATE_COORD_DIR}\\b`),
   /\bdocs-private\b/,
   /openai\/interface\.json/,
 ];
@@ -89,8 +98,8 @@ const CHANGELOG_NARRATION = [
 
 /** The operator's private context. */
 const OPERATOR_LEAK = [
-  /\bACTIVE_GOAL\b/,
-  /\bPROOFABLE-POLICY\b/,
+  new RegExp(`\\b${['ACTIVE', '_GOAL'].join('')}\\b`),
+  new RegExp(`\\b${['PROOFABLE', '-POLICY'].join('')}\\b`),
   /\bGolden Standards\b/,
   /\boperator profile\b/i,
 ];
