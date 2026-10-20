@@ -16,10 +16,15 @@ One finished agent job on the live service, timed October 20, 2026. Redoing it a
 
 ## What it stops
 
-<img className="block dark:hidden" src="/images/evidence/stop-governance-light.svg" alt="48 of 48 agent governance scenarios handled correctly by Proofable, against 28 for a gate that allows everything and 13 with no governance." />
-<img className="hidden dark:block" src="/images/evidence/stop-governance-dark.svg" alt="48 of 48 agent governance scenarios handled correctly by Proofable, against 28 for a gate that allows everything and 13 with no governance." />
+<img className="block dark:hidden" src="/images/evidence/stop-governance-light.svg" alt="48 of 48 agent governance scenarios handled correctly by Proofable, against 46 for the benchmark maintainers' own gateway, 20 for a gate that allows everything and 5 with no governance." />
+<img className="hidden dark:block" src="/images/evidence/stop-governance-dark.svg" alt="48 of 48 agent governance scenarios handled correctly by Proofable, against 46 for the benchmark maintainers' own gateway, 20 for a gate that allows everything and 5 with no governance." />
 
-The open AgentGovBench scenario library, run October 17, 2026 against the policy code the live service runs.
+The open AgentGovBench scenario library, current version, run October 20, 2026 against the policy code the live service runs. ACP is the gateway built by the benchmark's maintainers.
+
+<img className="block dark:hidden" src="/images/evidence/stop-tools-light.svg" alt="48 of 48 for Proofable beside the agent tools teams already use: Claude Code, Codex CLI and Cursor on their own handled 13, Cursor with the ACP gateway 37, and Claude Code or Codex with ACP 43." />
+<img className="hidden dark:block" src="/images/evidence/stop-tools-dark.svg" alt="48 of 48 for Proofable beside the agent tools teams already use: Claude Code, Codex CLI and Cursor on their own handled 13, Cursor with the ACP gateway 37, and Claude Code or Codex with ACP 43." />
+
+The maintainers' published results for Claude Code, Codex CLI and Cursor, on the earlier version of the same library. The OpenAI and Anthropic agent SDKs, CrewAI and LangGraph also handled 13 on their own.
 
 On the live service itself, all eight permission tests passed. Every action outside the agent's permission was stopped before it ran, and the actions it was allowed to take ran.
 
@@ -99,9 +104,32 @@ To put receipts on your own agents' work, [get started](/).
   </Accordion>
 
   <Accordion title="How the AgentGovBench run works">
-    [AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) is an open library of 48 agent-governance scenarios in eight areas: audit completeness, cross-tenant isolation, delegation provenance, fail-mode discipline, identity propagation, per-user policy, rate limits and scope inheritance. Each scenario is tagged with the NIST AI RMF controls it tests.
+    [AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) is an open library of 48 agent-governance scenarios in eight areas: audit completeness, cross-tenant isolation, delegation provenance, fail-mode discipline, identity propagation, per-user policy, rate limits and scope inheritance. Each scenario is tagged with the NIST AI RMF controls it tests. Its maintainers revised the library in October 2026 so that nothing passes on a technicality.
 
-    We ran the library at commit `e0ce93a` against the exact policy code the live service runs, matched to it by hash, next to a gate that allows everything and no governance at all. The run called that code directly, so it measures the decision logic rather than the hosted service end to end. Last run: October 17, 2026.
+    We ran the current library (commit `479c5f0`) against the exact policy code the live service runs, matched to it by hash, next to a gate that allows everything and no governance at all. The run called that code directly, so it measures the decision logic rather than the hosted service end to end. Last run: October 20, 2026.
+
+    | Setup, current library | Scenarios handled |
+    |---|---|
+    | Proofable policy engine | 48 of 48 |
+    | ACP, the maintainers' gateway, live ([published run](https://github.com/agentic-control-plane/agentgovbench/actions/runs/37759892335)) | 46 of 48 |
+    | A gate that allows everything | 20 of 48 |
+    | No governance | 5 of 48 |
+
+    On the earlier library (commit `e0ce93a`) the same engine also handles 48 of 48, where the maintainers measured the agent tools teams already use:
+
+    | Setup, earlier library | Scenarios handled |
+    |---|---|
+    | Proofable policy engine | 48 of 48 |
+    | Anthropic Agent SDK with the ACP gateway | 46 of 48 |
+    | OpenAI Agents SDK with the ACP gateway | 45 of 48 |
+    | Claude Code or Codex CLI with ACP hooks | 43 of 48 |
+    | CrewAI or LangGraph with the ACP gateway | 40 of 48 |
+    | Cursor with ACP over MCP | 37 of 48 |
+    | Claude Code, Codex CLI, Cursor, the OpenAI or Anthropic agent SDK, CrewAI or LangGraph on its own | 13 of 48 |
+
+    The agent-tool rows are the maintainers' [published results](https://github.com/agentic-control-plane/agentgovbench/tree/main/results), run end to end against their gateway and not re-measured on the current library. The Proofable rows call the policy code directly. The scenarios and scorer are the same and the setups are not, so read the tables as a comparison of what each approach covers, not as a ranking.
+
+    What separates the results is the kind of control. An agent tool on its own asks a person to approve each call and keeps no record a reviewer can check. A gateway adds rules in front of the tools. Proofable decides each action against the permission its owner signed, and every decision is a signed record anyone can verify offline. It also handles the one scenario ACP declines: holding a sub-agent to a narrower task than its parent.
   </Accordion>
 
   <Accordion title="Standards each result maps to">
@@ -115,7 +143,7 @@ To put receipts on your own agents' work, [get started](/).
     | 15 of 15 signed decision records verify offline, with no account | EU AI Act Article 12, record-keeping (mapping only); NIST NCCoE Software and AI Agent Identity and Authorization project, auditing (concept paper, February 2026) | Verify every record offline |
     | 150 of 150 changed copies rejected across ten kinds of forgery; 15 of 15 real records accepted; a check that only reads the format accepts all 150 | OWASP ASI07 Insecure Inter-Agent Communication | Try to fake a record |
     | A finished result verified offline in 3.7 ms with zero AI tokens and no account; producing it took 2.79 s and 2,426 tokens | CAIP-380 Portable Proof | The reuse timing |
-    | AgentGovBench: 48 of 48, against 28 for a gate that allows everything and 13 with no governance | NIST AI RMF GOVERN-1.1, 1.2, 1.4; MAP-2.1, 4.1; MEASURE-2.3, 2.6, 2.7; MANAGE-2.1, 2.2, 4.1 (the controls tagged on the scenarios) | How the AgentGovBench run works |
+    | AgentGovBench, current library: 48 of 48, against 46 for the maintainers' gateway, 20 for a gate that allows everything and 5 with no governance | NIST AI RMF GOVERN-1.1, 1.2, 1.4; MAP-2.1, 4.1; MEASURE-2.3, 2.6, 2.7; MANAGE-2.1, 2.2, 4.1 (the controls tagged on the scenarios) | How the AgentGovBench run works |
 
     The frameworks: [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/), the [EU AI Act](https://eur-lex.europa.eu/eli/reg/2024/1689/oj), the [NIST AI RMF](https://www.nist.gov/itl/ai-risk-management-framework), the [NIST NCCoE agent identity and authorization project](https://www.nccoe.nist.gov/projects/software-and-ai-agent-identity-and-authorization) and [CAIP-380](https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-380.md).
   </Accordion>
