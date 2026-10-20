@@ -27,6 +27,8 @@ AgentGovBench is the open benchmark for agent governance: 48 scenarios such as a
 
 **8 of 8 permission tests passed on the live service.** Every action outside the agent's permission was stopped before it ran, and the actions it was allowed to take ran.
 
+**When an agent was taken over, a scoped permission refused 6 of 6 attempts to send private data out, before they ran; an all-purpose key let all 6 through.** The scoped agent still finished every task and never used a tool it did not need; under the all-purpose key, 14 of 36 runs did. Self-run: 84 runs, five published attack templates, two models, a signed record for each run. [Run the test on your own agent](https://github.com/proofable/mcp/tree/main/examples/injection-test).
+
 **150 of 150 forged records caught.** We changed each of our 15 real records ten ways. Every changed copy failed verification and every real record passed.
 
 ## Test it in a minute
