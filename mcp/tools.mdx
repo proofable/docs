@@ -23,6 +23,26 @@ Call **`proofable_context`** once, then pick the tool for the job.
 | Store or replace a secret | `proofable_secret_create` | Encrypted Vault secret; the same alias replaces its prior value. |
 | List secrets | `proofable_secret_list` | Stored names and details. Never the secret itself. |
 | Revoke a secret | `proofable_secret_revoke` | Removes a stored secret by proof ID. |
+| List agents | `proofable_agents_list` | Agent identities and delegations on the profile. |
+| Revoke a proof | `proofable_proof_revoke` | Removes a proof from public access. |
+| Save a session note | `proofable_session_receipt_create` / `proofable_session_receipt_append` | Private receipt in your account; append adds to an existing one. |
+| Create or update a tool | `proofable_skill_tool_create_or_update` | A JavaScript tool or skill, run only when you or an agent invokes it. |
+
+## Research and browsing tools
+
+These reach the public web. Use search and fetch for reading, and the browser only when a page needs a click, JavaScript, or a visual check.
+
+| Job | Tool | What it does |
+|---|---|---|
+| Search the web | `proofable_web_search` | Structured results; optionally retrieves each page as text. |
+| Read a page | `proofable_url_fetch` | Clean page text from a public URL. Private and metadata hosts are refused. |
+| Operate a page | `proofable_browser` | Open, observe, click, type, screenshot and read console in an isolated job session. |
+| Call a connected app | `proofable_composio_search` / `proofable_composio_execute` | Find and run an action on Gmail, Drive, GitHub, Slack and similar apps. |
+| Call a saved provider key | `proofable_capability_call` | Sends a request to a BYOK provider with the API key you saved for it. |
+| Add an MCP server | `proofable_mcp_connection_create` / `proofable_mcp_connections_list` / `proofable_mcp_connection_delete` | Save, list or remove a remote MCP server for this account. |
+| Use an MCP server | `proofable_mcp_tools_list` / `proofable_mcp_tool_execute` | List that server's tools and run one. |
+
+An action that would create an external side effect needs approval first. Actions that reach another business system go through `proofable_composio_execute`, which is permissioned.
 
 ## Job tools
 
