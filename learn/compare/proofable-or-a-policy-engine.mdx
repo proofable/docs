@@ -1,0 +1,54 @@
+---
+title: "Proofable or a policy engine for agent authorization"
+sidebarTitle: "Proofable or a policy engine"
+description: "Which is better for authorizing an AI agent, a policy engine or Proofable? Keep your engine when the decision stays in your system."
+icon: scale-balanced
+---
+
+# Which is better for authorizing an AI agent, a policy engine or Proofable?
+
+A policy engine is better when your own team owns both the rules and every caller, and a log inside your infrastructure is enough evidence. Proofable is better when the decision has to be checked before the action runs and confirmed afterwards by a system you do not control.
+
+## It depends
+
+Keep your policy engine if you already express your rules in it, one team owns both the rules and every caller, and a log inside your infrastructure is enough evidence. Add Proofable when the agent runs somewhere you do not own, when more than one party has to rely on the outcome, or when the evidence has to travel with the action. A policy engine decides; Proofable can supply the portable record that the decision was made under current permission. Teams that already have a policy engine usually keep it and add Proofable at the boundary, rather than replacing it.
+
+## What each one answers
+
+| Question | Policy engine | Proofable |
+| --- | --- | --- |
+| Is this action allowed by our rules? | Yes, that is its purpose | Yes, for the agent's identity, limits and current permission |
+| Who is the agent and who owns it? | Only if you modelled it there | Part of the agent record |
+| Does the decision survive leaving your system? | Your log, your infrastructure | A proof another party can check |
+| Can the permission expire or be revoked? | If you build that | Built in, with an end date and revoke |
+| Does a refused action stop the call? | Depends on your integration | The caller stops when the decision is not allowed |
+
+## Where they fit together
+
+A policy engine is the right owner of your own rules. Proofable does not ask you to move them. It checks the agent's limits at the action boundary and records the result, so the same decision can be appraised by a system that never saw your engine.
+
+```ts
+import { evaluateRuntimeAction } from '@proofable/sdk/runtime-mount';
+
+const decision = evaluateRuntimeAction(mount, 'publish_report', { irreversible: true });
+if (!decision.allowed) throw new Error(`${decision.code}: ${decision.message}`);
+```
+
+Your engine can still run before or after this check. [Standards and interoperability](/learn/standards) lists the authorization and attestation layers Proofable works beside, including AuthZEN and AARM.
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Control agent actions" icon="shield-halved" href="/use-cases/control-agent-actions">
+    Every limit an agent can carry.
+  </Card>
+  <Card title="Reuse verification" icon="arrows-rotate" href="/use-cases/reuse-verification">
+    Check once and reuse the result.
+  </Card>
+  <Card title="Prove what happened" icon="receipt" href="/use-cases/prove-what-happened">
+    Keep a record of each decision.
+  </Card>
+  <Card title="Standards" icon="diagram-project" href="/learn/standards">
+    The layers beside Proofable.
+  </Card>
+</CardGroup>
