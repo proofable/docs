@@ -14,6 +14,10 @@ These Terms constitute a legally binding agreement between you and NEUS Network,
 
 NEUS Network, Inc. provides hosted services for identity, ownership, and permission checks, reusable results, and related developer tools. The Service includes:
 
+- Hosted profile, agent and delegation management, including scoped agent permissions, spend limits and approval requirements
+- A hosted assistant and background jobs that run on your behalf, optionally using a browser or a connected repository inside an isolated workspace
+- A hosted Model Context Protocol service that lets an AI client read your profile, run a verification, and reuse a proof
+- A Vault for credentials and tool definitions you save, which are used only for the action you request
 - Developer tools and integration examples
 - Software development kits (SDKs) and documentation
 - API services for checks and result reads
@@ -47,6 +51,10 @@ You must be at least 18 years old, or the age of legal majority in your jurisdic
 - Submit false or misleading verification data
 - Attempt to circumvent rate limits or security measures
 - Use the Service for illegal activities or fraud
+- Use a saved tool, job or browser session to reach a system you are not authorized to access, or to bypass a site's access controls, paywall or authentication
+- Use a saved credential for a provider whose terms do not permit your intended use of it
+- Grant an agent a spend limit or permission scope you are not authorized to grant
+- Store another person's credentials in the Vault without their permission
 
 ## 5. Service Availability and Limitations
 
@@ -65,7 +73,7 @@ You must be at least 18 years old, or the age of legal majority in your jurisdic
 
 - Users authenticate through supported account and session methods. Wallet authentication is optional where applicable.
 - All data handling is governed by our [Privacy Policy](./privacy-policy), which is the authoritative description of what we collect, how we use it, how long we keep it, and how to delete it.
-- We collect the categories the Privacy Policy describes: account and authentication data, profile data you provide, assistant and agent content you submit, payment and billing records, and the device and service activity needed to secure and operate the Service.
+- We collect the categories the Privacy Policy describes, including account and authentication data, profile data you provide, proof and verification records, proof comments and votes, connected-account data, assistant and agent content, credentials you save for a provider, tools and skills you create, remote MCP connections you add, files and attachments, payment and billing records, and the device and service activity needed to secure and operate the Service.
 - We do not sell personal information, and we do not use it for targeted advertising or data-broker services.
 
 ## 7. Intellectual Property
@@ -124,6 +132,8 @@ We may terminate or suspend your access to the Service at any time for violation
 Credit purchases are final and non-refundable. Credits are consumed upon use for verification operations and cannot be returned.
 
 Payment Method: Depending on product flow and availability, payments may be processed via blockchain transactions (for example ETH/USDC) and/or Stripe card checkout. Confirmed on-chain transactions and completed card charges are generally irreversible.
+
+Agent Spend: Where you authorize an agent to make payments, you set the spend limit and payment types. Transfers an agent makes within that limit are treated as authorized by you. You are responsible for the limits you set and for revoking a delegation you no longer want.
 
 Exceptional Circumstances: In exceptional circumstances (e.g., service outages preventing credit usage, duplicate charges due to technical errors), refunds may be considered on a case-by-case basis. Contact `info@proofable.me` with your transaction details.
 

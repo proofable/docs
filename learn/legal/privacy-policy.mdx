@@ -4,9 +4,9 @@ description: How Proofable collects, uses, protects, and shares personal informa
 icon: shield
 ---
 
-Effective date: July 26, 2026. Last updated: October 13, 2026.
+Effective date: July 26, 2026. Last updated: October 21, 2026.
 
-This Privacy Policy explains how NEUS Network, Inc. ("Proofable," "we," "us," or "our") handles personal information when you use the Proofable website, application, APIs, hosted Model Context Protocol (MCP) service, verification services, and related products (collectively, the "Service").
+This Privacy Policy explains how NEUS Network, Inc. ("Proofable," "we," "us," or "our") handles personal information when you use the Proofable website, application, APIs, hosted Model Context Protocol (MCP) service, the Proofable tools an MCP client calls, agent and job execution, verification services, and related products (collectively, the "Service").
 
 NEUS Network, Inc. is the company responsible for the personal information covered by this policy. This policy does not govern public blockchains, third-party websites, wallets, artificial-intelligence providers, or accounts that you connect to Proofable. Those services have their own privacy practices.
 
@@ -17,9 +17,15 @@ NEUS Network, Inc. is the company responsible for the personal information cover
 | Account and authentication | Wallet address, decentralized identifier, passkey public credential, email address or a protected email-derived identifier, third-party account identifier, name, username, profile image, authentication method, and session information |
 | Profile and workspace | Display name, biography, avatar, public handles, organization domain, workspace membership, preferences, and information you choose to publish |
 | Proof and verification | Information you submit for verification, proof results, verifier used, status, timestamps, hashes, signatures, visibility choices, and related records |
-| Connected accounts | Provider, account identifier, granted permissions, connection status, encrypted access or refresh token, and information returned when you ask Proofable to use the connection |
-| Assistant and agent content | Prompts, messages, files, tool requests and results, agent instructions, jobs, outputs, and private chat or execution proofs |
-| Payments | Plan, credits, transaction identifiers, wallet transactions, purchase and payout status, and limited billing records. Payment-card and payout onboarding details are collected by Stripe, not Proofable |
+| Connected accounts | Provider, account identifier, granted permissions, connection status, and information returned when you ask Proofable to use the connection. The connection is held on one of two paths. For a connection brokered through Composio, Composio holds the provider token and Proofable stores only a reference, so Proofable does not receive that token. For a connection you grant to an agent so the agent can keep calling the provider, Proofable receives the provider's refresh or access token and stores it encrypted in your Vault as a server-written credential record, separate from the secrets you create yourself |
+| Assistant and agent content | Prompts, messages, files, tool requests and results, agent instructions, jobs, outputs, and private chat, session or execution proofs |
+| Saved secrets | The name, type, tags and encrypted value of credentials you save to the Proofable Vault for a provider, API or tool, including provider API keys and key-value bundles. Stored values are not returned by any tool |
+| Saved tools and skills | Tool and skill definitions you create, including JavaScript source, title, summary, tags and visibility setting. The code is stored and run only when a tool you or an agent invokes it calls for it |
+| Agent configuration | Agent identifiers, labels, descriptions, capabilities, instruction text, permission presets, allowed and denied actions, approval requirements, spend limits, and expiry |
+| MCP connections | Servers you connect, including name, URL or launch command, arguments, environment variables, HTTP headers, settings and enabled state |
+| Proof feedback | Comments, replies and up or down votes you leave on a proof, and the proof they attach to |
+| Files and attachments | Files you upload, their type and size, and any text extracted from them for a requested action |
+| Payments | Plan, credits, transaction identifiers, wallet transactions, agent spend within a configured limit, purchase and payout status, and limited billing records. Payment-card and payout onboarding details are collected by Stripe, not Proofable |
 | Device and service activity | IP address or a protected derivative, browser and device information, page or feature used, referring page, performance data, request time, error details, and security events |
 | Communications | Contact requests, support messages, newsletter subscription, security reports, and related correspondence |
 | Public and third-party sources | Public blockchain records, public profile or repository information, domain records, and information returned by a provider you ask us to use |
@@ -27,6 +33,67 @@ NEUS Network, Inc. is the company responsible for the personal information cover
 Do not send Proofable a private key, seed phrase, account password, or information that is not needed for the feature you are using.
 
 Some identity checks use a third-party service to create a privacy-preserving proof. In those flows, the provider may inspect an identity document, while Proofable is designed to receive the proof result or derived identifier rather than the document itself. The provider's notice applies to its processing.
+
+## What the Proofable Tools Process
+
+An MCP client such as ChatGPT, Claude, Cursor or Codex calls the Proofable MCP service on your behalf. Some tools return only public information and work without an account. The rest run against your signed-in profile and process the information below. This section states what each tool takes in, what it returns, and where the information goes, so you can see the tool surface as it exists.
+
+### Tools that run without an account
+
+| Tool | Input | Output |
+| --- | --- | --- |
+| Read the profile context | Profile identifier, or the signed-in profile | Read-only profile summary, proof index, agent list, permissions and supported checks |
+| Read the verifier catalog | None, or a check ID | Supported check definitions with the inputs and networks each requires |
+| Check for existing proofs | Wallet address, chain and a list of required checks | Pass or fail only. No proof bodies, records or content are returned |
+| Resolve a verification request | Wallet address, check IDs and request context | Reusable qualifying proofs when they exist, or the next secure step to complete |
+
+### Tools that run against your signed-in profile
+
+| Tool | Input | Output and destination |
+| --- | --- | --- |
+| Proof and verification tools | Proof IDs, check inputs, visibility and pagination. A check that needs another signer is prepared first, which returns a signing string, timestamp and chain, then submitted with the same values plus the signature | Proof records and bodies you are entitled to read, saved to your profile. A public proof is readable by anyone with the link |
+| Proof update and revoke | Proof ID, title, tags, visibility, vote or comment. Revoking removes a proof from public access | The updated or revoked proof. Comments and votes are shown according to that proof's privacy and access |
+| Session receipt | Title, content and tags, for a new note or an addition to an existing one | A private session note retained in your account |
+| Saved secrets | Secret name, type, tags and value, or a request to list or revoke one by name | Metadata only. The value is encrypted, never returned and never logged in a receipt |
+| Saved tools and skills | Title, summary, JavaScript source, tags and visibility | The stored tool or skill. Its code runs when you or an agent invokes it |
+| Agent tools | Agent ID, label, description, capabilities, instructions, permission preset, allowed and denied actions, approval policy, spend limit, linked wallet and services. Listing reports the agents on your profile. Mounting loads an agent's identity, permissions, skills and context into the client you are using | The agent identity and its delegation record, plus the current authorized action set |
+| Job tools | A prompt describing the work, the target agent, an optional schedule, model or provider, and optional acceptance criteria. An approval decision or a cancel names the run it applies to | Job status, output and receipts. A job runs on the hosted runtime and may use a browser and a connected repository inside the job's own isolated workspace |
+| Browser | A URL and the interaction to perform | Page content, interactive elements, screenshots, console output and typed text, held in an isolated job session |
+| URL fetch | A public URL | Clean text of that page, retrieved through a third-party extraction service |
+| Web search | A query, and whether to also retrieve the pages in the results | Search results and, when requested, the text of those pages |
+| Connected-app tools | A connected app and an action, or a search for the action to use | Results from the app you connected, called through Composio using your authorization |
+| Provider call | A provider ID, path, method and body | The provider's response. The call is made with the API key you saved for that provider, so it reaches that provider as an inference request |
+| MCP connection | Server name, URL or command, arguments, environment variables and headers, for creating, listing or deleting a connection. Listing returns connection names and settings, never stored header or variable values | The saved connection. Tool calls to that server carry the configuration you supplied |
+| Capability call and tool execution | A named capability or connected MCP tool and its arguments, or a request to list available tools | That tool's result, or the tool list |
+
+Several tools send a request to a third party to do their job. A URL fetch and a web search reach the site or the search provider you named. A browser action loads the pages you point it at. A connected-app or provider call reaches the provider you chose. A job that uses a model sends its prompt to the inference path described in this policy. When you point a tool at a third-party service, that service receives the request and its own privacy policy applies.
+
+The tool names above map to this policy as follows, so you can check any single tool against the row that covers it:
+
+| Tool | Covered by |
+| --- | --- |
+| `proofable_context` | Read the profile context |
+| `proofable_verifiers_catalog` | Read the verifier catalog |
+| `proofable_proofs_check` | Check for existing proofs |
+| `proofable_verify_or_guide` | Resolve a verification request |
+| `proofable_verify`, `proofable_verify_prepare`, `proofable_verify_submit` | Proof and verification tools |
+| `proofable_proofs_get` | Proof and verification tools |
+| `proofable_proofs_update` | Proof update and revoke |
+| `proofable_proof_revoke` | Proof update and revoke |
+| `proofable_session_receipt_create`, `proofable_session_receipt_append` | Session receipt |
+| `proofable_secret_create`, `proofable_secret_list`, `proofable_secret_revoke` | Saved secrets |
+| `proofable_skill_tool_create_or_update` | Saved tools and skills |
+| `proofable_agent_create`, `proofable_agent_link`, `proofable_agent_mount`, `proofable_agents_list` | Agent tools |
+| `proofable_job_create`, `proofable_job_get`, `proofable_job_list`, `proofable_job_decide`, `proofable_job_cancel` | Job tools |
+| `proofable_browser` | Browser |
+| `proofable_url_fetch` | URL fetch |
+| `proofable_web_search` | Web search |
+| `proofable_composio_search`, `proofable_composio_execute` | Connected-app tools |
+| `proofable_capability_call` | Provider call |
+| `proofable_mcp_connection_create`, `proofable_mcp_connections_list`, `proofable_mcp_connection_delete` | MCP connection |
+| `proofable_mcp_tools_list`, `proofable_mcp_tool_execute` | Capability call and tool execution |
+
+These are the tools the hosted Proofable MCP service exposes. A client may show a different subset depending on whether you are signed in and what your client supports.
 
 ## How We Use Information
 
@@ -37,6 +104,11 @@ We use personal information only for the following purposes:
 | Provide accounts, profiles, proofs, connected accounts, assistants, agents, APIs, payments, and support | Perform our contract with you |
 | Authenticate users, protect private information, prevent fraud and abuse, enforce limits, and investigate incidents | Perform our contract and pursue our legitimate interest in securing the Service |
 | Process a provider connection or optional communication you request | Your direction or consent |
+| Comment on or vote on a proof, to answer a request, show feedback to the proof's audience, and help rank proofs | Your direction or consent |
+| Read public and third-party sources to perform a check or a requested action | Your direction or consent, or our legitimate interest in carrying out the verification you asked for |
+| Answer contact requests, support messages and security reports, and keep a record of how a request was handled | Perform our contract and pursue our legitimate interest in supporting users and securing the Service |
+| Run a saved tool, skill, browser action or job you request, including code execution inside that run | Your direction or consent |
+| Move funds an agent is authorized to spend within the limit you set | Your direction or consent |
 | Maintain reliability, diagnose errors, measure feature performance, and improve the Service | Our legitimate interest in operating a reliable product |
 | Process purchases, maintain financial records, and meet legal requests | Perform our contract and comply with law |
 | Send product or policy notices and, where you request them, newsletters | Perform our contract, pursue our legitimate interest in service communications, or obtain your consent, as applicable |
@@ -56,7 +128,7 @@ Proofable handles Google user data as follows:
 
 - **Access:** Proofable accesses data only through the permissions you approve and only to provide the user-facing feature you request.
 - **Use:** Retrieved data is used to answer your request, perform the tool action, and show or save the result in your private Proofable session or proof when that feature is enabled.
-- **Storage:** Composio stores and refreshes the connection tokens; Proofable stores a reference to your connection. Retrieved content may be retained in a private chat, job, or execution proof if it forms part of that record.
+- **Storage:** On the Composio path, Composio stores and refreshes the connection tokens and Proofable stores a reference to your connection. When you grant a connection to an agent so the agent can keep calling the provider, Proofable instead receives the provider's refresh or access token and stores it encrypted in your Vault as a server-written credential record. Retrieved content may be retained in a private chat, job, or execution proof if it forms part of that record.
 - **Sharing:** Data may be processed by Composio, the Proofable hosting stack and, when needed to answer your request, by the hosted AI provider or the AI provider you selected. It is not shared for advertising or unrelated purposes.
 - **AI training:** Proofable does not use raw or derived Google Workspace data to train or improve a generalized artificial-intelligence or machine-learning model.
 - **Hosted model isolation:** When you use Proofable-hosted assistant inference (the Default and Advanced tiers), Proofable sends the model request through RedPill's confidential-computing gateway. Proofable requires a verified serving path and, for each completed model call, checks the gateway identity and the signed receipt's exact request and response hashes. When the gateway forwards to a separate model host, Proofable also checks the cited serving-session record, its evidence digest, claims, and channel binding. The chat shows **TEE verified** only when every model call that contributed to the answer passed the checks that apply to its serving path. This verifies the recorded processing path; it does not mean the browser-to-model request is end-to-end encrypted. Proofable-side retention of the conversation or proof is separate and described above. When you supply your own AI provider key (bring-your-own-key), Proofable sends your request to the provider you selected. The same **TEE verified** checks can apply when that provider is RedPill's verified gateway; they do not apply to other bring-your-own-key providers. The selected provider's terms and privacy policy govern its processing.
@@ -120,14 +192,17 @@ Our principal provider roles are:
 | **Cloudflare** | Domain and network protection and, on forms where enabled, Turnstile abuse prevention |
 | **RedPill and its confidential-computing infrastructure** | Proofable-hosted AI inference for prompts and relevant context |
 | **Google, Microsoft, GitHub, and user-selected providers** | Authentication or connected-account data requested by the user |
-| **Composio** | Connected-account authorization, token storage and refresh, and tool calls to connected apps you ask an assistant or agent to use |
+| **Composio** | Connected-account authorization, token storage and refresh on the connections that use Composio, and tool calls to connected apps you ask an assistant or agent to use. An agent-granted connection stores its token in your Proofable Vault instead |
 | **Stripe** | Card payments, subscriptions, creator payout onboarding, fraud controls, and legally required payment records |
 | **Resend** | Transactional email, support delivery, and newsletters requested by the user |
 | **Reown / WalletConnect and wallet providers** | Wallet connection and wallet-request routing |
 | **Alchemy and public blockchains** | Blockchain reads, transactions, addresses, and public proof references |
 | **Pinata / IPFS and Vercel Blob** | Public content selected for publication and private file storage, respectively |
-| **context.dev** | Web search or webpage retrieval requested through assistant tools |
+| **context.dev** | Web search, webpage retrieval and page extraction requested through assistant, job or MCP tools |
+| **Job and browser sandbox infrastructure** | Isolated execution for jobs, browser sessions, screenshots and run artifacts |
+| **Payment rails and blockchain networks** | Agent-authorized transfers, wallet transactions, and public transaction records |
 | **Verification providers** | Information needed to perform an optional proof, subject to the provider notice shown for that flow |
+| **Connected MCP servers you add** | Tool calls that carry the configuration, arguments and headers you supplied for that server |
 
 Providers may process information in the United States and other countries. Those countries may have different privacy laws. Where applicable law requires a transfer safeguard, we use the safeguard available for the relevant provider arrangement. Contact us if you need information about a transfer that affects you.
 
@@ -151,10 +226,17 @@ Connected providers may set their own cookies when you visit their sign-in or co
 
 We keep information only for the period needed for the purposes described above:
 
-- account, profile, private proof, connection, chat, and agent records remain until you delete or revoke them, delete your profile, or they are no longer needed;
-- connected-provider credentials remain until you disconnect, reconnect and replace them, the provider invalidates them, or you delete your profile;
+- account, profile, private proof, connection, chat, session receipt, and agent records remain until you delete or revoke them, delete your profile, or they are no longer needed;
+- a saved secret remains until you replace it under the same name, revoke it, or delete your profile. Replacing a secret revokes its prior value immediately;
+- a saved tool, skill or agent instruction remains until you update or delete it, or delete your profile;
+- a remote MCP connection remains until you remove it or delete your profile;
+- a comment or vote remains with the proof it attaches to until you clear it or the proof is deleted;
+- browser session content, screenshots and run artifacts from a job remain with that job's output until you delete the job or your profile;
+- contact requests, support messages and security reports remain for the period needed to answer them and keep a record of the request;
+- connected-provider credentials remain until you disconnect, reconnect and replace them, the provider invalidates them, you revoke the agent grant that created them, or you delete your profile;
 - authentication and OAuth transaction data expires after the applicable security period;
-- service, security, and diagnostic records remain for the period needed to operate, secure, and audit the Service; and
+- service, security, and diagnostic records remain for the period needed to operate, secure, and audit the Service;
+- public and third-party source records are kept only as part of the proof that used them, and are governed by the proof's own retention above. Public blockchain and other public network records are outside our control and may never be erasable; and
 - payment, dispute, and compliance records remain as required by tax, accounting, fraud-prevention, and other laws.
 
 Where a record is kept because it is still needed to operate, secure, or audit the Service rather than because you hold an active account, we remove it within 24 months of your account closing, unless a shorter period applies above or a longer one is required by law. Records preserved by law, by an open dispute, or on a public network we cannot alter are outside that window.
@@ -167,7 +249,7 @@ Proofable uses administrative, technical, and organizational measures designed t
 
 - encrypted network connections;
 - server-side credentials and protected authentication cookies;
-- encryption of connected-account tokens and user-provided secrets;
+- encryption of the connected-account tokens Proofable holds on the agent-grant path, and of user-provided secrets;
 - authenticated access to private files and private proof content;
 - signed service-to-service requests and scoped access controls;
 - rate limits, abuse controls, security monitoring, and incident logging; and
@@ -188,13 +270,29 @@ Depending on where you live, you may have the right to:
 - appeal our response to a request; and
 - complain to your local data-protection authority.
 
-You may update or delete profile information in the Service and disconnect providers from your account. You may also email `info@proofable.me`. We may need to verify your account, wallet control, or identity before completing a request. An authorized agent may submit a request where local law permits. We will not discriminate against you for exercising a privacy right.
+You may update or delete profile information in the Service and disconnect providers from your account. You can also:
+
+- revoke a saved secret, which removes its stored value;
+- update or delete a tool, skill or agent instruction you saved;
+- remove a remote MCP connection you added;
+- revoke an agent delegation, which ends that agent's authorized actions and removes the connection credential it was granted;
+- disconnect a connected account, which removes Proofable's reference and requests provider-side revocation;
+- change a proof to private or revoke it, which removes it from public access where technically possible;
+- clear a vote or comment you left, and delete a comment on a proof you own;
+- delete a job and the output and receipts it produced;
+- request a copy of your payment and billing records;
+- ask us to delete support correspondence you sent us, subject to the record we must keep to answer it; and
+- close your account, which deletes your profile record as described above.
+
+You can also review or delete the device and service activity tied to your sessions through the account controls, and send a request to `info@proofable.me` for anything the interface does not expose.
+
+You may also email `info@proofable.me`. We may need to verify your account, wallet control, or identity before completing a request. An authorized agent may submit a request where local law permits. We will not discriminate against you for exercising a privacy right.
 
 Proofable does not offer an opt-out of sale or targeted advertising because Proofable does not engage in those activities.
 
 ## Children
 
-The Service is not directed to children under 13, and we do not knowingly collect personal information from a child under 13. If you believe a child has provided personal information to Proofable, contact us so we can investigate and delete it where required. Users must also meet any higher minimum age required by local law or by a connected provider.
+The Service is not directed to children under 13, and we do not knowingly collect personal information from a child under 13. The [Terms of Use](./terms-of-use) require users to be at least 18, or the age of legal majority where they live, so the Service is not offered to anyone younger even where local law would allow it. If you believe a child has provided personal information to Proofable, contact us so we can investigate and delete it where required.
 
 ## Changes to This Policy
 
