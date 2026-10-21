@@ -1,0 +1,63 @@
+---
+title: "Proofable or an identity provider for agent access"
+sidebarTitle: "Proofable or an IdP"
+description: "Which is better for controlling what an AI agent may do, an identity provider or Proofable? Run both when identity is not the same as authority."
+icon: scale-balanced
+---
+
+# Which is better for controlling an AI agent, an identity provider or Proofable?
+
+An identity provider is better if the only question you must answer is who an agent is. Proofable is better if you must also answer what that agent is allowed to do right now, and keep a record another system can check.
+
+## It depends
+
+Use your identity provider alone when every agent acts on behalf of a signed-in person, the provider already issues those tokens, and you do not need to bound or record the action. Use Proofable when an agent acts on its own schedule, when the permission has to be checked at the moment of the call rather than at sign-in, or when a third party must be able to confirm the decision afterwards. Many teams run both: the provider answers who signed in, and Proofable answers whether this specific action may run. One is not a replacement for the other.
+
+## What each one answers
+
+| Question at the action boundary | Identity provider | Proofable |
+| --- | --- | --- |
+| Who is the caller? | Yes, it issues the identity | Records the agent and the owner behind it |
+| Who does the agent work for? | Only if the agent is the person | Yes, the owner is part of the agent's identity |
+| May this action run right now? | Not its job | Yes, checked before the call |
+| What happens when permission is missing? | Not its job | The call stops |
+| Can a third party confirm the decision later? | Session and token logs | A proof the next system can check |
+
+## Where the check happens
+
+A provider decision is made when a session or token is issued. An action runs later, often from a schedule, and the permission may have changed in between. Proofable checks at the moment of the action, so a revoked or expired permission stops the next call even though the session is still valid.
+
+```text
+Agent          report-agent
+Action         Publish report
+Authority      Draft   ✓
+               Publish ✕
+Decision       Blocked
+```
+
+## Running both
+
+You do not have to choose. Keep the provider for sign-in, and add Proofable for the authority decision:
+
+1. [Add Proofable](/mcp/setup) to your assistant or app.
+2. [Give the agent limits](/use-cases/control-agent-actions): allowed actions, denied actions, spend cap, expiry.
+3. [Check before the tool call](/mcp/guarded-action) and stop when the decision is not allowed.
+
+The identity proves who is asking. The permission decides whether the action runs. [Standards and interoperability](/learn/standards) covers how Proofable works beside OAuth, OIDC, AuthZEN and agent SSO without replacing them.
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Control agent actions" icon="shield-halved" href="/use-cases/control-agent-actions">
+    Set the limits an agent runs under.
+  </Card>
+  <Card title="First guarded action" icon="shield-check" href="/mcp/guarded-action">
+    Run one allow or deny decision end to end.
+  </Card>
+  <Card title="Agent identity" icon="fingerprint" href="/agents/agent-identity">
+    Give each agent an owner you can check.
+  </Card>
+  <Card title="Standards" icon="diagram-project" href="/learn/standards">
+    Where Proofable sits beside existing standards.
+  </Card>
+</CardGroup>

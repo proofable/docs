@@ -45,6 +45,7 @@
     }
   },
   "seo": {
+    "indexing": "all",
     "metatags": {
       "theme-color": "#F5F4F1",
       "color-scheme": "light dark",
@@ -83,6 +84,14 @@
               "use-cases/prove-what-happened",
               "use-cases/control-agent-actions",
               "use-cases/build-a-platform"
+            ]
+          },
+          {
+            "group": "Compare",
+            "pages": [
+              "learn/compare/control-what-an-agent-can-do",
+              "learn/compare/proofable-or-an-identity-provider",
+              "learn/compare/proofable-or-a-policy-engine"
             ]
           },
           {
