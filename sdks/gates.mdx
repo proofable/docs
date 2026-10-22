@@ -63,8 +63,9 @@ With a `gateId`, the response carries a per-requirement `data.gate` block. Only 
 
 | Field | Meaning |
 |---|---|
-| `allRequiredSatisfied` | Every requirement is covered |
+| `allRequiredSatisfied` | Every requirement and prior listing is covered |
 | `satisfiedVerifierIds`, `missingVerifierIds` | Which requirements existing proofs cover |
+| `prerequisites` | `{ gateId, satisfied }` per required prior listing, when the gate has any |
 | `reusedVerifierProofs` | Verifier ID to proof ID, when you pass `includeQHashes: true` |
 
 <Warning>

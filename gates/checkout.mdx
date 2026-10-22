@@ -75,6 +75,7 @@ When `gateId` is passed, the response carries a per-requirement `data.gate` bloc
 ```
 
 - `satisfiedVerifierIds` / `missingVerifierIds`: which requirements existing proofs cover.
+- `prerequisites`: present when the listing requires prior listings. One `{ gateId, satisfied }` row each. See [Prior listings](#prior-listings).
 - `reusedVerifierProofs`: verifierId → qHash map (requires `includeQHashes=true`). Pass it as `options.reusedVerifierProofs` on `POST /api/v1/verification` so satisfied checks are not re-run.
 - Re-run the gate check after every interactive step (OAuth grant, personhood session) before treating checkout as complete. Interactive completions only count once Proofable confirms them here.
 
@@ -178,6 +179,16 @@ When the run finishes, the buyer's receipt (the `qHash` you fulfilled) records t
 ## Campaign windows
 
 Gates may carry a `schedule` (`startsAt` / `endsAt`). Outside the window, gate checks report the closed state and verification/fulfillment are refused server-side (`GATE_NOT_STARTED`, `GATE_ENDED`). Treat the window as enforced. It is not a UI-only hint.
+
+## Prior listings
+
+A listing can require that the visitor already completed other listings: an earlier campaign, the listing that awards a badge, or any step in a series. The gate stores them under `policy.prerequisites` as `[{ "gateId": "gate_season-1" }]`, up to five, all required.
+
+A prerequisite is met when the visitor's wallet holds that listing's completed checkout receipt. Proofable reads the gate link it stamps on the receipt at checkout, never a proof tag, so a visitor cannot claim a listing they did not complete. Revoking the receipt removes the qualification. A visitor who already completed this listing keeps qualifying if the seller adds a prerequisite later.
+
+- Gate checks fold prerequisites into `allRequiredSatisfied` and list them in `gate.prerequisites`.
+- Verification and fulfillment refuse a visitor who is missing one with `GATE_PREREQUISITE_MISSING` and `details.missingGateIds`, before any check runs or credit is spent.
+- Publishing refuses a prerequisite that was never published (`GATE_PREREQUISITE_NOT_FOUND`) or that requires this listing back (`GATE_PREREQUISITE_CYCLE`). A paused or ended prerequisite stays valid, since past visitors still hold its receipt.
 
 ## Next
 
