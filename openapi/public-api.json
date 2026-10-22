@@ -622,7 +622,26 @@
             "properties": {
               "allRequiredSatisfied": {
                 "type": "boolean",
-                "description": "True when every gate requirement row is satisfied by an existing or reused proof. This is the only signal that authorizes submit/fulfill."
+                "description": "True when every gate requirement row is satisfied by an existing or reused proof and every prerequisite listing is completed. This is the only signal that authorizes submit/fulfill."
+              },
+              "prerequisites": {
+                "type": "array",
+                "description": "Present when the gate requires prior listings. One row per listing, in the seller's order: satisfied when the wallet holds that listing's completed checkout receipt.",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "gateId": {
+                      "type": "string"
+                    },
+                    "satisfied": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "gateId",
+                    "satisfied"
+                  ]
+                }
               },
               "satisfiedVerifierIds": {
                 "type": "array",
