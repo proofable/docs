@@ -12,6 +12,12 @@
  * What it reads
  *   prose      .md and .mdx bodies (fenced code is skipped; HTML and MDX
  *              comments are read, because the raw file is public)
+ *   marketing  the body of a page whose job is to be read and acted on (a
+ *              launch post, blog post, case study, landing page). It runs the
+ *              generated-text, contrast, typography and private-name rules,
+ *              and is exempt from the docs-neutrality rules: SLOP-CORP,
+ *              SLOP-HOOK, HEDGE, UNDERSELL and PROCESS. Headings and
+ *              frontmatter on the same file still scan as `short`.
  *   short      the one-line surfaces: headings, frontmatter titles and
  *              descriptions, manifest descriptions, tool and API descriptions
  *   manifest   description, summary, title and label fields in JSON and YAML
@@ -26,8 +32,13 @@
  *                   product does: build steps, review steps, branch movement
  *   PLACEHOLDER     to-do markers, filler text and other unfinished text
  *   ENCODING        mojibake and replacement characters
- *   SLOP            filler vocabulary, throat-clearing, contrast formulas,
- *                   puffery, weasel attribution, recap endings
+ *   SLOP            generated-text tells and filler vocabulary, throat-
+ *                   clearing, contrast formulas, weasel attribution, recap
+ *                   endings. Banned on every surface including marketing.
+ *   SLOP-CORP       empty corporate puff that a marketing surface may use when
+ *                   it lands (empower, secure and scalable). Docs and UI only.
+ *   SLOP-HOOK       opener and framing devices that work in a hook and read as
+ *                   ceremony in docs (in a world where, what if). Docs only.
  *   TYPOGRAPHY      em dashes, en dashes and middle dots used as separators
  *   HEDGE           underselling in a one-line surface
  *   UNDERSELL       a narrative page that closes on what the product lacks
@@ -159,9 +170,35 @@ export const ENCODING = [
   new RegExp(chars(0xfffd)),
 ];
 
-/** Filler vocabulary. */
-export const SLOP_WORDS =
-  /(?<![\w-])(?:seamless(?:ly)?|empower(?:s|ed|ing)?|robust(?:ly|ness)?|comprehensive(?:ly)?|cutting-edge|next-generation|revolutioni[sz]e|revolutionary|transformative|future-proof|holistic|effortless(?:ly)?|leverag(?:e|es|ed|ing)|innovative|supercharg(?:e|es|ed|ing)|game[- ]chang(?:er|ing)|delve(?:s|d)?|tapestry|paradigm|unleash(?:es|ed|ing)?|elevat(?:e|es|ed|ing)|AI[- ]powered|the future of|in a world where|imagine a world|intelligent layer|trust fabric|unified platform|secure and scalable|foster(?:s|ed|ing)?|utili[sz](?:e|es|ed|ing)|facilitat(?:e|es|ed|ing)|streamlin(?:e|es|ed|ing)|realm|beacon|multifaceted|meticulous(?:ly)?|intricate|paramount|embark(?:s|ed|ing)?|ever-evolving|state-of-the-art|best-in-class|world-class|battle-tested|blazing(?:ly)? fast|turnkey|synerg(?:y|ies|istic))(?![\w-])/i;
+/**
+ * Filler vocabulary, split by why a word is banned so each register can take
+ * the list it needs. One flat list served docs, UI and marketing alike, which
+ * banned hook language on the surfaces whose whole job is to be read.
+ *
+ *   SLOP_AI     generated-text tells and empty praise. Banned everywhere.
+ *   SLOP_CORP   empty corporate puff. Banned on docs, UI and labels; a
+ *               marketing surface may use it when it lands, so `marketing`
+ *               does not run this list.
+ *   SLOP_HOOK   opener and framing devices that work in a hook and read as
+ *               ceremony in documentation. Allowed in `marketing` only.
+ */
+export const SLOP_AI =
+  /(?<![\w-])(?:seamless(?:ly)?|robust(?:ly|ness)?|comprehensive(?:ly)?|cutting-edge|next-generation|revolutioni[sz]e|revolutionary|transformative|future-proof|holistic|effortless(?:ly)?|leverag(?:e|es|ed|ing)|innovative|supercharg(?:e|es|ed|ing)|game[- ]chang(?:er|ing)|delve(?:s|d)?|tapestry|paradigm|unleash(?:es|ed|ing)?|elevat(?:e|es|ed|ing)|AI[- ]powered|intelligent layer|trust fabric|unified platform|foster(?:s|ed|ing)?|utili[sz](?:e|es|ed|ing)|facilitat(?:e|es|ed|ing)|streamlin(?:e|es|ed|ing)|realm|beacon|multifaceted|meticulous(?:ly)?|intricate|paramount|embark(?:s|ed|ing)?|ever-evolving|state-of-the-art|best-in-class|world-class|battle-tested|blazing(?:ly)? fast|turnkey|synerg(?:y|ies|istic))(?![\w-])/i;
+
+export const SLOP_CORP =
+  /(?<![\w-])(?:empower(?:s|ed|ing)?|secure and scalable|the future of|in a world where|imagine a world)(?![\w-])/i;
+
+/**
+ * Opener and framing devices that work in a hook and read as ceremony in docs.
+ * Only phrasings that carry no literal meaning: a bare "meet the" or "what if"
+ * is a hook, but "meet the WCAG target size" is a fact, so the generic verb
+ * phrases stay out of this list.
+ */
+export const SLOP_HOOK =
+  /(?<![\w-])(?:in a world where|imagine a world|imagine if|the next era of|say hello to|say goodbye to|welcome to the future)(?![\w-])/i;
+
+/** Kept as the union for callers that read it directly; the class map decides what runs. */
+export const SLOP_WORDS = SLOP_AI;
 
 /** Throat-clearing, setups, puffery, weasel attribution and recaps. */
 export const SLOP_PHRASES = [
@@ -201,18 +238,19 @@ export const SLOP_CONTRAST = [
 /** Separators that house style never uses in public text. */
 export const TYPOGRAPHY = [/—/, /–/, /·/];
 
-/** Underselling in a one-line surface: a description, a heading, a label. */
+/**
+ * Underselling in a one-line surface: a description, a heading, a label.
+ * Scoped to `short`, `marketing-meta` and manifests. A narrative page is
+ * allowed to say "so far" or "almost"; those words are only a defect when the
+ * whole surface is one line and the hedge is the entire message.
+ */
 export const HEDGE = [
   /\bsmall sample\b/i,
   /\bself-run\b/i,
-  /\bso far\b/i,
   /\baims? to\b/i,
   /\btries to\b/i,
-  /\bhelps you\b/i,
   /\bnot yet\b/i,
-  /\balmost\b/i,
   /\bUNKNOWN\b/,
-  /\bwe ran (?:it|them) ourselves\b/i,
 ];
 
 /** A narrative page that leads with what the product lacks. */
@@ -238,7 +276,9 @@ const RULES = {
   PROCESS,
   PLACEHOLDER,
   ENCODING,
-  SLOP: [SLOP_WORDS, ...SLOP_PHRASES],
+  SLOP: [SLOP_AI, ...SLOP_PHRASES],
+  'SLOP-CORP': [SLOP_CORP],
+  'SLOP-HOOK': [SLOP_HOOK],
   'SLOP-CONTRAST': SLOP_CONTRAST,
   TYPOGRAPHY,
   HEDGE,
@@ -246,15 +286,38 @@ const RULES = {
   'LEGACY-BRAND': LEGACY_BRAND,
 };
 
-/** Which rule codes apply to which text class. */
+/**
+ * Which rule codes apply to which text class.
+ *
+ * `marketing` is the register for a surface whose job is to be read and acted
+ * on: a blog post, a launch post, a case study, a landing page, an ad. It runs
+ * the generated-text tells (SLOP), the contrast and typography rules, the
+ * private-name and placeholder rules, and the legacy-brand rule. It does NOT
+ * run SLOP-CORP, SLOP-HOOK, HEDGE, UNDERSELL or PROCESS, because those exist to
+ * keep documentation neutral and a marketing surface is not documentation.
+ * Docs, UI, labels and manifests keep every rule they had.
+ */
 const CLASS_RULES = {
-  prose: ['PRIVATE-NAME', 'INTERNAL-TERM', 'PROCESS', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'SLOP-CONTRAST', 'TYPOGRAPHY', 'UNDERSELL'],
-  short: ['PRIVATE-NAME', 'INTERNAL-TERM', 'PROCESS', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'SLOP-CONTRAST', 'TYPOGRAPHY', 'HEDGE', 'LEGACY-BRAND'],
-  manifest: ['PRIVATE-NAME', 'INTERNAL-TERM', 'PROCESS', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'SLOP-CONTRAST', 'TYPOGRAPHY', 'HEDGE', 'LEGACY-BRAND'],
+  prose: ['PRIVATE-NAME', 'INTERNAL-TERM', 'PROCESS', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'SLOP-CORP', 'SLOP-HOOK', 'SLOP-CONTRAST', 'TYPOGRAPHY', 'UNDERSELL'],
+  marketing: ['PRIVATE-NAME', 'INTERNAL-TERM', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'SLOP-CONTRAST', 'TYPOGRAPHY', 'LEGACY-BRAND'],
+  short: ['PRIVATE-NAME', 'INTERNAL-TERM', 'PROCESS', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'SLOP-CORP', 'SLOP-HOOK', 'SLOP-CONTRAST', 'TYPOGRAPHY', 'HEDGE', 'LEGACY-BRAND'],
+  manifest: ['PRIVATE-NAME', 'INTERNAL-TERM', 'PROCESS', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'SLOP-CORP', 'SLOP-HOOK', 'SLOP-CONTRAST', 'TYPOGRAPHY', 'HEDGE', 'LEGACY-BRAND'],
   comment: ['PRIVATE-NAME', 'PLACEHOLDER', 'ENCODING', 'SLOP'],
   string: ['PRIVATE-NAME', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'TYPOGRAPHY', 'LEGACY-BRAND'],
   technical: ['PRIVATE-NAME', 'PLACEHOLDER', 'ENCODING'],
 };
+
+/**
+ * Files whose whole job is to be read and acted on. They scan as `marketing`
+ * for their body and keep the `short` rules on headings and frontmatter, so a
+ * hook is free and a title still cannot hedge.
+ */
+export const MARKETING_FILES = [
+  /(?:^|\/)launch-playbook\/.*\.md$/,
+  /(?:^|\/)blog\/.*\.mdx?$/,
+  /(?:^|\/)case-studies?\/.*\.mdx?$/,
+  /(?:^|\/)marketing\/.*\.mdx?$/,
+];
 
 export const ALLOW = /(?:language|leak)-gate:\s*allow/i;
 
@@ -499,7 +562,10 @@ export function classify(rel) {
   const ext = path.extname(rel).toLowerCase();
   const base = path.basename(rel);
   if (TECHNICAL.some((p) => p.test(rel))) return { kind: 'technical', ext };
-  if (PROSE_EXT.has(ext) || base === 'LICENSE' || base === 'NOTICE') return { kind: 'prose', ext };
+  if (PROSE_EXT.has(ext) || base === 'LICENSE' || base === 'NOTICE') {
+    const marketing = MARKETING_FILES.some((p) => p.test(rel));
+    return { kind: 'prose', ext, marketing };
+  }
   if (MANIFEST_EXT.has(ext)) return { kind: 'manifest', ext };
   if (CODE_EXT.has(ext)) return { kind: 'code', ext };
   if (ext === '.txt') return { kind: 'prose', ext };
@@ -509,11 +575,17 @@ export function classify(rel) {
 export function scanText(rel, text, kind, ext, options = {}) {
   const findings = [];
   const isChangelog = /(?:^|\/)CHANGELOG\.md$/i.test(rel) || /(?:^|\/)changelog\.mdx$/i.test(rel);
+  const isMarketing = options.marketing ?? MARKETING_FILES.some((p) => p.test(rel));
   let units;
   if (kind === 'technical') {
     units = text.split('\n').map((t, i) => ({ line: i + 1, cls: 'technical', text: t }));
   } else if (kind === 'prose') {
     units = readProse(text);
+    // A marketing page's body prose runs the marketing register. Its headings,
+    // frontmatter and anything already classified `short` keep the short rules.
+    if (isMarketing) {
+      for (const u of units) if (u.cls === 'prose') u.cls = 'marketing';
+    }
   } else if (kind === 'manifest') {
     units = readManifest(text, ext);
   } else {
