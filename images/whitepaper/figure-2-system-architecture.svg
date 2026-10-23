@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="760" viewBox="0 0 1440 760" role="img" aria-labelledby="title desc">
-  <title id="title">NEUS system architecture</title>
+  <title id="title">Proofable system architecture</title>
   <desc id="desc">Integration surfaces send authenticated requests to the verification engine. Modular verifiers produce saved results. Gates evaluate current receipts before protected actions.</desc>
   <defs>
     <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">

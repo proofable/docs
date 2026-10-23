@@ -12,7 +12,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 ### Added
 
 - **Changelog entries for `@proofable/mcp` 0.1.7 and `@proofable/sdk` 0.1.6.**
-- **Eligibility clause in the Terms of Use.** Section 4 states the minimum age and the capacity to contract. The Terms had no eligibility or age statement before.
+- **Eligibility clause in the Terms of Use.** Section 4 states the minimum age and the capacity to contract.
 - **Background jobs keep proofs private and offchain.** [Proofs](/proofs) says that a background job's request for a blockchain record, a public or link-only proof, or a visibility change is refused with `JOB_ONCHAIN_PUBLISH_DENIED`, `JOB_PUBLIC_PROOF_DENIED` or `JOB_VISIBILITY_CHANGE_DENIED`.
 
 ### Changed
@@ -20,7 +20,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 - **One Evidence page.** [Evidence](/evidence) opens on five results: a reused result about 750 times faster than redoing it, 48 of 48 AgentGovBench scenarios beside the agent tools teams already use, every unauthorized action stopped in 8 of 8 live tests, 6 of 6 data-theft attempts refused by a scoped permission in the prompt injection test, and 150 of 150 forged records caught. Its charts switch to a stacked layout on phones. Each result links to its signed record and a way to check or rerun it, and security reviewers get the OWASP, EU AI Act, NIST and CAIP-380 mapping in one section. `/benchmarks` and `/use-cases/authority-at-dispatch` now open it.
 - **Jobs and the hosted computer on every plan; Advanced on Pro.** [Jobs](/jobs) and [Pricing](/pricing) list what a run costs: 1 credit per run on any model or key, hosted tokens by tier, and 2 credits per vCPU for each started minute of a hosted machine. The Advanced hosted tier is on Pro, Partner and Enterprise; any model runs on your own key on every plan.
 - **Two checks you can run on the published records.** `public/evidence/checks/tamper-check.mjs` forges each signed record ten ways and confirms every copy is rejected offline; `reuse-check.mjs` times reading and verifying a finished result with no account.
-- **One current version of the public case set.** Superseded evidence packets are no longer carried alongside the current one, so a reader finds a single up-to-date set.
+- **Public evidence packet.** `/evidence` links to the signed eight-case reproduction packet and offline verification checks.
 - **Jobs run on credits on every plan.** [MCP tools](/mcp/tools) lists the job tools, including `proofable_job_decide`, for every signed-in plan, and the team-agents and reproduce guides no longer say jobs need Pro.
 - **Agent id format is in the schemas.** `agentId` in `agent-identity` and `agent-delegation` is 1 to 128 letters, digits, hyphens or underscores, the same id the agent page uses.
 
@@ -30,8 +30,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Fixed
 
-- **Terms of Use: the limitation of liability now names the correct legal entity.**
-- **Terms of Use: the privacy section contradicted the Privacy Policy.** Section 6 now points at the Privacy Policy as authoritative and lists the categories it documents.
+- **Terms of Use and Privacy Policy updates.** Section 6 of the Terms links directly to the Privacy Policy, and the Privacy Policy documents per-tool inputs, outputs, and third-party destinations.
 - **Privacy Policy: retention bound.** Records held only for operating, securing, or auditing the Service are removed within 24 months of account closure, outside records kept by law, by an open dispute, or on a public network.
 
 ## [0.1.2] - 2026-09-24
@@ -54,10 +53,9 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Changed
 
-- **One description per public surface.** GitHub, npm, registry, and product docs descriptions use the locked surface lines instead of repeating the product line.
+- **One description per public surface.** GitHub, npm, registry, and product docs descriptions each describe what that surface provides.
 - **Builder docs lead with inline gates.** `defineGate` and subject `gateCheck` first; a published `gateId` is optional.
 - **Pay-per-call documents x402** on both `GET` and `POST /api/v1/proofs/check`, plus verification and access-grant.
-- Use-case examples use generic agent names.
 - Contributor and verifier-proposal pages describe this repository only, so a reader knows which surface they are on.
 
 ## [0.1.0] - 2026-09-06

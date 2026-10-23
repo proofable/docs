@@ -8,7 +8,7 @@
 :root {
   color-scheme: light;
 
-  /* Brand primitives — same RGB in both themes. Semantic use remaps below. */
+  /* Brand primitives: same RGB in both themes. Semantic use remaps below. */
   --proofable-rgb-accent-primary: 152 192 239;
   --proofable-rgb-accent-primary-dim: 61 114 201;
   --proofable-rgb-accent-primary-dark: 47 80 151;
@@ -17,7 +17,7 @@
   --proofable-rgb-ink-edge: 52 54 60;
   --proofable-rgb-paper: 255 255 255;
 
-  /* Light surfaces — Bone / paper (themeLight in neus.tokens.json). */
+  /* Light surfaces: Bone / paper. */
   --proofable-rgb-surface-canvas: 245 244 241;
   --proofable-rgb-surface-rail: 237 236 233;
   --proofable-rgb-surface-card: 252 252 251;

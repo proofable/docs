@@ -1,4 +1,4 @@
-/* Proofable Mintlify skin — tokens colocated in docs/ (Mintlify CDN does not resolve ../examples imports). */
+/* Proofable Mintlify skin: tokens colocated in docs/ (Mintlify CDN does not resolve ../examples imports). */
 @import url('./proofable-tokens.css');
 
 /* Docs stay quiet so task content, code, and navigation carry the hierarchy. */
@@ -17,7 +17,7 @@ html {
 }
 
 /*
-  Mintlify decorative overlays only — never match [class*="shadow"] (breaks sidebar links
+  Mintlify decorative overlays only: never match [class*="shadow"] (breaks sidebar links
   with Tailwind text-shadow utilities) or broad gradient/backdrop selectors on <a>.
   Mintlify moved from bg-gradient-to-* to bg-linear-to-* (Tailwind v4); match both.
 */
@@ -46,7 +46,7 @@ main > span.absolute.inset-0.overflow-hidden.pointer-events-none:not(#background
 }
 
 /*
-  Frosted docs header — use Mintlify #navbar-transition as the glass plate (do not hide it).
+  Frosted docs header: use Mintlify #navbar-transition as the glass plate (do not hide it).
   Interactive chrome stays above the plate; no extra drop shadows on the shell.
 */
 #navbar {
@@ -117,8 +117,8 @@ main > span.absolute.inset-0.overflow-hidden.pointer-events-none:not(#background
 }
 
 /*
-  Header logo — primary mark only (full particle depth).
-  Mintlify h-7 (28px) makes the ring/particles sub-pixel mush.
+  Header logo: primary mark.
+  Display at 48px.
   docs.json serves a trim-cropped supersampled primary PNG; display at 48px.
 */
 #navbar a.select-none {
@@ -139,7 +139,7 @@ main > span.absolute.inset-0.overflow-hidden.pointer-events-none:not(#background
   object-fit: contain !important;
   flex-shrink: 0 !important;
   image-rendering: auto !important;
-  /* Hairline halo on dark only — light bone already reads the Arctic mark. */
+  /* Hairline halo on dark only: light bone already reads the Arctic mark. */
   filter: var(--proofable-logo-halo) !important;
   transform: translateZ(0);
 }
@@ -155,7 +155,7 @@ html.dark #navbar img.nav-logo[alt="light logo"] {
 @media (min-width: 1024px) {
   /*
     Mintlify row 1: one flex-1 wrapper containing logo | search | actions.
-    Target direct children only — the wrapper also has flex-1 + gap-x-4 and must stay full width.
+    Target direct children only: the wrapper also has flex-1 + gap-x-4 and must stay full width.
   */
   #navbar .flex.items-center.lg\:px-12.h-16 > .h-full.relative.flex-1 {
     display: flex !important;
@@ -200,7 +200,7 @@ html.dark #navbar img.nav-logo[alt="light logo"] {
     white-space: nowrap;
   }
 
-  /* Tab strip — no full-width rule (design: spacing only, never section dividers). */
+  /* Tab strip: no full-width rule (design: spacing only, never section dividers). */
   #navbar .hidden.lg\:flex.px-12.h-12 {
     width: 100% !important;
     border-top: none !important;
@@ -216,7 +216,7 @@ html.dark #navbar img.nav-logo[alt="light logo"] {
     gap: 0.25rem !important;
   }
 
-  /* Kill Mintlify hairline underlines — selected state is fill + accent text. */
+  /* Kill Mintlify hairline underlines: selected state is fill + accent text. */
   #navbar .nav-tabs a.nav-tabs-item > div.absolute.bottom-0,
   #navbar .nav-tabs a.nav-tabs-item > div.h-\[1\.5px\] {
     display: none !important;
@@ -235,7 +235,7 @@ html.dark #navbar img.nav-logo[alt="light logo"] {
     align-self: center !important;
     width: auto !important;
     flex: 0 0 auto !important;
-    /* Kill Mintlify h-full — full-row height makes any rim read as an underline. */
+    /* Kill Mintlify h-full: full-row height makes any rim read as an underline. */
     height: 2rem !important;
     max-height: 2rem !important;
     min-height: 2rem !important;
@@ -264,7 +264,7 @@ html.dark #navbar img.nav-logo[alt="light logo"] {
   }
 
   /*
-    Selected tab — quiet plate fill, theme ink, no accent wash.
+    Selected tab: quiet plate fill, theme ink, no accent wash.
   */
   #navbar .nav-tabs a.nav-tabs-item[aria-current],
   #navbar .nav-tabs a.nav-tabs-item[data-active="true"],
@@ -318,7 +318,7 @@ html.dark #navbar img.nav-logo[alt="light logo"] {
 }
 
 /*
-  Active sidebar item — quiet plate fill, no accent wash.
+  Active sidebar item: quiet plate fill, no accent wash.
   Matches the app selected-row soft fill.
 */
 #navigation-items a[aria-current="page"],
@@ -377,7 +377,7 @@ body {
 }
 
 /*
-  Layout — Mintlify ships flex-col on #content-area without display:flex, which
+  Layout: Mintlify ships flex-col on #content-area without display:flex, which
   collapses the column to ~243px and breaks card grids + three-column balance.
 */
 #content-container > .flex.flex-row-reverse {
@@ -419,7 +419,7 @@ body {
   max-width: 100% !important;
 }
 
-/* Mintlify prose grays — lift to Proofable tokens */
+/* Mintlify prose grays: lift to Proofable tokens */
 .prose.mdx-content,
 .mdx-content.prose {
   --tw-prose-body: var(--proofable-text-primary);
@@ -441,7 +441,7 @@ blockquote.sr-only:has(a[href*="llms.txt"]) * {
 }
 
 /*
-  Text selection — scoped to readable content only (do not fight nav/sidebar chrome).
+  Text selection: scoped to readable content only (do not fight nav/sidebar chrome).
   Mintlify sets -webkit-user-select: none globally; beat it inside MDX/prose only.
 */
 #body-content,
@@ -598,7 +598,7 @@ button,
   color: var(--proofable-text-muted) !important;
 }
 
-/* No zebra rows — flat spacing only (match app lists). */
+/* No zebra rows: flat spacing only (match app lists). */
 .mdx-content tbody tr:nth-child(even) {
   background: transparent !important;
 }
@@ -649,7 +649,7 @@ footer a[href*="mintlify"] span {
 }
 
 /*
-  Shell — transparent wash-through on content column only.
+  Shell: transparent wash-through on content column only.
   Left tabs + sidebar: no Proofable overrides (Mintlify defaults). Do not set position on #sidebar/#navbar.
 */
 #header,
@@ -672,7 +672,7 @@ footer {
 
 /*
   Left nav: space between tab row (navbar) and first sidebar section label.
-  Mintlify’s top fade scrim was removed — replace with intentional padding (20px desktop).
+  Mintlify’s top fade scrim was removed: replace with intentional padding (20px desktop).
 */
 @media (min-width: 1024px) {
   #navigation-items {
@@ -866,7 +866,7 @@ a#topbar-cta-button:focus-visible,
 }
 
 /*
-  Page rhythm — one vertical scale. Body copy sits one step under the page
+  Page rhythm: one vertical scale. Body copy sits one step under the page
   subtitle; a section heading sits two steps above its grid. Before this the
   gaps were 20 / 33 / 16.5px with no relationship to each other.
 */
@@ -926,7 +926,7 @@ a#topbar-cta-button:focus-visible,
   Cards lead with one mark, then a title, then a line of body. The icon is a
   visual affordance, not decoration: one glyph per card, all in the same slot
   and the same size, in the system's graphite ink. No icon tile, no accent
-  wash, no brand-color glyph — the mark carries the card, the copy explains it.
+  wash, no brand-color glyph: the mark carries the card, the copy explains it.
 */
 .card [data-component-part="card-icon"],
 .card-group .card [data-component-part="card-icon"] {

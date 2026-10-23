@@ -493,7 +493,7 @@ async function verify(dirArg) {
     if (!ok) failures += 1;
     rows.push([name, ok ? 'PASS' : 'FAIL', `${envelopes.length - bad}/${envelopes.length} envelopes`]);
   }
-  console.log(`run ${manifest.run_id} · revision ${manifest.product_revision} · custody ${manifest.custody}`);
+  console.log(`run ${manifest.run_id}, revision ${manifest.product_revision}, custody ${manifest.custody}`);
   for (const r of rows) console.log(`${r[0].padEnd(24)} ${r[1].padEnd(8)} ${r[2]}`);
   console.log(failures ? `\n${failures} failure(s)` : '\nall checks pass');
   process.exitCode = failures ? 1 : 0;
