@@ -14,10 +14,10 @@
  *              comments are read, because the raw file is public)
  *   marketing  the body of a page whose job is to be read and acted on (a
  *              launch post, blog post, case study, landing page). It runs the
- *              generated-text, contrast, typography and private-name rules,
- *              and is exempt from the docs-neutrality rules: SLOP-CORP,
- *              SLOP-HOOK, HEDGE, UNDERSELL and PROCESS. Headings and
- *              frontmatter on the same file still scan as `short`.
+ *              filler, contrast, typography and private-name rules, and skips
+ *              the docs-neutrality rules: SLOP-HOOK, HEDGE, UNDERSELL and
+ *              PROCESS. Headings and frontmatter on the same file still scan
+ *              as `short`.
  *   short      the one-line surfaces: headings, frontmatter titles and
  *              descriptions, manifest descriptions, tool and API descriptions
  *   manifest   description, summary, title and label fields in JSON and YAML
@@ -32,13 +32,11 @@
  *                   product does: build steps, review steps, branch movement
  *   PLACEHOLDER     to-do markers, filler text and other unfinished text
  *   ENCODING        mojibake and replacement characters
- *   SLOP            generated-text tells and filler vocabulary, throat-
+ *   SLOP            filler vocabulary and generated-text tells, throat-
  *                   clearing, contrast formulas, weasel attribution, recap
  *                   endings. Banned on every surface including marketing.
- *   SLOP-CORP       empty corporate puff that a marketing surface may use when
- *                   it lands (empower, secure and scalable). Docs and UI only.
- *   SLOP-HOOK       opener and framing devices that work in a hook and read as
- *                   ceremony in docs (in a world where, what if). Docs only.
+ *   SLOP-HOOK       openers and framing that carry no information. Docs, UI
+ *                   and manifests only; a marketing surface may open with one.
  *   TYPOGRAPHY      em dashes, en dashes and middle dots used as separators
  *   HEDGE           underselling in a one-line surface
  *   UNDERSELL       a narrative page that closes on what the product lacks
@@ -171,34 +169,33 @@ export const ENCODING = [
 ];
 
 /**
- * Filler vocabulary, split by why a word is banned so each register can take
- * the list it needs. One flat list served docs, UI and marketing alike, which
- * banned hook language on the surfaces whose whole job is to be read.
+ * Filler vocabulary. Two lists, one rule each.
  *
- *   SLOP_AI     generated-text tells and empty praise. Banned everywhere.
- *   SLOP_CORP   empty corporate puff. Banned on docs, UI and labels; a
- *               marketing surface may use it when it lands, so `marketing`
- *               does not run this list.
- *   SLOP_HOOK   opener and framing devices that work in a hook and read as
- *               ceremony in documentation. Allowed in `marketing` only.
+ *   SLOP       empty praise and words that mean nothing. Banned on every
+ *              surface, marketing included, because a buyer's ad and a doc
+ *              page both read worse with them.
+ *   SLOP_HOOK  content-free openers. Banned in docs and UI; a marketing
+ *              surface may open with them, so `marketing` does not run it.
+ *
+ * Strong, specific words are NOT on either list. "Transformative", "secure",
+ * "scalable", "best-in-class", "battle-tested", "state-of-the-art" and
+ * "world-class" are accurate claims a buyer searches for. Banning them cost
+ * reach for no gain, so they read as normal English again.
  */
-export const SLOP_AI =
-  /(?<![\w-])(?:seamless(?:ly)?|robust(?:ly|ness)?|comprehensive(?:ly)?|cutting-edge|next-generation|revolutioni[sz]e|revolutionary|transformative|future-proof|holistic|effortless(?:ly)?|leverag(?:e|es|ed|ing)|innovative|supercharg(?:e|es|ed|ing)|game[- ]chang(?:er|ing)|delve(?:s|d)?|tapestry|paradigm|unleash(?:es|ed|ing)?|elevat(?:e|es|ed|ing)|AI[- ]powered|intelligent layer|trust fabric|unified platform|foster(?:s|ed|ing)?|utili[sz](?:e|es|ed|ing)|facilitat(?:e|es|ed|ing)|streamlin(?:e|es|ed|ing)|realm|beacon|multifaceted|meticulous(?:ly)?|intricate|paramount|embark(?:s|ed|ing)?|ever-evolving|state-of-the-art|best-in-class|world-class|battle-tested|blazing(?:ly)? fast|turnkey|synerg(?:y|ies|istic))(?![\w-])/i;
-
-export const SLOP_CORP =
-  /(?<![\w-])(?:empower(?:s|ed|ing)?|secure and scalable|the future of|in a world where|imagine a world)(?![\w-])/i;
+export const SLOP =
+  /(?<![\w-])(?:seamless(?:ly)?|robust(?:ly|ness)?|comprehensive(?:ly)?|effortless(?:ly)?|leverag(?:e|es|ed|ing)|unleash(?:es|ed|ing)?|supercharg(?:e|es|ed|ing)|game[- ]chang(?:er|ing)|delve(?:s|d)?|tapestry|paradigm|elevat(?:e|es|ed|ing)|AI[- ]powered|intelligent layer|trust fabric|unified platform|foster(?:s|ed|ing)?|utiliz(?:e|es|ed|ing)|utilis(?:e|es|ed|ing)|facilitat(?:e|es|ed|ing)|streamlin(?:e|es|ed|ing)|realm|beacon|multifaceted|meticulous(?:ly)?|paramount|embark(?:s|ed|ing)?|ever-evolving|turnkey|synerg(?:y|ies|istic))(?![\w-])/i;
 
 /**
- * Opener and framing devices that work in a hook and read as ceremony in docs.
- * Only phrasings that carry no literal meaning: a bare "meet the" or "what if"
- * is a hook, but "meet the WCAG target size" is a fact, so the generic verb
- * phrases stay out of this list.
+ * Openers and framing that carry no information. A marketing surface may use
+ * them because that is what a hook is; a doc page must not.
  */
 export const SLOP_HOOK =
-  /(?<![\w-])(?:in a world where|imagine a world|imagine if|the next era of|say hello to|say goodbye to|welcome to the future)(?![\w-])/i;
+  /(?<![\w-])(?:in a world where|imagine a world|imagine if|say hello to|say goodbye to|welcome to the future|at the end of the day|when it comes to|moving forward|circle back|deep dive into|take a step back)(?![\w-])/i;
 
-/** Kept as the union for callers that read it directly; the class map decides what runs. */
-export const SLOP_WORDS = SLOP_AI;
+/** Read by callers that predate the split; the class map decides what runs. */
+export const SLOP_AI = SLOP;
+export const SLOP_CORP = SLOP_HOOK;
+export const SLOP_WORDS = SLOP;
 
 /** Throat-clearing, setups, puffery, weasel attribution and recaps. */
 export const SLOP_PHRASES = [
@@ -265,6 +262,11 @@ export const UNDERSELL = [
  * The predecessor brand used as if it were the product. The legal entity,
  * package names, the frozen signing format, deployed contract names, the
  * registered trademark line and historical release tables stay.
+ *
+ * This does NOT run on `marketing`: telling the build story requires naming the
+ * predecessor ("nearly two years, first as NEUS"), so the old brand in a launch
+ * post, blog post or case study is required copy, not a defect. Docs, UI and
+ * manifests must never show it, and there it stays banned.
  */
 export const LEGACY_BRAND = [
   /(?<!Connect to )\bNEUS\b(?! Network, Inc| Network|®|-v1\b|Verifier|Voucher|Token|Proof\b| Sponsor Grant| Profile Update Request|\.tokens|_)(?![\w/@-])/,
@@ -276,8 +278,7 @@ const RULES = {
   PROCESS,
   PLACEHOLDER,
   ENCODING,
-  SLOP: [SLOP_AI, ...SLOP_PHRASES],
-  'SLOP-CORP': [SLOP_CORP],
+  SLOP: [SLOP, ...SLOP_PHRASES],
   'SLOP-HOOK': [SLOP_HOOK],
   'SLOP-CONTRAST': SLOP_CONTRAST,
   TYPOGRAPHY,
@@ -291,17 +292,17 @@ const RULES = {
  *
  * `marketing` is the register for a surface whose job is to be read and acted
  * on: a blog post, a launch post, a case study, a landing page, an ad. It runs
- * the generated-text tells (SLOP), the contrast and typography rules, the
- * private-name and placeholder rules, and the legacy-brand rule. It does NOT
- * run SLOP-CORP, SLOP-HOOK, HEDGE, UNDERSELL or PROCESS, because those exist to
- * keep documentation neutral and a marketing surface is not documentation.
- * Docs, UI, labels and manifests keep every rule they had.
+ * the two rules that matter everywhere (generated-text filler, and the contrast
+ * and typography rules), plus the private-name, placeholder and legacy-brand
+ * guards. It does NOT run SLOP-HOOK, HEDGE, UNDERSELL or PROCESS, because those
+ * exist to keep documentation neutral and a marketing surface is not
+ * documentation. Docs, UI, labels and manifests keep every rule they had.
  */
 const CLASS_RULES = {
-  prose: ['PRIVATE-NAME', 'INTERNAL-TERM', 'PROCESS', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'SLOP-CORP', 'SLOP-HOOK', 'SLOP-CONTRAST', 'TYPOGRAPHY', 'UNDERSELL'],
-  marketing: ['PRIVATE-NAME', 'INTERNAL-TERM', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'SLOP-CONTRAST', 'TYPOGRAPHY', 'LEGACY-BRAND'],
-  short: ['PRIVATE-NAME', 'INTERNAL-TERM', 'PROCESS', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'SLOP-CORP', 'SLOP-HOOK', 'SLOP-CONTRAST', 'TYPOGRAPHY', 'HEDGE', 'LEGACY-BRAND'],
-  manifest: ['PRIVATE-NAME', 'INTERNAL-TERM', 'PROCESS', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'SLOP-CORP', 'SLOP-HOOK', 'SLOP-CONTRAST', 'TYPOGRAPHY', 'HEDGE', 'LEGACY-BRAND'],
+  prose: ['PRIVATE-NAME', 'INTERNAL-TERM', 'PROCESS', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'SLOP-HOOK', 'SLOP-CONTRAST', 'TYPOGRAPHY', 'UNDERSELL'],
+  marketing: ['PRIVATE-NAME', 'INTERNAL-TERM', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'SLOP-CONTRAST', 'TYPOGRAPHY'],
+  short: ['PRIVATE-NAME', 'INTERNAL-TERM', 'PROCESS', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'SLOP-HOOK', 'SLOP-CONTRAST', 'TYPOGRAPHY', 'HEDGE', 'LEGACY-BRAND'],
+  manifest: ['PRIVATE-NAME', 'INTERNAL-TERM', 'PROCESS', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'SLOP-HOOK', 'SLOP-CONTRAST', 'TYPOGRAPHY', 'HEDGE', 'LEGACY-BRAND'],
   comment: ['PRIVATE-NAME', 'PLACEHOLDER', 'ENCODING', 'SLOP'],
   string: ['PRIVATE-NAME', 'PLACEHOLDER', 'ENCODING', 'SLOP', 'TYPOGRAPHY', 'LEGACY-BRAND'],
   technical: ['PRIVATE-NAME', 'PLACEHOLDER', 'ENCODING'],

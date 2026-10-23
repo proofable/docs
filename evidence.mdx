@@ -7,31 +7,76 @@ icon: certificate
 
 With Proofable, every finished agent job carries a signed receipt. The next agent checks the receipt instead of paying to redo the job.
 
-## What it saves you
+## At a glance
 
-<img className="block dark:hidden" src="/images/evidence/save-reuse-light.svg" alt="750 times faster to check a Proofable receipt than to redo the job: redoing it took 2.79 seconds, checking the receipt took 3.7 milliseconds." />
-<img className="hidden dark:block" src="/images/evidence/save-reuse-dark.svg" alt="750 times faster to check a Proofable receipt than to redo the job: redoing it took 2.79 seconds, checking the receipt took 3.7 milliseconds." />
-<img className="block dark:hidden" src="/images/evidence/save-reuse-stacked-light.svg" alt="750 times faster to check a Proofable receipt than to redo the job: redoing it took 2.79 seconds, checking the receipt took 3.7 milliseconds." />
-<img className="hidden dark:block" src="/images/evidence/save-reuse-stacked-dark.svg" alt="750 times faster to check a Proofable receipt than to redo the job: redoing it took 2.79 seconds, checking the receipt took 3.7 milliseconds." />
+Every number below comes from a run you can repeat yourself. Each row names what it was measured against and where to check it.
+
+| What we measured | Result | Measured against | Check it |
+|---|---|---|---|
+| Time to check a finished job | **3.7 ms** | 2.79 s to redo the same job | [Time it yourself](#run-it-yourself) |
+| AI tokens to check a finished job | **0** | 2,426 tokens to redo it | [Time it yourself](#run-it-yourself) |
+| Agent-governance scenarios handled | **48 of 48** | 13 for the agent tools on their own | [AgentGovBench detail](#how-the-agentgovbench-run-works) |
+| Permission tests on the live service | **8 of 8** | Every out-of-permission action stopped before it ran | [The eight live tests](#the-eight-live-tests) |
+| Exfiltration attempts refused after a takeover | **6 of 6** | 6 of 6 got through on an all-purpose key | [What a takeover could send out](#what-a-takeover-could-send-out) |
+| Forged records caught | **150 of 150** | A format-only check accepted all 150 | [Try to fake a record](#try-to-fake-a-record) |
+
+## What one check costs you
+
+<img className="evid-light evid-wide" src="/images/evidence/save-reuse-light.svg" alt="750 times faster to check a Proofable receipt than to redo the job: redoing it took 2.79 seconds and 2,426 AI tokens, checking the receipt took 3.7 milliseconds and no tokens." />
+<img className="evid-dark evid-wide" src="/images/evidence/save-reuse-dark.svg" alt="750 times faster to check a Proofable receipt than to redo the job: redoing it took 2.79 seconds and 2,426 AI tokens, checking the receipt took 3.7 milliseconds and no tokens." />
+<img className="evid-light evid-tall" src="/images/evidence/save-reuse-stacked-light.svg" alt="750 times faster to check a Proofable receipt than to redo the job: redoing it took 2.79 seconds and 2,426 AI tokens, checking the receipt took 3.7 milliseconds and no tokens." />
+<img className="evid-dark evid-tall" src="/images/evidence/save-reuse-stacked-dark.svg" alt="750 times faster to check a Proofable receipt than to redo the job: redoing it took 2.79 seconds and 2,426 AI tokens, checking the receipt took 3.7 milliseconds and no tokens." />
 
 One finished agent job on the live service, timed October 20, 2026. Redoing it also used 2,426 AI tokens; checking the receipt used none.
 
+*Both figures are measured on the same record. The 750 times multiplier is 2.79 s divided by 3.7 ms, the median of ten runs. Self-run: measured by Proofable.*
+
 ## What it stops
 
-<img className="block dark:hidden" src="/images/evidence/stop-tools-light.svg" alt="48 of 48 agent governance scenarios for Proofable beside the agent tools teams already use: on their own they handled 13, Cursor with the ACP gateway 37, and Claude Code or Codex with ACP 43." />
-<img className="hidden dark:block" src="/images/evidence/stop-tools-dark.svg" alt="48 of 48 agent governance scenarios for Proofable beside the agent tools teams already use: on their own they handled 13, Cursor with the ACP gateway 37, and Claude Code or Codex with ACP 43." />
-<img className="block dark:hidden" src="/images/evidence/stop-tools-stacked-light.svg" alt="48 of 48 agent governance scenarios for Proofable beside the agent tools teams already use: on their own they handled 13, Cursor with the ACP gateway 37, and Claude Code or Codex with ACP 43." />
-<img className="hidden dark:block" src="/images/evidence/stop-tools-stacked-dark.svg" alt="48 of 48 agent governance scenarios for Proofable beside the agent tools teams already use: on their own they handled 13, Cursor with the ACP gateway 37, and Claude Code or Codex with ACP 43." />
+<img className="evid-light evid-wide" src="/images/evidence/stop-tools-light.svg" alt="48 of 48 AgentGovBench agent-governance scenarios handled by Proofable, against the agent tools teams already use: on their own they handled 13, Cursor with the ACP gateway 37, and Claude Code or Codex with ACP 43." />
+<img className="evid-dark evid-wide" src="/images/evidence/stop-tools-dark.svg" alt="48 of 48 AgentGovBench agent-governance scenarios handled by Proofable, against the agent tools teams already use: on their own they handled 13, Cursor with the ACP gateway 37, and Claude Code or Codex with ACP 43." />
+<img className="evid-light evid-tall" src="/images/evidence/stop-tools-stacked-light.svg" alt="48 of 48 AgentGovBench agent-governance scenarios handled by Proofable, against the agent tools teams already use: on their own they handled 13, Cursor with the ACP gateway 37, and Claude Code or Codex with ACP 43." />
+<img className="evid-dark evid-tall" src="/images/evidence/stop-tools-stacked-dark.svg" alt="48 of 48 AgentGovBench agent-governance scenarios handled by Proofable, against the agent tools teams already use: on their own they handled 13, Cursor with the ACP gateway 37, and Claude Code or Codex with ACP 43." />
+
+*Benchmark: [AgentGovBench](https://github.com/agentic-control-plane/agentgovbench), the open 48-scenario agent-governance library. Proofable's row is self-run, measured by Proofable on October 20, 2026 against the policy code the live service runs. The comparison rows are the maintainers' published results on the earlier library. Same scenarios and scorer, different setups, so read this as what each approach covers and not as a ranking.*
 
 AgentGovBench is the open benchmark for agent governance: 48 scenarios such as a sub-agent reaching past its parent's limits or one customer's data reaching another. The agent-tool rows are the maintainers' published results on the earlier version of the library, where Claude Code, Codex CLI and Cursor each handle 13 on their own. On the current version, run October 20, 2026 against the policy code the live service runs, Proofable handles all 48 and ACP, the maintainers' own gateway, handles 46.
 
+### The eight live tests
+
 **8 of 8 permission tests passed on the live service.** Every action outside the agent's permission was stopped before it ran, and the actions it was allowed to take ran.
+
+We ran each test on the live service on October 8, 2026, with a dedicated agent under its own fixed permission. Each link opens that test's signed record.
+
+| Test | What happened |
+|---|---|
+| [Permission granted](https://proofable.me/proof/0x64f293e61b826e03bd1de6564fc2db8cec0f50390bafc8bdf162ec9961262fca) | Ran and completed |
+| [Action outside the permission](https://proofable.me/proof/0xffdc0455b72732a8c6a31eb4e2861943b85dbc271fe2dfa8b18d0e85d2b33726) | Stopped before it ran |
+| [Needs approval, approved](https://proofable.me/proof/0xe662eaa54a5e3d7875827794d6a69b4e86973fee49cfa71e555f821d5ed28c35) | Held until approved, then ran |
+| [Needs approval, nobody answers](https://proofable.me/proof/0x6c53cb0005c9dc30fde5bb1bd06860d74ae51790be3869a6605bfc9f71e01954) | Never ran; a late approval was refused |
+| [Permission revoked](https://proofable.me/proof/0x8a3e5ff89c8a86423bae61db96c9732f319a6f6cdb34f4bde560c90d25366c95) | Stopped; no job created |
+| [Permission expired](https://proofable.me/proof/0xf1880cba0876acc2364e31892b261a47299c0a70177b61b32d465fcd1b61447a) | Stopped; no job created |
+| [Revoked permission reused](https://proofable.me/proof/0x1d987781eb519337fa9e62043831ee187340f6e589f217b16b99ed98be5acfbc) | Stopped every time |
+| [Revoked mid-job](https://proofable.me/proof/0x05ef986ee3817a6fd56b327b1de3523ab7f65c11c4ff386d34c16f93d11c0045) | The running step finished; the next was stopped |
+
+### What a takeover could send out
 
 **When an agent was taken over, a scoped permission refused 6 of 6 attempts to send private data out, before they ran; an all-purpose key let all 6 through.** The scoped agent still finished every task and never used a tool it did not need; under the all-purpose key, 14 of 36 runs did. Self-run: 84 runs, five published attack templates, two models, a signed record for each run. [Run the test on your own agent](https://github.com/proofable/mcp/tree/main/examples/injection-test).
 
+## Try to fake a record
+
 **150 of 150 forged records caught.** We changed each of our 15 real records ten ways. Every changed copy failed verification and every real record passed.
 
-## Test it in a minute
+This check takes the 15 real records and changes each one ten ways, such as editing the content, swapping the owner or flipping one bit of the signature. Then it verifies every copy. All 150 changed copies fail and all 15 real records pass. A check that only looks at the format would accept every changed copy.
+
+```sh
+git clone --depth 1 https://github.com/proofable/docs
+cd docs/public/evidence/checks
+npm install
+node tamper-check.mjs
+```
+
+## Run it yourself
 
 Time a reuse on your own machine, with no account and no API key:
 
@@ -46,41 +91,53 @@ It reads a finished agent job by its id, verifies the signed receipt locally, an
 
 To put receipts on your own agent's work, [add Proofable to your AI tool](/mcp/setup).
 
+To rerun the same eight tests on any account you control, create an access key under [Profile, Account tab, Access keys](https://proofable.me/profile?tab=account), then:
+
+```sh
+git clone --depth 1 https://github.com/proofable/docs
+cd docs/public/evidence/aaif/authority-at-dispatch/reproduce
+npm install
+export PROOFABLE_ACCESS_KEY=npk_...
+export AAD_OPERATOR="Your Organization"
+node aad.mjs setup
+node aad.mjs run
+node aad.mjs verify runs/<run-id>
+```
+
+The same records are part of the [AAIF Identity & Trust working-group comparison](https://github.com/aaif/wg-identity-and-trust/issues/13) at the Linux Foundation.
+
+## How the AgentGovBench run works
+
+[AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) is an open library of 48 agent-governance scenarios in eight areas: audit completeness, cross-tenant isolation, delegation provenance, fail-mode discipline, identity propagation, per-user policy, rate limits and scope inheritance. Each scenario is tagged with the NIST AI RMF controls it tests. Its maintainers revised the library in October 2026 so that nothing passes on a technicality.
+
+We ran the current library (commit `479c5f0`) against the exact policy code the live service runs, matched to it by hash, next to a gate that allows everything and no governance at all. The run called that code directly, so it measures the decision logic rather than the hosted service end to end. Last run: October 20, 2026.
+
+| Setup, current library | Scenarios handled |
+|---|---|
+| Proofable policy engine | 48 of 48 |
+| ACP, the maintainers' gateway, live ([published run](https://github.com/agentic-control-plane/agentgovbench/actions/runs/37759892335)) | 46 of 48 |
+| A gate that allows everything | 20 of 48 |
+| No governance | 5 of 48 |
+
+On the earlier library (commit `e0ce93a`) the same engine also handles 48 of 48, where the maintainers measured the agent tools teams already use:
+
+| Setup, earlier library | Scenarios handled |
+|---|---|
+| Proofable policy engine | 48 of 48 |
+| Anthropic Agent SDK with the ACP gateway | 46 of 48 |
+| OpenAI Agents SDK with the ACP gateway | 45 of 48 |
+| Claude Code or Codex CLI with ACP hooks | 43 of 48 |
+| CrewAI or LangGraph with the ACP gateway | 40 of 48 |
+| Cursor with ACP over MCP | 37 of 48 |
+| Claude Code, Codex CLI, Cursor, the OpenAI or Anthropic agent SDK, CrewAI or LangGraph on its own | 13 of 48 |
+
+The agent-tool rows are the maintainers' [published results](https://github.com/agentic-control-plane/agentgovbench/tree/main/results), run end to end against their gateway and not re-measured on the current library. The Proofable rows call the policy code directly. The scenarios and scorer are the same and the setups are not, so read the tables as a comparison of what each approach covers, not as a ranking. Proofable also handles the one scenario ACP declines: holding a sub-agent to a narrower task than its parent.
+
 ## Details for reviewers
 
 <AccordionGroup>
   <Accordion title="The reuse timing">
-    [This record](https://proofable.me/proof/0xcf67dcc3cc9c203136daf9905a422601652fd76cce437e2cbf56967e3a8117e6) is a finished agent job from the live service. Producing it took 2.79 s and 2,426 AI tokens. On October 20, 2026, verifying its signature offline took 3.7 ms, the median of ten runs, with no account and no AI tokens. The command in [Test it in a minute](#test-it-in-a-minute) repeats the measurement.
-  </Accordion>
-
-  <Accordion title="The eight live tests">
-    We ran each test on the live service on October 8, 2026, with a dedicated agent under its own fixed permission. Each link opens that test's signed record.
-
-    | Test | What happened |
-    |---|---|
-    | [Permission granted](https://proofable.me/proof/0x64f293e61b826e03bd1de6564fc2db8cec0f50390bafc8bdf162ec9961262fca) | Ran and completed |
-    | [Action outside the permission](https://proofable.me/proof/0xffdc0455b72732a8c6a31eb4e2861943b85dbc271fe2dfa8b18d0e85d2b33726) | Stopped before it ran |
-    | [Needs approval, approved](https://proofable.me/proof/0xe662eaa54a5e3d7875827794d6a69b4e86973fee49cfa71e555f821d5ed28c35) | Held until approved, then ran |
-    | [Needs approval, nobody answers](https://proofable.me/proof/0x6c53cb0005c9dc30fde5bb1bd06860d74ae51790be3869a6605bfc9f71e01954) | Never ran; a late approval was refused |
-    | [Permission revoked](https://proofable.me/proof/0x8a3e5ff89c8a86423bae61db96c9732f319a6f6cdb34f4bde560c90d25366c95) | Stopped; no job created |
-    | [Permission expired](https://proofable.me/proof/0xf1880cba0876acc2364e31892b261a47299c0a70177b61b32d465fcd1b61447a) | Stopped; no job created |
-    | [Revoked permission reused](https://proofable.me/proof/0x1d987781eb519337fa9e62043831ee187340f6e589f217b16b99ed98be5acfbc) | Stopped every time |
-    | [Revoked mid-job](https://proofable.me/proof/0x05ef986ee3817a6fd56b327b1de3523ab7f65c11c4ff386d34c16f93d11c0045) | The running step finished; the next was stopped |
-
-    To rerun the same eight tests on any account you control, create an access key under [Profile, Account tab, Access keys](https://proofable.me/profile?tab=account), then:
-
-    ```sh
-    git clone --depth 1 https://github.com/proofable/docs
-    cd docs/public/evidence/aaif/authority-at-dispatch/reproduce
-    npm install
-    export PROOFABLE_ACCESS_KEY=npk_...
-    export AAD_OPERATOR="Your Organization"
-    node aad.mjs setup
-    node aad.mjs run
-    node aad.mjs verify runs/<run-id>
-    ```
-
-    The same records are part of the [AAIF Identity & Trust working-group comparison](https://github.com/aaif/wg-identity-and-trust/issues/13) at the Linux Foundation.
+    [This record](https://proofable.me/proof/0xcf67dcc3cc9c203136daf9905a422601652fd76cce437e2cbf56967e3a8117e6) is a finished agent job from the live service. Producing it took 2.79 s and 2,426 AI tokens. On October 20, 2026, verifying its signature offline took 3.7 ms, the median of ten runs, with no account and no AI tokens. The command in [Run it yourself](#run-it-yourself) repeats the measurement.
   </Accordion>
 
   <Accordion title="Verify every record offline">
@@ -93,44 +150,6 @@ To put receipts on your own agent's work, [add Proofable to your AI tool](/mcp/s
     npm install @proofable/sdk@0.1.6
     node verify-portable-proofs.mjs
     ```
-  </Accordion>
-
-  <Accordion title="Try to fake a record">
-    This check takes the 15 real records and changes each one ten ways, such as editing the content, swapping the owner or flipping one bit of the signature. Then it verifies every copy. All 150 changed copies fail and all 15 real records pass. A check that only looks at the format would accept every changed copy.
-
-    ```sh
-    git clone --depth 1 https://github.com/proofable/docs
-    cd docs/public/evidence/checks
-    npm install
-    node tamper-check.mjs
-    ```
-  </Accordion>
-
-  <Accordion title="How the AgentGovBench run works">
-    [AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) is an open library of 48 agent-governance scenarios in eight areas: audit completeness, cross-tenant isolation, delegation provenance, fail-mode discipline, identity propagation, per-user policy, rate limits and scope inheritance. Each scenario is tagged with the NIST AI RMF controls it tests. Its maintainers revised the library in October 2026 so that nothing passes on a technicality.
-
-    We ran the current library (commit `479c5f0`) against the exact policy code the live service runs, matched to it by hash, next to a gate that allows everything and no governance at all. The run called that code directly, so it measures the decision logic rather than the hosted service end to end. Last run: October 20, 2026.
-
-    | Setup, current library | Scenarios handled |
-    |---|---|
-    | Proofable policy engine | 48 of 48 |
-    | ACP, the maintainers' gateway, live ([published run](https://github.com/agentic-control-plane/agentgovbench/actions/runs/37759892335)) | 46 of 48 |
-    | A gate that allows everything | 20 of 48 |
-    | No governance | 5 of 48 |
-
-    On the earlier library (commit `e0ce93a`) the same engine also handles 48 of 48, where the maintainers measured the agent tools teams already use:
-
-    | Setup, earlier library | Scenarios handled |
-    |---|---|
-    | Proofable policy engine | 48 of 48 |
-    | Anthropic Agent SDK with the ACP gateway | 46 of 48 |
-    | OpenAI Agents SDK with the ACP gateway | 45 of 48 |
-    | Claude Code or Codex CLI with ACP hooks | 43 of 48 |
-    | CrewAI or LangGraph with the ACP gateway | 40 of 48 |
-    | Cursor with ACP over MCP | 37 of 48 |
-    | Claude Code, Codex CLI, Cursor, the OpenAI or Anthropic agent SDK, CrewAI or LangGraph on its own | 13 of 48 |
-
-    The agent-tool rows are the maintainers' [published results](https://github.com/agentic-control-plane/agentgovbench/tree/main/results), run end to end against their gateway and not re-measured on the current library. The Proofable rows call the policy code directly. The scenarios and scorer are the same and the setups are not, so read the tables as a comparison of what each approach covers, not as a ranking. Proofable also handles the one scenario ACP declines: holding a sub-agent to a narrower task than its parent.
   </Accordion>
 
   <Accordion title="Standards each result maps to">
