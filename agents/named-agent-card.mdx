@@ -20,7 +20,7 @@ That card is the portable record. Other marketplaces can list the same agent. Pr
 | Platform metadata | `https://proofable.me/.well-known/agent-card.json` | Service discovery and registration status |
 | Per-agent metadata | `https://api.proofable.me/.well-known/agent-card.json?agentId={agentId}` | Per-agent discovery metadata |
 
-Per-agent cards resolve to `GET https://api.proofable.me/api/v1/agents/card/{agentId}`. The platform A2A card is also available at `/api/agent/config?format=a2a`. Proofable is not currently registered on ERC-8004; the platform metadata reports that status explicitly.
+Per-agent cards resolve to `GET https://api.proofable.me/api/v1/agents/card/{agentId}`. The platform A2A card is also available at `/api/agent/config?format=a2a`. Proofable publishes ERC-8004 registration metadata at `https://proofable.me/.well-known/agent-registration.json`, so an 8004 indexer can read it. It is not registered in an on-chain ERC-8004 registry, and the platform metadata reports that distinction explicitly: `erc8004.registered` is `false` while the registration file is published.
 
 ## Examples
 
