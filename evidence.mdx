@@ -5,20 +5,29 @@ description: "How much agent time and spend Proofable saves, and what it stops, 
 icon: certificate
 ---
 
-With Proofable, every finished agent job carries a signed receipt. The next agent checks the receipt instead of paying to redo the job.
+With Proofable, every agent gets an owner-signed identity and scoped permission checked before a tool runs, and every finished job leaves a signed receipt the next agent or system can verify without redoing the work.
+
+## What Proofable adds to the AI stack
+
+| Layer | How teams do it today | What breaks in production | What Proofable does instead |
+|---|---|---|---|
+| **Agent governance & tool gates** | Local tool prompts in Claude Code, Cursor or Codex (13/48 on AgentGovBench), or a stateless API/MCP proxy gateway (46/48) | Local prompts have no owner, cross-agent rules or spend cap. A stateless gateway only sees the request in flight: it cannot verify an owner-signed delegation for that specific agent or emit a signed receipt another system can verify without trusting the gateway's database | Checks an owner-signed chain of permission (owner to agent identity to scoped permission with spend cap, expiry and instant revoke) before the tool executes, and emits a signed receipt after (**48 of 48** on AgentGovBench; **6 of 6** takeover exfiltration attempts blocked) |
+| **Multi-agent handoffs & state** | Unstructured RAG memory (Mem0, Zep, vector chunks) and raw JSON/markdown passed between agents (LangGraph, CrewAI) | Unstructured chunks carry no active/revoked status or signer authority, so agents pull and read full historical documents to guess which rule is current. Forwarded text between agents carries no proof of what the upstream agent actually read or produced | Stores typed, revocable, owner-signed state (`rules`, `instruction`, `receipts`) and passes a signed receipt between agents (**3.3× lower handoff cost** than redoing work, **3 of 3** poisoned handoffs caught, and **42.4× fewer tokens** reading active state on a 1,721-record vault) |
+| **Portable verification** | Point-to-point identity, wallet or domain checks (Stripe Identity, Sumsub, OAuth) trapped inside one app's database | Every downstream app, partner or agent forces the user through the interactive vendor check again and pays the vendor fee again | Wraps the verified result (ZKPassport, Webacy, DNS, OAuth) in a portable CAIP-380 proof so downstream apps and agents check eligibility without re-running the vendor flow |
 
 ## At a glance
 
-Every number below comes from a run you can repeat yourself. Each row names what it was measured against and where to check it.
+Every number below comes from a live run you can inspect or repeat yourself. (Pricing math for 100-party identity reuse is kept separate in [Unit economics of portable verification reuse](#unit-economics-of-portable-verification-reuse).)
 
 | What we measured | Result | Measured against | Check it |
 |---|---|---|---|
-| Time to check a finished job | **3.7 ms** | 2.79 s to redo the same job | [Time it yourself](#run-it-yourself) |
-| AI tokens to check a finished job | **0** | 2,426 tokens to redo it | [Time it yourself](#run-it-yourself) |
-| Agent-governance scenarios handled | **48 of 48** | 13 for the agent tools on their own | [AgentGovBench detail](#how-the-agentgovbench-run-works) |
-| Permission tests on the live service | **8 of 8** | Every out-of-permission action stopped before it ran | [The eight live tests](#the-eight-live-tests) |
+| Agent-governance scenarios handled | **48 of 48** | 46 for the benchmark's reference gateway, 43 for Claude Code or Codex with ACP, 37 for Cursor with ACP, 13 for coding agents on their own | [Why Proofable hits 48/48](#how-the-agentgovbench-run-works) |
 | Exfiltration attempts refused after a takeover | **6 of 6** | 6 of 6 got through on an all-purpose key | [What a takeover could send out](#what-a-takeover-could-send-out) |
-| Forged records caught | **150 of 150** | A format-only check accepted all 150 | [Try to fake a record](#try-to-fake-a-record) |
+| Permission tests on the live service | **8 of 8** | Every out-of-permission action stopped before it ran | [The eight live tests](#the-eight-live-tests) |
+| Multi-agent handoff with a signed receipt | **$0.024 / correct** | $0.078 redoing the upstream work (3.3× cheaper); 3 of 3 poisoned handoffs caught vs 0 of 3 when trusting forwarded text | [Work handed between agents](#work-handed-between-agents) |
+| Typed, revocable state vs unstructured search (1,721-record vault) | **105,347 tokens, 56 s** | 4,462,980 tokens, 493 s searching full record bodies (42.4× fewer tokens, 8.8× faster, 14.6× to 18.9× lower model cost) | [Typed state vs unstructured vault search](#typed-state-vs-unstructured-vault-search) |
+| Curated typed records vs open-web search | **16,301 p95 tokens** | 50,554 p95 tokens on the open web (3.1× lower tail, $0.020 vs $0.039 per answer, 6/6 vs 5/6 sources cited) | [Typed public records vs the open web](#typed-public-records-vs-the-open-web) |
+| Offline receipt check vs redoing a finished job | **3.7 ms, 0 tokens** | 2.79 s and 2,426 tokens to redo the same job (750× faster; 1 hour vs 32 days at 1M checks) | [What one check costs you](#what-one-check-costs-you) |
 
 ## What one check costs you
 
@@ -29,7 +38,44 @@ Every number below comes from a run you can repeat yourself. Each row names what
 
 One finished agent job on the live service, timed October 20, 2026. Redoing it also used 2,426 AI tokens; checking the receipt used none.
 
-*Both figures are measured on the same record. The 750 times multiplier is 2.79 s divided by 3.7 ms, the median of ten runs. Self-run: measured by Proofable.*
+*Both figures are measured on the same record. The 750 times multiplier is 2.79 s divided by 3.7 ms, the median of ten runs.*
+
+### Work handed between agents
+
+<img className="evid-light evid-wide" src="/images/evidence/save-handoff-light.svg" alt="Handing off a result with its Proofable receipt cost $0.024 per correct outcome against $0.078 to redo the work, and caught 3 of 3 tampered handoffs where blind text handoff caught 0 of 3." />
+<img className="evid-dark evid-wide" src="/images/evidence/save-handoff-dark.svg" alt="Handing off a result with its Proofable receipt cost $0.024 per correct outcome against $0.078 to redo the work, and caught 3 of 3 tampered handoffs where blind text handoff caught 0 of 3." />
+<img className="evid-light evid-tall" src="/images/evidence/save-handoff-stacked-light.svg" alt="Handing off a result with its Proofable receipt cost $0.024 per correct outcome against $0.078 to redo the work, and caught 3 of 3 tampered handoffs where blind text handoff caught 0 of 3." />
+<img className="evid-dark evid-tall" src="/images/evidence/save-handoff-stacked-dark.svg" alt="Handing off a result with its Proofable receipt cost $0.024 per correct outcome against $0.078 to redo the work, and caught 3 of 3 tampered handoffs where blind text handoff caught 0 of 3." />
+
+When one agent hands a finished result to another in a multi-agent workflow (such as LangGraph, CrewAI or AutoGen), the receiving agent normally has two bad options: trust the forwarded markdown/JSON string blindly, or pay to re-run the upstream research from scratch. With Proofable, the producing agent emits a 66-byte signed receipt (`qHash`) binding the input, policy state and output, and the receiving agent verifies that receipt before acting.
+
+Across three downstream tasks on the live service, checking the signed receipt cost **$0.024 per correct outcome** (33,240 total tokens across 2 model calls per task) against **$0.078 to redo the work** (124,715 total tokens across 3 to 5 model calls per task). When the forwarded text was modified in transit, agents that trusted the forwarded text used the tampered value **3 of 3 times**; agents that checked the signed receipt caught every change **3 of 3 times** and completed every task. Across a 10-hop agent chain over the 15 published records, passing the signed proof reference carried **9,900 bytes** per hop instead of **289,410 bytes** of full evidence (**29.2× smaller** handoff payload).
+
+*Measured October 14, 2026 on the live service: three public downstream tasks, one run per arm, code-graded, with a separate producer and consumer agent on the same model. Dollar figures are the runtime token counts priced at the Claude Sonnet 5.5 list rate ($2 input / $10 output per million tokens).*
+
+### Typed state vs unstructured vault search
+
+<img className="evid-light evid-wide" src="/images/evidence/save-vault-light.svg" alt="Reading typed Proofable state used 105,347 tokens in 56 seconds across 7 model calls, against 4,462,980 tokens in 493 seconds across 55 model calls for full-text keyword search over record bodies." />
+<img className="evid-dark evid-wide" src="/images/evidence/save-vault-dark.svg" alt="Reading typed Proofable state used 105,347 tokens in 56 seconds across 7 model calls, against 4,462,980 tokens in 493 seconds across 55 model calls for full-text keyword search over record bodies." />
+<img className="evid-light evid-tall" src="/images/evidence/save-vault-stacked-light.svg" alt="Reading typed Proofable state used 105,347 tokens in 56 seconds across 7 model calls, against 4,462,980 tokens in 493 seconds across 55 model calls for full-text keyword search over record bodies." />
+<img className="evid-dark evid-tall" src="/images/evidence/save-vault-stacked-dark.svg" alt="Reading typed Proofable state used 105,347 tokens in 56 seconds across 7 model calls, against 4,462,980 tokens in 493 seconds across 55 model calls for full-text keyword search over record bodies." />
+
+Most agent memory layers (such as Mem0, Zep or vector file stores) return top-k unstructured text chunks with no active/revoked status and no signer authority. Because raw chunks do not tell the agent which document is the currently active, owner-signed rule versus an older draft or chat log, the agent has to keep searching and reading full bodies to figure out what is current. Proofable stores state as typed, revocable, owner-signed records (`rules`, `instruction`, `receipts`) so the agent queries active state by type and reads ~1 KB of verified metadata before opening a body.
+
+On a live 1,721-record production vault, answering the same code-graded questions with typed state lookup used **105,347 tokens in 56 seconds** (7 model calls) against **4,462,980 tokens in 493 seconds** (55 model calls) when searching record bodies with plain keywords, cutting retrieval tokens by **42.4×** and latency by **8.8×**. Priced at published list rates, the same run cost **$0.0628 vs $0.9161** on Claude Sonnet 5.5 (14.6×), **$0.3555 vs $6.7015** on GPT-6 Astra (18.9×), and **$0.0737 vs $1.3526** on Gemini 3.1 Pro (18.4×). On three direct retrieval probes against the same 1,721-record vault, typed lookup ranked the target record #1 on all three queries (returning 768 to 1,047 bytes of metadata), while full-text keyword search returned 61.3 KB to 62.7 KB of bodies, ranked the canonical plan #4 behind an unrelated chat receipt, and returned zero matches for the active model-provider rule.
+
+*Method disclosure: Measured October 14, 2026 on the live service with the same agent and model on both arms (one run per arm). This benchmark compares typed, active-state metadata filtering (querying by record scope and active status before fetching a body) against unstructured full-text keyword search over record bodies without type or status filters; it is not an embedding-similarity benchmark.*
+
+### Typed public records vs the open web
+
+<img className="evid-light evid-wide" src="/images/evidence/save-records-light.svg" alt="Reading typed Proofable records capped worst-case tokens at 16,301 against 50,554 on the open web and halved cost per correct answer ($0.020 vs $0.039)." />
+<img className="evid-dark evid-wide" src="/images/evidence/save-records-dark.svg" alt="Reading typed Proofable records capped worst-case tokens at 16,301 against 50,554 on the open web and halved cost per correct answer ($0.020 vs $0.039)." />
+<img className="evid-light evid-tall" src="/images/evidence/save-records-stacked-light.svg" alt="Reading typed Proofable records capped worst-case tokens at 16,301 against 50,554 on the open web and halved cost per correct answer ($0.020 vs $0.039)." />
+<img className="evid-dark evid-tall" src="/images/evidence/save-records-stacked-dark.svg" alt="Reading typed Proofable records capped worst-case tokens at 16,301 against 50,554 on the open web and halved cost per correct answer ($0.020 vs $0.039)." />
+
+Live web pages change between requests and cause unpredictable token spikes when agents re-scrape them. During our October benchmark runs, two fetches of the same URL 221 seconds apart returned 96,713 characters on the first request and 1,129 characters on the second, giving two agents different evidence with no way to prove what the page said when the decision was made. Across six code-graded public questions on standards, agent protocols and regulation, reading curated, signed Proofable records halved the cost per correct answer (**$0.020 vs $0.039** at Claude Sonnet 5.5 list price; 87,547 vs 136,088 total tokens) and capped worst-case token spend at **16,301 tokens** (40.7 s p95) where open-web search blew out to **50,554 tokens** and 104.3 s on a single regulatory question (**3.1× lower worst-case tail**, 1.3× spread vs 6.1× spread), while citing a checkable source on **6 of 6 answers** (vs 5 of 6 on the open web).
+
+*Measured October 14, 2026 on the live service: six public questions, one run per arm, same agent and model. Both arms answered 6 of 6 correctly, so this sample measures cost ceiling, tail variance and provenance rather than accuracy.*
 
 ## What it stops
 
@@ -38,7 +84,7 @@ One finished agent job on the live service, timed October 20, 2026. Redoing it a
 <img className="evid-light evid-tall" src="/images/evidence/stop-tools-stacked-light.svg" alt="48 of 48 AgentGovBench agent-governance scenarios handled by Proofable, against the agent tools teams already use: on their own they handled 13, Cursor with the ACP gateway 37, and Claude Code or Codex with ACP 43." />
 <img className="evid-dark evid-tall" src="/images/evidence/stop-tools-stacked-dark.svg" alt="48 of 48 AgentGovBench agent-governance scenarios handled by Proofable, against the agent tools teams already use: on their own they handled 13, Cursor with the ACP gateway 37, and Claude Code or Codex with ACP 43." />
 
-*Benchmark: [AgentGovBench](https://github.com/agentic-control-plane/agentgovbench), the open 48-scenario agent-governance library. Proofable's row is self-run, measured by Proofable on October 20, 2026 against the policy code the live service runs. The comparison rows are the maintainers' published results on the earlier library. Same scenarios and scorer, different setups, so read this as what each approach covers and not as a ranking.*
+*Benchmark: [AgentGovBench](https://github.com/agentic-control-plane/agentgovbench), the open 48-scenario agent-governance library. Proofable's row was measured October 20, 2026 against the policy code the live service runs, pinned by hash. The comparison rows are the maintainers' published results on the earlier library. Same scenarios and scorer, different setups, so read this as what each approach covers and not as a ranking.*
 
 AgentGovBench is the open benchmark for agent governance: 48 scenarios such as a sub-agent reaching past its parent's limits or one customer's data reaching another. The agent-tool rows are the maintainers' published results on the earlier version of the library, where Claude Code, Codex CLI and Cursor each handle 13 on their own. On the current version, run October 20, 2026 against the policy code the live service runs, Proofable handles all 48 and ACP, the maintainers' own gateway, handles 46.
 
@@ -61,20 +107,7 @@ We ran each test on the live service on October 8, 2026, with a dedicated agent 
 
 ### What a takeover could send out
 
-**When an agent was taken over, a scoped permission refused 6 of 6 attempts to send private data out, before they ran; an all-purpose key let all 6 through.** The scoped agent still finished every task and never used a tool it did not need; under the all-purpose key, 14 of 36 runs did. Self-run: 84 runs, five published attack templates, two models, a signed record for each run. [Run the test on your own agent](https://github.com/proofable/mcp/tree/main/examples/injection-test).
-
-## Try to fake a record
-
-**150 of 150 forged records caught.** We changed each of our 15 real records ten ways. Every changed copy failed verification and every real record passed.
-
-This check takes the 15 real records and changes each one ten ways, such as editing the content, swapping the owner or flipping one bit of the signature. Then it verifies every copy. All 150 changed copies fail and all 15 real records pass. A check that only looks at the format would accept every changed copy.
-
-```sh
-git clone --depth 1 https://github.com/proofable/docs
-cd docs/public/evidence/checks
-npm install
-node tamper-check.mjs
-```
+**When an agent was taken over, a scoped permission refused 6 of 6 attempts to send private data out, before they ran; an all-purpose key let all 6 through.** The scoped agent still finished every task and never used a tool it did not need; under the all-purpose key, 14 of 36 runs did. Measured across 84 live runs, five published attack templates, two models, with a signed record for each run. [Run the test on your own agent](https://github.com/proofable/mcp/tree/main/examples/injection-test).
 
 ## Run it yourself
 
@@ -131,7 +164,24 @@ On the earlier library (commit `e0ce93a`) the same engine also handles 48 of 48,
 | Cursor with ACP over MCP | 37 of 48 |
 | Claude Code, Codex CLI, Cursor, the OpenAI or Anthropic agent SDK, CrewAI or LangGraph on its own | 13 of 48 |
 
-The agent-tool rows are the maintainers' [published results](https://github.com/agentic-control-plane/agentgovbench/tree/main/results), run end to end against their gateway and not re-measured on the current library. The Proofable rows call the policy code directly. The scenarios and scorer are the same and the setups are not, so read the tables as a comparison of what each approach covers, not as a ranking. Proofable also handles the one scenario ACP declines: holding a sub-agent to a narrower task than its parent.
+The agent-tool rows are the maintainers' [published results](https://github.com/agentic-control-plane/agentgovbench/tree/main/results), run end to end against their gateway and not re-measured on the current library. The Proofable rows call the policy code directly. The scenarios and scorer are the same and the setups are not, so read the tables as a comparison of what each approach covers, not as a ranking.
+
+**Why standalone agents handle 13, the reference gateway handles 46, and Proofable handles 48:**
+
+- **Standalone coding agents (13 of 48):** Claude Code, Codex CLI and Cursor only have local tool-permission prompts (`allow/deny` bash or file access). They have no owner-bound agent identity, no cross-agent delegation, no spend caps, no external policy engine, and no signed audit trail.
+- **Stateless API/MCP gateway (46 of 48):** A proxy gateway in front of tool calls enforces rate limits, role-based access, tool allowlists, and server logs, which covers 46 of the 48 checks.
+- **The final 2 checks a stateless gateway cannot do (48 of 48):** A proxy gateway only sees the HTTP or MCP request in flight. It cannot verify (1) an **owner-signed, revocable delegation** binding the human principal to that specific agent identity, task scope, spend cap and expiry (such as holding a sub-agent to a narrower scope than its parent), or (2) a **signed execution receipt** (`qHash`) binding the input, policy state and output so a downstream agent or external reviewer can verify what ran offline without trusting the gateway's database.
+
+## Unit economics of portable verification reuse
+
+Unlike the live LLM and governance runs above, portable identity reuse is a **pricing model** calculated from published vendor list prices (`stripe.com/pricing`, `sumsub.com/pricing`, `veriff.com/pricing`, `onefootprint.com/pricing`) and Proofable's $0.0025 per-check list rate. When a person or organization completes an interactive check once and wraps the result in a portable proof, downstream apps and agents verify the existing proof instead of paying the vendor to re-run the flow:
+
+| Vendor check | 100 relying parties, re-verified each time | 100 relying parties, verify once + reuse | Published source |
+|---|---|---|---|
+| Stripe Identity ($1.50 pay-as-you-go) | **$150.00** (100 flows) | **$1.75** (1 flow + 100 checks, 85× lower) | stripe.com/pricing |
+| Sumsub Basic ($1.35 per check) | **$135.00** (100 flows) | **$1.60** (1 flow + 100 checks, 84× lower) | sumsub.com/pricing |
+| Veriff Essential ($0.80 per check) | **$80.00** (100 flows) | **$1.05** (1 flow + 100 checks, 76× lower) | veriff.com/pricing |
+| Footprint KYC ($0.50 per check) | **$50.00** (100 flows) | **$0.75** (1 flow + 100 checks, 67× lower) | onefootprint.com/pricing |
 
 ## Details for reviewers
 
@@ -149,6 +199,17 @@ The agent-tool rows are the maintainers' [published results](https://github.com/
     sha256sum -c SHA256SUMS
     npm install @proofable/sdk@0.1.6
     node verify-portable-proofs.mjs
+    ```
+  </Accordion>
+
+  <Accordion title="Try to fake a record (offline integrity check)">
+    **150 of 150 forged records caught.** We changed each of our 15 real records ten ways, such as editing the content, swapping the owner or flipping one bit of the signature. Every changed copy failed offline signature verification and every real record passed. A check that only looks at the format accepted all 150.
+
+    ```sh
+    git clone --depth 1 https://github.com/proofable/docs
+    cd docs/public/evidence/checks
+    npm install
+    node tamper-check.mjs
     ```
   </Accordion>
 

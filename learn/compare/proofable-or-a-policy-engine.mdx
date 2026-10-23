@@ -15,13 +15,13 @@ Keep your policy engine if you already express your rules in it, one team owns b
 
 ## What each one answers
 
-| Question | Policy engine | Proofable |
+| Question | Policy engine or API gateway | Proofable |
 | --- | --- | --- |
-| Is this action allowed by our rules? | Yes, that is its purpose | Yes, for the agent's identity, limits and current permission |
-| Who is the agent and who owns it? | Only if you modelled it there | Part of the agent record |
-| Does the decision survive leaving your system? | Your log, your infrastructure | A proof another party can check |
-| Can the permission expire or be revoked? | If you build that | Built in, with an end date and revoke |
-| Does a refused action stop the call? | Depends on your integration | The caller stops when the decision is not allowed |
+| Is this action allowed by our rules? | Yes, static role and tool rules (46 of 48 on AgentGovBench) | Yes, plus owner-to-agent delegation, spend cap, expiry and instant revoke (48 of 48) |
+| Who is the agent and who owns it? | Only if you modelled it there; a gateway sees an API key in flight | Signed owner-to-agent identity and scoped permission |
+| Does the decision survive leaving your system? | Server log row inside your infrastructure | A signed receipt (`qHash`) another agent or auditor verifies offline |
+| Can a downstream agent trust a handed-off result? | No receipt layer; agents trust forwarded text or redo the work | Verifies the signed receipt in 3.7 ms ($0.024 vs $0.078 redo; 3 of 3 poisoned handoffs caught) |
+| Does a refused action stop the call? | Depends on your integration | The caller stops before the tool runs (6 of 6 takeover exfiltration attempts blocked) |
 
 ## Where they fit together
 
@@ -47,6 +47,9 @@ Your engine can still run before or after this check. [Standards and interoperab
   </Card>
   <Card title="Prove what happened" icon="receipt" href="/use-cases/prove-what-happened">
     Keep a record of each decision.
+  </Card>
+  <Card title="Evidence & benchmarks" icon="certificate" href="/evidence">
+    48 of 48 on AgentGovBench, 3.3× cheaper multi-agent handoffs, and 42.4× fewer retrieval tokens.
   </Card>
   <Card title="Standards" icon="diagram-project" href="/learn/standards">
     The layers beside Proofable.
