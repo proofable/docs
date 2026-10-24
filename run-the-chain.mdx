@@ -1,0 +1,95 @@
+---
+title: "Run one chain from human to evidence"
+description: "Run a human, agent, delegation and receipt chain end to end, then check every record offline without an account."
+---
+
+A single Proofable job records five things in order: who the human is, which agent ran, what that agent
+was allowed to do, the decision to dispatch it, and what it actually returned. Each is signed and
+carries a `qHash`, and the signed decision commits to the delegation and agent-identity that produced
+it, so the chain can be rebuilt from the records alone on any machine.
+
+## The chain
+
+| Step | Record | Commits to | Read |
+| --- | --- | --- | --- |
+| 1. Human | A verification proof for the person | The controller wallet, the check that ran, and its verifier | [Verification](/verification) |
+| 2. Agent | An agent identity proof | The agent id, its wallet, and the controller it answers to | [Agent identity](/agents/agent-identity) |
+| 3. Authority | A delegation proof | Scope, spend cap, expiry, and the agent it binds | [Delegation](/agents/agent-delegation) |
+| 4. Decision | An authority decision, before the job exists | The principal, the agent, `delegationQHash`, `agentIdentityQHash`, and `argsDigest` over the request exactly as sent | [Jobs](/jobs) |
+| 5. Receipt | A terminal receipt | The `jobId`, the prompt, the acceptance criterion, every tool call with its target, and the returned text | [Proofs](/proofs) |
+
+## The joins are hashes
+
+A database row can point at another row only inside that database. These records point at each other
+with hashes, so the pointer survives export.
+
+- `delegationQHash` and `agentIdentityQHash` inside the signed decision name the authority and the
+  agent that produced it.
+- `argsDigest` is a `sha256` over the request as sent, so a reader holding the decision can recompute
+  what was authorized without trusting a log.
+- The job record carries the `terminalQHash` of the signed receipt for that execution, and the same
+  `delegationQHash` and `agentIdentityQHash` the decision named.
+
+The decision is recorded before the job exists, so its own `jobId` is `null`. The create response
+returns the `jobId` and the decision `qHash` together, and the two hashes above tie the decision to the
+job record without it.
+
+That is what makes the chain checkable by a third party: nothing in it requires reading our database,
+which is also why an external reviewer or another agent can audit a run they did not make.
+
+## Run it end to end
+
+The reference kit drives all five steps against the hosted service and writes the records to a folder
+on your machine. It needs your own access key, because it runs real agent jobs against your plan.
+
+```sh
+git clone --depth 1 https://github.com/proofable/docs
+cd docs/public/evidence/aaif/authority-at-dispatch/reproduce
+npm install
+export PROOFABLE_ACCESS_KEY=npk_...
+export AAD_OPERATOR="Your Organization"
+node aad.mjs setup        # creates a local agent wallet and registers your review agent
+node aad.mjs run          # eight permission cases
+node aad.mjs verify runs/<run-id>
+```
+
+`verify` needs no network and no account. The eight cases cover an allowed job, an action outside the
+delegation, an approval that arrives, an approval that never arrives, revocation before dispatch,
+expiry before dispatch, reuse of a revoked grant against a valid control, and revocation while a job is
+running. Their expected outcomes are listed in the kit's README.
+
+The same cases run in CI from the same kit, and fail the build when a record does not verify:
+[`public/evidence/aaif/authority-at-dispatch/action`](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/action).
+
+## Check a record without taking our word for it
+
+One function, no network call, no account:
+
+```js
+import { verifyPortableProofEnvelope } from '@proofable/sdk';
+
+const result = await verifyPortableProofEnvelope(portableProof);
+// { valid: true, qHashValid: true, signatureValid: true, requiresChainState: false, signer: '0x…' }
+```
+
+It recomputes the `qHash` from the envelope and recovers the signer from the signature, with no
+network call and no account. The [CAIP-380 profile](/learn/standards/caip-380) documents the canonical
+form, so you can write the same check in another language, and the [signing
+format](/verification/signing-format) covers wallets that sign with something other than an EOA.
+
+Published runs, with the records and a script that verifies every envelope in them:
+[authority-at-dispatch evidence](https://docs.proofable.me/evidence).
+
+## What the chain does not cover
+
+- The effect at a target you control. Records state effects as the service observed them at the job
+  boundary. A readback taken at a target outside that boundary is a separate observation, and the kit's
+  URL fetch is where to add one.
+- How long a revocation takes to reach the check. A revocation lands on the next dispatch. A job
+  already running is not cancelled mid-flight, and its receipt says so.
+
+## Build on it
+
+- [MCP setup](/mcp/setup) for an agent that calls the service directly.
+- [JavaScript SDK](/sdks/javascript) for the same calls in your own code.
+- [Sell access](/gates/sell-access) to require a proof before your product serves a request.

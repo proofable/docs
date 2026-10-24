@@ -72,7 +72,7 @@
         "groups": [
           {
             "group": "Overview",
-            "pages": ["index", "pricing", "security", "evidence", "enterprise", "migrate"]
+            "pages": ["index", "run-the-chain", "pricing", "security", "evidence", "enterprise", "migrate"]
           },
           {
             "group": "Use cases",
