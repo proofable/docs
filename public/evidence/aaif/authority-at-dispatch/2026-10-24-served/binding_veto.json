@@ -1,0 +1,105 @@
+{
+  "schema": "proofable-aaif-authority-suite/v1",
+  "kit": "aad-kit/1",
+  "case": "binding_veto",
+  "contractId": "https://probityai.github.io/agent-evidence-observer/contract/authority-at-dispatch/v1",
+  "run_id": "aad-20261024-served2",
+  "operator": "Proofable (review identity, served-revision rerun)",
+  "custody": "OPERATOR: Proofable (review identity, served-revision rerun) (agent wallet and run records on this machine; controller account 0x0d4e513a3a7eb92bab65c97786c67b198d9dca15)",
+  "product_revision": "61724c9f4592f00858a31ef0ac7fa4dcdc67e160",
+  "mcp_url": "https://mcp.proofable.me/mcp",
+  "delegationRoot": "did:pkh:eip155:8453:0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+  "agentId": "aaif-rerun-20261024",
+  "agentWallet": "0x3356a942bf5b17fdeb7de9c3670f1be3a1ad6aa7",
+  "started": "2026-10-24T02:25:04.308Z",
+  "finished": "2026-10-24T02:25:27.562Z",
+  "delegationHops": [
+    {
+      "delegator": "did:pkh:eip155:8453:0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+      "delegate": "did:pkh:eip155:8453:0x3356a942bf5b17fdeb7de9c3670f1be3a1ad6aa7",
+      "actions": [
+        "read_context",
+        "read_proofs",
+        "create_proof",
+        "execute_jobs",
+        "manage_runtime"
+      ],
+      "targets": "not_emitted"
+    }
+  ],
+  "evidenceAgeSeconds": "not_emitted",
+  "freshnessLimitSeconds": "not_applicable",
+  "jobId": "eb6ed262-d5b8-43c4-8c2b-c1d62987e7e1",
+  "grant": "0x8ddbddbdf7fd069b6cdc11b2af9603032c817d358c7f2afeb674007043a4eeda",
+  "allowedActions": [
+    "read_context",
+    "read_proofs",
+    "create_proof",
+    "execute_jobs",
+    "manage_runtime"
+  ],
+  "observed": {
+    "status": "failed",
+    "executor": null,
+    "error": "JOB_AUTHORITY_DENIED: run_command is required for isolated harness execution."
+  },
+  "receipt": {
+    "qHash": "0x69b7b8aa0469b22fba5b4035f916fc2551bbc8e6904f4901ffc7fdd387d98ea9",
+    "status": "verified",
+    "visibility": "unlisted",
+    "privacyLevel": "public",
+    "publicDisplay": false,
+    "envelope": {
+      "qHash": "0x69b7b8aa0469b22fba5b4035f916fc2551bbc8e6904f4901ffc7fdd387d98ea9",
+      "did": "did:pkh:eip155:8453:0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec",
+      "walletAddress": "0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec",
+      "verifierIds": [
+        "ownership-basic"
+      ],
+      "data": {
+        "owner": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+        "content": "{\"version\":1,\"kind\":\"agent-job\",\"showContent\":true,\"jobId\":\"eb6ed262-d5b8-43c4-8c2b-c1d62987e7e1\",\"agentId\":\"aaif-rerun-20261024\",\"prompt\":\"Run only `node --version` and `pwd` on the isolated computer, then report each command and exit code.\",\"status\":\"failed\",\"executionSteps\":[{\"id\":\"dispatch\",\"label\":\"Queued for execution\",\"status\":\"completed\",\"at\":\"2026-10-24T02:25:18.447Z\"},{\"id\":\"zeus-runtime\",\"label\":\"Run Agent runtime\",\"status\":\"failed\",\"at\":\"2026-10-24T02:25:18.447Z\"},{\"id\":\"complete\",\"label\":\"Finish and record result\",\"status\":\"failed\",\"at\":\"2026-10-24T02:25:18.447Z\"}],\"createdAt\":\"2026-10-24T02:25:16.600Z\",\"agentWallet\":\"0x3356a942bf5b17fdeb7de9c3670f1be3a1ad6aa7\",\"schedule\":{\"type\":\"once\",\"runAtMs\":1792808716600},\"runAtMs\":1792808716600,\"error\":\"JOB_AUTHORITY_DENIED: run_command is required for isolated harness execution.\",\"completedAt\":\"2026-10-24T02:25:18.447Z\",\"durationMs\":1839,\"runtime\":{\"requiresComputer\":true},\"acceptance\":{\"criterion\":\"The job reaches a terminal state with a verified terminal receipt.\",\"criteria\":[\"The job reaches a terminal state with a verified terminal receipt.\"],\"mode\":\"text\"},\"evaluation\":{\"version\":2,\"jobId\":\"eb6ed262-d5b8-43c4-8c2b-c1d62987e7e1\",\"attempt\":1,\"taskClass\":\"general\",\"agentId\":\"aaif-rerun-20261024\",\"agentWallet\":\"0x3356a942bf5b17fdeb7de9c3670f1be3a1ad6aa7\",\"model\":null,\"provider\":null,\"requestedModel\":null,\"requestedProvider\":null,\"inferenceFallback\":false,\"harness\":null,\"transport\":null,\"policy\":{\"policyVersion\":null,\"harnessVersion\":null},\"status\":\"failed\",\"rawTaskSuccess\":false,\"accepted\":false,\"acceptedOutcome\":false,\"evaluator\":\"job-completion-contract\",\"failureClass\":\"authority_denied\",\"authoritySignal\":\"clean\",\"approval\":{\"required\":false,\"decided\":false,\"decision\":null,\"decidedBy\":null,\"parkedAt\":null,\"resolvedAt\":null,\"waitMs\":null,\"steps\":{\"approved\":0,\"declined\":0},\"humanIntervention\":false},\"checks\":[],\"artifacts\":[],\"workRefs\":[],\"toolActions\":{\"count\":null,\"failed\":null},\"retrieval\":{\"indexVersion\":null,\"proofRefs\":null,\"count\":null},\"cost\":{\"tokens\":null,\"modelCalls\":null,\"currency\":null},\"durationMs\":1839,\"createdAt\":1792808716600,\"completedAt\":1792808718447,\"qHash\":null,\"terminalQHash\":null,\"recurrenceId\":null,\"runNumber\":null,\"evidenceComplete\":false}}",
+        "reference": {
+          "type": "job",
+          "id": "eb6ed262-d5b8-43c4-8c2b-c1d62987e7e1"
+        }
+      },
+      "signedTimestamp": 1792808718456,
+      "chainId": 8453,
+      "signature": "0xf3c4a2f56d9038d9d4c1b06c0ee62261d53e6be63de59a6dd09d3a49086cb54374b899302738339f11b188aa6ce33a4491b098389c54309466875388b57026c01c",
+      "signatureMethod": "eip191"
+    },
+    "offlineVerified": true,
+    "anonymousReadback": true,
+    "authorityDecision": {
+      "qHash": "0xd1c4c86861e940ae35ba85fca68e788734af99864c8e9472c2f12898ddac28e4",
+      "status": "verified",
+      "visibility": "unlisted",
+      "privacyLevel": "public",
+      "publicDisplay": false,
+      "envelope": {
+        "qHash": "0xd1c4c86861e940ae35ba85fca68e788734af99864c8e9472c2f12898ddac28e4",
+        "did": "did:pkh:eip155:8453:0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec",
+        "walletAddress": "0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec",
+        "verifierIds": [
+          "ownership-basic"
+        ],
+        "data": {
+          "owner": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+          "content": "{\"version\":1,\"kind\":\"agent-job-authority-decision\",\"action\":\"job.dispatch\",\"outcome\":\"ALLOW\",\"reason\":null,\"risk\":\"medium\",\"policyVersion\":\"authority-policy.v2\",\"principal\":\"0x0d4e513a3a7eb92bab65c97786c67b198d9dca15\",\"agentId\":\"aaif-rerun-20261024\",\"agentWallet\":\"0x3356a942bf5b17fdeb7de9c3670f1be3a1ad6aa7\",\"delegationQHash\":\"0x8ddbddbdf7fd069b6cdc11b2af9603032c817d358c7f2afeb674007043a4eeda\",\"agentIdentityQHash\":\"0xaf0bd7c0f4e17febc1ff23835db91da3223e2f5ffb8fe1265a2dc0b435b7faaf\",\"argsDigest\":\"e61acdd107fad69952a3a1eab1fbcec8faa364dcc484ef48a1be2274792a33d6\",\"jobId\":null,\"requestedAtMs\":1792808715213,\"effect\":\"none\"}",
+          "reference": {
+            "type": "agent-job-authority-decision",
+            "id": "aaif-rerun-20261024:1792808715213"
+          }
+        },
+        "signedTimestamp": 1792808715213,
+        "chainId": 8453,
+        "signature": "0x214bdaa5d4946e7e7850d3ded239836941a136866e36fb89ef74c9437746cfa352103c9179bb947bde02a563a1d864c5cb32dbee0f08682668e2257ac2b699741c",
+        "signatureMethod": "eip191"
+      },
+      "offlineVerified": true,
+      "anonymousReadback": true
+    }
+  },
+  "passed": true
+}

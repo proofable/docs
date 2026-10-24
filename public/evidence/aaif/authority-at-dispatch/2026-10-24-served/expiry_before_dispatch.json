@@ -1,0 +1,95 @@
+{
+  "schema": "proofable-aaif-authority-suite/v1",
+  "kit": "aad-kit/1",
+  "case": "expiry_before_dispatch",
+  "contractId": "https://probityai.github.io/agent-evidence-observer/contract/authority-at-dispatch/v1",
+  "run_id": "aad-20261024-served2",
+  "operator": "Proofable (review identity, served-revision rerun)",
+  "custody": "OPERATOR: Proofable (review identity, served-revision rerun) (agent wallet and run records on this machine; controller account 0x0d4e513a3a7eb92bab65c97786c67b198d9dca15)",
+  "product_revision": "61724c9f4592f00858a31ef0ac7fa4dcdc67e160",
+  "mcp_url": "https://mcp.proofable.me/mcp",
+  "delegationRoot": "did:pkh:eip155:8453:0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+  "agentId": "aaif-rerun-20261024",
+  "agentWallet": "0x3356a942bf5b17fdeb7de9c3670f1be3a1ad6aa7",
+  "started": "2026-10-24T02:26:49.510Z",
+  "finished": "2026-10-24T02:28:33.937Z",
+  "delegationHops": [
+    {
+      "delegator": "did:pkh:eip155:8453:0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+      "delegate": "did:pkh:eip155:8453:0x3356a942bf5b17fdeb7de9c3670f1be3a1ad6aa7",
+      "actions": [
+        "read_context",
+        "read_proofs",
+        "create_proof",
+        "execute_jobs",
+        "run_command",
+        "manage_runtime"
+      ],
+      "targets": "not_emitted"
+    }
+  ],
+  "evidenceAgeSeconds": "not_emitted",
+  "freshnessLimitSeconds": "not_applicable",
+  "grant": "0xd994d96e3638095a1e31597f77fec31ed50ec47b8d9c0eab8f2568cb3a06e54c",
+  "allowedActions": [
+    "read_context",
+    "read_proofs",
+    "create_proof",
+    "execute_jobs",
+    "run_command",
+    "manage_runtime"
+  ],
+  "expiresAt": "2026-10-24T02:28:19.510Z",
+  "dispatch": {
+    "decision": "DENY",
+    "jobId": null,
+    "code": "DELEGATION_PROOF_DENIED",
+    "response": {
+      "error": "DELEGATION_PROOF_DENIED",
+      "message": "The requested delegation proof is not active and authorized for this agent. Use the agent wallet you own or ensure an active delegation to that agent wallet.",
+      "statusCode": 403,
+      "authorityDecision": {
+        "outcome": "DENY",
+        "code": "DELEGATION_PROOF_DENIED",
+        "qHash": "0x253868dd01bfe03cb76f7eebe221a4db768870a5a5c073f472fa966a0d3609ab",
+        "visibility": "private"
+      },
+      "authorityDecisionQHash": "0x253868dd01bfe03cb76f7eebe221a4db768870a5a5c073f472fa966a0d3609ab"
+    },
+    "authorityDecision": {
+      "qHash": "0x253868dd01bfe03cb76f7eebe221a4db768870a5a5c073f472fa966a0d3609ab",
+      "status": "verified",
+      "visibility": "unlisted",
+      "privacyLevel": "public",
+      "publicDisplay": false,
+      "envelope": {
+        "qHash": "0x253868dd01bfe03cb76f7eebe221a4db768870a5a5c073f472fa966a0d3609ab",
+        "did": "did:pkh:eip155:8453:0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec",
+        "walletAddress": "0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec",
+        "verifierIds": [
+          "ownership-basic"
+        ],
+        "data": {
+          "owner": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+          "content": "{\"version\":1,\"kind\":\"agent-job-authority-decision\",\"action\":\"job.dispatch\",\"outcome\":\"DENY\",\"reason\":\"DELEGATION_PROOF_DENIED\",\"risk\":\"medium\",\"policyVersion\":\"authority-policy.v2\",\"principal\":\"0x0d4e513a3a7eb92bab65c97786c67b198d9dca15\",\"agentId\":\"aaif-rerun-20261024\",\"agentWallet\":\"0x3356a942bf5b17fdeb7de9c3670f1be3a1ad6aa7\",\"delegationQHash\":\"0xd994d96e3638095a1e31597f77fec31ed50ec47b8d9c0eab8f2568cb3a06e54c\",\"agentIdentityQHash\":null,\"argsDigest\":\"346d4ea052f69dbaee17c69e7c3ee82f145fbba0a0555089f1b920d8527c962d\",\"jobId\":null,\"requestedAtMs\":1792808909746,\"effect\":\"none\"}",
+          "reference": {
+            "type": "agent-job-authority-decision",
+            "id": "aaif-rerun-20261024:1792808909746"
+          }
+        },
+        "signedTimestamp": 1792808909746,
+        "chainId": 8453,
+        "signature": "0x011266c291cb113406b9bb742becd25533ebd86961649a107189fc360d9f10d0194c6d8c116e39770a4c4d901d9ad8821d69863949b7748296bae1dbf38435351c",
+        "signatureMethod": "eip191"
+      },
+      "offlineVerified": true,
+      "anonymousReadback": true
+    },
+    "at": "2026-10-24T02:28:33.937Z"
+  },
+  "observed_effect": {
+    "committed": false,
+    "evidence": "no job created; delegation past expiry"
+  },
+  "passed": true
+}

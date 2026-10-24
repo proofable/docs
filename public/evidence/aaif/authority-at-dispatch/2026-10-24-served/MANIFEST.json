@@ -1,0 +1,80 @@
+{
+  "schema": "proofable-aad-run-manifest/v1",
+  "kit": "aad-kit/1",
+  "contractId": "https://probityai.github.io/agent-evidence-observer/contract/authority-at-dispatch/v1",
+  "run_id": "aad-20261024-served2",
+  "operator": "Proofable (review identity, served-revision rerun)",
+  "custody": "OPERATOR: Proofable (review identity, served-revision rerun) (agent wallet and run records on this machine; controller account 0x0d4e513a3a7eb92bab65c97786c67b198d9dca15)",
+  "product_revision": "61724c9f4592f00858a31ef0ac7fa4dcdc67e160",
+  "mcp_url": "https://mcp.proofable.me/mcp",
+  "delegationRoot": "did:pkh:eip155:8453:0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+  "agentId": "aaif-rerun-20261024",
+  "agentWallet": "0x3356a942bf5b17fdeb7de9c3670f1be3a1ad6aa7",
+  "sealed_at": "2026-10-24T02:31:15.964Z",
+  "expected_cases": [
+    "hosted_allow",
+    "binding_veto",
+    "approval_reachable",
+    "approval_unavailable",
+    "revoke_before_dispatch",
+    "expiry_before_dispatch",
+    "stale_authority",
+    "post_dispatch_revoke"
+  ],
+  "cases": [
+    {
+      "case": "approval_reachable",
+      "passed": true,
+      "jobId": "d49763cd-83d9-4255-9401-3f029c742dcc",
+      "grant": "0x07ca3be2328272260857ee25383b035ae7915037af2245462e76080908203a75"
+    },
+    {
+      "case": "approval_unavailable",
+      "passed": true,
+      "jobId": "0dae68c0-2e61-42eb-988d-2de252d36594",
+      "grant": "0xdd9ecce58176b672a198ce10af4a2412ea728fd614ab4d84ce2f4f86af465d5c"
+    },
+    {
+      "case": "binding_veto",
+      "passed": true,
+      "jobId": "eb6ed262-d5b8-43c4-8c2b-c1d62987e7e1",
+      "grant": "0x8ddbddbdf7fd069b6cdc11b2af9603032c817d358c7f2afeb674007043a4eeda"
+    },
+    {
+      "case": "expiry_before_dispatch",
+      "passed": true,
+      "jobId": null,
+      "grant": "0xd994d96e3638095a1e31597f77fec31ed50ec47b8d9c0eab8f2568cb3a06e54c"
+    },
+    {
+      "case": "hosted_allow",
+      "passed": true,
+      "jobId": "122dda99-8170-47e2-a59d-9654e1028a67",
+      "grant": "0xab0c148aeaf2036dc85beac397567b5c653c0a8446704a5b41c818fbedf947bf"
+    },
+    {
+      "case": "post_dispatch_revoke",
+      "passed": true,
+      "jobId": "4929cd32-6dc7-49be-8a63-27b3254d54ab",
+      "grant": "0x39f4bc159bc7d85c9954ab5503c47b855be894dfeee2f0c40c9fff4b527eea91"
+    },
+    {
+      "case": "revoke_before_dispatch",
+      "passed": true,
+      "jobId": null,
+      "grant": "0xa706247e045c2b58e16ef12b5b69add60aefe832e97fd8b5cc38e87acdf5bfdc"
+    },
+    {
+      "case": "stale_authority",
+      "passed": true,
+      "jobId": null,
+      "grant": "0x555e0c55f97feac8e27188984932decb154cb67515a26845c9d24b9a701a5db6"
+    }
+  ],
+  "errors": [],
+  "passed_count": 8,
+  "not_measured": [
+    "revocation latency",
+    "target-side committed effect (effects are platform-observed)"
+  ]
+}

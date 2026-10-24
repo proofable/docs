@@ -6,15 +6,20 @@ link to every record, is at
 
 | Folder | What it is |
 | --- | --- |
-| [`2026-10-08-eight-case/`](./2026-10-08-eight-case/) | The results, 15 signed records, checksums, and an offline verifier |
+| [`2026-10-24-served/`](./2026-10-24-served/) | **Current run.** Eight cases on revision `61724c9f4`, 17 signed records, checksums, per-case verdicts |
 | [`reproduce/`](./reproduce/) | Run the same cases under your own account |
+| [`action/`](./action/) | The same run as a GitHub Action, writing a `trustharness.report/v1` report |
+| [`2026-10-08-eight-case/`](./2026-10-08-eight-case/) | Earlier run at revision `e1217327a`: 15 signed records and an offline verifier |
 
 ```sh
-cd 2026-10-08-eight-case
+cd 2026-10-24-served
 sha256sum -c SHA256SUMS
-npm install @proofable/sdk@0.1.6
-node verify-portable-proofs.mjs
+cd ../reproduce
+node aad.mjs verify ../2026-10-24-served
 ```
+
+For the October 8 packet, its own pin applies: `npm install @proofable/sdk@0.1.6` inside
+`2026-10-08-eight-case/`, then `node verify-portable-proofs.mjs`.
 
 Earlier packets stay at their commits:
 [`9851059`](https://github.com/proofable/docs/tree/9851059900e29ba701bb0f4df2bf89a2107f430c/public/evidence/aaif/authority-at-dispatch/2026-10-08)
