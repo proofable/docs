@@ -1,0 +1,156 @@
+name: Proofable trust harness
+description: Run the eight authority-at-dispatch cases on your own Proofable account and publish a scored report whose records verify offline.
+author: Proofable
+branding:
+  icon: shield
+  color: black
+
+inputs:
+  access-key:
+    description: A Proofable access key (npk_...) from the account that pays for the run. Pass it from a repository secret; never commit it.
+    required: true
+  operator:
+    description: Who is running this (organization or person). Recorded as the custodian in every sealed record.
+    required: true
+  agent-id:
+    description: Review agent id registered on that account. Give each reviewer sharing an account its own id.
+    required: false
+    default: aaif-authority-review
+  cases:
+    description: Space-separated case names, or "all". List them with `node aad.mjs cases`.
+    required: false
+    default: all
+  kit-ref:
+    description: docs commit or ref the kit is read from. Pin a commit sha for a reproducible run; the resolved sha is recorded in the report either way.
+    required: false
+    default: main
+  fail-on-failure:
+    description: Fail the job when any case does not pass.
+    required: false
+    default: "true"
+  report-path:
+    description: Where to write the report JSON.
+    required: false
+    default: proofable-report.json
+
+outputs:
+  report:
+    description: Path to the trustharness.report/v1 JSON.
+    value: ${{ steps.report.outputs.path }}
+  passed:
+    description: Cases that passed.
+    value: ${{ steps.report.outputs.passed }}
+  total:
+    description: Cases attempted.
+    value: ${{ steps.report.outputs.total }}
+
+runs:
+  using: composite
+  steps:
+    - name: Read the kit at a pinned ref
+      shell: bash
+      env:
+        KIT_REF: ${{ inputs.kit-ref }}
+      run: |
+        set -euo pipefail
+        kit="$RUNNER_TEMP/proofable-kit"
+        rm -rf "$kit"
+        git init -q "$kit"
+        cd "$kit"
+        git remote add origin https://github.com/proofable/docs.git
+        git fetch -q --depth 1 origin "$KIT_REF"
+        git checkout -q FETCH_HEAD
+        echo "PROOFABLE_KIT_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+        echo "PROOFABLE_KIT_DIR=$kit/public/evidence/aaif/authority-at-dispatch/reproduce" >> "$GITHUB_ENV"
+
+    - name: Install the kit
+      shell: bash
+      run: |
+        set -euo pipefail
+        cd "$PROOFABLE_KIT_DIR"
+        npm ci --no-audit --no-fund
+
+    - name: Register the review agent
+      shell: bash
+      env:
+        PROOFABLE_ACCESS_KEY: ${{ inputs.access-key }}
+        AAD_OPERATOR: ${{ inputs.operator }}
+        AAD_AGENT_ID: ${{ inputs.agent-id }}
+      run: |
+        set -euo pipefail
+        cd "$PROOFABLE_KIT_DIR"
+        node aad.mjs setup
+
+    - name: Run the cases
+      shell: bash
+      env:
+        PROOFABLE_ACCESS_KEY: ${{ inputs.access-key }}
+        AAD_OPERATOR: ${{ inputs.operator }}
+        AAD_AGENT_ID: ${{ inputs.agent-id }}
+        AAD_CASES: ${{ inputs.cases }}
+      run: |
+        set -euo pipefail
+        cd "$PROOFABLE_KIT_DIR"
+        # The newest sealed run is the one this job reports on.
+        if [ "$AAD_CASES" = "all" ]; then
+          node aad.mjs run
+        else
+          # shellcheck disable=SC2086
+          node aad.mjs run $AAD_CASES
+        fi
+        run_dir="$(ls -1dt runs/*/ | head -n 1)"
+        echo "PROOFABLE_RUN_DIR=$PROOFABLE_KIT_DIR/${run_dir%/}" >> "$GITHUB_ENV"
+
+    - name: Verify the records offline
+      shell: bash
+      run: |
+        set -euo pipefail
+        cd "$PROOFABLE_KIT_DIR"
+        set +e
+        node aad.mjs verify "$PROOFABLE_RUN_DIR" > "$RUNNER_TEMP/proofable-verify.log" 2>&1
+        verify_status=$?
+        set -e
+        cat "$RUNNER_TEMP/proofable-verify.log"
+        echo "PROOFABLE_VERIFY_STATUS=$verify_status" >> "$GITHUB_ENV"
+
+    - name: Build the report
+      id: report
+      shell: bash
+      env:
+        AAD_OPERATOR: ${{ inputs.operator }}
+        REPORT_PATH: ${{ inputs.report-path }}
+        SOURCE_URL: ${{ github.server_url }}/${{ github.repository }}
+      run: |
+        set -euo pipefail
+        node "$PROOFABLE_KIT_DIR/../action/report.mjs" "$PROOFABLE_RUN_DIR" \
+          --verify-log "$RUNNER_TEMP/proofable-verify.log" \
+          --source "$SOURCE_URL" \
+          --out "$REPORT_PATH" \
+          --summary "$RUNNER_TEMP/proofable-report.md"
+        node -e '
+          const r = require(process.env.REPORT_PATH.replace(/^/, "./"));
+          const fs = require("fs");
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `path=${process.env.REPORT_PATH}\n`);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `passed=${r.authority.passed}\n`);
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `total=${r.authority.total}\n`);
+        '
+        cat "$RUNNER_TEMP/proofable-report.md" >> "$GITHUB_STEP_SUMMARY"
+
+    - name: Keep the sealed run and the report
+      uses: actions/upload-artifact@v4
+      with:
+        name: proofable-trust-harness
+        path: |
+          ${{ inputs.report-path }}
+          ${{ env.PROOFABLE_RUN_DIR }}
+        if-no-files-found: error
+
+    - name: Fail when a case did not pass
+      if: ${{ inputs.fail-on-failure == 'true' }}
+      shell: bash
+      run: |
+        set -euo pipefail
+        if [ "${PROOFABLE_VERIFY_STATUS:-1}" != "0" ]; then
+          echo "The offline check did not pass; see the report and the verify log."
+          exit 1
+        fi
