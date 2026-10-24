@@ -139,6 +139,20 @@ node aad.mjs verify runs/<run-id>
 
 The same records are part of the [AAIF Identity & Trust working-group comparison](https://github.com/aaif/wg-identity-and-trust/issues/13) at the Linux Foundation.
 
+### Run it on every pull request
+
+Add one workflow file and the same eight cases run in your CI, on your account, with every record verified offline and kept as a build artifact:
+
+```yaml
+- uses: proofable/docs/public/evidence/aaif/authority-at-dispatch/action@<commit-sha>
+  with:
+    access-key: ${{ secrets.PROOFABLE_ACCESS_KEY }}
+    operator: ${{ github.repository_owner }}
+    kit-ref: <commit-sha>
+```
+
+Pin both refs to the same commit so a rerun measures the same kit. The action writes a `trustharness.report/v1` report listing the outcome for each case, whether each record verified offline, and the revision observed. It fails the job when the offline check does not pass, and it reports what it measured and nothing else: cost and performance rows stay `null` with a reason, and every comparison figure stays on this page. [Action and report schema](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/action).
+
 ## How the AgentGovBench run works
 
 [AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) is an open library of 48 agent-governance scenarios in eight areas: audit completeness, cross-tenant isolation, delegation provenance, fail-mode discipline, identity propagation, per-user policy, rate limits and scope inheritance. Each scenario is tagged with the NIST AI RMF controls it tests. Its maintainers revised the library in October 2026 so that nothing passes on a technicality.
