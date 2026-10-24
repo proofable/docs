@@ -44,6 +44,10 @@ These reach the public web. Use search and fetch for reading, and the browser on
 
 An action that would create an external side effect needs approval first. Actions that reach another business system go through `proofable_composio_execute`, which is permissioned.
 
+Prefer your own client's search, page fetch and browser. These are here for a client that has none, and each call is metered: `proofable_web_search` and `proofable_url_fetch` record 1 credit, `proofable_composio_execute` records 2, and a call relayed through a saved MCP server records 1. [Pricing](/pricing) lists the rates.
+
+Saving a remote MCP server and running its tools (`proofable_mcp_connection_create`, `proofable_mcp_tool_execute`) are on [Pro](/pricing). Listing, using and removing a saved server stay on every plan, and every other tool here runs on credits on every plan.
+
 ## Job tools
 
 Signed-in connections get the job tools on every plan. Each run uses your credits and stays within the permissions on your profile. `tools/list` returns the full set your connection can call.

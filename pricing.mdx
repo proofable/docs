@@ -22,7 +22,7 @@ Agent identity and permission proofs are public checks. They are available on ev
 
 ## Included on every plan
 
-Hosted sign-in and profile, Hosted Verify and reusable proofs, agent identity and permission proofs, the Proof Graph, agent composing with your own model key, hosted AI on the Default tier, jobs in the background or on a schedule, and the hosted computer. Everything runs on your credits; Pro adds the Advanced tier, credits and throughput.
+Hosted sign-in and profile, Hosted Verify and reusable proofs, agent identity and permission proofs, the Proof Graph, agent composing with your own model key, hosted AI on the Default tier, jobs in the background or on a schedule, and the hosted computer. Everything runs on your credits; Pro adds the Advanced tier, credits, throughput, and remote MCP servers you can save and run.
 
 ## What a job costs
 
@@ -33,6 +33,20 @@ Hosted sign-in and profile, Hosted Verify and reusable proofs, agent identity an
 | Hosted AI, Advanced tier (Pro and above) | 2 per 1,000 tokens |
 | Your own model key | 0 for tokens |
 | Hosted computer or job machine | 2 per vCPU for each started minute; the standard browser machine is 2 vCPUs, so 4 a minute |
+
+## What a tool call costs
+
+Signing in, checking a saved proof, and reading your own profile, proofs, agents, jobs, connections and secret names are free. The calls that reach another service are metered per call:
+
+| Call | Credits |
+|---|---|
+| Web search (`proofable_web_search`) | 1 |
+| Read a page (`proofable_url_fetch`) | 1 |
+| Run a connected-app action (`proofable_composio_execute`) | 2 |
+| A call relayed through a saved MCP server (`proofable_mcp_tool_execute`, Pro) | 1 |
+| A call on your own provider key (`proofable_capability_call`) | 0 |
+
+Operating a page with `proofable_browser` runs inside a job machine and is charged as a job above.
 
 ## What checks cost
 
