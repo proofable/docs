@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://docs.proofable.me/schemas/trustharness.report.v1.json",
+  "title": "Proofable trust harness report",
+  "description": "One report shape for both arms of the trust harness: `review` (a public-surface reading, no run) and `self-run` (the operator's own production run of the authority-at-dispatch cases, verified offline). The arm field is never optional. Every value is either what this report measured or null with a reason; a comparison figure is a link to its owner, never a copy.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "arm", "generated_at", "subject", "authority", "not_measured", "limits"],
+  "properties": {
+    "schema": { "const": "trustharness.report/v1" },
+    "arm": {
+      "enum": ["review", "self-run"],
+      "description": "review = read of public material only, nothing executed against the subject. self-run = the subject's own account ran the kit and the records verify offline."
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "instrument": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "kit": { "type": "string", "description": "Record schema the kit sealed, e.g. proofable-aad-run-manifest/v1." },
+        "kit_url": { "type": "string" },
+        "kit_commit": { "type": ["string", "null"], "description": "Resolved docs commit the kit was read from. null when unknown." },
+        "run_id": { "type": ["string", "null"] }
+      }
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["operator"],
+      "properties": {
+        "operator": { "type": "string", "description": "Who ran it (self-run) or whose material was read (review)." },
+        "agent_id": { "type": ["string", "null"] },
+        "agent_wallet": { "type": ["string", "null"] },
+        "controller": { "type": ["string", "null"] },
+        "product_revision": { "type": ["string", "null"], "description": "Deployed revision the run observed." },
+        "source": { "type": ["string", "null"], "description": "review only: repository or endpoint read." }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cases", "passed", "total"],
+      "properties": {
+        "cases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["case", "outcome"],
+            "properties": {
+              "case": { "type": "string" },
+              "outcome": { "enum": ["pass", "fail", "not-run", "error"] },
+              "job_id": { "type": ["string", "null"] },
+              "evidence": { "type": ["string", "null"], "description": "Where to look: proof qHash, file:line for a review, or null." },
+              "note": { "type": ["string", "null"] }
+            }
+          }
+        },
+        "passed": { "type": "integer", "minimum": 0 },
+        "total": { "type": "integer", "minimum": 0 },
+        "unauthorized_actions_through": {
+          "type": ["integer", "null"],
+          "description": "Sum of failed cases. A case with no recorded outcome counts as one that got through only when the arm is self-run; otherwise null."
+        }
+      }
+    },
+    "integrity": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "description": "self-run only: the offline check of the sealed records. null in the review arm.",
+      "properties": {
+        "checksums": { "enum": ["pass", "fail"] },
+        "envelopes_verified": { "type": ["integer", "null"] },
+        "envelopes_total": { "type": ["integer", "null"] }
+      }
+    },
+    "assets": {
+      "type": "object",
+      "description": "sha256 of every sealed file in the run directory, so a reader can prove the report describes bytes they can check.",
+      "additionalProperties": { "type": "string" }
+    },
+    "cost": {
+      "type": "array",
+      "description": "Cost and performance are never inferred. A row with no measurement carries value null and a reason.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["metric", "value", "reason"],
+        "properties": {
+          "metric": { "type": "string" },
+          "value": { "type": ["number", "null"] },
+          "unit": { "type": ["string", "null"] },
+          "reason": { "type": ["string", "null"], "description": "Why the value is null. Required whenever value is null." }
+        }
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "description": "review only: findings, each with what it means and the smallest fix.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["finding", "means"],
+        "properties": {
+          "finding": { "type": "string" },
+          "means": { "type": "string" },
+          "fix": { "type": ["string", "null"] },
+          "evidence": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "not_measured": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Named limits. Never empty: every arm has something it does not measure."
+    },
+    "limits": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Scope statements that must travel with the report wherever it is quoted."
+    },
+    "evidence_url": {
+      "type": "string",
+      "description": "The one page that owns every comparison figure. This report never restates them."
+    }
+  }
+}
