@@ -62,7 +62,8 @@ offline, and the deployed revision observed. Cost and performance rows are `null
 because this kit does not measure them. Comparison figures are a link to
 [docs.proofable.me/evidence](https://docs.proofable.me/evidence), which owns every number.
 
-`arm` is always `self-run` here: you drove the run on your own account. An independent run by a
-third party is the next tier, not this one.
+Every run this action produces is marked `self-run` in the report, because you drove it on your own
+account. A run by an independent third party is a separate tier, and this action does not produce
+one.
 
 Report shape: [`schema.json`](schema.json).

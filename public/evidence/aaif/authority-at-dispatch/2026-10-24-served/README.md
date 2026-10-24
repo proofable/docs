@@ -1,84 +1,83 @@
 # Eight authority cases on revision `61724c9f4`
 
-Run 2026-10-24T02:29Z UTC by Proofable, on the service revision production was serving at the time:
-`61724c9f4592f00858a31ef0ac7fa4dcdc67e160`, hosted MCP `0.1.7`. The kit that drove it is
-[`../reproduce/`](../reproduce/), run as the page documents, with no local modification, at kit
-version `aad-kit/1` as it stands in this tree.
+Proofable ran this on 2026-10-24 at 02:29 UTC, against the service revision production was serving
+at the time, `61724c9f4592f00858a31ef0ac7fa4dcdc67e160`, with hosted MCP `0.1.7`. The run used the
+kit in [`../reproduce/`](../reproduce/) unchanged, exactly as that page describes.
 
-This packet replaces [`../2026-10-08-eight-case/`](../2026-10-08-eight-case/) as the current run.
-That packet stays at its commit as history.
+This is the current run. It replaces [`../2026-10-08-eight-case/`](../2026-10-08-eight-case/), which
+stays at its own commit.
 
-## Result
+## What happened
 
 | | |
 | --- | --- |
-| Cases | 8 of 8 pass, zero errors |
-| Signed envelopes | 17, all verified offline |
-| Denials | every case that must refuse, refused before a job existed |
-| Controls | `stale_authority` includes a fresh valid control that ran and completed |
-| Records | unlisted, readable by anyone with the link, no account needed |
+| Cases | 8 of 8 passed, no errors |
+| Signed records | 17, every one verified offline |
+| Requests that should have been refused | all refused before a job was created |
+| Control | `stale_authority` also includes a valid request, and that one ran and completed |
+| Reading the records | no account needed. Each record is link-only, so the link is the access |
 
-| Case | What it exercises | Outcome |
+| Case | What it tests | Result |
 | --- | --- | --- |
-| `hosted_allow` | permission covers the job | ran, completed |
-| `binding_veto` | the job needs an action the permission leaves out | refused before dispatch |
-| `approval_reachable` | the job needs approval and the operator approves | held, then ran |
-| `approval_unavailable` | the job needs approval and nobody answers | never ran; a late approval was refused |
-| `revoke_before_dispatch` | permission revoked, then used | refused; no job created |
-| `expiry_before_dispatch` | permission used after it expires | refused; no job created |
-| `stale_authority` | revoked permission reused twice, plus a valid control | both refused; the control ran |
-| `post_dispatch_revoke` | permission revoked while a job runs, then used again | the running step finished; the next dispatch was refused |
+| `hosted_allow` | the permission covers the job | ran and completed |
+| `binding_veto` | the job needs something the permission leaves out | refused before anything ran |
+| `approval_reachable` | the job needs approval, and the operator approves | held, then ran |
+| `approval_unavailable` | the job needs approval, and nobody answers | never ran. A late approval was refused too |
+| `revoke_before_dispatch` | permission revoked, then used again | refused, and no job was created |
+| `expiry_before_dispatch` | permission used after it expires | refused, and no job was created |
+| `stale_authority` | revoked permission reused twice, plus a valid request | both refusals held, and the valid request ran |
+| `post_dispatch_revoke` | permission revoked while a job runs, then used again | the running step finished, and the next request was refused |
 
 ## Who ran it, and what that is worth
 
-The operator is Proofable. Custody is `SELF`: the agent wallet and the run records were produced on
-the operator's machine, by the operator's account, with no independent witness present.
+Proofable ran it. The agent wallet and the run records were produced on our own machine, through our
+own account, with nobody from outside the company watching.
 
-- Independent witness of the committed effect: **none**. Effects are recorded as the service observed
-  them at the job boundary.
-- Relationship of the observer to the implementation: the observer is the implementation.
-- Artifact custody: the operator holds the run directory; this copy is published unmodified and its
-  digests are in [`SHA256SUMS`](./SHA256SUMS).
+- No independent party confirmed what happened at the far end. What is recorded is what the service
+  reported when the job ran.
+- The observer and the team that built the service are the same team.
+- We hold the original run directory. This copy is what we published, unchanged, and its checksums
+  are in [`SHA256SUMS`](./SHA256SUMS).
 
-An outside observer would add what this run cannot: a readback taken at a target the operator does not
-control. The fetch route supports that (see the dispatch-only packet on the AgenTrust thread); the
-eight cases here do not use it.
+An outside observer would add the one thing this run cannot. That is a readback taken at a target we
+do not control. Our fetch route supports it, and these eight cases do not use it.
 
-## What is measured, and what is not
+## What this measures, and what it does not
 
-Measured: whether each case's authority decision matches the permission state, whether a refused case
-created a job, and whether the job that was allowed completed.
+Measured: whether each case's decision matches the permission state, whether a refused request
+created a job, and whether an allowed job completed.
 
-Not measured, and named as such in every record: revocation latency (how long a revocation takes to
-reach the check), and the committed effect at the target.
+Not measured, and said so in every record: how long a revocation takes to reach the check, and what
+actually happened at the far end of the call.
 
-One field reads differently than it looks. These cases hand the service a free-text acceptance
-sentence, not a machine-checkable criterion, so the service's own acceptance evaluator reports
-`acceptedOutcome: false` on the job record even when the case behaved exactly as the table says. The
-case verdict does not use that flag: it rests on the terminal receipt, the authority decision, and the
-response each job returned. Read `passed` in `MANIFEST.json`, not the job's acceptance flag.
+One field is easy to misread. Each case hands the service a sentence describing acceptance rather
+than a rule a machine can check, so the service's own evaluator reports `acceptedOutcome: false` on
+the job record even when the case behaved exactly as the table above says. The case result does not
+use that field. It rests on the final receipt, the decision, and the response each job returned.
+Read `passed` in `MANIFEST.json`, not the job's acceptance flag.
 
-## Grade it yourself
+## Check it yourself
 
 ```sh
 cd 2026-10-24-served && sha256sum -c SHA256SUMS
 cd ../reproduce && node aad.mjs verify ../2026-10-24-served
 ```
 
-Or open any `receipt.qHash` in a browser as `https://proofable.me/proof/<qHash>`; the records are
-unlisted, so the link is the access, and verification needs no account.
+You can also open any receipt in a browser as `https://proofable.me/proof/<qHash>`. The records are
+link-only, so the link is the access, and no account is needed.
 
-## Fields a working group grades on
+## What an evaluator looks for, and where it is here
 
-| Field | This packet |
+| What is being checked | This run |
 | --- | --- |
-| committed effect | the job terminal state and its signed receipt |
-| independent effect witness | none (self-observed) |
-| observer identity and its relationship to the run operator | Proofable, the implementation and the operator |
-| artifact custody | operator; published copy sealed by `SHA256SUMS` |
-| before/after state bound to run, action and target | permission state, decision, dispatch, outcome, receipt, in that order, per case |
-| artifact digests | `SHA256SUMS`, plus each envelope's own digest |
-| permitted positive control | `stale_authority` control and `hosted_allow` |
-| missing evidence kept distinct from measurements not performed | `not_measured` in the manifest, never a zero |
+| What the run actually changed | the job's final state and its signed receipt |
+| An independent witness of that change | none. We observed our own service |
+| Who observed it, and how they relate to the operator | Proofable, which is also the team that built the service |
+| Who holds the artifacts | us. The published copy is sealed by `SHA256SUMS` |
+| State before and after, tied to the run, the action and the target | permission state, decision, dispatch, outcome and receipt, in that order, for every case |
+| Digests of the artifacts | `SHA256SUMS`, plus a digest inside each record |
+| A request that is allowed, to prove the check can pass | `hosted_allow`, and the control inside `stale_authority` |
+| What was not measured, kept apart from what was | listed as `not_measured` in the manifest, never as a zero |
 
-Files: `MANIFEST.json` (run summary and per-case verdicts), one JSON record per case, `SHA256SUMS`.
+Files: `MANIFEST.json` for the run summary and the result of each case, one JSON record per case,
+and `SHA256SUMS`.
