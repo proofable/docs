@@ -57,15 +57,24 @@ A run started here costs what [Jobs](/jobs) lists for a run started in Proofable
 | Save a session note | `proofable_session_receipt_create` / `proofable_session_receipt_append` | Private receipt in your account; append adds to an existing one. |
 | Create or update a tool | `proofable_skill_tool_create_or_update` | A JavaScript tool or skill, run only when you or an agent invokes it. |
 
-## What a connection does not carry
+## Saved keys
 
-Three things stay off the MCP endpoint on every plan, because each one holds a credential or relays to a server your client can reach itself:
+| Job | Tool | What it does |
+|---|---|---|
+| List saved keys | `proofable_secret_list` | Names and update times. Never a value. |
+| Remove a saved key | `proofable_secret_revoke` | Deletes a saved key by proof ID. |
+| Call a provider with a saved key | `proofable_capability_call` | Proofable sends the request with your key and returns the provider's answer. The key never reaches the client. |
 
-- **Saving, listing or removing a provider key.** A key typed into an AI app's conversation has already been disclosed to that app. Save keys on [Secrets](./secrets); a job or the assistant in Proofable uses them without the value reaching a client.
-- **Calling a provider with a saved key.** Proofable's own runs do this for you.
-- **Relaying to a remote MCP server.** Add that server to your client directly.
+Save a key on [Secrets](./secrets), not through a tool. A key typed into an AI app's conversation has already been disclosed to that app.
 
-A connection does not list these tools, and a call to one is rejected as an unknown tool.
+## Remote MCP servers
+
+Save another MCP server on your profile and run its tools through Proofable, so each call carries your permissions and leaves a receipt.
+
+| Job | Tool | What it does |
+|---|---|---|
+| Save, list or remove a server | `proofable_mcp_connection_create` / `proofable_mcp_connections_list` / `proofable_mcp_connection_delete` | The server's URL and headers, stored encrypted on your profile. |
+| Use a server | `proofable_mcp_tools_list` / `proofable_mcp_tool_execute` | List its tools and run one. Each run records 1 credit. Private and metadata hosts are refused. |
 
 | Topic | Detail |
 |-------|--------|

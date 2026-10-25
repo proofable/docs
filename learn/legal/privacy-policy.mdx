@@ -93,7 +93,7 @@ The tool names above map to this policy as follows, so you can check any single 
 | `proofable_mcp_connection_create`, `proofable_mcp_connections_list`, `proofable_mcp_connection_delete` | MCP connection |
 | `proofable_mcp_tools_list`, `proofable_mcp_tool_execute` | Capability call and tool execution |
 
-This table covers Proofable's tools, whether a connection can call them or not, because the data each one handles is disclosed the same way either way. A signed-in connection to the hosted MCP service can call every tool above except the saved-secret tools, the provider call, and the MCP connection and tool execution tools, which run only inside Proofable. A client may show a different subset depending on whether you are signed in and what your client supports.
+This table covers Proofable's tools, whether a connection can call them or not, because the data each one handles is disclosed the same way either way. A signed-in connection to the hosted MCP service can call every tool above except saving a secret, which happens only inside Proofable. A client may show a different subset depending on whether you are signed in and what your client supports.
 
 ## How We Use Information
 

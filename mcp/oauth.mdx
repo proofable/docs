@@ -180,7 +180,7 @@ OAuth access tokens are valid only when `aud` is `https://mcp.proofable.me/mcp`,
 |-------|-------------|---------|
 | `neus:core` | Public protocol tools (context, catalog, public proof reads) | Yes |
 | `neus:profile` | Signed-in profile context and ownership checks | Yes |
-| `neus:secrets` | Stored credentials on your profile, used by Proofable's own runs. A connection carries no tool that handles one | Yes |
+| `neus:secrets` | Saved keys on your profile: list or remove one, or call a provider with one. A key is saved in Proofable, never through a tool | Yes |
 | `offline_access` | Refresh token so the client can stay signed in | Yes |
 
 These four scopes are the complete public permission model. Server keys (`npk_*`) are a full-profile credential.
