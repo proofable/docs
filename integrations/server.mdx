@@ -5,7 +5,7 @@ description: "Create proofs for users who approved your app, and automate Proofa
 icon: server
 ---
 
-Add a [gate](/gates/sell-access), then check the result on the server with `gateCheck`. This page is for backends that create proofs directly, or that automate Proofable as their own profile.
+Most apps add a [gate](/gates/sell-access) and check the result on the server with `gateCheck`. Backends that create proofs directly, or automate your own profile, use the paths below.
 
 ## Choose a path
 
@@ -45,11 +45,9 @@ This needs:
 
 If the approval is missing, send the user through [Hosted Verify](/verification/hosted) first.
 
-Creating proofs this way is different from publishing a listing, which bills hosted verification to your account.
-
 ## Automate as your profile
 
-An access key identifies your builder profile for automation. Pass it as `apiKey` on the server. It does not replace per-user approval for creating proofs for other people. [Access keys](/deployment/access-keys)
+An access key identifies your builder profile for automation. Pass it as `apiKey` on the server. Creating proofs for other people still needs their approval. [Access keys](/deployment/access-keys)
 
 ## Billing
 

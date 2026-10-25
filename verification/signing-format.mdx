@@ -5,34 +5,28 @@ description: "How Proofable canonicalizes, hashes, and replay-protects the messa
 icon: file-code
 ---
 
-**Default:** [Hosted Verify](./hosted) or **SDK** `client.verify()` - you do not need to read this page to ship.
+[Hosted Verify](./hosted) and the SDK's `client.verify()` sign for you. Use this reference when you call `POST /api/v1/verification` directly or debug a `SIGNATURE_VERIFICATION_FAILED` response.
 
-Use this reference when you implement **raw `POST /api/v1/verification`** or debug **`SIGNATURE_VERIFICATION_FAILED` / invalid signature** responses.
+The signature authenticates the exact request, not the later verifier outcome. Proofable returns a `qHash` and the complete `portableProof` envelope to the creator.
 
-## Why
+## Raw HTTP
 
-The wallet agrees to the exact request; Proofable returns a **qHash** and the complete `portableProof` envelope to the creator. The signature authenticates the request, not the later verifier outcome.
+1. Build the verification JSON body you will submit.
+2. `POST /api/v1/verification/standardize` with that body to get `signerString`, the exact bytes to sign.
+3. Sign `signerString`.
+4. `POST /api/v1/verification` with the same body plus `signature`.
 
-## Raw HTTP only
-
-If you call the API without the SDK:
-
-1. Build the verification **JSON body** you will submit.
-2. **`POST /api/v1/verification/standardize`** with that body to **`signerString`** (exact bytes to sign).
-3. Sign **`signerString`**.
-4. **`POST /api/v1/verification`** with the **same body** + **`signature`**.
-
-Do not hand-edit the six-line text. Only sign what **`standardize`** returns (or SDK **`standardizeVerificationRequest`**) for that exact body.
+Sign only what `standardize` (or the SDK's `standardizeVerificationRequest`) returns for that exact body. Never hand-edit the message.
 
 ## Troubleshooting
 
-- Re-run **`/standardize`** on the same payload and compare **`signerString`** to what the wallet signed.
-- **`walletAddress`**, **`verifierIds`**, **`data`**, **`signedTimestamp`**, and chain fields must match between standardize and submit.
-- Do not remove nonces or timestamps from `data` when recomputing `qHash`; every data field is bound.
+- Re-run `/standardize` on the same payload and compare `signerString` to what the wallet signed.
+- `walletAddress`, `verifierIds`, `data`, `signedTimestamp`, and chain fields must match between standardize and submit.
+- Every `data` field is bound, so keep nonces and timestamps in `data` when recomputing `qHash`.
 
 ## Shape
 
-UTF-8, **LF** newlines.
+UTF-8, LF newlines.
 
 ```text
 Portable Proof Verification Request
@@ -61,19 +55,4 @@ import {
 | Contract | EIP-1271 |
 | Counterfactual | EIP-6492 |
 
-## Related
-
-<CardGroup cols={2}>
- <Card title="How it works" icon="shield-check" href="./how-it-works">
- Flow.
- </Card>
- <Card title="API auth" icon="key" href="../api/authentication">
- HTTP.
- </Card>
- <Card title="Verifiers" icon="list-tree" href="./verifiers">
- Ids.
- </Card>
- <Card title="CAIP-380" icon="file-signature" href="../learn/standards/caip-380">
- Envelope.
- </Card>
-</CardGroup>
+The envelope format is defined in [CAIP-380](../learn/standards/caip-380).

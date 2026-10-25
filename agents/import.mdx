@@ -5,14 +5,14 @@ description: Bring a package, repo, or card. Proofable wraps identity and connec
 icon: file-import
 ---
 
-Drop a package, pick a GitHub repo, or paste a card or runtime link. Proofable inspects the source, registers identity on your profile, and asks you to reconnect apps. It does not copy secrets or run the package.
+Drop a package, pick a GitHub repo, or paste a card or runtime link. Proofable inspects the source, registers identity on your profile, and asks you to reconnect apps. Secrets stay behind, and the package never runs.
 
 Supported inputs include OpenClaw workspace files, Hermes config and skills, Agent Skills `SKILL.md` folders, A2A Agent Cards, MCP URLs, GitHub repositories, and zip or tar packages.
 
 ## From the product
 
 1. Open **Import your agent**.
-2. Drop files or paste a link. Do not start with a name.
+2. Drop files or paste a link.
 3. Review the detected label, skills, and apps that need reconnect.
 4. Continue to register identity. Set spend and action limits as a separate step.
 5. Connect the runtime from the project:
@@ -21,7 +21,7 @@ Supported inputs include OpenClaw workspace files, Hermes config and skills, Age
 npx -y @proofable/sdk mount <agentId> --apply <host>
 ```
 
-Hermes, OpenClaw, OpenCode, Cursor, Claude Code, and Codex imports use those `--apply` values. VS Code uses `--apply cursor`. The browser never writes host files.
+`<host>` is `hermes`, `openclaw`, `opencode`, `cursor`, `claude`, or `codex`. VS Code uses `--apply cursor`. Host files are written by this command in your project, never by the browser.
 
 ## From the CLI
 
@@ -34,7 +34,7 @@ npx -y @proofable/sdk import ./agent-pack.zip
 
 ## HTTP
 
-Inspect first, then map onto identity create. Retry is safe. There is no separate MCP import tool.
+Inspect first, then map onto identity create. Retry is safe.
 
 ```bash
 POST https://api.proofable.me/api/v1/agents/import/preview
@@ -53,5 +53,4 @@ Credentials, OAuth databases, private keys, and token values are excluded. Recon
 
 - [Agent identity](./agent-identity)
 - [Connect agent context](./runtime-mount)
-- [Agent create](../mcp/agent-create)
 - [Proofable CLI](../sdks/cli)

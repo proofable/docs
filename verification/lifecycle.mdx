@@ -13,23 +13,26 @@ icon: rotate
 | Accepted | Request in flight |
 | Processing | Async check |
 | Complete | Proof ID ready |
-| Reused | Checks / gates / MCP |
-| Stale / revoked | Policy or user revoke |
+| Reused | Checks, gates, and MCP |
+| Stale or revoked | Policy or owner revoke |
 
 ## Strategies
 
+`VerifyGate` takes a `strategy`:
+
 | Strategy | Use |
 |----------|-----|
-| `reuse-or-create` | Default. Reuse if valid |
+| `reuse-or-create` | Default. Reuse a valid proof, or create one |
 | `reuse` | Read-only checks |
 | `fresh` | Force a new result |
 
 ## Freshness
 
-- Point-in-time checks (balance, risk): respect recency.
-- Prefer cheap checks + `since` / `sinceDays`. Run a new check only when policy needs it.
+Point-in-time checks such as balance and risk go stale. Pass `since` or `sinceDays` to `gateCheck` to require a recent proof, and run a new check only when your policy needs one.
 
-## Revoke (owner)
+## Revoke
+
+The proof owner signs the revocation.
 
 ```http
 POST /api/v1/proofs/revoke-self/{qHash}
@@ -39,19 +42,4 @@ POST /api/v1/proofs/revoke-self/{qHash}
 await client.revokeOwnProof(qHash, wallet);
 ```
 
-## Related
-
-<CardGroup cols={2}>
- <Card title="How it works" icon="shield-check" href="./how-it-works">
- Flow.
- </Card>
- <Card title="Proofs" icon="file-check" href="../proofs">
- qHash.
- </Card>
- <Card title="Signing" icon="file-signature" href="./signing-format">
- Messages.
- </Card>
- <Card title="Verifiers" icon="list-tree" href="./verifiers">
- Catalog.
- </Card>
-</CardGroup>
+[Proofs](/proofs) covers the proof record and `qHash`.

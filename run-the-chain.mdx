@@ -35,8 +35,7 @@ The decision is recorded before the job exists, so its own `jobId` is `null`. Th
 returns the `jobId` and the decision `qHash` together, and the two hashes above tie the decision to the
 job record without it.
 
-That is what makes the chain checkable by a third party: nothing in it requires reading our database,
-which is also why an external reviewer or another agent can audit a run they did not make.
+An external reviewer or another agent can audit a run they did not make without reading our database.
 
 ## Run it end to end
 
@@ -59,12 +58,11 @@ delegation, an approval that arrives, an approval that never arrives, revocation
 expiry before dispatch, reuse of a revoked grant against a valid control, and revocation while a job is
 running. Their expected outcomes are listed in the kit's README.
 
-The same cases run in CI from the same kit, and fail the build when a record does not verify:
-[`public/evidence/aaif/authority-at-dispatch/action`](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/action).
+To run the same cases in your own CI, use the
+[GitHub Action](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/action)
+from the same kit. It fails the build when a record does not verify.
 
 ## Check a record without taking our word for it
-
-One function, no network call, no account:
 
 ```js
 import { verifyPortableProofEnvelope } from '@proofable/sdk';
@@ -79,7 +77,7 @@ form, so you can write the same check in another language, and the [signing
 format](/verification/signing-format) covers wallets that sign with something other than an EOA.
 
 Published runs, with the records and a script that verifies every envelope in them:
-[authority-at-dispatch evidence](https://docs.proofable.me/evidence).
+[authority-at-dispatch evidence](/evidence).
 
 ## What the chain does not cover
 

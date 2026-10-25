@@ -21,7 +21,7 @@ if (!result.satisfied) throw new Error('Verification required');
 await submitReview();
 ```
 
-No dashboard or published listing is required. Your application owns the final allow or deny decision.
+No dashboard or published listing is required.
 
 <Tabs>
   <Tab title="Missing verification">
@@ -83,11 +83,11 @@ Users keep their proofs. When they reach another product that accepts them, they
 
 ## Who pays
 
-Your app can sponsor usage, users can pay through a Listing, and agents or APIs can use x402. Payer-resolution details are in [Pricing](/pricing).
+Your app can sponsor usage, users can pay through a listing, and agents or APIs can pay per call with x402. [Pricing](/pricing) shows who is charged in each case.
 
 ## Keep credentials on the server
 
-Access keys and other secrets never belong in browser code. Call Proofable from your backend when you need more than the SDK exposes in the browser.
+Access keys and other secrets stay in your backend. Call Proofable from there when you need more than the browser SDK exposes.
 
 ## Next
 
@@ -95,13 +95,7 @@ Access keys and other secrets never belong in browser code. Call Proofable from 
   <Card title="Server integrations" icon="server" href="/integrations/server">
     Create proofs from your backend.
   </Card>
-  <Card title="Hosted verification" icon="key" href="/verification/hosted">
-    Every parameter for the hosted flow.
-  </Card>
   <Card title="Agents in the SDK" icon="robot" href="/sdks/agents">
     Create agents for your users with owner approval.
-  </Card>
-  <Card title="HTTP API" icon="terminal" href="/api/overview">
-    Endpoints, paging, and raw requests.
   </Card>
 </CardGroup>

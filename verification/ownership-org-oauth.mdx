@@ -7,19 +7,13 @@ icon: building
 
 **Verifier ID:** `ownership-org-oauth`
 
-Confirm a person belongs to an organization, then gate member-only apps, agents, and content. They sign in with Google Workspace or Microsoft 365, or enter a one-time code sent to their work email, so organizations on any mail host can pass. Personal mail hosts such as Gmail, Outlook.com, and Yahoo never do. Sign-in and codes run on Proofable. Use Hosted Verify or `VerifyGate`. Never build a custom OAuth UI.
+Confirm a person belongs to an organization, then gate member-only apps, agents, tools, and partner portals. The person signs in with Google Workspace or Microsoft 365, or enters a one-time code sent to their work email, so organizations on any mail host can pass. Personal mail hosts such as Gmail, Outlook.com, and Yahoo never pass. Sign-in and codes run on Proofable through Hosted Verify or `VerifyGate`.
 
 A person already signed in to Proofable with that work email confirms it in one click, with no new code.
 
-## Use cases
-
-- Gating to members of an organization by its email domain
-- Org-scoped agents and apps
-- Member-only tools and partner portals
-
 ## Flow type
 
-Interactive, hosted-only. This verifier cannot be submitted directly from your backend, and it cannot be combined with other checks in one request.
+Interactive, hosted-only. Your backend cannot submit this verifier directly, and it runs on its own, never combined with other checks in one request.
 
 ## The simplest path
 
@@ -35,11 +29,7 @@ You get a proof ID in the `qHash` field. Store and reuse it.
 |------|----------|-------|
 | `provider` | Yes | `google`, `microsoft`, or `email` (a one-time code sent to the work address) |
 | `internalSocialToken` | Yes (direct submit) | Short-lived token issued by the hosted sign-in or code step |
-| `expectedOrgDomain` | No | Restrict the proof to one company domain such as `acme.com` |
+| `expectedOrgDomain` | No | Restrict the proof to one company domain such as `acme.com`. Omit it to accept any organization domain. |
 | `walletAddress` | No | Subject override to bind membership to a wallet |
-
-<Tip>
-Set `expectedOrgDomain` only when a single company domain should pass; omit it if any organization domain is acceptable.
-</Tip>
 
 Full schema: [`ownership-org-oauth.json`](https://github.com/proofable/docs/blob/main/verifiers/schemas/ownership-org-oauth.json).

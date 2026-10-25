@@ -9,4 +9,4 @@ Request shapes for the public verifier catalog. Guides for people integrating Pr
 | **`schemas/*.json`** | One JSON Schema per public verifier |
 | **`VERIFIERS.json`** | Catalog index; each `inputSchemaPath` is `verifiers/schemas/<id>.json` |
 
-These files are the public catalog. After a change merges, the live API uses them. To propose a new public check, see [Propose a verifier](../verification/propose-a-verifier).
+These files mirror the live verifier registry in the Proofable service and update when a verifier ships there. To propose a new public check, see [Propose a verifier](../verification/propose-a-verifier).

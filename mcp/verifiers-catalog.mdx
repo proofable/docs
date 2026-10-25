@@ -1,14 +1,11 @@
 ---
 title: MCP verifier catalog
 sidebarTitle: Verifier catalog
-description: "List every Proofable check you can run through MCP and the exact inputs each one needs. Live catalog, no hardcoded lists."
+description: "List every Proofable check you can run through MCP, with the inputs and flow each one needs, read from the live service."
 icon: table
 ---
 
-| Situation | Tool |
-|-----------|------|
-| Typical integration | **`proofable_context`** |
-| Complete verifier list and schemas | This tool |
+`proofable_context` already returns a compact `verifierSummary`. Call **`proofable_verifiers_catalog`** when you need the full list and each check's required inputs. It runs without sign-in.
 
 ## Input
 
@@ -18,6 +15,9 @@ icon: table
 
 ## Output
 
-An array of live verifier **IDs** (strings), e.g. `["ownership-basic", "proof-of-human", ...]`. Use it to confirm which verifiers exist before building a request.
+| Field | Contents |
+|-------|----------|
+| `verifiers` | Live verifier IDs, e.g. `["ownership-basic", "proof-of-human", ...]` |
+| `metadata` | Per-verifier details keyed by ID: required fields, data schema, and flow type |
 
-For input fields and schemas per verifier, see the [Verifiers](../verification/verifiers) pages and the JSON schemas in [`verifiers/schemas/`](https://github.com/proofable/docs/tree/main/verifiers/schemas), or call `GET /api/v1/verification/verifiers` for the full metadata response.
+The same data is available from `GET /api/v1/verification/verifiers`. Per-check guides are in [Verifiers](../verification/verifiers), and the JSON schemas are in [`verifiers/schemas/`](https://github.com/proofable/docs/tree/main/verifiers/schemas).

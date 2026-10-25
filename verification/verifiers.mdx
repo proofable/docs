@@ -1,99 +1,37 @@
 ---
 title: Available verifiers
 sidebarTitle: Verifier catalog
-description: "Choose the right Proofable verifier for the decision your product makes: identity, ownership, access, or safety. Full catalog."
+description: "Every public Proofable verifier ID, grouped by the decision it supports, with the way each check runs."
 icon: list-tree
 ---
 
-## By outcome
-
-| Need | Verifier | Type |
-|------|-------|------|
-| Content ownership | [ownership-basic](./ownership-basic) | Instant |
-| Social link | [ownership-social](./ownership-social) | Interactive |
-| Domain | [ownership-dns-txt](./ownership-dns-txt) | Lookup |
-| Org / team | [ownership-org-oauth](./ownership-org-oauth) | Interactive |
-| Username / handle | [ownership-pseudonym](./ownership-pseudonym) | Instant |
-| Linked wallets | [wallet-link](./wallet-link) | Instant |
-| NFT gate | [nft-ownership](./nft-ownership) | Lookup |
-| Token gate | [token-holding](./token-holding) | Lookup |
-| Contract control | [contract-ownership](./contract-ownership) | Lookup |
-| Human | [proof-of-human](./proof-of-human) | Interactive |
-| Wallet risk | [wallet-risk](./wallet-risk) | Lookup |
-| Content safety | [ai-content-moderation](./ai-content-moderation) | Lookup |
-| Agent identity | [agent-identity](../agents/agent-identity) | Instant |
-| Agent authority | [agent-delegation](../agents/agent-delegation) | Instant |
+| Category | Verifier | Confirms | Type |
+|---|---|---|---|
+| Identity | [ownership-social](./ownership-social) | Control of a social account | Interactive |
+| Identity | [ownership-org-oauth](./ownership-org-oauth) | A work email at an organization | Interactive |
+| Identity | [ownership-dns-txt](./ownership-dns-txt) | Control of a domain | Lookup |
+| Identity | [ownership-pseudonym](./ownership-pseudonym) | A handle bound to a wallet | Instant |
+| Identity | [wallet-link](./wallet-link) | Wallets linked to one account | Instant |
+| Ownership | [ownership-basic](./ownership-basic) | Authorship of content or a claim | Instant |
+| Ownership | [contract-ownership](./contract-ownership) | Owner or admin control of a contract | Lookup |
+| Access | [nft-ownership](./nft-ownership) | An NFT holder | Lookup |
+| Access | [token-holding](./token-holding) | A minimum token balance | Lookup |
+| Abuse | [proof-of-human](./proof-of-human) | A real person | Interactive |
+| Abuse | [wallet-risk](./wallet-risk) | Wallet risk signals | Lookup |
+| Abuse | [ai-content-moderation](./ai-content-moderation) | Content safety | Lookup |
+| Agents | [agent-identity](../agents/agent-identity) | Who the agent is | Instant |
+| Agents | [agent-delegation](../agents/agent-delegation) | What the agent may do | Instant |
 
 ## Types
 
-| Type | Behavior | Examples |
-|------|----------|----------|
-| Instant | Wallet signs | ownership-basic, agent-identity |
-| Interactive | Hosted flow | ownership-social, proof-of-human |
-| Lookup | Live state | nft-ownership, token-holding |
-
-## By category
-
-### Identity
-
-| Verifier | Confirms |
-|----------|--------|
-| [ownership-social](./ownership-social) | Social account |
-| [ownership-dns-txt](./ownership-dns-txt) | Domain |
-| [ownership-org-oauth](./ownership-org-oauth) | Org membership |
-| [ownership-pseudonym](./ownership-pseudonym) | Username |
-| [wallet-link](./wallet-link) | Linked wallets |
-
-### Ownership
-
-| Verifier | Confirms |
-|----------|--------|
-| [ownership-basic](./ownership-basic) | Content / claim |
-| [contract-ownership](./contract-ownership) | Contract control |
-
-### Access
-
-| Verifier | Confirms |
-|----------|--------|
-| [nft-ownership](./nft-ownership) | NFT holder |
-| [token-holding](./token-holding) | Balance threshold |
-
-### Abuse
-
-| Verifier | Confirms |
-|----------|--------|
-| [proof-of-human](./proof-of-human) | Human |
-| [wallet-risk](./wallet-risk) | Risk signal |
-| [ai-content-moderation](./ai-content-moderation) | Content safety |
-
-### Agents
-
-| Verifier | Confirms |
-|----------|--------|
-| [agent-identity](../agents/agent-identity) | Who the agent is |
-| [agent-delegation](../agents/agent-delegation) | What the agent may do |
+| Type | What happens |
+|---|---|
+| Instant | The account signs during the session. |
+| Interactive | The person completes a hosted step on Proofable. |
+| Lookup | Proofable reads live on-chain, DNS, or provider state. |
 
 ## Bundles
 
-Ready-made `?preset=` bundles, or combine verifiers with `?verifiers=id1,id2`. See [Presets](./presets).
+Run several checks with `?verifiers=id1,id2`, or a named bundle with `?preset=`. [Presets](./presets) lists the bundles.
 
-| Preset | Verifiers | For |
-|--------|-----------|-----|
-| `agent-pack` | agent-identity + agent-delegation + wallet-risk | Scoped agents |
-| `project-pack` | contract-ownership + ownership-dns-txt | Project trust |
-| `creator-pack` | ownership-basic + ai-content-moderation | Content trust |
-| `workspace-pack` | ownership-social + ownership-basic + agent-identity + wallet-link | Team onboarding |
-
-## Next
-
-<CardGroup cols={2}>
- <Card title="Sell access" icon="rocket" href="../gates/sell-access">
- First proof.
- </Card>
- <Card title="Hosted Verify" icon="key" href="./hosted">
- Guided.
- </Card>
- <Card title="Propose a verifier" icon="plus" href="./propose-a-verifier">
- Add one.
- </Card>
-</CardGroup>
+To add a check, [propose a verifier](./propose-a-verifier).

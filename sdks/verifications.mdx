@@ -1,11 +1,11 @@
 ---
 title: Verify patterns
 sidebarTitle: Verify patterns
-description: "Verification patterns for the Proofable SDK: proof reuse, fresh checks, hosted checkout, and server-side verification for every flow."
+description: "Choose between proof reuse, fresh checks, hosted handoff, or a server-side gateCheck, and set who can read each proof you create."
 icon: network-wired
 ---
 
-Default strategy: **`reuse-or-create`**.
+Default strategy: **`reuse-or-create`**. Every `VerifyGate` prop is in [VerifyGate](../widgets/verifygate).
 
 ## Privacy
 
@@ -15,10 +15,10 @@ Default strategy: **`reuse-or-create`**.
 |--------|------|
 | `privacyLevel: 'private'` | Default; owner or authorized access for private reads |
 | `privacyLevel: 'public'` | Public reuse without owner auth; pair with `publicDisplay` |
-| `publicDisplay: false` | Unlisted - still public to anyone with id |
+| `publicDisplay: false` | Unlisted. Anyone with the proof ID can read it |
 | `publicDisplay: true` | Listed / discoverable (needs `public`) |
 
-`storeOriginalContent` and explicit visibility options are advanced `client.verify()` storage controls, not the default VerifyGate path.
+`storeOriginalContent` and these visibility options apply to `client.verify()`.
 
 ## Reuse-first
 
@@ -33,7 +33,7 @@ Default strategy: **`reuse-or-create`**.
 
 ## Fresh
 
-High-stakes actions - force new proof:
+For high-stakes actions, force a new proof:
 
 ```jsx
 <VerifyGate strategy="fresh" gate={[{ verifierId: 'proof-of-human' }]}>
@@ -74,14 +74,3 @@ const result = await client.gateCheck({
 
 if (!result.satisfied) throw new Error('Verification required');
 ```
-
-## Next
-
-<CardGroup cols={2}>
- <Card title="VerifyGate" icon="object-group" href="../widgets/verifygate">
- Props.
- </Card>
- <Card title="Start" icon="bolt" href="/">
- Loop.
- </Card>
-</CardGroup>

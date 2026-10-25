@@ -6,15 +6,11 @@ keywords: ["proofable_verify", "create a proof", "verify", "MCP"]
 icon: circle-check
 ---
 
-Use **[`proofable_verify_or_guide`](./verify-or-guide)** as the normal trust path. It reuses a qualifying proof when one exists or returns the one next step needed to finish verification.
+Start with **[`proofable_verify_or_guide`](./verify-or-guide)**, which reuses a qualifying proof before anything new is created. Use **`proofable_verify`** when the signed-in account can complete a known check in-session and a new proof is needed. Ownership checks finish here.
 
-Use **`proofable_verify`** when the signed-in account can complete a known check in-session and a new proof is actually needed. Ownership checks finish here.
+When a separate signer is required, call **`proofable_verify_prepare`** to get the exact signing string, then **`proofable_verify_submit`** with its signature and original timestamp. Preparation creates no proof.
 
-When a separate signer is required, call **`proofable_verify_prepare`** to get the exact signing string, then **`proofable_verify_submit`** with its signature and original timestamp. Preparation does not create a proof.
-
-Use **`proofable_proofs_check`** only when the user explicitly needs a yes/no eligibility, gate, or access answer.
-
-When signed in, **omit `walletAddress`**. The tool uses your profile account from `proofable_context`. For `ownership-basic`, omit `owner`. The signed-in account is filled in.
+When signed in, **omit `walletAddress`**. The tool uses your profile account from `proofable_context`. For `ownership-basic`, omit `owner`; the signed-in account is filled in.
 
 ## Input
 

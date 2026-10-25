@@ -9,24 +9,23 @@ Publish one DNS record, run the check, and keep the proof. This guide uses the [
 
 <Steps>
   <Step title="Add a TXT record">
-    At your DNS host, create a TXT record named `_proofable` on the domain. The check reads `_proofable.<your-domain>`. A legacy `_neus` record still verifies.
+    At your DNS host, create a TXT record named `_proofable` on the domain. The check reads `_proofable.<your-domain>`.
 
     ```text
     wallet=<your-account-address>
     ```
 
-    Use the same account address Proofable uses for the check. Write Ethereum addresses in lowercase. Only the `wallet=` prefix is read.
+    Use the wallet address that signs the check. Write Ethereum addresses in lowercase. Only the `wallet=` prefix is read.
   </Step>
   <Step title="Run the check">
     ```js
     const proof = await client.verify({
       verifier: 'ownership-dns-txt',
       data: { domain: 'example.com' },
-      walletAddress: '0x...',
     });
     ```
 
-    A signed request fills in the account address. Add `walletAddress` inside `data` only when it must be explicit, and it must match the signer.
+    The SDK fills in the connected wallet address, which must match the TXT record.
   </Step>
   <Step title="Check it later">
     ```bash

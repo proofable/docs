@@ -7,22 +7,14 @@ icon: chart-line
 
 **Verifier ID:** `wallet-risk`
 
-## Use cases
+Lookup. Proofable checks the wallet with Webacy before payments, fraud-sensitive actions, and high-risk onboarding.
 
-- Payment flows
-- Fraud checks
-- High-risk onboarding
-
-## Flow type
-
-Lookup. Proofable checks wallet risk through an external provider.
-
-## Required fields
+## Fields
 
 | Field | Required | Notes |
 |------|----------|-------|
 | `walletAddress` | Yes | Wallet to assess |
-| `provider` | No | Example: `webacy` |
+| `provider` | No | `webacy` (default) |
 | `chain` or `chainId` | No | Chain context: `eth`, `base`, `bsc`, `pol`, `opt`, `arb`, `sol`, `ton`, `sei`, `sui`, `btc`, `stellar` |
 
 ## Example

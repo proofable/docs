@@ -4,11 +4,11 @@ description: "Gate access, actions, payments, or content by verified proof."
 icon: door-open
 ---
 
-Require proof before it happens. You decide what must already be proven. The person verifies. You keep the result.
+Require proof before an action happens. You decide what must already be proven, the person verifies, and you keep the result.
 
-One check is not a gate. A single `proof-of-human` requirement is [Verify](/verification) with a saved proof: send the person to [Hosted Verify](/verification/presets), read the returned proof ID, done. No gate to define.
+A single check needs no gate. For one `proof-of-human` requirement, send the person to [Hosted Verify](/verification/presets) and read the returned proof ID. [Verify](/verification) covers that path.
 
-Reach for a gate when the decision needs a policy of several checks, a price, or a schedule. Publishing a listing is optional: use it only when you want a persisted `gateId`, price, schedule, or marketplace offer.
+Use a gate when the decision needs several checks, a price, or a schedule. Publish it as a listing when you want a persisted `gateId`, price, schedule, or marketplace offer.
 
 ## What a gate holds
 
@@ -35,7 +35,7 @@ import { ProofableClient, defineGate } from '@proofable/sdk';
 const proofable = new ProofableClient();
 const gate = defineGate([
   { verifierId: 'proof-of-human' },
-  { verifierId: 'ownership-dns-txt', match: { domain: 'acme.com' } },
+  { verifierId: 'ownership-dns-txt', match: [{ path: 'domain', value: 'acme.com' }] },
 ]);
 const result = await proofable.gateCheck({ gate, subject });
 if (result.satisfied) {
@@ -49,7 +49,7 @@ import { VerifyGate } from '@proofable/sdk/widgets';
 
 const gate = defineGate([
   { verifierId: 'proof-of-human' },
-  { verifierId: 'ownership-dns-txt', match: { domain: 'acme.com' } },
+  { verifierId: 'ownership-dns-txt', match: [{ path: 'domain', value: 'acme.com' }] },
 ]);
 
 <VerifyGate gate={gate} onVerified={grantAccess} />;

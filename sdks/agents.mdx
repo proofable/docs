@@ -34,12 +34,9 @@ With `identityQHash`, Proofable asks the owner only for permissions. The callbac
 | `allowedActions`, `deniedActions` | What the agent may and may not do |
 | `maxSpend` | Spend cap in token base units |
 | `expiresAt` | When the permission ends, in Unix milliseconds |
-| `scope` | Where the permission applies |
 | `runtimePolicy` | Allowed providers and models, and whether a person must approve |
 | `approvalPolicy` | Approval for new claims or content |
 | `returnUrl` | Where to send the owner afterward |
-
-Keep agent setup on its own URL. Do not combine it with `gateId` or `intent: 'login'`.
 
 For an agent on the owner's own profile, ask Proofable over MCP instead: [`proofable_agent_create`](/mcp/agent-create).
 
@@ -102,7 +99,7 @@ if (!decision.allowed) {
 | `MOUNT_REQUIRED` | `denied` | No agent bundle was passed. |
 | `ACTION_REQUIRED` | `denied` | No action name was passed. |
 
-A denial is applied first, then the allowed list, then approval. The SDK evaluates one action. Your host owns the tool call and must stop it when `allowed` is `false`.
+A denial is applied first, then the allowed list, then approval. The SDK evaluates one action, and your host stops the tool call when `allowed` is `false`.
 
 ## Load the permission bundle
 

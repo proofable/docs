@@ -7,17 +7,7 @@ icon: wand-magic-sparkles
 
 **Verifier ID:** `ai-content-moderation`
 
-Screen text or images for safety, then reuse the result before you publish.
-
-## Use cases
-
-- User-generated content
-- AI-generated output
-- Moderation and publishing workflows
-
-## Flow type
-
-External lookup. Proofable screens the content with a moderation provider and records the outcome.
+Lookup. Proofable screens text or images with a moderation provider and records the outcome, so you can check it again before you publish.
 
 ## Fields
 
@@ -25,7 +15,7 @@ External lookup. Proofable screens the content with a moderation provider and re
 |------|----------|-------|
 | `content` | Yes | Raw text, base64, or an `ipfs://` / CID reference |
 | `contentType` | Yes | MIME type. See supported types below |
-| `provider` | No | Defaults by content: text → `google-perspective`, images → `google-vision` |
+| `provider` | No | Defaults by content: text uses `google-perspective`, images use `google-vision` |
 
 **Supported `contentType` values:** `text/plain`, `text/markdown`, `text/x-markdown`, `application/json`, `application/xml`, `image/jpeg`, `image/png`, `image/gif`, `image/webp`.
 

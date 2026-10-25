@@ -25,13 +25,11 @@ The full catalog, including risk and content checks, is on [Verify](/verificatio
 
 <Tabs>
   <Tab title="Hosted">
-    Send people to Proofable. They complete the check there and return with a proof ID.
+    Send people to Proofable. They complete the check there and return to your URL with the proof ID in the `qHash` field.
 
     ```text
     https://proofable.me/verify?verifiers=ownership-org-oauth&returnUrl=https://app.example.com/verified
     ```
-
-    Read the proof ID from the `qHash` field on your return URL.
   </Tab>
   <Tab title="SDK">
     ```js
@@ -61,9 +59,6 @@ Define the required checks in your app, use `gateCheck` on your server, and show
 ## Next
 
 <CardGroup cols={2}>
-  <Card title="Verify" icon="badge-check" href="/verification">
-    Every supported check and how it runs.
-  </Card>
   <Card title="Hosted verification" icon="key" href="/verification/hosted">
     Sign-in and checks without building UI.
   </Card>

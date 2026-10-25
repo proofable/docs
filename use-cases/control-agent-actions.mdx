@@ -43,7 +43,7 @@ A missing, expired, or revoked permission grants nothing.
     npx -y @proofable/sdk mount draft-agent --apply cursor
     ```
 
-    This writes the agent's current permission to `.proofable/mount.json`. Use `claude` or `codex` in place of `cursor` for those hosts. If the CLI asks for a credential, run `npx -y @proofable/sdk auth --oauth` first.
+    This writes the agent's current permission to `.proofable/mount.json`. For other hosts, replace `cursor` with `claude`, `codex`, `hermes`, `openclaw`, or `opencode`. If the CLI asks for a credential, run `npx -y @proofable/sdk auth --oauth` first.
   </Step>
   <Step title="Check before the tool call">
     ```ts
@@ -70,21 +70,18 @@ A missing, expired, or revoked permission grants nothing.
 | Your tools | The host loads the agent's rules. Start a new session after you mount. |
 | Your own workers and backends | Your code calls `evaluateRuntimeAction` and stops when `allowed` is `false`. |
 
-Proofable supplies the decision. The system that owns the tool call must honor it.
+The system that owns the tool call enforces the decision.
 
 ## Built-in guardrails
 
 - **Connected apps.** Only the capabilities you enable can run. Sends, creates, and deletes still pass through agent permissions. [Connections](/connections)
 - **Secrets.** Stored encrypted and never returned in plaintext through MCP. Connected tools run without handing credentials to the model. [Security](/security)
-- **Payments.** Set `maxSpend` with the `payments:x402` scope. Your application checks the cap before it signs each payment. [Pay per call](/gates/pay-per-call)
+- **Payments.** Allow `make_payment` with `allowedPaymentTypes: ["x402"]` and a `maxSpend` cap. Your application checks the cap before it signs each payment. [Pay per call](/gates/pay-per-call)
 - **Jobs.** A run that needs approval waits for you. Approve to continue, or deny to stop it. [Jobs](/jobs)
 
 ## Next
 
 <CardGroup cols={2}>
-  <Card title="Guard an agent action" icon="shield-check" href="/mcp/guarded-action">
-    Run one allow or deny decision end to end.
-  </Card>
   <Card title="Agent permissions" icon="handshake" href="/agents/agent-delegation">
     Every permission field, with examples.
   </Card>

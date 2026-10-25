@@ -5,41 +5,34 @@ description: Use Proofable for passkey, OAuth, and listing checkout without buil
 icon: key
 ---
 
-Send users to `https://proofable.me/verify` for sign-in, proof of human, social links, or listing checkout. You never embed passkey, OAuth, or wallet UI.
-
-Wallet steps appear only when a published gate requires them. Sign-in and gate checkout share one surface.
+Send users to `https://proofable.me/verify` for sign-in, proof of human, social and work accounts, or listing checkout. Passkey, OAuth, and wallet steps all run there.
 
 ## What runs here
 
-| Query intent | User completes on Proofable |
-|--------------|-------------------------|
-| `intent=login` | Proofable session: passkey sign-in (primary), optional wallet attach |
-| `gateId` | Gate checkout; wallet steps **only** if the published gate requires them |
-| Social / org | OAuth inside a verifier. [ownership-social](../verification/ownership-social), [ownership-org-oauth](../verification/ownership-org-oauth) |
+| Query | The user completes | You get |
+|---|---|---|
+| `intent=login` | Passkey sign-in, with an optional wallet attach | A Proofable session |
+| `gateId` | Listing checkout. Wallet steps appear only when the published gate requires them. | A proof |
+| `verifiers` or `preset` | The named checks. See [Presets](/verification/presets). | A proof |
 
-## Login vs verification
-
-| Topic | `intent=login` | Gate checkout (`gateId`, no login-only intent) |
-|--|----------------|---------------------------------------------------------------------|
-| Purpose | Proofable **session** (profile and later proofs) | **Proof** / listing outcome |
-| Screen | Dedicated login shell | Composer |
+Social and work-account checks run their OAuth step inside the verifier: [ownership-social](/verification/ownership-social), [ownership-org-oauth](/verification/ownership-org-oauth).
 
 ## Parameters
 
 | Param | Use |
 | --- | --- |
-| `intent=login` | Hosted **login** only |
-| `returnUrl` | Absolute `https://…` back to **your** app after completion. Validated before redirect. |
-| `returnTo` | **proofable.me** path only (e.g. `/profile`). Not for third-party domains. `@proofable/sdk` `getHostedCheckoutUrl` does not set this; append manually if needed. |
-| `connect=1` | Optional for wallet-native products. With `intent=login`, auto-starts wallet connect on load |
-| `gateId` | Gate definition |
-| `mode=popup` | Popup; requires `origin` |
-| `origin` | Opener origin for postMessage |
-| `appId` | Advanced server/app attribution only; not required for published gate checkout |
+| `intent=login` | Sign-in only |
+| `returnUrl` | Absolute `https://` URL in your app to return to. Validated before redirect. |
+| `returnTo` | A path on `proofable.me`, such as `/profile`. `getHostedCheckoutUrl` does not set it. |
+| `connect=1` | With `intent=login`, starts wallet connect on load |
+| `gateId` | Published gate |
+| `mode=popup` | Run as a popup. Requires `origin`. |
+| `origin` | Opener origin for `postMessage` |
+| `appId` | Attribution for a server-registered app. Ignored with `gateId`. |
 
 ## Redirect examples
 
-**Checkout / proof (your app):**
+Checkout or proof in your app:
 
 ```javascript
 import { getHostedCheckoutUrl } from '@proofable/sdk';
@@ -50,9 +43,9 @@ window.location.href = getHostedCheckoutUrl({
 });
 ```
 
-After redirect, read the **proof ID** from the `qHash` field in your callback URL.
+After the redirect, read the proof ID from the `qHash` field in your callback URL.
 
-**Login then return to your app:**
+Sign in, then return to your app:
 
 ```javascript
 import { getHostedCheckoutUrl } from '@proofable/sdk';
@@ -63,13 +56,13 @@ window.location.href = getHostedCheckoutUrl({
 });
 ```
 
-**First-party only** (stay on `proofable.me`):
+Stay on `proofable.me`:
 
 ```txt
 https://proofable.me/verify?intent=login&returnTo=/profile
 ```
 
-`/login` on `proofable.me` redirects to `/verify?intent=login&…` with a validated `returnTo`.
+`proofable.me/login` redirects to `/verify?intent=login` with a validated `returnTo`.
 
 ## Popup
 
@@ -77,9 +70,9 @@ Open with `mode: 'popup'` and `origin: window.location.origin`.
 
 | Flow | Opener listens for |
 |------|-------------------|
-| Verification / gate | `neus_checkout_done` (includes `qHash` when applicable) |
+| Verification or gate | `neus_checkout_done`, with `qHash` when a proof was created |
 | `intent=login` | `neus_login_complete` |
 
-## No browser handoff
+## Without a browser
 
-Server-created proofs and access keys: [Server integrations](/integrations/server).
+Server-created proofs and access keys are covered in [Server integrations](/integrations/server).

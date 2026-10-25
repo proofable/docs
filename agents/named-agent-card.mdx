@@ -5,9 +5,7 @@ description: Every registered agent gets a public page other apps and marketplac
 icon: address-card
 ---
 
-Every registered Proofable agent has a **public card**: owner, identity, capabilities, and current status other apps can check.
-
-That card is the portable record. Other marketplaces can list the same agent. Proofable keeps identity, control, and proof state in one place.
+Every registered Proofable agent has a **public card** with its owner, identity, capabilities, and current status. Other marketplaces can list the same agent while Proofable keeps its identity, control, and proof state in one place.
 
 ## Discovery paths
 
@@ -20,7 +18,7 @@ That card is the portable record. Other marketplaces can list the same agent. Pr
 | Platform metadata | `https://proofable.me/.well-known/agent-card.json` | Service discovery and registration status |
 | Per-agent metadata | `https://api.proofable.me/.well-known/agent-card.json?agentId={agentId}` | Per-agent discovery metadata |
 
-Per-agent cards resolve to `GET https://api.proofable.me/api/v1/agents/card/{agentId}`. The platform A2A card is also available at `/api/agent/config?format=a2a`. Proofable publishes ERC-8004 registration metadata at `https://proofable.me/.well-known/agent-registration.json`, so an 8004 indexer can read it. It is not registered in an on-chain ERC-8004 registry, and the platform metadata reports that distinction explicitly: `erc8004.registered` is `false` while the registration file is published.
+Per-agent cards resolve to `GET https://api.proofable.me/api/v1/agents/card/{agentId}`. The platform A2A card is also available at `/api/agent/config?format=a2a`. ERC-8004 registration metadata is published at `https://proofable.me/.well-known/agent-registration.json` for 8004 indexers. On-chain registry status appears in the platform metadata as `erc8004.registered`, which is currently `false`.
 
 ## Examples
 
@@ -53,13 +51,11 @@ curl https://proofable.me/.well-known/a2a/agent-card.json
 | `allowedActions` | Permission proof | Owner-view only |
 | `deniedActions` | Permission proof | Owner-view only |
 
-Public cards do not expose full allow/deny lists. External callers see who the agent is and who approved it, not the full permission matrix.
+Public callers see who the agent is and who approved it. The full allow and deny lists are visible to the owner only.
 
 ## Visibility
 
-An agent **is** its identity proof, so it has exactly one visibility setting, the same
-three values every Proofable proof has. The setting covers the whole agent, including
-its instructions.
+An agent is its identity proof, so it has one visibility setting with the same three values every Proofable proof has. The setting covers the whole agent, including its instructions.
 
 | Setting | Who can open the card | Listed in search and feeds |
 |---------|----------------------|----------------------------|
@@ -67,38 +63,24 @@ its instructions.
 | **Unlisted** | Anyone with the link | No |
 | **Private** | The owner, plus people the owner grants access to | No |
 
-**Unlisted is link-addressed**, exactly like a proof: `GET` on the card by its own URL
-returns it to any caller, and it simply never appears in a listing. Do not treat
-"not discoverable" as "not fetchable". An unlisted agent is meant to be handed to
-someone directly.
+An **Unlisted** card is link-addressed, like a proof: a `GET` on its URL returns it to any caller, and it never appears in a listing. Hand it to someone directly.
 
 A **Private** agent:
 
-- answers `403` with `error.code = "AGENT_NOT_PUBLIC"` to a caller with no access,
-  so you can distinguish "exists but not shared with you" from `404 AGENT_NOT_FOUND`;
-- opens fully for the owner and for anyone holding a live **access grant** on that
-  agent's identity proof.
+- answers `403` with `error.code = "AGENT_NOT_PUBLIC"` to a caller with no access, so you can tell "exists but not shared with you" apart from `404 AGENT_NOT_FOUND`;
+- opens fully for the owner and for anyone holding a live **access grant** on that agent's identity proof.
 
-Grants are per-record and per-viewer, created by the owner
-(`POST /api/v1/verification/access/grant`) and stored against the identity proof's
-`qHash`. Fetching a private agent as a granted viewer behaves identically to
-fetching it as the owner. An expired or revoked grant falls back to `403`.
+The owner creates grants per record and per viewer (`POST /api/v1/verification/access/grant`), stored against the identity proof's `qHash`. A granted viewer sees the agent exactly as the owner does. An expired or revoked grant falls back to `403`.
 
-The owner changes visibility from the agent's own Share sheet, which edits the
-identity proof in place; the change takes effect on the same link immediately.
+The owner changes visibility from the agent's Share sheet, which edits the identity proof in place. The change takes effect on the same link immediately.
 
 ## CORS and caching
 
-Discovery endpoints return `Access-Control-Allow-Origin: *`. Platform cards cache for about an hour; per-agent cards cache for about five minutes.
-
-A card served to its **owner** is never cached publicly: the response carries the
-viewer marker and must not be replayed to a later visitor.
+Discovery endpoints return `Access-Control-Allow-Origin: *`. Platform cards cache for about an hour; per-agent cards cache for about five minutes. A card served to its **owner** is never cached publicly.
 
 ## Platform A2A card
 
-The platform card includes registered skills, MCP / REST / payment interfaces, auth options (OAuth and server keys), and networks listed by CAIP-2 id.
-
-## Cross-chain identifiers
+The platform card includes registered skills, MCP, REST and payment interfaces, auth options (OAuth and access keys), and networks listed by CAIP-2 id.
 
 | Network | CAIP-2 |
 |---------|--------|
@@ -107,25 +89,11 @@ The platform card includes registered skills, MCP / REST / payment interfaces, a
 | Solana Mainnet | `solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp` |
 | Solana Devnet | `solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1` |
 
-## How to use it
-
-1. **Discover**: fetch the card for the agent you need.
-2. **Confirm**: check the permission proof before a sensitive action.
-3. **Connect**: call the agent through MCP, A2A, or your own runtime.
-
-## Next
-
 <CardGroup cols={2}>
   <Card title="Agent identity" icon="id-card" href="./agent-identity">
     Register an agent so it appears in discovery.
   </Card>
-  <Card title="Team agents" icon="user-group" href="./team-agents">
-    One approving account, many agents.
-  </Card>
   <Card title="Connect agent context" icon="layer-group" href="./runtime-mount">
     Mount a verified agent into a project.
-  </Card>
-  <Card title="MCP" icon="plug" href="../mcp/overview">
-    Check proofs and resolve agents at runtime.
   </Card>
 </CardGroup>

@@ -31,14 +31,12 @@ Create or import an agent on my Proofable profile. Set spend and action limits. 
 
 The agent lives on your signed-in profile by default. Ask for a dedicated spend account only when the agent should pay from its own account. [`proofable_agent_create`](/mcp/agent-create) covers every option.
 
-## Use it where I work
-
-Pick the surface that matches where the agent already runs:
+## Use it where you work
 
 - **Chat and jobs on Proofable.** Chat now, or start a [job](/jobs) for background and scheduled work.
 - **Any MCP client.** Load the same agent with `npx -y @proofable/sdk mount <agentId> --apply cursor`.
 - **Your servers.** Point the runtime at the same endpoint with an [access key](/deployment/access-keys), or deploy to a [private cloud](/deployment/private-cloud).
-- **Other apps and marketplaces.** Each agent has a public card that others can check. [Verify an agent](/agents/named-agent-card)
+- **Other apps and marketplaces.** Each agent has a public card that others can check before they trust it. [Discover agents](/agents/named-agent-card)
 
 Keep your model, runtime, and enterprise sign-in such as Okta. Proofable keeps the agent's identity, approved tools, current permissions, and proofs available to supported clients.
 
@@ -54,7 +52,7 @@ Keep your model, runtime, and enterprise sign-in such as Okta. Proofable keeps t
 
 <CardGroup cols={2}>
   <Card title="Guard an agent action" icon="shield-check" href="/mcp/guarded-action">
-    Stop a tool call the agent is not allowed to make.
+    Stop a tool call the agent's permission denies.
   </Card>
   <Card title="Agent permissions" icon="handshake" href="/agents/agent-delegation">
     Actions, spend caps, expiry, and revoke.
@@ -63,9 +61,6 @@ Keep your model, runtime, and enterprise sign-in such as Okta. Proofable keeps t
     Several agents on one profile.
   </Card>
   <Card title="Import an agent" icon="file-import" href="/agents/import">
-    Bring a package, repo, or card without copying secrets.
-  </Card>
-  <Card title="Verify an agent" icon="address-card" href="/agents/named-agent-card">
-    Check who owns an agent before you trust it.
+    Bring a package, repo, or card. Secrets stay behind.
   </Card>
 </CardGroup>

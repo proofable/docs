@@ -1,16 +1,16 @@
 ---
 title: Pay per call
 sidebarTitle: Pay per call
-description: "Pay for a single check with x402 over Base USDC, no account required. Exact-change, per-call verification for machines and agents."
+description: "Pay for one new proof or access grant per call with x402 in Base USDC, with no account. Built for machines and agents."
 icon: coins
 ---
 
-Two endpoints accept per-call payment. Checking an existing proof is free and is not listed here.
+Two endpoints accept per-call payment. Checking an existing proof is free.
 
 | Resource | Method | What it does | Base cost |
 |----------|--------|--------------|-----------|
-| `/api/v1/verification` | POST | Create a new proof | 3+ credits (gate + verifier + proof write) |
-| `/api/v1/verification/access/grant` | POST | Create a signed private-proof sharing capability | 2 credits |
+| `/api/v1/verification` | POST | Create a new proof | 4+ credits (gate + verifier + proof write) |
+| `/api/v1/verification/access/grant` | POST | Create a signed private-proof sharing capability | 2 credits, flat |
 
 The exact price for each request is in the `PAYMENT-REQUIRED` header. It scales with the verifier's weight and optional add-ons (IPFS pinning, extra chains).
 
@@ -36,52 +36,31 @@ The exact price for each request is in the `PAYMENT-REQUIRED` header. It scales 
 
 ## Proof check
 
-Check existing proofs before granting access, releasing a payment, or allowing an agent action:
-
-```http
-GET https://api.proofable.me/api/v1/proofs/check
-POST https://api.proofable.me/api/v1/proofs/check
-```
+Check existing proofs before granting access, releasing a payment, or allowing an agent action. Checks carry no charge at any query size, verifier count, or result limit. Per-plan rate limits are the only control.
 
 ```bash
-curl --include --get \
+curl --get \
   "https://api.proofable.me/api/v1/proofs/check" \
   --data-urlencode "address=0x1111111111111111111111111111111111111111" \
   --data-urlencode "verifierId=ownership-basic"
 ```
 
-Inline policy uses the same evaluator and the same x402 handshake:
+Inline policy uses the same evaluator:
 
 ```bash
-curl --include \
+curl \
   -X POST "https://api.proofable.me/api/v1/proofs/check" \
   -H "content-type: application/json" \
   -d '{"subject":{"accountId":"0x1111111111111111111111111111111111111111"},"requirements":[{"verifierId":"proof-of-human"}]}'
 ```
 
-Checking an existing proof is **free**. There is no per-check charge and no surcharge for query
-complexity, verifier count, or result limit. Rate limits per plan are the only control. You pay only
-when you create a new proof.
-
 ## Proof creation
-
-Create a new proof by paying per call:
 
 ```http
 POST https://api.proofable.me/api/v1/verification
 ```
 
-Cost = gate check (1 credit) + each verifier's weight + proof write (2 credits) + optional add-ons. Verifier weights range from 1 (ownership-basic) to 70 (wallet-risk). The per-verifier credit table is returned by [`GET /api/v1/payments/pricing`](../reference#pricing).
-
-## Access grant
-
-Create a signed capability for private-proof sharing:
-
-```http
-POST https://api.proofable.me/api/v1/verification/access/grant
-```
-
-Base cost: 2 credits. No per-hour surcharge.
+Cost = gate check (1 credit) + each verifier's weight + proof write (2 credits) + optional add-ons. Verifier weights range from 1 (ownership-basic) to 70 (wallet-risk). [`GET /api/v1/payments/pricing`](/pricing) returns the per-verifier credit table.
 
 ## Settlement
 
@@ -91,7 +70,7 @@ Base cost: 2 credits. No per-hour surcharge.
 | Network | Base mainnet (`eip155:8453`) |
 | Asset | USDC on Base |
 
-Pricing is exact and sub-cent. A 1-credit gate check settles at its unit cost, not a rounded-up minimum. No settlement cap; pay for exactly the credits used. Per-credit price: [Pricing](/pricing).
+Each call settles at its exact credit cost, down to sub-cent amounts, with no rounded-up minimum and no settlement cap. Per-credit price: [Pricing](/pricing).
 
 Always enforce a client-side maximum before signing. Treat the decoded `PAYMENT-REQUIRED` header as the source of truth for the current amount, asset, recipient, and timeout.
 
@@ -105,9 +84,7 @@ After payment, validate all of the following before accepting the result:
 
 ## Discovery
 
-The payment challenge includes the x402 v2 Bazaar extension with the HTTP input, JSON output example, and JSON Schema. After the facilitator completes a successful settlement, the resource can be indexed for agent and marketplace search.
-
-There is no separate Bazaar registration step. See [x402 Bazaar discovery](https://docs.cdp.coinbase.com/x402/bazaar).
+The payment challenge includes the x402 v2 Bazaar extension with the HTTP input, JSON output example, and JSON Schema. After the facilitator completes a successful settlement, the resource can be indexed for agent and marketplace search, with no separate registration step. See [x402 Bazaar discovery](https://docs.cdp.coinbase.com/x402/bazaar).
 
 ## Agent spending limits
 
@@ -118,18 +95,4 @@ Pair x402 with an agent permission proof to limit autonomous spending.
 - Use `toAgentDelegationMaxSpend('25', 6)` from `@proofable/sdk` when constructing the cap.
 - The calling application should also enforce a per-request maximum before signing any payment.
 
-Details: [Agent permissions](../agents/agent-delegation).
-
-## Next
-
-<CardGroup cols={3}>
-  <Card title="Proof API" icon="shield-check" href="../api/overview">
-    Request and interpret a reusable trust decision.
-  </Card>
-  <Card title="Pricing" icon="tags" href="/pricing">
-    Credits, sponsorship, and who pays.
-  </Card>
-  <Card title="Agent delegation" icon="key" href="../agents/agent-delegation">
-    Scope actions and spending for autonomous agents.
-  </Card>
-</CardGroup>
+Details: [Agent permissions](../agents/agent-delegation). Every endpoint: [API overview](../api/overview).

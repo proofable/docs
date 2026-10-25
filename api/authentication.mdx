@@ -4,9 +4,7 @@ description: "Authenticate servers and apps to the Proofable API with OAuth, ser
 icon: fingerprint
 ---
 
-Pick the path that matches your caller. Most products use Hosted Verify for people and a server key for backend calls.
-
-Credits apply to checks and saved results, not to hosted session sign-in. See [Docs](..) and [Pricing](../pricing).
+Most products use Hosted Verify for people and a server key for backend calls. Creating a proof uses credits; sign-in and checks against existing proofs are free. [Pricing](../pricing)
 
 | Need | Mechanism | Wallet code in your app |
 |------|-----------|---------------------------|
@@ -17,34 +15,28 @@ Credits apply to checks and saved results, not to hosted session sign-in. See [D
 | Server creates proofs for an approved user | App link + `verifyFromApp` | No |
 | Sign inside your page | SDK `verify` + `wallet` | Yes. Rare |
 
-Server integration: [Server integrations](../integrations/server).
-
 ## Hosted Verify (default)
 
-`https://proofable.me/verify` for [Hosted Verify](../verification/hosted).
-
-Send users to your checkout with `gateId`; the enforcement policy bills your app's credits.
+Send people to `https://proofable.me/verify` ([Hosted Verify](../verification/hosted)). With a `gateId`, your credits cover the checks unless the listing charges visitors a price.
 
 ## MCP OAuth
 
-MCP clients authenticate via **OAuth 2.0 Authorization Code with PKCE**. Register `https://mcp.proofable.me/mcp` and finish the sign-in your client opens. Only Claude connectors and Devin render a control called Connect. Official CLI: `npx -y @proofable/sdk`.
+MCP clients authenticate via **OAuth 2.0 Authorization Code with PKCE**. Register `https://mcp.proofable.me/mcp` and finish the sign-in your client opens. Official CLI: `npx -y @proofable/sdk`.
 
 Request only the scopes you need:
 
 | Scope | What it allows |
 |-------|-----------------|
-| `neus:core` | Public protocol tools |
-| `neus:profile` | Signed-in profile context |
-| `neus:secrets` | Portable encrypted secrets |
+| `proofable:core` | Public protocol tools |
+| `proofable:profile` | Signed-in profile context |
+| `proofable:secrets` | Portable encrypted secrets |
 | `offline_access` | Refresh token |
-
-Server keys (`npk_*`) are a full-profile credential.
 
 See [Add Proofable to any MCP client](../mcp/setup) and [MCP OAuth](../mcp/oauth).
 
 ## Server keys
 
-[Access keys](https://proofable.me/profile?tab=account) for servers, CI, and MCP automation. Never in browser bundles.
+[Access keys](https://proofable.me/profile?tab=account) (`npk_*`) carry full profile access. Use them for servers, CI, and MCP automation, and keep them out of browser bundles.
 
 ## Backend proofs
 

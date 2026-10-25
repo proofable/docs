@@ -1,6 +1,6 @@
 ---
 title: "Access keys"
-description: "Connect servers, CI, scheduled jobs, containers, and headless agents to Proofable with a server key instead of browser sign-in."
+description: "Authenticate headless workloads with a Proofable server key, then rotate or revoke it from your profile."
 icon: key
 ---
 
@@ -88,9 +88,9 @@ Gateways that reserve the `Authorization` header for their own sign-in, such as 
 
 ## What a key can do
 
-- It acts as your full profile for MCP tools, the SDK, and the HTTP API.
-- It does not expire. Revoke it when you no longer need it.
-- It does not replace a user's approval. To create proofs for your users, use [server integrations](/integrations/server).
+- It works for MCP tools, the SDK, and the HTTP API.
+- It stays valid until you revoke it.
+- Proofs for your users still need their approval. Create those through [server integrations](/integrations/server).
 
 ## Rotate or revoke
 
@@ -107,12 +107,6 @@ If a key is exposed, revoke it right away and issue a new one.
 <CardGroup cols={2}>
   <Card title="Private cloud" icon="cloud" href="/deployment/private-cloud">
     Run the same agent on your own infrastructure.
-  </Card>
-  <Card title="Server integrations" icon="server" href="/integrations/server">
-    Create proofs for your users from your backend.
-  </Card>
-  <Card title="MCP authentication" icon="lock" href="/mcp/auth">
-    OAuth, access keys, and token security.
   </Card>
   <Card title="Add Proofable to any MCP client" icon="plug" href="/mcp/setup">
     Setup for every supported client.

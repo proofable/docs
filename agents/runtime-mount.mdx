@@ -5,7 +5,7 @@ description: Keep agent identity, permissions, context, and proof across runtime
 icon: layer-group
 ---
 
-This is optional. First-run is [MCP setup](../mcp/setup): add the endpoint, finish the sign-in your client opens, then call `proofable_context`.
+Optional. Start with [MCP setup](../mcp/setup): add the endpoint, finish the sign-in your client opens, then call `proofable_context`.
 
 To load the same agent into an editor project:
 
@@ -14,23 +14,23 @@ npx -y @proofable/sdk setup
 npx -y @proofable/sdk mount my-agent --apply cursor
 ```
 
-Same command for `claude`, `codex`, `hermes`, `openclaw`, or `opencode`. VS Code uses `--apply cursor`. This writes `.proofable/mount.json` and the host adapter. Hermes, OpenClaw, and OpenCode also write a pointer at `.hermes/proofable.json`, `.openclaw/proofable.json`, or `.opencode/proofable.json`. ACP jobs already attach hosted Proofable MCP; this pointer is project identity, not a second protocol. Start a new session so the project picks it up.
+Valid `--apply` values are `cursor`, `claude`, `codex`, `hermes`, `openclaw`, and `opencode`. VS Code uses `--apply cursor`. The command writes `.proofable/mount.json` and the host adapter. Hermes, OpenClaw, and OpenCode also get a pointer to that file at `.hermes/proofable.json`, `.openclaw/proofable.json`, or `.opencode/proofable.json`. Start a new session so the project picks it up.
 
 The editor runs the tools. Proofable supplies identity, limits, and proofs. Cursor Cloud Agents connect to the same hosted MCP endpoint from the VMs Cursor runs.
 
 ## From the agent card
 
-**Connect in** copies:
+**Connect in** copies the same command for the agent:
 
 ```bash
 npx -y @proofable/sdk mount <agentId> --apply <host>
 ```
 
-Valid `--apply` values are `cursor`, `claude`, `codex`, `hermes`, `openclaw`, or `opencode`. VS Code uses `--apply cursor`. Run it in the project. If the host is not connected yet, run `proofable setup` first. The browser never writes host files.
+Run it in the project. If the host is not connected yet, run `proofable setup` first. Host files are written by this command, never by the browser.
 
 ## Assistant tool
 
-When signed in, call **`proofable_agent_mount`** with `agentId`. You can also use `agentWallet` or the identity proof ID in `identityQHash`.
+When signed in, call **`proofable_agent_mount`** with `agentId`, `agentWallet`, or the identity proof ID in `identityQHash`.
 
 Suggested order:
 
@@ -45,20 +45,13 @@ import { resolveRuntimeBundleFromMcp } from '@proofable/sdk/runtime-mount';
 import { applyRuntimeBundle } from '@proofable/sdk/runtime-adapters';
 ```
 
-Use `resolveRuntimeBundleFromMcp` with your MCP transport, then `applyRuntimeBundle(host, bundle, cwd)` for project files. The same bundle shape is returned by the `proofable_agent_mount` MCP tool and the `proofable mount` CLI.
+Use `resolveRuntimeBundleFromMcp` with your MCP transport, then `applyRuntimeBundle(host, bundle, cwd)` for project files. The `proofable_agent_mount` MCP tool and the `proofable mount` CLI return the same bundle shape.
 
-## Where permissions are enforced
+## Enforcement
 
-| Surface | What Proofable provides |
-|--------|----------------------|
-| **Proofable agent tab** | Enforces permissions, tool access, and proof checks |
-| **MCP clients** | Loads project rules and trust context; start a new session after connecting |
-| **Workers and backends** | Returns the bundle for your application to enforce in its own tool loop |
-
-Your client controls its own tools. Proofable supplies verified context and permissions; your host remains responsible for enforcement.
+Your client runs its own tools and enforces the mounted permissions in its own tool loop. Proofable enforces them directly for chat and jobs on Proofable. [Agents](/agents#where-permissions-are-enforced) compares each surface, and [your first guarded action](../mcp/guarded-action) shows the check in code.
 
 ## Related
 
 - [Agent identity](./agent-identity)
 - [Agent delegation](./agent-delegation)
-- [Add Proofable to any MCP client](../mcp/setup)

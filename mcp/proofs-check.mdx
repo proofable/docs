@@ -6,13 +6,11 @@ keywords: ["proofable_proofs_check", "proof reuse", "eligibility check", "MCP"]
 icon: shield-check
 ---
 
-**Yes/no lookup only.** Use this before you verify again or open a hosted handoff. It never creates proofs and never opens hosted flows.
+**Yes/no lookup only.** Use it before you verify again or open a hosted handoff. It creates no proofs, opens no hosted flows, and returns no proof content. To read a body, start from the `proofable_context` context index and call **`proofable_proofs_get`** with a known proof ID and `include=content`.
 
 Private proofs count only for the signed-in account ([Auth](./auth)). Signed-in owners omit `wallet` and get `{ eligible, matchedCount }` from their own proofs without paying. Public third-party lookups may return `payment_required`.
 
-This tool is eligibility-only. Never use it to retrieve memory, context, or content. Start from the `proofable_context` context index and use **`proofable_proofs_get`** with a known proof ID and `include=content` when you need an exact body.
-
-If **`eligible`** is true, continue. If false, use **`proofable_proofs_get`** when you need exact state, or **`proofable_verify_or_guide`**. When signed in, ownership proofs continue with **`proofable_verify`**.
+If **`eligible`** is true, continue. If false, call **`proofable_verify_or_guide`**. When signed in, ownership proofs continue with **`proofable_verify`**.
 
 ## Input
 
@@ -26,7 +24,7 @@ Uses **`wallet`** (not `walletAddress`):
 }
 ```
 
-Optional `minCount` requires at least N matching verifiers instead of all-or-any. Optional `gateId` scopes a hosted listing. Optional `handle` and `namespace` filter handle-based verifiers. Omit `wallet` when signed in to use your profile wallet.
+`requireAll` defaults to `false`, which accepts any one listed verifier. Optional `minCount` requires at least N matching proofs. Optional `gateId` scopes a hosted listing. Optional `handle` and `namespace` filter handle-based verifiers.
 
 ## Output
 

@@ -2,11 +2,10 @@
 
 By participating you agree to the [Code of Conduct](./CODE_OF_CONDUCT.md).
 
-**If you are integrating Proofable into a product**, use **[docs.proofable.me](https://docs.proofable.me)** and the live product first. The table below is for people proposing changes here.
+To integrate Proofable into a product, start at [docs.proofable.me](https://docs.proofable.me). This page is for changes to this repository.
 
 | Need | Where |
 | --- | --- |
-| Product documentation | [docs.proofable.me](https://docs.proofable.me) |
 | Possible bugs | [Issues](https://github.com/proofable/docs/issues) |
 | Ideas and questions | [Discussions](https://github.com/proofable/docs/discussions) |
 | Security reports | [dev@proofable.me](mailto:dev@proofable.me) (do not post publicly) |
@@ -14,7 +13,7 @@ By participating you agree to the [Code of Conduct](./CODE_OF_CONDUCT.md).
 
 ## What lives here
 
-The published documentation at [docs.proofable.me](https://docs.proofable.me), the OpenAPI description, and the public verifier catalog. Client code lives in [proofable/sdk](https://github.com/proofable/sdk); MCP discovery metadata lives in [proofable/mcp](https://github.com/proofable/mcp).
+The published documentation, the OpenAPI description, and the public verifier catalog. Client code lives in [proofable/sdk](https://github.com/proofable/sdk); the MCP package, plugins and skills live in [proofable/mcp](https://github.com/proofable/mcp).
 
 ## What helps
 
@@ -22,23 +21,16 @@ The published documentation at [docs.proofable.me](https://docs.proofable.me), t
 - Verifier proposals that spell out the user-visible outcome you want.
 - Runnable examples, and the errors a builder will actually hit.
 
-**Do not** share keys, tokens, bearer secrets, or private proof content in public issues or change descriptions.
+Never share keys, tokens, bearer secrets, or private proof content in issues or pull requests, and never commit `.env` files, `.npmrc` files or key material.
 
 ## Verifier proposals
 
-The public verifier catalog lives in **this repo**: JSON Schemas under [`verifiers/schemas/`](./verifiers/schemas) and the machine index at [`verifiers/VERIFIERS.json`](./verifiers/VERIFIERS.json). Open a [Discussion](https://github.com/proofable/docs/discussions) first, then a PR with the spec, the schema, and the docs page together. After merge, the check appears in the live catalog. See [Propose a verifier](https://docs.proofable.me/verification/propose-a-verifier).
+Open a [Discussion](https://github.com/proofable/docs/discussions) with the outcome you want verified. An accepted check ships once it is built into the Proofable service, and its schema then appears under [`verifiers/schemas/`](./verifiers/schemas) and in [`verifiers/VERIFIERS.json`](./verifiers/VERIFIERS.json). See [Propose a verifier](https://docs.proofable.me/verification/propose-a-verifier).
 
 ## Changelog
 
-Put a user-facing note under `## [Unreleased]` in [CHANGELOG.md](./CHANGELOG.md). Use Added, Changed, Deprecated, Removed, Fixed, or Security. Write what a builder will notice. Leave out ticket IDs, private repository names, and process notes.
-
-## Do not commit
-
-These paths are local-only or generated elsewhere (see `.gitignore`):
-
-- `.env`, `.npmrc`, secrets, and key material
-- Generated OpenAPI output and build artifacts
+Put a user-facing note under `## [Unreleased]` in [CHANGELOG.md](./CHANGELOG.md). Use Added, Changed, Deprecated, Removed, Fixed, or Security. Write what a builder will notice. Leave out ticket IDs and private repository names.
 
 ## Describing your change
 
-Explain **what builders or end users will experience differently** (for example new fields, new errors, or renamed concepts). If you adjust verifiers or any documented HTTP surface, keep the written API reference and examples in step with the live product.
+Say what builders or end users will experience differently, such as new fields, new errors, or renamed concepts. If you change a verifier or a documented HTTP surface, update the API reference and examples in the same pull request.

@@ -43,13 +43,11 @@ The agent can call any Proofable MCP tool, including `proofable_context`, `proof
 
 ## Confidential compute
 
-To prove the environment is genuine before it receives keys, run the agent in a confidential VM with hardware attestation. The attestation covers the full app: system prompt, model, tools, and environment. Keys are sealed to that app and released only after attestation passes, so no host process sees them in plaintext.
-
-The agent's permissions and proofs still live in Proofable. Confidential compute adds proof that the environment matches what you expect.
+To prove the environment is genuine before it receives keys, run the agent in a confidential VM with hardware attestation. The attestation covers the system prompt, model, tools, and environment. Keys are sealed to that app and released only after attestation passes, so no host process sees them in plaintext.
 
 ### Phala dstack
 
-[dstack](https://phala.com/dstack) runs a Docker Compose app inside an Intel TDX confidential VM. The TDX quote covers the full compose hash, and keys are released only after attestation passes. Proofable's hosted AI already runs only on confidential models: every call goes through RedPill's attested gateway, which runs on Phala, to a model inside a TEE.
+[dstack](https://phala.com/dstack) runs a Docker Compose app inside an Intel TDX confidential VM, and the TDX quote covers the full compose hash. Proofable's hosted AI also runs only on confidential models. Each call goes through RedPill's attested gateway on Phala to a model inside a TEE.
 
 ```bash
 npx phala deploy
@@ -65,14 +63,11 @@ Any runtime with Intel TDX, AMD SEV-SNP, or equivalent remote attestation over t
 
 Any agent that speaks MCP can connect, including OpenClaw. Package it the same way, set `PROOFABLE_ACCESS_KEY`, and point it at `https://mcp.proofable.me/mcp`. The framework handles planning and memory. Proofable handles identity, permissions, and proof before sensitive actions.
 
-For Cursor Cloud Agents, connect Proofable MCP inside Cursor, and the VMs Cursor launches carry the same identity and limits.
+For Cursor Cloud Agents, connect Proofable MCP inside Cursor. Cursor launches and runs those VMs.
 
 ## Next
 
 <CardGroup cols={2}>
-  <Card title="Access keys" icon="key" href="/deployment/access-keys">
-    Credentials for servers and headless agents.
-  </Card>
   <Card title="Agents" icon="robot" href="/agents">
     Owners, limits, and proof history.
   </Card>

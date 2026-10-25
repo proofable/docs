@@ -4,9 +4,7 @@ description: "SDK and CLI for verification gates, reusable proof, and agent perm
 icon: code
 ---
 
-Verify a user or agent once. Check that result on your server.
-
-Use `@proofable/sdk` for `api.proofable.me` so headers and paths stay correct.
+Verify a user or agent once. Check that result on your server. The SDK keeps headers and paths for `api.proofable.me` correct.
 
 ## Browser vs server
 
@@ -17,7 +15,7 @@ Use `@proofable/sdk` for `api.proofable.me` so headers and paths stay correct.
 
 One check needs no gate. Send the person to Hosted Verify and read the returned proof ID. Reach for **`defineGate`** + **`gateCheck`** when the decision needs several checks, a price, or a schedule.
 
-Do not put **`npk_*`** or other secrets in browser bundles. If you need calls the SDK does not expose from the client, **proxy through your backend**. [API overview](../api/overview).
+Keep **`npk_*`** and other secrets out of browser bundles. If the browser needs a call the SDK does not expose there, **proxy through your backend**. [API overview](../api/overview).
 
 ## Install
 
@@ -25,7 +23,7 @@ Do not put **`npk_*`** or other secrets in browser bundles. If you need calls th
 npm install @proofable/sdk
 ```
 
-Upgrading from the earlier `@neus` packages? See [the migration guide](../migrate) for the rename map and the one-path upgrade.
+Upgrading from an earlier package? [The migration guide](../migrate) has the rename map and the one-path upgrade.
 
 ## Hosted URL (browser default)
 
@@ -40,11 +38,9 @@ window.location.assign(
 );
 ```
 
-`getHostedCheckoutUrl` supports login, a published gate, or direct verifier checks. These are separate recipes: `intent: 'login'` removes checkout parameters, and `gateId` owns the gate policy instead of mixing with `verifiers` or `preset`. Shared handoff options are `returnUrl`, `mode`, `origin`, and `oauthProvider`; advanced sponsor options are `appId` and `billingWallet`.
+`getHostedCheckoutUrl` takes one recipe per URL: `intent: 'login'`, a published `gateId`, or direct `verifiers` / `preset`. [Gates in the SDK](./gates) lists the shared options.
 
-For agent identity + delegation, use `getHostedAgentCreateUrl` so dedicated-wallet identity and controller approval stay in the correct order. [Agent create](../mcp/agent-create) and [Hosted Verify](../verification/hosted).
-
-React: [Widgets](../widgets/overview).
+For agents, `getHostedAgentCreateUrl` runs agent identity and owner approval in the right order. [Agents in the SDK](./agents).
 
 ## Client configuration
 
@@ -57,11 +53,11 @@ const client = new ProofableClient({
 });
 ```
 
-Other options (advanced): `apiKey` (server key, sent as `Authorization: Bearer`), `appId`, `billingWallet`, `appLinkQHash`, `paymentSignature`, `extraHeaders`, `hubChainId` (advanced; defaults to the canonical identity chain. On-chain anchoring is a per-proof opt-in), `enableLogging`. Keep `apiKey` and any secret server-side only.
+Other options: `apiKey` (server key, sent as `Authorization: Bearer`), `appId`, `billingWallet`, `appLinkQHash`, `paymentSignature`, `extraHeaders`, `identityChainId` (the signing chain, Base by default; onchain anchoring stays a per-proof opt-in), and `enableLogging`. Keep `apiKey` and any secret server-side only.
 
 ## App attribution (`appId`)
 
-Set `appId` only for advanced server/app attribution flows. It is public, not a secret, and it is not required for inline `gateCheck`, published listing checkout, or `gateCheck({ gateId })`.
+`appId` is a public attribution ID for server and app flows such as `verifyFromApp`. Inline `gateCheck`, `gateCheck({ gateId })`, and published listing checkout work without it.
 
 ```javascript
 const client = new ProofableClient({
@@ -76,15 +72,15 @@ Pass these under `options` on `client.verify(...)`:
 
 | Option | When to use |
 |--------|-------------|
-| `privacyLevel: 'public' \| 'unlisted' \| 'private'` | Control who can read the proof |
-| `enableIpfs: true` | Pin proof data to IPFS |
+| `privacyLevel: 'public' \| 'private'` | Control who can read the proof. Default `private` |
+| `enableIpfs: true` | Pin proof data to IPFS (public proofs only) |
 | `storeOriginalContent: true` | Keep the original content with the proof |
 | `targetChains: [...]` | Anchor/publish to specific chains |
 | `publishToHub: true` | Record the proof on the hub chain. Offchain by default. Does not change who can see the proof. |
-| `publicDisplay: true` | Allow public display of the proof |
+| `publicDisplay: true` | List a public proof for discovery. Leave it off for an unlisted, link-only proof |
 | `meta`, `verifierOptions` | App metadata and per-verifier options |
 
-Reuse-vs-create is a **widget** concern: the `strategy` prop (`reuse-or-create` default, `fresh`, `reuse`) lives on [`VerifyGate`](../widgets/verifygate), not on `client.verify()`. [Verification patterns](./verifications) for privacy and widget options.
+`client.verify()` always creates a new proof. Reuse is set by the `strategy` prop on [`VerifyGate`](../widgets/verifygate) (`reuse-or-create` default, `fresh`, `reuse`). [Verification patterns](./verifications) covers privacy and widget options.
 
 ## Optional: `client.verify()` (signs in the browser)
 
@@ -145,15 +141,6 @@ const res = await client.verify({
 });
 ```
 
-Live verifier list: `GET /api/v1/verification/verifiers`.
-
-## Gate checks: `gateCheck` vs `checkGate`
-
-| Method | Use when |
-|--------|----------|
-| **`gateCheck()`** | **Allow/deny** via `POST /api/v1/proofs/check` for inline requirements (server-enforced). |
-| **`checkGate()`** | Preview against proofs you already loaded. Not a substitute for **`gateCheck()`** where trust matters. |
-
 ## Link a wallet with Hosted Verify
 
 For typical UX, use Hosted Verify so wallet selection and secondary signing stay on Proofable. Direct mode is for integrations that already control the secondary wallet and provider.
@@ -190,14 +177,14 @@ if (!result.satisfied) {
 ```
 
 <Warning>
-**`gateCheck`** uses **public** and **unlisted** proofs by default. **Private** proofs count when that user is **signed in**. For strict live checks, create a fresh proof and wait for **verified** status.
+`gateCheck` uses public and unlisted proofs by default. Private proofs count when that user is signed in. For strict live checks, create a fresh proof and wait for `verified` status.
 </Warning>
 
-`defineGate()` only normalizes requirements locally. It makes no request and persists nothing. `result.proofs` contains zero or more matching proof references; `result.missing` identifies checks that still need verification. A persisted listing and `gateId` remain optional for managed checkout and fulfillment.
+`defineGate()` normalizes requirements locally and makes no request. `result.proofs` lists matching proof references and `result.missing` lists checks that still need verification. Publish a listing with a `gateId` only when you need managed checkout and fulfillment. `gateCheck` versus `checkGate`, private-proof checks, and checkout calls are in [Gates in the SDK](./gates).
 
 ## Polling
 
-`pollProofStatus()` backs off on `429` and transient errors.
+`pollProofStatus()` retries transient errors and backs off on `429`.
 
 ## Advanced: private proof operations
 
@@ -226,16 +213,6 @@ List the live verifier ids or fetch the full catalog with metadata and access le
 const ids = await client.getVerifiers();        // ['ownership-basic', 'token-holding', ...]
 const catalog = await client.getVerifierCatalog(); // full metadata + access levels
 const ok = await client.isHealthy();             // true / false
-```
-
-For private-proof gate access, create a signed private auth payload, then pass it to `gateCheck`:
-
-```javascript
-const privateAuth = await client.createGatePrivateAuth({
-  address: 'YOUR_WALLET',
-  wallet: window.ethereum,
-});
-const res = await client.gateCheck({ gateId: 'gate_your-app-name', privateAuth });
 ```
 
 ## Public proofs by wallet

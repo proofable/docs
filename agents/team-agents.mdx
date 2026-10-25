@@ -5,15 +5,9 @@ description: "Run several agents on one Proofable profile. Each agent keeps its 
 icon: user-group
 ---
 
-Install Proofable, finish the sign-in your client opens, then ask:
+[Add Proofable](../mcp/setup), finish the sign-in your client opens, then ask:
 
 > Create agents research, writer, and ops on my Proofable profile. Give any of them a separate spend account if they need one. Set limits. Confirm they are ready.
-
-## Do the work
-
-Chat now, or create a job that runs in the background or on a schedule. Jobs run on your credits on every plan. Open **Connections** to link apps. [Connections](../connections)
-
-Every tool uses the same endpoint.
 
 ## Set it up
 
@@ -25,25 +19,21 @@ Every tool uses the same endpoint.
     **`proofable_agent_create`** per agent. Default is your signed-in profile. Pass an existing dedicated account address only when that agent needs its own spend account.
   </Step>
   <Step title="Confirm">
-    **`proofable_agent_link`** until **`linked: true`**.
+    **`proofable_agent_link`** until **`linked: true`**. Pass **`agentId`** on every link and mount call when one account hosts several agents.
   </Step>
 </Steps>
 
 Revoke one agent without touching the others.
 
-## Next
+## Do the work
+
+Chat now, or create a [job](../jobs) that runs in the background or on a schedule. Jobs run on your credits on every plan. Link apps in [Connections](../connections).
 
 <CardGroup cols={2}>
-  <Card title="MCP setup" icon="plug" href="../mcp/setup">
-    Install Proofable, then finish the sign-in your client opens.
-  </Card>
-  <Card title="Agents" icon="robot" href="./overview">
+  <Card title="Agents" icon="robot" href="/agents">
     Create or import, then do the work.
   </Card>
   <Card title="Limits" icon="handshake" href="./agent-delegation">
     Spend, actions, expiry, revoke.
-  </Card>
-  <Card title="Connections" icon="grid-2" href="../connections">
-    Link apps in Connections.
   </Card>
 </CardGroup>

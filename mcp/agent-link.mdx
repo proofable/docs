@@ -6,18 +6,14 @@ keywords: ["proofable_agent_link", "agent readiness", "agent permissions", "MCP"
 icon: robot
 ---
 
-Checks the agent on your profile before agent work. Pass the signed-in account from **`proofable_context`**, or the dedicated spend account if you created one.
+Checks the agent on your profile before agent work. Pass the signed-in account from **`proofable_context`** as **`agentWallet`**, or the dedicated spend account if you created one.
 
-**`linked: true`** means the agent is on your profile. A signed-in-profile agent needs verified identity. A separate spend account also needs signed limits. If a required step is missing, you get **`link_required`**, **`missingVerifiers`**, and a hosted URL for only that step.
+A signed-in-profile agent needs verified identity. A separate spend account also needs signed limits.
 
 | State | Meaning |
 |-------|---------|
 | **`linked: true`** | Identity and required permissions are on file. Continue. |
-| **`link_required`** | Open **`hostedVerifyUrl`** or follow **`nextSteps`** |
-
-**`agentId`** is optional only when the account identifies one agent unambiguously. Pass it whenever one account hosts several agents. Optional **`principal`** hints the **owner** account (not the agent account). [Agent concepts](../agents/concepts)
-
-When you need to create or import first, see [Agent create](./agent-create).
+| **`link_required`** | A step is missing. Open **`hostedVerifyUrl`** or follow **`nextSteps`**; **`missingVerifiers`** names the step. |
 
 ## Input
 
@@ -25,6 +21,11 @@ When you need to create or import first, see [Agent create](./agent-create).
 { "agentWallet": "0x…", "agentId": "data-analyst" }
 ```
 
-## Related
+| Field | Notes |
+|-------|-------|
+| `agentWallet` | Required. The agent account |
+| `agentId` | Required when one account hosts several agents |
+| `principal` | Optional owner account or DID. Omit when the signed-in profile is the owner |
+| `identityQHash` | Optional identity proof ID the agent just signed, so the owner can link an identity no permission names yet |
 
-[Agent create](./agent-create) and [Verify an agent](../agents/named-agent-card)
+The tool changes nothing. To grant or change authority, use [`proofable_agent_create`](./agent-create) or `proofable_verify` with `agent-delegation`. See [Agents](/agents) and [Discover agents](../agents/named-agent-card).

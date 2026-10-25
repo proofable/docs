@@ -5,13 +5,13 @@ description: "Move a verified result between apps without repeating the check, u
 icon: file-signature
 ---
 
-CAIP-380 is an open [ChainAgnostic](https://standards.chainagnostic.org/CAIPs/caip-380) standard at **Draft** status. Proofable is a reference implementation. This page describes the portable envelope Proofable emits: a signed request from a wallet, or a Proofable-signed statement about its own result. See [Standards & interoperability](/learn/standards) for how Proofable uses this format with other protocols, and the [whitepaper](/whitepaper#6-standards-and-interoperability) for the architecture.
+CAIP-380 is an open [ChainAgnostic](https://standards.chainagnostic.org/CAIPs/caip-380) standard at **Draft** status, and Proofable is the reference implementation. Proofable emits the envelope in two forms: a signed request from a wallet, or a Proofable-signed statement about its own result.
 
 The CAIP-380 specification text in this document is released under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/). Reference implementation code, schemas, and fixtures elsewhere in this repository are Apache-2.0.
 
 ## Scope of the proposal
 
-One wallet-signed envelope; apps validate off-chain; stable **qHash**.
+One wallet-signed envelope with a stable **qHash** that apps validate off-chain.
 
 - Networks use CAIP-2 (`eip155:1`, `solana:mainnet`, `near:mainnet`, ...)
 - Account ids use CAIP-10 (`eip155:1:0x...`, `solana:mainnet:...`, `near:mainnet:alice.near`) where an `*AccountId` field is emitted
@@ -24,7 +24,7 @@ One wallet-signed envelope; apps validate off-chain; stable **qHash**.
 | CAIP-2 | `namespace:reference` | Network context. Use `chain` for any non-EVM signing and account identity, for example `solana:mainnet` or `near:mainnet`. |
 | CAIP-10 | `namespace:reference:account` | Account id fields such as `agentAccountId` and `controllerAccountId`. |
 | `did:pkh` | `did:pkh:namespace:reference:account` | Stable DID for profiles, proof subjects, and `/u/[did]` URLs. It is derived from the same chain and account context, but is not a bare CAIP-10 string. |
-| `chainId` | number | EVM-only compatibility field for the **account / signing** network (Proofable defaults to Base mainnet, `8453`). Do not put the optional voucher hub here. For NFT, token, or contract checks, set that asset's `chainId` inside `data`. |
+| `chainId` | number | EVM-only compatibility field for the **account / signing** network (Proofable defaults to Base mainnet, `8453`). For NFT, token, or contract checks, set that asset's `chainId` inside `data`. |
 
 Rule of thumb: EVM browser flows can rely on hosted verify or pass an explicit EVM provider. Any non-EVM flow passes the wallet or provider explicitly and includes `chain` as a CAIP-2 value. The envelope is chain-agnostic by design. Any namespace that publishes a CAIP-2 reference and a signing profile can participate.
 
@@ -32,15 +32,13 @@ Rule of thumb: EVM browser flows can rely on hosted verify or pass an explicit E
 
 **`qHash`** (0x…) is SHAKE-256 (256-bit) of the canonical subset `did`, `verifierIds`, `data`, `signedTimestamp`, and exactly one of `chainId` or `chain`. Every field inside `data`, including a nonce or timestamp, remains bound to the hash. [Proofs](../../proofs)
 
-## Inputs (conceptual)
+## Canonical JSON
 
-Account + chain, `verifierIds`, `data` (canonical JSON), `signedTimestamp`, EVM `chainId` or any non-EVM `chain` (CAIP-2).
-
-Canonical JSON normalizes strings and keys to NFC, sorts object keys by Unicode code point, preserves array order and `null`, and rejects `undefined`, sparse arrays, non-finite numbers, functions, symbols, and bigint values. An envelope must contain exactly one of `chainId` or `chain`.
+Canonical JSON normalizes strings and keys to NFC, sorts object keys by Unicode code point, preserves array order and `null`, and rejects `undefined`, sparse arrays, non-finite numbers, functions, symbols, and bigint values.
 
 ## Signer string
 
-Six-line UTF-8, LF. The wallet must sign these exact bytes. **`POST /api/v1/verification/standardize`** returns **`signerString`** for raw HTTP and debugging; the SDK **`verify()`** path builds the same message client-side (or use **`standardizeVerificationRequest`** when you need the API round-trip).
+Six-line UTF-8, LF. The wallet signs these exact bytes. `POST /api/v1/verification/standardize` returns the `signerString` for raw HTTP. The SDK `verify()` builds the same message client-side, and `standardizeVerificationRequest` fetches it from the API.
 
 ```text
 Portable Proof Verification Request
@@ -51,7 +49,7 @@ Data: <json payload>
 Timestamp: <unix-ms>
 ```
 
-Same as [Signing format](../../verification/signing-format).
+[Signing format](../../verification/signing-format) has the full rules.
 
 ## What the envelope proves
 
@@ -94,6 +92,4 @@ Proofable rejects a new request if `signedTimestamp` is older than 5 minutes or 
 
 ## Spec and lifecycle
 
-[CAIP-380 (ChainAgnostic)](https://standards.chainagnostic.org/CAIPs/caip-380). Status: Draft. Proofable is the reference implementation.
-
-CAIP-380 is at Draft status in the official CASA registry. Per [CAIP-1](https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-1.md) the lifecycle is `Draft → Review → Last Call → Final` (there is no "Accepted" rung). Advancing it requires editor advancement and, for the cryptographic profile, a second independent implementation. See [Standards & interoperability](/learn/standards) and the [whitepaper](/whitepaper#6-standards-and-interoperability).
+[CAIP-380 (ChainAgnostic)](https://standards.chainagnostic.org/CAIPs/caip-380) follows the [CAIP-1](https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-1.md) lifecycle: `Draft → Review → Last Call → Final`. Moving past Draft takes editor review and, for the cryptographic profile, a second independent implementation. [Standards and interoperability](/learn/standards) shows how the format works with other protocols, and the [whitepaper](/whitepaper#6-standards-and-interoperability) covers the architecture.

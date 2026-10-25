@@ -43,13 +43,13 @@ The [Proofable SDK on GitHub](https://github.com/proofable/sdk) includes the CLI
 
 ## Privacy
 
-Proofable returns the result and its proof, not the private data used to complete the check. Proofs are private by default. Each connected client or runtime remains responsible for enforcing the returned result and permissions.
+A check returns its result and proof, and the private data used to complete it stays out of the response. Proofs are private by default. Your client or runtime enforces the returned result and permissions.
 
 When authorized, agents can read:
 
 - The signed-in profile and current agent permissions
 - Approved tools, skills, and selected context
 - Current proofs and verification status
-- Vault record metadata without stored secret values
+- Saved key names and metadata, never the stored values
 
 To load one registered agent into a project, see [Connect agent context](/agents/runtime-mount).

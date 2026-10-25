@@ -4,10 +4,10 @@ description: "Connect a custom MCP host to Proofable sign-in: discovery, authori
 icon: shield-check
 ---
 
-Proofable MCP uses the **Authorization Code** grant. The user signs in on Proofable with the same passkey or wallet flow as the product.
+Proofable MCP uses the **Authorization Code** grant with PKCE. The user signs in on Proofable with the same passkey or wallet flow as the product.
 
 <Note>
-  **Default:** add `https://mcp.proofable.me/mcp` and finish the sign-in your client opens. Only Claude connectors and Devin render a control called Connect. Optional terminal installer: `npx -y @proofable/sdk setup`. Use this page for custom MCP hosts, security review, standalone sign-in, or raw HTTP integration.
+  Most clients only need `https://mcp.proofable.me/mcp` and the sign-in they open. This page is for custom MCP hosts, security review, and raw HTTP integration.
 </Note>
 
 ## Flow overview
@@ -25,9 +25,7 @@ MCP client discovers Proofable MCP
   → Client uses Bearer token on MCP requests
 ```
 
-`/oauth/authorize` validates OAuth parameters. Without a session it redirects to `https://proofable.me/verify?intent=mcp&returnTo=/oauth/authorize?...`. After login it issues a single-use code (10-minute TTL) and redirects to `redirect_uri`. Repeated identical `resource` values are accepted (RFC 8707).
-
-Token exchange and revocation are public OAuth endpoints on `proofable.me`.
+`/oauth/authorize` validates OAuth parameters. Without a session it redirects to `https://proofable.me/verify?intent=mcp&returnTo=/oauth/authorize?...`. After login it issues a single-use code (5-minute TTL) and redirects to `redirect_uri`.
 
 ## Discovery
 
@@ -43,22 +41,20 @@ GET https://mcp.proofable.me/.well-known/oauth-protected-resource/mcp
   "resource": "https://mcp.proofable.me/mcp",
   "authorization_servers": ["https://proofable.me"],
   "scopes_supported": [
-    "neus:core",
-    "neus:profile",
-    "neus:secrets"
+    "proofable:core",
+    "proofable:profile",
+    "proofable:secrets"
   ],
   "resource_documentation": "https://docs.proofable.me/mcp/overview"
 }
 ```
 
-`https://mcp.proofable.me/mcp` is the single endpoint: an uncredentialed request, including `initialize`, returns `401` + `WWW-Authenticate`, so interactive installs start DCR + PKCE immediately. A server key uses the same URL as a Bearer token. Protected operations return the same challenge:
+A signed-out handshake and the four signed-out tools answer normally. Every other call without a usable token returns the challenge that starts DCR and PKCE. An access key uses the same URL as a Bearer token.
 
 ```http
 HTTP/1.1 401 Unauthorized
-WWW-Authenticate: Bearer resource_metadata="https://mcp.proofable.me/mcp/.well-known/oauth-protected-resource", scope="neus:core neus:profile neus:secrets"
+WWW-Authenticate: Bearer resource_metadata="https://mcp.proofable.me/mcp/.well-known/oauth-protected-resource", scope="proofable:core proofable:profile proofable:secrets"
 ```
-
-The `401` + `WWW-Authenticate` response is served for every method without a token, on the same single endpoint, so interactive installs start DCR + PKCE immediately and server keys connect to the same URL.
 
 ### Authorization server metadata
 
@@ -78,9 +74,9 @@ GET https://proofable.me/.well-known/oauth-authorization-server
   "code_challenge_methods_supported": ["S256"],
   "token_endpoint_auth_methods_supported": ["none"],
   "scopes_supported": [
-    "neus:core",
-    "neus:profile",
-    "neus:secrets",
+    "proofable:core",
+    "proofable:profile",
+    "proofable:secrets",
     "offline_access"
   ],
   "resource_indicators_supported": true,
@@ -90,7 +86,7 @@ GET https://proofable.me/.well-known/oauth-authorization-server
 
 ## Authorization
 
-The example below shows the **Proofable SDK CLI** loopback flow (`proofable auth --oauth`), which identifies as `proofable-cli`. Host MCP clients use the same endpoint with the `client_id` issued to them by DCR and their own loopback `redirect_uri`. Never use `proofable-cli` for host clients.
+The examples on this page use the **Proofable SDK CLI** loopback flow (`proofable auth --oauth`), which identifies as `proofable-cli`. A host MCP client sends the `client_id` that DCR issued to it, its own registered `redirect_uri`, and the same `resource`.
 
 ```http
 GET https://proofable.me/oauth/authorize
@@ -100,7 +96,7 @@ GET https://proofable.me/oauth/authorize
   &code_challenge=BASE64URL(SHA256(code_verifier))
   &code_challenge_method=S256
   &state=RANDOM_CSRF_VALUE
-  &scope=neus:core neus:profile neus:secrets offline_access
+  &scope=proofable:core proofable:profile proofable:secrets offline_access
   &resource=https://mcp.proofable.me/mcp
 ```
 
@@ -112,8 +108,8 @@ GET https://proofable.me/oauth/authorize
 | `code_challenge` | Yes | PKCE challenge (BASE64URL of SHA-256 of code_verifier) |
 | `code_challenge_method` | Yes | Must be `S256` |
 | `state` | Yes | CSRF protection: returned verbatim |
-| `scope` | No | Default: `neus:core neus:profile neus:secrets offline_access` |
-| `resource` | No | Missing defaults to `https://mcp.proofable.me/mcp`. Repeated identical canonical values are accepted (RFC 8707). |
+| `scope` | No | Default: `proofable:core proofable:profile proofable:secrets offline_access` |
+| `resource` | No | Defaults to `https://mcp.proofable.me/mcp`. Repeated identical values are accepted (RFC 8707); a different resource is rejected. |
 | `iss` | Returned | The AS returns `iss=https://proofable.me` on the callback. Clients MUST validate it matches the expected issuer (RFC 9207). |
 
 ## Token exchange
@@ -136,9 +132,9 @@ Response:
 {
   "access_token": "eyJ...",
   "token_type": "Bearer",
-  "expires_in": 3600,
+  "expires_in": 86400,
   "refresh_token": "rt_...",
-  "scope": "neus:core neus:profile neus:secrets"
+  "scope": "proofable:core proofable:profile proofable:secrets"
 }
 ```
 
@@ -154,7 +150,7 @@ client_id=proofable-cli
 resource=https://mcp.proofable.me/mcp
 ```
 
-Refresh tokens rotate on each use. Include `offline_access` in the initial scope to receive one.
+Refresh tokens last 30 days and rotate on each use. Include `offline_access` in the initial scope to receive one.
 
 ## Token claims
 
@@ -172,18 +168,18 @@ The MCP access token is a JWT:
 | `iat` | Unix seconds | Issued at |
 | `exp` | Unix seconds | Expires at |
 
-OAuth access tokens are valid only when `aud` is `https://mcp.proofable.me/mcp`, `iss` is `https://proofable.me`, `token_use` is `mcp_access`, and the token is not expired or revoked.
+The MCP server accepts a token only when `aud`, `iss` and `token_use` match these values and the token is unexpired and unrevoked.
 
 ## Scope model
 
 | Scope | Description | Default |
 |-------|-------------|---------|
-| `neus:core` | Public protocol tools (context, catalog, public proof reads) | Yes |
-| `neus:profile` | Signed-in profile context and ownership checks | Yes |
-| `neus:secrets` | Saved keys on your profile: list or remove one, or call a provider with one. A key is saved in Proofable, never through a tool | Yes |
+| `proofable:core` | Public protocol tools (context, catalog, public proof reads) | Yes |
+| `proofable:profile` | Signed-in profile context and ownership checks | Yes |
+| `proofable:secrets` | Saved keys on your profile: list or remove one, or call a provider with one. Keys are saved in Proofable | Yes |
 | `offline_access` | Refresh token so the client can stay signed in | Yes |
 
-These four scopes are the complete public permission model. Server keys (`npk_*`) are a full-profile credential.
+These four scopes are the complete public permission model. Access keys (`npk_*`) are a full-profile credential.
 
 ## Revocation
 
@@ -203,11 +199,9 @@ Revoking an access token also invalidates all associated refresh tokens.
 | `client_id` | Use |
 |-------------|-----|
 | `proofable-cli` | Proofable SDK CLI (`proofable auth --oauth`): loopback redirect on `127.0.0.1` only |
-| `neus-mcp-host` | Host MCP clients: issued by DCR for non-loopback flows |
+| Issued by DCR | Host MCP clients: one client ID per registration, bound to its exact callback URIs |
 
-Hosted MCP clients use a **URL-only** MCP config. The host discovers OAuth metadata via `/.well-known/oauth-protected-resource`, runs its own Dynamic Client Registration (DCR) against `/oauth/register`, and owns its PKCE + silent-refresh lifecycle. DCR issues `neus-mcp-host` for non-loopback redirect URIs. Do not pin `proofable-cli` for host-owned OAuth.
-
-The OAuth examples above show `client_id=proofable-cli` because they document the CLI loopback path (`proofable auth --oauth`). Host clients receive their own `client_id` from DCR and send that instead, plus the same `resource=https://mcp.proofable.me/mcp`.
+Host MCP clients use a URL-only MCP config. The host reads `/.well-known/oauth-protected-resource`, registers itself at `/oauth/register`, and owns its PKCE and silent-refresh lifecycle. Host clients send their own DCR client ID, never `proofable-cli`.
 
 ## Security properties
 
@@ -216,20 +210,16 @@ The OAuth examples above show `client_id=proofable-cli` because they document th
 | PKCE required | `code_challenge_method=S256` is mandatory |
 | Exact redirect_uri match | Prevents open redirect attacks |
 | State parameter preserved | CSRF protection |
-| Resource indicator required | Prevents token misuse across services |
+| Resource indicator checked | A `resource` other than the MCP endpoint is rejected |
 | Issuer validation (RFC 9207) | Client confirms `iss` on auth response matches expected AS; closes IdP mix-up |
 | Token audience validated | MCP tokens cannot be used for other Proofable services |
 | Refresh token rotation | Old refresh token invalidated on each use |
 | Tokens never in query strings | Bearer header only |
 | Single-use auth codes | Code invalidated after first exchange |
-| Access key fallback | For servers and automation where browser is unavailable |
 
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card title="Auth" icon="lock" href="./auth">
-    Keys and headers.
-  </Card>
-  <Card title="Setup" icon="code" href="./setup">
-    Install and configure.
+    Sign-in and access keys.
   </Card>
   <Card title="Endpoints" icon="globe" href="./endpoints">
     Discovery URLs.
