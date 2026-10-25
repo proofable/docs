@@ -91,7 +91,8 @@
             "pages": [
               "learn/compare/control-what-an-agent-can-do",
               "learn/compare/proofable-or-an-identity-provider",
-              "learn/compare/proofable-or-a-policy-engine"
+              "learn/compare/proofable-or-a-policy-engine",
+              "learn/compare/cheapest-way-to-verify-and-gate"
             ]
           },
           {
