@@ -22,7 +22,7 @@ window.location.assign(
 );
 ```
 
-`getHostedCheckoutUrl` builds three separate recipes: `gateId` for a published gate, `intent: 'login'` for sign-in only, or `verifiers` (or `preset`) for direct checks. Use one per URL. Shared options are `returnUrl`, `mode`, `origin`, and `oauthProvider`. `appId` and `billingWallet` are advanced sponsor options; omit them with `gateId`.
+`getHostedCheckoutUrl` takes one recipe per URL: `gateId` for a published gate, `intent: 'login'` for sign-in only, or `verifiers` (or `preset`) for direct checks. Shared options are `returnUrl`, `mode`, `origin`, and `oauthProvider`. `appId` and `billingWallet` are advanced sponsor options; omit them with `gateId`.
 
 ### React
 
@@ -97,7 +97,7 @@ const result = await client.gateCheck({
 
 ## Drive checkout yourself
 
-Most apps never need this. Use it to mirror hosted checkout from your own backend.
+Use these calls to mirror hosted checkout from your own backend.
 
 ```js
 const gate = await client.getGate('gate_your-app-name'); // requirements, price, schedule

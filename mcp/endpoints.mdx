@@ -1,10 +1,8 @@
 ---
 title: Discovery and endpoints
-description: "Where to point your client: the MCP URL, the HTTP API base, and the discovery documents that advertise both."
+description: "Point your client at the hosted MCP URL, the OAuth discovery and token endpoints, and the discovery cards that advertise them."
 icon: globe
 ---
-
-The **MCP URL** and the **HTTP API** use different transports and base paths. Discovery and the [agent card](https://proofable.me/.well-known/agent-card.json) list what your integration needs.
 
 ## MCP endpoint
 
@@ -25,7 +23,8 @@ The **MCP URL** and the **HTTP API** use different transports and base paths. Di
 | URL | Role |
 |-----|------|
 | `https://proofable.me/oauth/authorize` | Authorization endpoint (browser login) |
-| `https://proofable.me/api/v1/auth/mcp/token` | Token endpoint (code exchange + refresh) |
+| `https://proofable.me/oauth/register` | Dynamic client registration |
+| `https://proofable.me/api/v1/auth/mcp/token` | Token endpoint (code exchange and refresh) |
 | `https://proofable.me/api/v1/auth/mcp/revoke` | Token revocation |
 
 Full OAuth reference: [MCP OAuth](./oauth).
@@ -38,15 +37,5 @@ Full OAuth reference: [MCP OAuth](./oauth).
 | `https://mcp.proofable.me/.well-known/mcp.json` | MCP discovery |
 | `https://proofable.me/.well-known/mcp` | Same discovery card on the product domain (`url` stays `https://mcp.proofable.me/mcp`) |
 | `https://mcp.proofable.me/.well-known/mcp/server-card.json` | MCP server card |
-| `https://mcp.proofable.me/.well-known/glama.json` | Glama connector claim |
-| `https://proofable.me/.well-known/a2a/agent-card.json` | Platform A2A agent card. [Docs](../agents/named-agent-card) |
+| `https://proofable.me/.well-known/a2a/agent-card.json` | Platform A2A agent card. [Discover agents](../agents/named-agent-card) |
 | `https://proofable.me/.well-known/agent-card.json` | Platform service discovery and ERC-8004 registration status |
-
-<CardGroup cols={2}>
-  <Card title="MCP OAuth" icon="shield-check" href="./oauth">
-    OAuth flow reference.
-  </Card>
-  <Card title="Setup" icon="code" href="./setup">
-    Install and configure.
-  </Card>
-</CardGroup>

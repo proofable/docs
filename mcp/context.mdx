@@ -1,16 +1,12 @@
 ---
 title: "Session context"
 sidebarTitle: "Context"
-description: "Start here for the signed-in profile, available verifiers, and recommended workflow."
+description: "One call per session returns your signed-in profile, a proof index, available verifiers, and the recommended tool order."
 keywords: ["proofable_context", "session context", "profile context", "MCP"]
 icon: database
 ---
 
-Call **`proofable_context`** once at the start of a Proofable MCP session.
-
-It returns setup links, available verifiers, the recommended workflow, and **profile details when the connection is signed in**. After Connect, one call covers the signed-in profile. No separate profile tool.
-
-Profile context can include `profileSummary.proofsSummary`: a compact proof summary with totals, verifier counts, and recent proof references. Use **`proofable_proofs_get`** for full records or more pages.
+Call **`proofable_context`** once at the start of a Proofable MCP session. When the connection is signed in, the same call returns the profile.
 
 ## What it returns
 
@@ -18,12 +14,11 @@ Profile context can include `profileSummary.proofsSummary`: a compact proof summ
 |-------|-----|
 | `setup.mcpEndpoint` | The hosted MCP endpoint in use (`https://mcp.proofable.me/mcp`) |
 | `sessionWallet` | Signed-in account address. Omit `wallet` on later tools when signed in |
+| `contextIndex` | Up to three title-and-proof-ID references per scope |
+| `profileContext` | Signed-in profile, agents, and `profileSummary.proofsSummary` (totals, verifier counts, recent proof references) |
 | `runtimeContract` | Recommended tool order and stopping conditions |
 | `verifierSummary` | Compact list of available verifiers |
-| `profileSummary` | Signed-in profile context, including `proofsSummary` |
 
-When signed in, let account-based tools use the current profile. Ownership proofs finish with **`proofable_verify`**. Share a hosted link only when a tool returns one.
+Agent entries omit instructions and skill bodies, and tool descriptions stay in MCP `tools/list`. Use **`proofable_proofs_get`** for full records or a known proof body, and **`proofable_agent_mount`** to load one agent.
 
-The response is intentionally bounded: agent entries omit instructions and skill bodies, the context index contains at most three title-and-proof-ID references per scope, and tool descriptions stay in MCP `tools/list` instead of being repeated in every context response. Mount one agent or fetch one known proof body only when the current task needs it.
-
-See [Overview](./overview). Reuse existing proofs first. Use a hosted link only when the next step needs an outside login, payment, or a different account.
+When signed in, let account-based tools use the current profile. Ownership proofs finish with **`proofable_verify`**. Share a hosted link only when a tool returns one for an outside login, payment, or a different account.

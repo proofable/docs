@@ -1,13 +1,11 @@
 ---
 title: Gate checkout
 sidebarTitle: Gate checkout
-description: "Sell access with a hosted gate: verify visitors, collect payment, and deliver content in one flow. Buyers keep and reuse their proof."
+description: "Run listing checkout from your own backend with the gate snapshot, eligibility check, payment evidence and fulfill call."
 icon: door-open
 ---
 
-A published listing is a reusable checkout: visitors complete the verifiers you configured, optionally pay, and receive the reward you attached. This page documents the full server contract behind hosted checkout so you can mirror it from your own app or backend.
-
-Use the [VerifyGate widget](../widgets/verifygate) or the hosted checkout link for the usual path. This page is the raw server contract.
+A published listing is a reusable checkout. Visitors complete the checks you configured, pay if the listing has a price, and receive the reward you attached. Use the [VerifyGate widget](../widgets/verifygate) or the hosted checkout link for the usual path, and the contract below to mirror it from your own app or backend.
 
 ## Which API host?
 
@@ -21,10 +19,10 @@ Prefer the SDK on your server. The `proofable.me` paths are the same contract, p
 
 ## Lifecycle
 
-1. **Snapshot**: load the public gate: requirements, price, schedule, and reward presence (not the secret reward value). Use `client.getGate(gateId)` or `GET /api/v1/profile/gates/{gateId}` on `api.proofable.me`.
-2. **Eligibility**: `GET /api/v1/proofs/check?gateId=...&address=...&includePrivate=true&includeQHashes=true` evaluates the visitor's existing proofs against every requirement. An inline Gate Policy uses the same evaluator over `POST /api/v1/proofs/check` and does not collect listing payment.
+1. **Snapshot**: load the public gate with its requirements, price, schedule, and whether a reward exists. The secret reward value stays out of the snapshot. Use `client.getGate(gateId)` or `GET /api/v1/profile/gates/{gateId}` on `api.proofable.me`.
+2. **Eligibility**: `GET /api/v1/proofs/check?gateId=...&address=...&includePrivate=true&includeQHashes=true` evaluates the visitor's existing proofs against every requirement. An inline Gate Policy uses the same evaluator over `POST /api/v1/proofs/check` and collects no listing payment.
 3. **Verify**: if proofs are missing, the visitor completes them (hosted verify link, VerifyGate, or `POST /api/v1/verification` for signature-based verifiers). Pass `gateId` and reuse satisfied proofs via `options.reusedVerifierProofs`.
-4. **Pay**: for paid gates, payment happens after verification by default (`executionOrder: "verifyThenCharge"`). Gates with a connected payout account settle through one Stripe checkout session. The visitor picks card or crypto there. Gates with a custom wallet settle by direct USDC on Base.
+4. **Pay**: for paid gates, payment happens after verification by default (`executionOrder: "verifyThenCharge"`). Gates with a connected payout account settle through one Stripe checkout session, where the visitor picks card or crypto. Gates with a custom wallet settle by direct USDC on Base.
 5. **Fulfill**: deliver the reward with the verified `qHash` (plus payment evidence for paid gates) via `client.fulfillGate(...)` or `POST /api/v1/gates/{gateId}/fulfill`. If the snapshot includes `requestedAccess`, also send the buyer-approved `accessGrant` (connected account + selected resource). Hosted checkout stamps that grant on the receipt. A configured return URL receives `grant` and `receipt` set to the same proof ID. The listing owner then calls `POST /api/v1/proofs/composio/execute` with `grant` set to that proof ID. Proofable runs the tool as the buyer and never returns the buyer’s credential. Missing, revoked, or out-of-scope grants return `403`. For an AI service listing, also send the buyer's `serviceParameters` (see [AI service listings](#ai-service-listings)).
 
 ```js
@@ -77,7 +75,7 @@ When `gateId` is passed, the response carries a per-requirement `data.gate` bloc
 - `satisfiedVerifierIds` / `missingVerifierIds`: which requirements existing proofs cover.
 - `prerequisites`: present when the listing requires prior listings. One `{ gateId, satisfied }` row each. See [Prior listings](#prior-listings).
 - `reusedVerifierProofs`: verifierId → qHash map (requires `includeQHashes=true`). Pass it as `options.reusedVerifierProofs` on `POST /api/v1/verification` so satisfied checks are not re-run.
-- Re-run the gate check after every interactive step (OAuth grant, personhood session) before treating checkout as complete. Interactive completions only count once Proofable confirms them here.
+- Re-run the gate check after every interactive step (OAuth grant, personhood session). An interactive step counts once this check confirms it.
 
 ## Request-time vs proof-based rules
 
@@ -96,7 +94,7 @@ For `wallet-risk` gates, any proof-based row also requires `policyVerified` to b
 
 In the gate builder, choose **Verification link**. The visitor pastes their own HTTPS URL; Proofable reads JSON from that URL or its conventional `.json` form and checks whether `verified` is `true`.
 
-Builders do not configure fetch targets, callbacks, or provider-specific connectors. The saved gate contains the portable match rows `reference.type = url` and `resolved.verified = true`. API clients can use other `resolved.*` output matches when a source exposes a different public JSON contract. Resolved-link proofs default to five-minute freshness so checkout does not silently reuse old source status.
+The saved gate holds the portable match rows `reference.type = url` and `resolved.verified = true`, with no fetch targets or callbacks to configure. API clients can use other `resolved.*` output matches when a source exposes a different public JSON contract. Resolved-link proofs default to five-minute freshness, so checkout reads current source status.
 
 See [Content ownership](../verification/ownership-basic#verification-links-in-hosted-gates) for the wire shape and resolver safeguards.
 
@@ -156,7 +154,7 @@ order.data.fulfillment.delivery; // 'access_granted'
 order.data.serviceJob.jobId; // the run this order started
 ```
 
-Each value can be up to 512 characters. A missing required value returns `400 SERVICE_PARAMETER_REQUIRED`, and a longer one returns `400 SERVICE_PARAMETER_TOO_LONG`. The buyer receives the run's answer, never the listing's instructions, so the fulfillment carries no `value`.
+Each value can be up to 512 characters. A missing required value returns `400 SERVICE_PARAMETER_REQUIRED`, and a longer one returns `400 SERVICE_PARAMETER_TOO_LONG`. The buyer receives the run's answer and never sees the listing's instructions.
 
 When the run finishes, the buyer's receipt (the `qHash` you fulfilled) records the outcome. Read it as the buyer with `client.getPrivateProof(qHash, wallet)`:
 
@@ -178,7 +176,7 @@ When the run finishes, the buyer's receipt (the `qHash` you fulfilled) records t
 
 ## Campaign windows
 
-Gates may carry a `schedule` (`startsAt` / `endsAt`). Outside the window, gate checks report the closed state and verification/fulfillment are refused server-side (`GATE_NOT_STARTED`, `GATE_ENDED`). Treat the window as enforced. It is not a UI-only hint.
+Gates may carry a `schedule` (`startsAt` / `endsAt`). Outside the window, gate checks report the closed state and the server refuses verification and fulfillment (`GATE_NOT_STARTED`, `GATE_ENDED`).
 
 ## Prior listings
 
@@ -193,9 +191,6 @@ A prerequisite is met when the visitor's wallet holds that listing's completed c
 ## Next
 
 <CardGroup cols={2}>
-  <Card title="VerifyGate widget" icon="object-group" href="../widgets/verifygate">
-    Drop-in checkout for published gates
-  </Card>
   <Card title="Pricing" icon="tags" href="/pricing">
     Plans, credits, and who pays
   </Card>

@@ -7,23 +7,15 @@ icon: file-contract
 
 **Verifier ID:** `contract-ownership`
 
-## Use cases
+Lookup. Proofable reads owner or admin authority on-chain.
 
-- App ownership
-- Contract admin access
-- Partner and ecosystem trust
-
-## Flow type
-
-Lookup. Proofable checks owner or admin authority on-chain.
-
-## Required fields
+## Fields
 
 | Field | Required | Notes |
 |------|----------|-------|
 | `contractAddress` | Yes | EVM contract address |
 | `chainId` | Yes | EVM chain ID |
-| `method` | No | `owner`, `admin`, or `accessControl` (defaults to `owner`) |
+| `method` | No | `owner`, `admin`, or `accessControl`. Omit to try all three in that order |
 | `walletAddress` | No | Address to check; defaults to the signer |
 
 ## Example

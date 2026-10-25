@@ -11,7 +11,7 @@ You control an agent by giving it an owner and explicit limits, checking those l
 
 ## The short answer
 
-An agent needs three things before it can be trusted with a real action: an identity that names the agent and the person or team behind it, a permission that says what it may access, spend or change, and a check that runs before the action and can stop it. Instructions in a prompt are not a limit, because the model can be talked out of them. A limit that runs in the caller cannot be.
+An agent needs three things before it can be trusted with a real action: an identity that names the agent and the person or team behind it, a permission that says what it may access, spend or change, and a check that runs before the action and can stop it. A prompt instruction is advice the model can be talked out of. A limit enforced in the caller that owns the tool holds.
 
 ## Set the limits
 
@@ -28,7 +28,7 @@ A missing, expired or revoked permission grants nothing. [Control agent actions]
 
 ## Check at the boundary
 
-The check belongs where the tool call happens, not in the prompt and not only in the logs afterwards.
+The check runs where the tool call happens, before the call. A log entry written afterwards only describes what already ran.
 
 ```text
 Agent          report-agent
@@ -49,25 +49,16 @@ if (!decision.allowed) throw new Error(`${decision.code}: ${decision.message}`);
 
 ## Keep proof of each decision
 
-A limit you cannot demonstrate is hard to rely on. Each check can leave a proof that records which agent acted, which permission applied, and whether the call was allowed or refused, so the next system can check it without repeating the work. [Prove what happened](/use-cases/prove-what-happened) and [Reuse verification](/use-cases/reuse-verification) cover the record and its reuse.
+Each check can leave a proof that records which agent acted, which permission applied, and whether the call was allowed or refused, so the next system can check it without repeating the work. [Prove what happened](/use-cases/prove-what-happened) and [Reuse verification](/use-cases/reuse-verification) cover the record and its reuse.
 
 ## Common ways this goes wrong
 
-- **The limit lives in the prompt.** A prompt instruction is advice. Keep the limit in the caller that owns the tool.
-- **The check runs after the action.** A check in the logs describes what already happened. It has to run before.
 - **The agent has no owner.** Without an owner there is nobody to hold responsible and nobody who can revoke.
-- **Permission never expires.** An approval given once should not last forever without a decision.
-- **A denial loses to an allowance.** When both match, the denial has to win, or the narrower rule is meaningless.
+- **Permission never expires.** An approval given once stays live until someone remembers to remove it. Set an expiry.
 
 ## Where to go next
 
 <CardGroup cols={2}>
-  <Card title="Control agent actions" icon="shield-halved" href="/use-cases/control-agent-actions">
-    Set each limit and load it where the tool runs.
-  </Card>
-  <Card title="First guarded action" icon="shield-check" href="/mcp/guarded-action">
-    Run one allow or deny decision end to end.
-  </Card>
   <Card title="Agent identity" icon="fingerprint" href="/agents/agent-identity">
     Name the agent and its owner.
   </Card>

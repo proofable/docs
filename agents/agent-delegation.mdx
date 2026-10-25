@@ -5,13 +5,11 @@ description: "Grant an agent specific allowed actions, a per-payment spend cap, 
 icon: handshake
 ---
 
-Set spend and action limits for an agent. A signed-in-profile agent can act after identity is on file. A separate spend account also needs this permission record.
-
-The record shows who approved the agent, what it may do, how much it may spend, and when access expires.
+Set spend and action limits for an agent. A signed-in-profile agent can act once its identity is on file. A separate spend account also needs this permission record, which shows who approved the agent, what it may do, how much it may spend, and when access expires.
 
 **Verifier ID:** `agent-delegation`
 
-**`controllerWallet`** is the approving account, the address that signs this step. See [Agent concepts](./concepts).
+**`controllerWallet`** is the approving account, the address that signs this step.
 
 ## Setup
 
@@ -49,7 +47,7 @@ Both accounts need a CAIP-2 network reference (`controllerChainRef`, `agentChain
 
 ## App link
 
-One-time user approval lets your backend create proofs without asking for a signature on every request. This is different from creating a **listing** in your profile for hosted verification. See [Server integrations](../integrations/server).
+One-time user approval lets your backend create proofs without asking for a signature on every request. A **listing** for hosted verification is a separate setup. See [Server integrations](../integrations/server).
 
 1. User signs in on Proofable
 2. User approves the delegation once
@@ -73,13 +71,13 @@ await client.verify({
 
 **`agentId`** matches your `x-proofable-app` header. **`allowedOrigins`** lists the exact web origins your app may act from; use `"*"` for server-to-server callers with no browser origin.
 
-Send `x-proofable-app: your-app-id` and matching site origin on verification requests. On Node, set `appOrigin: 'https://app.example.com'` on `ProofableClient` (or pass `Origin` via `extraHeaders`).
+Send `x-proofable-app: your-app-id` and the matching site origin on verification requests. With the SDK on Node, set `appId: 'your-app-id'` and `appOrigin: 'https://app.example.com'` on `ProofableClient`, or pass `Origin` via `extraHeaders`.
 
 ## Payment limits
 
 `maxSpend` is a whole-number string in token base units. For USDC (6 decimals), 25 USDC = `"25000000"`. Use `toAgentDelegationMaxSpend('25', 6)` from `@proofable/sdk`.
 
-When `allowedActions` includes `make_payment`, `allowedPaymentTypes` and `maxSpend` are both required. The agent can then settle metered API calls via the allowed rails, such as x402, without a Proofable account. The calling application enforces the `maxSpend` cap client-side before signing each payment. The protocol does not decrement `maxSpend` server-side. When the cap is exhausted, the application stops signing payments and the agent is refused. See [Pay per call](../gates/pay-per-call) for the full settlement flow.
+When `allowedActions` includes `make_payment`, `allowedPaymentTypes` and `maxSpend` are both required. The agent can then settle metered API calls via the allowed rails, such as x402, without a Proofable account. `maxSpend` caps each payment: the payment check refuses an amount above it, and the calling application enforces the cap before signing each payment. Proofable keeps no running balance against it. See [Pay per call](../gates/pay-per-call) for the full settlement flow.
 
 ```javascript
 import { toAgentDelegationMaxSpend } from '@proofable/sdk';
@@ -111,16 +109,15 @@ await client.verify({
 | `allowedActions` | Yes | Explicit action allowlist. Must list at least one canonical action; an empty list grants nothing |
 | `deniedActions` | No | Explicit action denylist. Always wins over `allowedActions` |
 | `allowedOrigins` | No | Exact web origins an app agent may act from, or `"*"` for server callers |
-| `maxSpend` | With `make_payment` | Spend cap in token base units |
+| `maxSpend` | With `make_payment` | Spend cap per payment in token base units |
 | `allowedPaymentTypes` | With `make_payment` | Payment rails (e.g. `x402`) |
 | `receiptDisclosure` | No | `summary`, `full`, or `none` |
 | `expiresAt` | No | Expiration (Unix ms) |
 | `instructions` | No | Policy text (16000 chars) |
-| `skills` | No | Up to 48 skill objects |
 | `runtimePolicy` | No | Provider/model limits and human-approval requirement |
 | `approvalPolicy` | No | Approval requirements for new claims or content |
 
-The protocol accepts action strings only in **`allowedActions`** and **`deniedActions`**. `deniedActions` always wins over `allowedActions`, and a delegation with no listed actions grants nothing.
+Action strings go only in **`allowedActions`** and **`deniedActions`**.
 
 ## Human approval pattern
 
@@ -160,8 +157,10 @@ A proof ID returned in **`qHash`**. Read that exact record with **`proofable_pro
 
 ## Revoke
 
+Sign the revocation with the wallet that owns the proof:
+
 ```javascript
-await client.revokeOwnProof(qHash, walletAddress);
+await client.revokeOwnProof(qHash, wallet);
 ```
 
 Set **`expiresAt`** and **`maxSpend`** when money or high-risk actions are in play.

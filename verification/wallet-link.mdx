@@ -7,28 +7,20 @@ icon: link
 
 **Verifier ID:** `wallet-link`
 
-## Use cases
+Instant. The secondary wallet signs the linking payload, so one account can hold several wallets, including agent and controller wallets.
 
-- Multi-wallet identity
-- Agent and controller wallets
-- Account portability
+## In the browser
 
-## Flow type
+[Hosted Verify](https://proofable.me/verify) runs the link before the proof:
 
-Instant. The secondary wallet signs the linking payload.
+1. Connect the secondary wallet.
+2. Sign the wallet-link payload.
+3. See **Linked**.
+4. Continue to create the proof.
 
-## Browser UX
+Submit directly only when your integration already controls the secondary wallet's signature.
 
-For end-user browser flows, prefer **Hosted Verify** at [`/verify`](https://proofable.me/verify). The hosted flow now stages wallet linking first:
-
-1. Connect the secondary wallet
-2. Sign the wallet-link payload
-3. Show **Linked**
-4. Continue to create the proof
-
-Use direct/API mode only for advanced integrations that already control the secondary-wallet signature step.
-
-## Required fields
+## Fields
 
 | Field | Required | Notes |
 |------|----------|-------|
@@ -38,14 +30,14 @@ Use direct/API mode only for advanced integrations that already control the seco
 | `signatureMethod` | Yes | `eip191` for EVM, `ed25519` for non-EVM |
 | `chain` | Yes | CAIP-2 chain |
 | `signedTimestamp` | Yes | Unix ms timestamp |
-| `relationshipType` | No | `linked` (default), `controller`, or `delegate` |
+| `relationshipType` | No | `linked` (default), `primary`, `personal`, `org`, `affiliate`, or `agent` |
 | `label` | No | Display label for the link |
 
-Instead of `primaryWalletAddress` / `secondaryWalletAddress` + `chain`, you may pass CAIP-10 `primaryAccountId` and `secondaryAccountId`.
+In place of `primaryWalletAddress`, `secondaryWalletAddress`, and `chain`, you can pass CAIP-10 `primaryAccountId` and `secondaryAccountId`.
 
 ## Example
 
-Advanced direct/API payload after the secondary wallet has already signed:
+A direct payload after the secondary wallet has signed:
 
 ```json
 {

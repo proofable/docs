@@ -35,8 +35,6 @@ The [verifier catalog](/verification/verifiers) lists every check and its inputs
 | Instant | The account signs during the session. | `ownership-basic`, `agent-identity` |
 | Lookup | Proofable reads live state. | `nft-ownership`, `wallet-risk` |
 
-Most product gates start with interactive checks. Use instant and lookup checks when your rule needs them.
-
 ## Start a check
 
 | From | Use |
@@ -50,18 +48,15 @@ Most product gates start with interactive checks. Use instant and lookup checks 
 ## What you get back
 
 - A proof ID in `qHash`
-- A `status` of `verified`, `processing`, or `failed`
+- A `status`, which the SDK reads with `isSuccessStatus` and `isTerminalStatus`
 - A proof page at `https://proofable.me/proof/{qHash}`
 - A hosted link, only when the person must finish a step in the browser
 
-When the status is `processing`, poll with `pollProofStatus` until it finishes.
+While the status is still processing, poll with `pollProofStatus` until it finishes.
 
 ## Guides
 
-<CardGroup cols={2}>
-  <Card title="Hosted verification" icon="key" href="/verification/hosted">
-    Sign-in and checks without building UI.
-  </Card>
+<CardGroup cols={3}>
   <Card title="Presets" icon="layer-group" href="/verification/presets">
     Run one check, several, or a bundle from a URL.
   </Card>

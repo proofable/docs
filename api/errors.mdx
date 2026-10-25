@@ -1,6 +1,6 @@
 ---
 title: API errors
-description: "Every Proofable API error code explained: what triggers it, what the response body means, and the exact recovery step for each case."
+description: "What the common Proofable API error codes mean and the recovery step to take for each one, from signature failures to rate limits."
 icon: bug
 ---
 
@@ -33,7 +33,7 @@ The same schema is published on every public operation in [Proofable OpenAPI](ht
 | `INVALID_VERIFIER_DATA` | Verifier inputs are missing or malformed | Check the verifier's required fields and retry |
 | `INVALID_VERIFIER_COMBINATION` | Requested verifiers can't be combined in one request | Split into separate requests |
 | `INVALID_VERIFIER_FLOW_COMBINATION` | A hosted-only verifier was mixed with others | Run the hosted-only check on its own |
-| `VERIFICATION_FAILED` | The requested check did not pass | Treat as a failed verification, not a transport error |
+| `VERIFICATION_FAILED` | The requested check did not pass | Treat it as a check result and show which check failed |
 | `NOT_FOUND` | Proof or resource not found | Confirm the id and visibility |
 | `PROOF_NOT_FOUND` | Gate/fulfill proof not found | Confirm the gate and the proof exist |
 | `WALLET_AUTH_REQUIRED` | Action needs an owner wallet signature/session | Authenticate the right wallet, then retry |

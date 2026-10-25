@@ -7,44 +7,27 @@ icon: globe
 
 **Verifier ID:** `ownership-dns-txt`
 
-## Use cases
+Lookup. Proofable reads the TXT record at `_proofable.<domain>` and compares it to the wallet address that signs the check. Records published under the earlier `_neus.<domain>` name still verify. The [domain guide](./domain) walks through setup.
 
-- verified website on your profile
-- team workspace and branded handles
-- public trust pages for domains
+## DNS record
 
-## Flow Type
+Create a TXT record named `_proofable` on the domain. For `example.com`, the lookup is `_proofable.example.com`.
 
-Lookup. Proofable resolves DNS TXT at `_proofable.<domain>` (canonical) and `_neus.<domain>` (legacy, still supported) and compares the record to the **account address** used for this verification (see below).
-
-## DNS record (what builders publish)
-
-Create a **TXT** record:
-
-- **Name / host:** `_proofable` (canonical). `_neus` still verifies for existing records, so no domain has to change at once. Effective lookup: `_proofable.<your-domain>` then `_neus.<your-domain>`, e.g. `_proofable.example.com` if the apex is `example.com`.
-- **Value:** a single line starting with `wallet=` followed by the **same wallet or account address** Proofable uses when it runs this check.
-
-Supported shapes today:
-
-| Format | When it matches |
+| Value | When it matches |
 |--------|------------------|
-| `wallet=<address>` | Default. `<address>` must match the wallet or account address Proofable uses for this proof. For **Ethereum**, use **lowercase** `0x` plus 40 hex digits in DNS. |
-| `wallet=eip155:<chainId>:<address>` | Only if the verification run supplies a numeric **`chainId`** in verifier options so this form is generated for the check. |
+| `wallet=<address>` | Default. The address must match the signing wallet. Write Ethereum addresses as lowercase `0x` plus 40 hex digits. |
+| `wallet=eip155:<chainId>:<address>` | Only when the verification request passes a numeric `chainId` in its options. |
 
-Other prefixes (for example `neus=`) are **not** read by this verifier. Use **`wallet=`** only.
+Only the `wallet=` prefix is read. For other networks, copy the address exactly as Proofable shows it, since some formats are case-sensitive.
 
-**Other networks:** Use the address format for that network. Copy the value exactly as Proofable shows it. Some networks are case-sensitive. Do not retype the address.
+## Fields
 
-## Request `data` (API / SDK)
-
-| Field | In JSON Schema | What to know |
-|------|------------------|------------------------------|
-| `domain` | **Required** | Hostname to verify (apex or eTLD+1 style you control in DNS). |
-| `walletAddress` | **Optional** in `data` | **Still needed for a passing check:** the TXT line must match the **wallet or account address Proofable uses for this proof**. You may **omit** `walletAddress` inside `data` when the proof request already includes a verified **`walletAddress` at the request level** (signed flow); the service fills in the signer wallet before the DNS check. If you omit it **and** the request has no signer wallet, verification fails. If you **set** `walletAddress` in `data`, it must match the wallet that signs the proof (or follow your product's allowed delegation rules). Do not use someone else's address. |
+| Field | Required | Notes |
+|------|----------|-------|
+| `domain` | Yes | The hostname you control in DNS |
+| `walletAddress` | No | Filled from the signing wallet. If you set it, it must match the signer. With neither, the check fails. |
 
 ## Example
-
-Minimal `data` when the proof request carries the signer wallet (typical browser / server signing):
 
 ```json
 {
@@ -52,13 +35,4 @@ Minimal `data` when the proof request carries the signer wallet (typical browser
 }
 ```
 
-Explicit `data` (custom clients, tests, or when you want the payload self-describing):
-
-```json
-{
-  "domain": "example.com",
-  "walletAddress": "0x..."
-}
-```
-
-See also: [Domain ownership guide](./domain), [JSON Schema](https://github.com/proofable/docs/blob/main/verifiers/schemas/ownership-dns-txt.json).
+Full schema: [`ownership-dns-txt.json`](https://github.com/proofable/docs/blob/main/verifiers/schemas/ownership-dns-txt.json).

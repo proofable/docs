@@ -7,26 +7,16 @@ icon: id-badge
 
 **Verifier ID:** `ownership-pseudonym`
 
-Claim a portable handle with a wallet signature. A public name, not a legal identity.
-
-## Use cases
-
-- Product handles
-- Portable public names
-- Pseudonymous creator identity
-
-## Flow type
-
-Instant. The user signs once and the pseudonym binding is created.
+Instant. The user claims a portable public handle with one wallet signature. The [account ownership guide](/verification/accounts#verified-handles) covers badges and server checks.
 
 ## Fields
 
 | Field | Required | Notes |
 |------|----------|-------|
-| `pseudonymId` | Yes | Handle, 3 to 32 chars, pattern `^[a-z0-9][a-z0-9._-]{1,30}[a-z0-9]$` |
+| `pseudonymId` | Yes | Handle, 3 to 32 characters, pattern `^[a-z0-9][a-z0-9._-]{1,30}[a-z0-9]$` |
 | `namespace` | No | Defaults to `proofable`. Legacy `neus` writes remap to `proofable`; existing `neus:<handle>` proofs still resolve. |
 | `displayName` | No | Human-readable label |
-| `metadata` | No | Optional object for app-specific attributes |
+| `metadata` | No | Object for app-specific attributes |
 
 ## Example
 
@@ -39,6 +29,6 @@ Instant. The user signs once and the pseudonym binding is created.
 
 ## Expiry
 
-Pseudonym proofs are time-bound: the proof includes an `expiresAt`. Re-verify to refresh before it lapses.
+The proof includes an `expiresAt`. Re-verify before it lapses.
 
 Full schema: [`ownership-pseudonym.json`](https://github.com/proofable/docs/blob/main/verifiers/schemas/ownership-pseudonym.json).

@@ -5,16 +5,15 @@ description: "Combine account, social, and proof of human checks in one gate for
 icon: shield-halved
 ---
 
-One weak signal is easy to game. Define a local policy that layers checks, so visitors must pass more than one.
+One weak signal is easy to game. Define a policy that layers checks, so visitors must pass more than one.
 
 | Layer | Check | When |
 |---|---|---|
 | Social or work account | `ownership-social` or `ownership-org-oauth` | The linked identity most products need first |
 | Human | `proof-of-human` | Bot resistance and fair access |
-| Signed account | `ownership-basic` | A signed account check alongside the others |
 | Wallet risk | `wallet-risk` | Payment flows and high-value access |
 
-A common pair is a social account plus proof of human. Add `ownership-basic` or `wallet-risk` when the threat model needs them.
+A social account plus proof of human covers most products.
 
 ## Define the layered requirements
 
@@ -27,7 +26,7 @@ const layered = defineGate([
 ]);
 ```
 
-This is local configuration. It does not publish or persist a Gate.
+`defineGate` builds the policy in your code and publishes nothing.
 
 ## Add it to your app
 
@@ -54,7 +53,7 @@ if (!result.satisfied) throw new Error('Verification required');
 ```
 
 <Warning>
-Set recency on the gate for point-in-time checks, and store proof IDs where replay matters.
+Set `maxAgeMs` on a requirement for point-in-time checks, and store proof IDs where replay matters.
 </Warning>
 
-[Sell access with a Listing](/gates/sell-access) covers optional publishing and commerce. [Hosted verification](/verification/hosted) covers the browser flow for missing checks.
+[Sell access with a Listing](/gates/sell-access) covers publishing and commerce. [Hosted verification](/verification/hosted) covers the browser flow for missing checks.

@@ -5,7 +5,7 @@ description: "Confirm control of social and work accounts, bind a portable handl
 icon: at
 ---
 
-Confirm that a person controls an account, then reuse the proof across your apps. OAuth runs on Proofable, so you never handle provider tokens.
+Confirm that a person controls an account, then reuse the proof across your apps. OAuth runs on Proofable, so provider tokens never reach your app.
 
 | Prove | Check | Runs |
 |---|---|---|
@@ -23,11 +23,11 @@ https://proofable.me/verify?verifiers=ownership-social&returnUrl=https://app.exa
 
 Use `ownership-org-oauth` for work accounts. Its `expectedOrgDomain` field limits the proof to one company domain.
 
-Store the proof ID from the `qHash` field and reuse it. Don't re-run the flow on every visit.
+Store the proof ID from the `qHash` field and reuse it on later visits.
 
 ## Verified handles
 
-Bind a handle to a wallet with `ownership-pseudonym`, then badge, link, and gate on the proof. It suits creator platforms, media networks, and launchpads that need handle ownership without legal identity.
+Bind a handle to a wallet with `ownership-pseudonym`, then badge, link, and gate on the proof.
 
 ### Flow
 
@@ -104,7 +104,7 @@ const result = await client.gateCheck({
   address: walletAddress,
 });
 
-if (result.data?.gate?.allRequiredSatisfied !== true) {
+if (!result.satisfied) {
   throw new Error('Handle not verified');
 }
 ```
@@ -117,6 +117,6 @@ curl "https://api.proofable.me/api/v1/proofs/check?gateId=gate_acme-handles&addr
 
 ### Namespaces
 
-Namespaces other than the default require the namespace owner to confirm DNS control with [`ownership-dns-txt`](/verification/ownership-dns-txt), or approval from Proofable. Contact Proofable to reserve a production namespace.
+A namespace other than the default needs its owner to prove DNS control with [`ownership-dns-txt`](/verification/ownership-dns-txt), or approval from Proofable. Contact Proofable to reserve a production namespace.
 
 A complete React and Vite app is in the [verified-handle-react example](https://github.com/proofable/sdk/tree/main/examples/verified-handle-react).

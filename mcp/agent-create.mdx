@@ -21,9 +21,7 @@ Ask:
 
 > Create or import an agent on my Proofable profile. Give it a separate spend account if it needs one. Set spend and action limits. Then confirm it is ready.
 
-[Agent concepts](../agents/concepts)
-
-Inspect a package, repo, or card with the [agent import](/agents/import) HTTP routes, then call **`proofable_agent_create`** with the mapped fields. There is no separate import tool.
+To import, inspect a package, repo, or card with the [agent import](/agents/import) HTTP routes, then call **`proofable_agent_create`** with the mapped fields.
 
 ## Account options
 
@@ -72,7 +70,7 @@ Every non-validation result includes **`path`** and **`next_action`**.
 | `hosted_required` | Browser handoff is required | `open_hosted_verify` |
 | `payment_required` | The account paying for the current step needs more credits | `complete_billing_then_retry` |
 
-**`sessionProgress.identityComplete`**, **`delegationRequired`**, and **`delegationComplete`** show which step is required and already saved. On **`payment_required`**, add credits and retry the same request. This is an account billing requirement, not a signature failure.
+**`sessionProgress.identityComplete`**, **`delegationRequired`**, and **`delegationComplete`** show which step is required and already saved. On **`payment_required`**, add credits and retry the same request.
 
 ## Hosted callback
 
@@ -95,7 +93,7 @@ const url = getHostedAgentCreateUrl({
 
 With **`identityQHash`**, Hosted Verify requests only permissions. The callback receives the new permission **`qHash`**, **`agentId`**, and **`agentWallet`**. Keep the identity **`qHash`** from step 1.
 
-Do not combine agent creation with **`gateId`** or **`intent=login`** on one URL:
+Keep agent setup, login and gate checkout on separate URLs:
 
 - Login: **`intent=login&returnUrl=...`**
 - Gate checkout: **`gateId=...&returnUrl=...`**
@@ -112,8 +110,4 @@ Billing follows the signer for each proof unless a validated sponsor or pay-per-
 
 Hosted sign-in itself is free. See [Pricing](../pricing).
 
-Optional fields include **`instructions`**, **`skills`**, **`services`**, scope, expiry, spend cap, runtime policy, approval policy, and allowed/denied actions. See [Agent identity](../agents/agent-identity) and [Agent delegation](../agents/agent-delegation).
-
-## Related
-
-[Auth](./auth), [Agent link](./agent-link), [Overview](./overview), [Verify an agent](../agents/named-agent-card)
+Optional fields include **`instructions`**, **`skills`**, **`services`**, expiry, spend cap, runtime policy, approval policy, and allowed/denied actions. See [Agent identity](../agents/agent-identity) and [Agent delegation](../agents/agent-delegation).

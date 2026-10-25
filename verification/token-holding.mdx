@@ -7,23 +7,15 @@ icon: coins
 
 **Verifier ID:** `token-holding`
 
-## Use cases
+Lookup. Proofable reads current token balances for balance-based access and membership tiers.
 
-- Balance-based access
-- Governance or membership tiers
-- Token utility products
-
-## Flow type
-
-Lookup. Proofable checks current token balances.
-
-## Required fields
+## Fields
 
 | Field | Required | Notes |
 |------|----------|-------|
 | `contractAddress` | Yes | Token contract or mint |
-| `minBalance` | Yes | Human-readable token amount, e.g. `"10.5"`. Converted with the token's on-chain decimals, not base units |
-| `chainId` or `chain` | Yes | Chain id or CAIP-2 chain |
+| `minBalance` | Yes | Human-readable token amount, such as `"10.5"`. Converted with the token's on-chain decimals, not base units |
+| `chainId` or `chain` | Yes | Chain ID or CAIP-2 chain |
 | `ownerAddress` | No | Wallet to check; defaults to the signer |
 | `blockNumber` | No | Check the balance at a specific block |
 

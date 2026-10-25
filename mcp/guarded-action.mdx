@@ -5,7 +5,7 @@ description: Load current agent permissions and make one allow or deny decision 
 icon: shield-check
 ---
 
-This flow proves that the host can stop a tool call when the current agent permission does not allow it.
+In three steps, your host stops a tool call that the agent's current permission denies.
 
 ## 1. Create a bounded agent
 
@@ -66,6 +66,6 @@ For the permission above, `send_message` returns:
 4. Require approval for an irreversible action when configured.
 5. Allow the host tool call.
 
-The SDK evaluates one action against the mounted snapshot, as of `@proofable/sdk@0.1.4`. Load that snapshot from a trusted mount; caller-supplied JSON is not a verified proof. The host still owns the tool call and must stop when `allowed` is `false`. A mount file cannot discover a revocation that happens after it was written; refresh current authority through the connected Proofable host before a consequential action that needs current revocation status.
+The SDK evaluates one action against the mounted snapshot. Load that snapshot from a trusted mount, because caller-supplied JSON carries no proof. The host owns the tool call and must stop when `allowed` is `false`. A mount file reflects authority as of when it was written, so refresh authority through the connected Proofable host before a consequential action that needs current revocation status.
 
 Runnable source: [`examples/guarded-agent-action`](https://github.com/proofable/mcp/tree/main/examples/guarded-agent-action).

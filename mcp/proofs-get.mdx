@@ -6,7 +6,7 @@ keywords: ["proofable_proofs_get", "read proofs", "proof records", "MCP"]
 icon: receipt
 ---
 
-Use when you need a proof by ID or need to find proof records, tags, or content. Omit **`identifier`** when signed in to search the current account. For an explicit yes/no eligibility answer, use **`proofable_proofs_check`**. Profile totals and account context come from **`proofable_context`**.
+Use when you need a proof by ID or need to find proof records, tags, or content. Omit **`identifier`** when signed in to search the current account. For a yes/no eligibility answer, use **`proofable_proofs_check`**. Profile totals come from **`proofable_context`**.
 
 | Auth | Visibility |
 |------|------------|
@@ -23,8 +23,6 @@ Use when you need a proof by ID or need to find proof records, tags, or content.
 | Confirm an agent handoff | Include `agentWallet` for delegated reads |
 | Find related records | Use `tagPrefix`, `tagContains`, `tagPrefixesAll`, `verifierId`, or `q` |
 
-Keep tag values short and product-facing in your own app. Avoid exposing private workflow names in assistant replies.
-
 ## Input
 
 ```json
@@ -39,31 +37,28 @@ Keep tag values short and product-facing in your own app. Avoid exposing private
 | Field | Notes |
 |-------|-------|
 | `identifier` | Wallet address or **`did:pkh:...`**; optional when signed in |
-| `scope` | Category preset (`memory`, `research`, `rules`, `instruction`, `tools`, `receipts`) or `all` for a whole-account metadata list |
-| `tags` | Comma-separated exact tags; when present, takes precedence over `scope` |
+| `scope` | Category preset (`memory`, `research`, `rules`, `instruction`, `tools`, `jobs`, `receipts`) or `all` for a whole-account metadata list |
+| `tags` | Exact tags, as an array or one comma-separated string. A proof matches any one. Takes precedence over `scope` |
 | `tagPrefix`, `tagContains` | Match the beginning of a tag or text within a tag |
-| `tagPrefixesAll` | Comma-separated prefixes that must each match a tag |
+| `tagPrefixesAll` | Prefixes that must each match a tag, as an array or one comma-separated string |
 | `verifierId`, `q` | Filter by check ID or search text |
 | `agentWallet` | Delegation (**`x-agent-wallet`**) |
+| `limit`, `offset` | Page size (default 15, max 25) and offset |
 | `include` | Defaults to `metadata`; `content` requires a known proof ID or narrowing filter and is capped for list reads |
 | `qHash` | When set, returns that one record instead of a vault page |
-| `includeComments` | Set `true` with `qHash` to include comments visible to the signed-in account |
+| `includeComments` | Set `true` with `qHash` to include comments visible to the signed-in account. Private proof comments are available to the owner |
 
 When `identifier` is a DID, Proofable resolves the DID to its native account. Non-EVM signing and account context still use CAIP-2 `chain`; see [CAIP-380 Portable Proof](../learn/standards/caip-380).
 
-To read comments for one proof, pass its **`qHash`** and set **`includeComments: true`**. Private proof comments are available to the proof owner.
-
-In user-facing replies, summarize the result in plain language and link only real proof URLs returned by Proofable.
-
 ## Response
 
-With no ID or filter, the tool returns an index hint rather than a vault page. `scope: "all"` returns paginated metadata. `include: "metadata"` returns proof ID, status, check IDs and outcomes, title, tags, timestamps, and content length when known. It does not include proof bodies or profile summary. With `includeComments: true`, comments appear under `data.feedback.comments`.
+With no ID or filter, the tool returns an index hint instead of a vault page. `scope: "all"` returns paginated metadata. `include: "metadata"` returns proof ID, status, check IDs and outcomes, title, tags, timestamps, and content length when known; bodies and the profile summary are left out. With `includeComments: true`, comments appear under `data.feedback.comments`.
 
-Use `include: "content"` for a specific proof or tightly filtered page when the body is required. A whole-vault read does not unlock bodies. Filtered content lists are capped at five records by default, so inspect pagination before inferring absence. An upstream read error is an error, not an empty proof list. Use the profile summary from `proofable_context` for aggregate totals. A known `qHash` read returns its stored `portableProof` envelope to the owner, and to anyone for a public proof whose owner enables disclosure.
+Use `include: "content"` for a specific proof or tightly filtered page when the body is required. A whole-vault read does not unlock bodies. Filtered content lists are capped at five records by default, so inspect pagination before inferring absence. A failed upstream read returns an error. A known `qHash` read returns its stored `portableProof` envelope to the owner, and to anyone for a public proof whose owner enables disclosure.
 
 ## Assistant output
 
-Do:
+Summarize the result in plain language and link only real proof URLs returned by Proofable:
 
 ```txt
 Proofable: Passed. Requirement satisfied. Result on file. Next: Continue.
@@ -77,7 +72,7 @@ Avoid raw JSON, private implementation tags, or guessed proof URLs.
   <Card title="Reuse or verify" icon="circle-check" href="./verify-or-guide">
     Reuse a qualifying proof or finish the one missing step.
   </Card>
-  <Card title="MCP overview" icon="plug" href="./overview">
-    Install, session flow, and tool map.
+  <Card title="Update a proof" icon="pen" href="./proofs-update">
+    Edit, vote, or comment on a proof by ID.
   </Card>
 </CardGroup>

@@ -7,7 +7,7 @@ icon: rocket
 "twitter:image": "/images/og-default.png"
 ---
 
-One listing holds the checks, the price, and hosted sign-in. Your app adds the listing and confirms the result. It never rebuilds the check, and visitors never need an API key.
+One listing holds the checks, the price, and hosted sign-in. Your app embeds the listing and checks the outcome server-side, and visitors need no API key.
 
 ## Build it
 
@@ -24,7 +24,7 @@ One listing holds the checks, the price, and hosted sign-in. Your app adds the l
     </VerifyGate>;
     ```
 
-    `VerifyGate` reuses a saved proof, or opens hosted sign-in on Proofable when a new one is needed. Wallet, passkey, and OAuth steps all happen on Proofable, not inside your app.
+    `VerifyGate` reuses a saved proof, or opens hosted sign-in on Proofable when a new one is needed. Wallet, passkey, and OAuth steps all run on Proofable.
   </Step>
   <Step title="Confirm on your server">
     Pass the visitor's account address from Proofable sign-in or the saved result:
@@ -74,7 +74,7 @@ window.location.assign(
 );
 ```
 
-Read the proof ID (`qHash`) from the callback URL or popup message, then store it. [Hosted verification](/verification/hosted)
+Read the proof ID (`qHash`) from the callback URL or popup message, then store it. Callback details are in [Hosted verification](/verification/hosted).
 
 ## Next
 

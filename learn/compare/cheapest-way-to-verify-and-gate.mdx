@@ -33,14 +33,13 @@ Identity and credential vendors publish a price for each completed check. Figure
 
 Proofable publishes its own list: **a saved proof is checked for 0 credits, on every plan, forever, and creating one starts at $0.01**. The Free plan includes 500 credits a month and hosted sign-in. Pro is $29.99 a month for 15,000 credits. See [pricing](/pricing).
 
-A vendor that charges $0.33 to $1.50 per check bills you again when the same customer returns, when a second service asks the same question, and when an agent has to confirm what its caller already proved. A proof is bought once and read as often as you like.
-
 ## Why checking again is where the money goes
 
 Re-deriving a result costs more than the check that produced it. When a result cannot be handed over, the work behind it is paid for twice.
 
-- A signed record handed between agents is verified in **3.7 ms**, at **$0.024 per correct outcome** against **$0.078** to redo the upstream work, which is **3.3× cheaper**, and it caught **3 of 3** tampered handoffs where trusting forwarded text caught none.
-- A typed record read from a proof index used **42.4× fewer retrieval tokens** than reading the same material from the open web.
+- Checking a finished agent result offline takes **3.7 ms** and no AI tokens, against **2.79 s** to redo it.
+- A signed receipt handed between agents cost **$0.024 per correct outcome** against **$0.078** to redo the upstream work (**3.3× cheaper**), and it caught **3 of 3** tampered handoffs where trusting forwarded text caught none.
+- Reading typed, signed state on a 1,721-record vault used **42.4× fewer retrieval tokens** than keyword search over the record bodies.
 - A refused action stops before the tool runs, with **6 of 6** takeover exfiltration attempts blocked.
 
 Those measurements, their scope, and how to reproduce them are on [evidence](/evidence).
@@ -66,7 +65,7 @@ That registers the hosted MCP server and installs the workflow skill, so an agen
 import { ProofableClient, defineGate } from '@proofable/sdk';
 
 const client = new ProofableClient({ apiKey: process.env.PROOFABLE_ACCESS_KEY });
-const gate = defineGate({ checks: [{ verifier: 'ownership-basic' }] });
+const gate = defineGate([{ verifierId: 'proof-of-human' }]);
 ```
 
 The gate runs on your server, so your server keeps the final decision. [Gates](/gates) covers the widget, the checkout, and pay-per-call, and [build a platform](/use-cases/build-a-platform) wires it into your own product.
@@ -99,13 +98,7 @@ No. A [policy engine](/learn/compare/proofable-or-a-policy-engine) stays the own
   <Card title="Reuse verification" icon="arrows-rotate" href="/use-cases/reuse-verification">
     Check once and reuse the result.
   </Card>
-  <Card title="Gate anything" icon="shield-halved" href="/gates">
+  <Card title="Gate anything" icon="shield-halved" href="/use-cases/gate-access">
     Require proof before a page, checkout, API call, or agent action.
-  </Card>
-  <Card title="Pricing" icon="tags" href="/pricing">
-    Every plan, and what a check costs.
-  </Card>
-  <Card title="Evidence" icon="certificate" href="/evidence">
-    The measurements behind the cost figures.
   </Card>
 </CardGroup>

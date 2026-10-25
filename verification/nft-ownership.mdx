@@ -7,22 +7,15 @@ icon: image
 
 **Verifier ID:** `nft-ownership`
 
-## Use cases
+Lookup. Proofable reads on-chain ownership.
 
-- Token-gated access
-- Drops and collector-only content
-
-## Flow type
-
-Lookup. Proofable checks on-chain ownership.
-
-## Required fields
+## Fields
 
 | Field | Required | Notes |
 |------|----------|-------|
 | `contractAddress` | Yes | NFT contract or mint |
 | `tokenId` | Yes | Token ID |
-| `chainId` or `chain` | Yes | Chain id or CAIP-2 chain |
+| `chainId` or `chain` | Yes | Chain ID or CAIP-2 chain |
 | `tokenType` | No | `erc721` (default) or `erc1155` |
 | `ownerAddress` | No | Wallet to check; defaults to the signer |
 | `blockNumber` | No | Check ownership at a specific block |
@@ -37,6 +30,6 @@ Lookup. Proofable checks on-chain ownership.
 }
 ```
 
-High-stakes access: pair with freshness checks or require a new proof when policy demands it.
+For high-value access, require a recent proof with `sinceDays` on `gateCheck`, or run a fresh check.
 
 Full schema: [`nft-ownership.json`](https://github.com/proofable/docs/blob/main/verifiers/schemas/nft-ownership.json).

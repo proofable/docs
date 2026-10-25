@@ -5,7 +5,7 @@ description: "Require proof before a page, checkout, API call, or agent action. 
 icon: door-closed
 ---
 
-Decide what must already be true, then enforce it where the action happens. One check does not need a gate: [Verify once, read the proof](/verification). Publish a listing for a saved `gateId`, price, or schedule. Field reference: [Gates](/gates).
+Decide what must already be true, then enforce it where the action happens. For a single check, [verify once and read the proof](/verification). Publish a listing when you need a saved `gateId`, a price, or a schedule.
 
 ## Choose what to protect
 
@@ -26,7 +26,7 @@ Decide what must already be true, then enforce it where the action happens. One 
     const gate = defineGate([{ verifierId: 'proof-of-human' }]);
     ```
 
-    You do not need a dashboard visit or a published listing to start.
+    This works before you publish anything.
   </Step>
   <Step title="Add it to your app">
     ```jsx
@@ -55,7 +55,7 @@ Decide what must already be true, then enforce it where the action happens. One 
 
 ## Who pays
 
-Sponsored usage, visitor checkout, or pay per call. Details: [Pricing](/pricing)
+Your app can sponsor usage, visitors can pay at checkout, or callers can pay per call. [Pricing](/pricing)
 
 ## What people receive
 

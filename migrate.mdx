@@ -1,13 +1,13 @@
 ---
 title: Migrate from NEUS
 sidebarTitle: Migrate from NEUS
-description: "Move an earlier NEUS setup to Proofable in one path."
+description: "Swap packages, the CLI, MCP tools and access keys to their Proofable names. Your account and records carry over unchanged."
 icon: arrows-rotate
 "og:image": "/images/og-default.png"
 "twitter:image": "/images/og-default.png"
 ---
 
-Proofable is the current name for the service formerly published as `@neus`. Your existing profile, proofs, agents, listings, and secrets stay with the same account. There is no data export or database migration.
+Proofable is the current name for the service formerly published as `@neus`. Your profile, proofs, agents, listings, and secrets stay with the same account, so there is nothing to export.
 
 ## Rename map
 
@@ -39,9 +39,9 @@ If your application imports SDK names directly, use `ProofableClient` and `build
 
 ## If the old setup is still visible
 
-A `neus` entry may still point the client at the old server. Remove only that old entry, then run setup again. Do not keep both entries: one client would show two servers and could use the old workflow.
+A `neus` entry may still point the client at the old server. Remove only that entry, then run setup again, so the client shows one server and uses the current workflow.
 
-If sign-in fails after the swap, do not delete stored data. Run `npx -y @proofable/sdk refresh`, then sign in again if that does not recover it.
+If sign-in fails after the swap, keep your stored data and run `npx -y @proofable/sdk refresh`. Sign in again if that does not recover it.
 
 If a project still uses the old agent mount, run `proofable mount` again. Keep one Proofable connection and one current workflow skill installed.
 

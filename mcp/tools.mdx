@@ -16,9 +16,9 @@ Call **`proofable_context`** once, then pick the tool for the job. A signed-in c
 | Prepare an outside signature | `proofable_verify_prepare` | Returns the exact signing string and timestamp; creates no proof. |
 | Submit an outside signature | `proofable_verify_submit` | Creates the proof from a signed prepared check. |
 | Read a proof | `proofable_proofs_get` | Current proof records and status. |
-| Update or review a proof | `proofable_proofs_update` | Change title/tags, vote, or comment on the same proof. |
-| Revoke a proof | `proofable_proof_revoke` | Removes a proof from public access. |
-| Create or import an agent | `proofable_agent_create` | Links the agent to your profile. Optional separate spend account and controls. Pass an existing account address for dedicated spend. |
+| Update or review a proof | `proofable_proofs_update` | Change title, tags or visibility, vote, or comment on the same proof. |
+| Revoke a proof | `proofable_proof_revoke` | Revokes a proof you own. |
+| Create or import an agent | `proofable_agent_create` | Links the agent to your profile. Pass an existing account address for a separate spend account and controls. |
 | Confirm the agent is ready | `proofable_agent_link` | Identity and the permissions that account needs. |
 | Load the agent | `proofable_agent_mount` | Identity, permissions, skills, and current settings. |
 | List agents | `proofable_agents_list` | Agent identities and delegations on the profile. |
@@ -62,10 +62,10 @@ A run started here costs what [Jobs](/jobs) lists for a run started in Proofable
 | Job | Tool | What it does |
 |---|---|---|
 | List saved keys | `proofable_secret_list` | Names and update times. Never a value. |
-| Remove a saved key | `proofable_secret_revoke` | Deletes a saved key by proof ID. |
+| Remove a saved key | `proofable_secret_revoke` | Revokes a saved key by proof ID so it can no longer be used. |
 | Call a provider with a saved key | `proofable_capability_call` | Proofable sends the request with your key and returns the provider's answer. The key never reaches the client. |
 
-Save a key on [Secrets](./secrets), not through a tool. A key typed into an AI app's conversation has already been disclosed to that app.
+Save a key on your profile in Proofable ([Secrets](./secrets)). A key typed into an AI app's conversation has already been disclosed to that app.
 
 ## Remote MCP servers
 
@@ -76,20 +76,14 @@ Save another MCP server on your profile and run its tools through Proofable, so 
 | Save, list or remove a server | `proofable_mcp_connection_create` / `proofable_mcp_connections_list` / `proofable_mcp_connection_delete` | The server's URL and headers, stored encrypted on your profile. |
 | Use a server | `proofable_mcp_tools_list` / `proofable_mcp_tool_execute` | List its tools and run one. Each run records 1 credit. Private and metadata hosts are refused. |
 
-| Topic | Detail |
-|-------|--------|
-| Session context | Call **`proofable_context`** first. After Connect it includes the signed-in profile. |
-| Create in-session | **`proofable_verify`** when signed in and ownership can finish here. |
-| Interactive | **`proofable_verify_or_guide`** reuses a proof, then continues with **`proofable_verify`** or returns a hosted link for an outside login, payment, or different account. |
-
 ## Field names
 
 | Tool | Address field | Verifiers / filters |
 |------|---------------|---------------------|
 | `proofable_proofs_check` | `wallet` | `verifiers` |
 | `proofable_verify`, `proofable_verify_prepare`, `proofable_verify_submit`, `proofable_verify_or_guide` | `walletAddress` | `verifierIds` |
-| `proofable_proofs_get` | `identifier` | optional `tags` (comma-separated proof tags) |
-| `proofable_proofs_update` | `qHash` (proof ID) | optional metadata, `vote`, or `comment` |
+| `proofable_proofs_get` | `identifier` | optional `tags` (array or comma-separated string) |
+| `proofable_proofs_update` | `qHash` (proof ID) | optional metadata, visibility, `vote`, or `comment` |
 
 Wallet address in native format, or `did:pkh:…`. Delegated reads: **`agentWallet`** on **`proofable_proofs_get`** (**`x-agent-wallet`** on the API).
 
@@ -100,10 +94,7 @@ Wallet address in native format, or `did:pkh:…`. Delegated reads: **`agentWall
 | Default | Connect → **`proofable_context`** → **`proofable_agent_link`** for agents → **`proofable_verify_or_guide`** before sensitive actions |
 | Project agent | **`proofable_agent_mount`** or `proofable mount <agentId> --apply <host>` in the repo |
 | Details | **`proofable_proofs_get`** for proof records, tags, delegated context, and proof fields |
-| Fallback | **`proofable_verify_or_guide`** only when something is missing |
-| Catalog | **`proofable_verifiers_catalog`** only when you need raw schemas beyond the compact `verifierSummary` in `proofable_context` |
-
-Same flow as [Overview](./overview).
+| Catalog | **`proofable_verifiers_catalog`** only when you need required inputs beyond the compact `verifierSummary` in `proofable_context` |
 
 ## Reference pages
 
@@ -112,7 +103,7 @@ Same flow as [Overview](./overview).
     Load profile, proofs, and workflow once per session.
   </Card>
   <Card title="Catalog" icon="list-tree" href="./verifiers-catalog">
-    Live verifier schemas and required inputs.
+    Every check ID and its required inputs.
   </Card>
   <Card title="Proof reuse" icon="circle-check" href="./proofs-check">
     Reuse existing proofs before verifying.
@@ -127,7 +118,7 @@ Same flow as [Overview](./overview).
     Read proof records and current status.
   </Card>
   <Card title="Proofs update" icon="pen" href="./proofs-update">
-    Change the title or tags on a proof you own.
+    Edit a proof you own, or vote and comment on one.
   </Card>
   <Card title="Agent create" icon="robot" href="./agent-create">
     Create or import an agent. Optional separate spend account.

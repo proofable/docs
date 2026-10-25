@@ -5,7 +5,7 @@ description: Sign people in on Proofable. Authenticate your server with a key or
 icon: key
 ---
 
-Default: no wallet or passkey code in your app. Visitors sign in or complete checks on `proofable.me/verify` via `VerifyGate`, `getHostedCheckoutUrl`, or MCP OAuth.
+Visitors sign in and complete checks on `proofable.me/verify` through `VerifyGate`, `getHostedCheckoutUrl`, or MCP OAuth, so your app ships no wallet or passkey code.
 
 | Where | What | Wallets or keys in your app |
 |-------|------|------------------------------|
@@ -28,8 +28,6 @@ import { VerifyGate } from '@proofable/sdk/widgets';
 
 ## Hosted sign-in (browser)
 
-[Hosted sign-in](../verification/hosted).
-
 ```javascript
 import { getHostedCheckoutUrl } from '@proofable/sdk';
 
@@ -47,6 +45,8 @@ const loginUrl = getHostedCheckoutUrl({
   returnUrl: 'https://app.example.com/auth/callback',
 });
 ```
+
+The callback and popup contract is in [Hosted sign-in](../verification/hosted).
 
 ## Server reuse
 
@@ -80,9 +80,7 @@ The SDK sends `Authorization: Bearer <npk_...>`.
 
 ## Client and MCP sign-in
 
-Run `proofable setup`. Default is browser OAuth. Set `PROOFABLE_ACCESS_KEY` first only for servers and CI.
-
-See [MCP setup](../mcp/setup).
+Run `proofable setup`. It signs in with browser OAuth by default. Set `PROOFABLE_ACCESS_KEY` first only for servers and CI. [MCP setup](../mcp/setup) covers each client.
 
 ## Advanced: `verifyFromApp`
 
@@ -102,8 +100,4 @@ await client.verifyFromApp({
 });
 ```
 
-Full detail: [Server integrations](../integrations/server).
-
-## Advanced
-
-[API authentication](../api/authentication)
+Full detail: [Server integrations](../integrations/server). Raw HTTP auth: [API authentication](../api/authentication).
