@@ -60,7 +60,7 @@ const gate = defineGate([
 1. **Define the policy.** Verifier IDs plus optional match, freshness, and count rows.
 2. **Check existing proofs.** `gateCheck` evaluates the subject's current proofs against that policy.
 3. **Verify what's missing.** Hosted Verify or your own verify call covers only the gaps.
-4. **Decide.** `satisfied` is the decision. Proofable does not grant access for you.
+4. **Decide.** `satisfied` is the decision, and your server grants the access, so the final call stays yours.
 
 ## Who pays
 

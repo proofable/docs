@@ -33,7 +33,7 @@ Omit **`agentWallet`**. The agent lives on your signed-in account. Identity is e
 
 ### Dedicated account
 
-Proofable does not generate or hold private keys. Create the account in your wallet or secure runtime, then pass only its public address as **`agentWallet`**.
+The private key stays in your wallet or secure runtime, and Proofable only ever receives the public address. Create the account there, then pass that address as **`agentWallet`**.
 
 ```json
 {

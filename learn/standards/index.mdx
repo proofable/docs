@@ -5,12 +5,12 @@ description: How Proofable works with existing identity, authority, execution, p
 icon: diagram-project
 ---
 
-Proofable does not replace your sign-in, policy engine, agent runtime, or processor. It records results those systems can check.
+Proofable plugs into the sign-in, policy engine, agent runtime, and payment processor you already run. It checks each action at the boundary and turns the result into a portable proof every one of those systems can verify.
 
 Wallet-signed checks and Proofable-signed outcome statements use the [CAIP-380](/learn/standards/caip-380) format. The [Technical Whitepaper](/whitepaper#6-standards-and-interoperability) covers the architecture.
 
 <Note>
-A signed CAIP-380 envelope proves who signed and that the statement was not changed. Proofable records the check result and whether it is still current. Those are related, not the same.
+A signed CAIP-380 envelope proves who signed and that the statement is unchanged, and anyone can check that offline. Proofable adds the check result and whether it is still current.
 </Note>
 
 ## How Proofable uses these standards
@@ -31,11 +31,11 @@ A signed CAIP-380 envelope proves who signed and that the statement was not chan
 | x402 | Pay for a single HTTP call | Payment settles the call. Proofable can still require a current proof before the call proceeds | Available | [Pay per call](/gates/pay-per-call) |
 | Phala | Confidential compute | Hosted AI can run in a Phala-backed confidential environment. The same proofs work on a private deploy | Available | [Private cloud agents](/deployment/private-cloud) |
 
-Proofable uses these standards. It does not replace them. [CAIP-380](https://standards.chainagnostic.org/CAIPs/caip-380) remains the open specification for the signed request format.
+[CAIP-380](https://standards.chainagnostic.org/CAIPs/caip-380), the open specification for the signed request format, was written by Proofable's founder.
 
 ## Related standards by layer
 
-Proofable is not replacing identity, authorization, credential, or attestation standards. It provides the portable evidence layer connecting them:
+Proofable is the portable evidence layer that connects identity, authorization, credential, and attestation standards:
 
 > SPIFFE and A2A can establish or describe an agent. OAuth and AuthZEN can determine what it may do. RATS/EAT can attest its environment or claims. VC and OpenID4VP can carry credentials across parties. CAEP can communicate trust-state changes. SCITT can add transparency and independent receipt verification. Proofable preserves the resulting identity, authority, decision, and effect records as portable proofs another relying party can independently appraise.
 

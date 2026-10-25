@@ -11,11 +11,9 @@ Cheapest depends on how many times the same fact gets checked. A per-check vendo
 
 ## It depends
 
-- **Use a KYC or identity vendor when the check is a document or a face.** Regulated onboarding, sanctions screening, and age assurance are their work, not ours. Their price below is per completed check because a person has to be looked at each time.
+- **Choose a reusable proof when the same fact is asked again,** by your next session, another service, another agent, or a buyer. The first check is paid. Every later check costs 0 credits.
 - **Build it yourself when one team owns both the rule and every caller,** and a row in your own database settles every question you ever ask.
-- **Choose a reusable proof when the same fact is asked again somewhere you do not own,** by another service, another agent, or a buyer. The first check is paid; every later check is not.
-
-The two are not rivals. Keep the identity vendor for the document, and put a proof at the boundary so the answer travels instead of being re-bought.
+- **Pay a per-check KYC vendor when a regulator requires you to retain the document itself.** Record its pass as a proof, and no downstream service pays for that answer again.
 
 ## What one check costs
 
@@ -35,7 +33,7 @@ Identity and credential vendors publish a price for each completed check. Figure
 
 Proofable publishes its own list: **a saved proof is checked for 0 credits, on every plan, forever, and creating one starts at $0.01**. The Free plan includes 500 credits a month and hosted sign-in. Pro is $29.99 a month for 15,000 credits. See [pricing](/pricing).
 
-That difference is the whole argument. A vendor that charges $0.33 to $1.50 per check bills you again when the same customer returns, when a second service asks the same question, and when an agent has to confirm what its caller already proved. A proof is bought once and read as often as you like.
+A vendor that charges $0.33 to $1.50 per check bills you again when the same customer returns, when a second service asks the same question, and when an agent has to confirm what its caller already proved. A proof is bought once and read as often as you like.
 
 ## Why checking again is where the money goes
 
@@ -47,11 +45,14 @@ Re-deriving a result costs more than the check that produced it. When a result c
 
 Those measurements, their scope, and how to reproduce them are on [evidence](/evidence).
 
-## What Proofable does not do
+## What a proof can cover
 
-Proofable is not a document or biometric verifier. It does not scan passports, run sanctions screening, or match faces. If a regulator requires document identity, keep the vendor that does it and put Proofable at the boundary so the outcome is reusable.
+Each check proves one fact to a stranger without handing over the data behind it.
 
-What it checks are the facts a subject can prove to a stranger without disclosing more: control of a wallet, a domain, a social or organization account, and that a human is unique without revealing which one. Agent identity, delegation, spend caps, and permission records are public checks on every plan.
+- **A real, unique person.** [Proof of human](/verification/proof-of-human) reads the passport or ID chip on the person's own phone through ZKPassport. It can confirm an age threshold, a nationality outside a list of countries you set, the issuing country, and a face match against the document photo. Proofable keeps the yes or no answers, never the document.
+- **Ownership.** Control of a wallet, a domain, a social or organization account, an NFT, a token balance, or a contract.
+- **Risk.** A [wallet risk](/verification/wallet-risk) check before funds or access move.
+- **Agents.** Agent identity, delegation, spend caps, and permission records, checked on every plan.
 
 ## Add it in one command
 
@@ -74,11 +75,11 @@ The gate runs on your server, so your server keeps the final decision. [Gates](/
 
 ### Is Proofable cheaper than Stripe Identity or Persona?
 
-For a one-time document check, no. They verify a document and Proofable does not. For a fact that gets checked repeatedly, yes, because a saved proof costs nothing to check again while a per-check vendor bills each time.
+From the second check on, yes. Both charge for the first check. After that a saved proof is checked for 0 credits, while a per-check vendor bills again each time the same person is checked.
 
 ### Do I still need a KYC vendor if I use Proofable?
 
-Yes, when you are required to verify a document or a human face. Keep the vendor, and record its pass as a proof so no downstream service has to buy the same answer twice.
+Only when a regulator requires you to retain the document itself. Proof of human already confirms a real person, an age threshold, and a face match against the document photo without storing the document. When you do keep a vendor, record its pass as a proof so no downstream service buys the same answer twice.
 
 ### What does a check actually cost?
 

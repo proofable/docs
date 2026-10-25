@@ -62,7 +62,7 @@ Proofable reduces the enforcement path to five steps:
 
 A proof is reusable only when the relying party accepts its source and it still satisfies current policy.
 
-Proofable does not create universal trust. It provides a common proof model that different systems can evaluate under their own requirements. Related credential standards separate issuers from verifiers. Proofable preserves that separation while adding lifecycle state, local policy, and enforcement at the protected boundary [9].
+Proofable gives different systems one proof model, and each evaluates it under its own requirements. Related credential standards separate issuers from verifiers. Proofable preserves that separation while adding lifecycle state, local policy, and enforcement at the protected boundary [9].
 
 | Role | Responsibility |
 | --- | --- |
@@ -171,19 +171,9 @@ Following the security-considerations guidance in RFC 3552 [13], Proofable makes
 - **Verifier or issuer compromise.** Assurance is bounded by the sources the relying party chooses to trust.
 - **Availability failure.** When required current state cannot be established, high-risk actions should fail closed.
 
-### Out of scope
+### Integrator responsibilities
 
-Proofable does not replace:
-
-- authentication;
-- endpoint authorization;
-- payment settlement;
-- runtime sandboxing;
-- secrets management;
-- rate limiting;
-- or observability.
-
-It does not guarantee that an agent will reason safely. Integrators remain responsible for those controls and for ensuring that protected actions cannot bypass the gate.
+The gate governs whether an action runs. It cannot govern how a model reasons, so assurance rests on the action boundary: an unsafe plan still stops when it reaches an action outside current authority. The integrator routes every protected action through the gate, leaves no alternate execution path, and keeps runtime sandboxing and endpoint controls on its own infrastructure.
 
 ## 6. Standards and interoperability
 

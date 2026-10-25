@@ -1,17 +1,17 @@
 ---
 title: "Proofable or a policy engine for agent authorization"
 sidebarTitle: "Proofable or a policy engine"
-description: "Which is better for authorizing an AI agent, a policy engine or Proofable? Keep your engine when the decision stays in your system."
+description: "A policy engine applies your rules. Proofable adds delegation, spend caps, expiry and instant revoke, plus a receipt any system verifies offline."
 icon: scale-balanced
 ---
 
 # Which is better for authorizing an AI agent, a policy engine or Proofable?
 
-A policy engine is better when your own team owns both the rules and every caller, and a log inside your infrastructure is enough evidence. Proofable is better when the decision has to be checked before the action runs and confirmed afterwards by a system you do not control.
+Proofable, when the decision has to hold outside your own system. It checks the agent's delegated limits before the action runs, stops the call on a refusal, and signs a receipt a customer, auditor, or downstream agent verifies offline. On AgentGovBench, Proofable scores 48 of 48 and the benchmark maintainers' own gateway scores 46.
 
-## It depends
+## Which to use
 
-Keep your policy engine if you already express your rules in it, one team owns both the rules and every caller, and a log inside your infrastructure is enough evidence. Add Proofable when the agent runs somewhere you do not own, when more than one party has to rely on the outcome, or when the evidence has to travel with the action. A policy engine decides; Proofable can supply the portable record that the decision was made under current permission. Teams that already have a policy engine usually keep it and add Proofable at the boundary, rather than replacing it.
+Add Proofable when an agent runs somewhere you do not own, when more than one party relies on the outcome, or when the evidence has to travel with the action. Teams with a policy engine keep their rules in it and add Proofable at the action boundary. A policy engine with a log inside your infrastructure is enough only when one team owns the rules, every caller, and every reader of the evidence.
 
 ## What each one answers
 
@@ -25,7 +25,7 @@ Keep your policy engine if you already express your rules in it, one team owns b
 
 ## Where they fit together
 
-A policy engine is the right owner of your own rules. Proofable does not ask you to move them. It checks the agent's limits at the action boundary and records the result, so the same decision can be appraised by a system that never saw your engine.
+Your rules stay in your engine. Proofable checks the agent's limits at the action boundary and records the result, so a system that never saw your engine can still verify the decision.
 
 ```ts
 import { evaluateRuntimeAction } from '@proofable/sdk/runtime-mount';
