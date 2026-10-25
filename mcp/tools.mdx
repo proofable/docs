@@ -1,12 +1,10 @@
 ---
 title: MCP tools
-description: "The hosted MCP trust layer: prove something once, reuse the proof, and hold an agent to a scoped permission."
+description: "The hosted MCP tool reference: reuse a proof before creating one, scope an agent's permission, and run jobs, the browser and connected apps on your credits."
 icon: wrench
 ---
 
-Proofable's MCP endpoint carries the trust layer. Prove identity, ownership or permission; reuse an existing proof instead of verifying it again; and give an agent a permission you can revoke. Work that needs the Proofable platform to *run* something happens in Proofable, and the proof it produces comes back here to be checked, shared and reused.
-
-Call **`proofable_context`** once, then pick the tool for the job.
+Call **`proofable_context`** once, then pick the tool for the job. A signed-in connection gets every tool on this page on every plan. Each call runs on your credits and within the permissions on your profile, and `tools/list` returns the set your connection can call.
 
 | Job | Tool | What it does |
 |---|---|---|
@@ -25,18 +23,49 @@ Call **`proofable_context`** once, then pick the tool for the job.
 | Load the agent | `proofable_agent_mount` | Identity, permissions, skills, and current settings. |
 | List agents | `proofable_agents_list` | Agent identities and delegations on the profile. |
 
-## What this endpoint does not carry
+## Research and browsing tools
 
-The platform runtime stays in the product, not on the protocol surface:
+These reach the public web. Use search and fetch for reading, and the browser only when a page needs a click, JavaScript, or a visual check.
 
-- **Work the platform runs:** background and scheduled jobs, the hosted browser, sandboxes, hosted model inference.
-- **Integrations:** connected apps (Gmail, Drive, GitHub, Slack and similar), a saved provider key, remote MCP servers.
-- **Storage:** the encrypted vault, and the private records Proofable writes to hold something for you.
-- **What your client already does:** web search and page fetch.
+| Job | Tool | What it does |
+|---|---|---|
+| Search the web | `proofable_web_search` | Structured results; optionally retrieves each page as text. |
+| Read a page | `proofable_url_fetch` | Clean page text from a public URL. Private and metadata hosts are refused. |
+| Operate a page | `proofable_browser` | Open, observe, click, type, screenshot and read console in an isolated session. |
+| Call a connected app | `proofable_composio_search` / `proofable_composio_execute` | Find and run an action on Gmail, Drive, GitHub, Slack and similar apps. |
 
-Those run in Proofable or in the SDK against the product API, where the run holds its own permission, a human approves side effects, and the result is a proof, which comes back to this endpoint to be checked and reused. Calling one of them here returns `platform_only` and says where the work belongs.
+An action that would create an external side effect needs approval first. Actions that reach another business system go through `proofable_composio_execute`, which is permissioned.
 
-That is a boundary, not a plan limit: no plan unlocks the runtime through a connection, and the refusal never sells one. A connection should carry proof and authority. A general execution surface would rent out the platform, bill for work the client can already do, and turn a trust primitive into a proxy.
+Prefer your own client's search, page fetch and browser. These are here for a client that has none, and each call is metered: `proofable_web_search` and `proofable_url_fetch` record 1 credit, and `proofable_composio_execute` records 2. The browser runs on your hosted computer, charged by the minute. [Pricing](/pricing) lists the rates.
+
+## Job tools
+
+| Job | Tool | What it does |
+|---|---|---|
+| Start work | `proofable_job_create` | Run agent work now or on a schedule. |
+| List work | `proofable_job_list` | List jobs available to the signed-in profile. |
+| Inspect work | `proofable_job_get` | Read one job and its latest run state. |
+| Approve a step | `proofable_job_decide` | Approve or deny a run that is waiting for approval. |
+| Stop work | `proofable_job_cancel` | Cancel a run or recurring schedule. |
+
+A run started here costs what [Jobs](/jobs) lists for a run started in Proofable.
+
+## Notes and saved tools
+
+| Job | Tool | What it does |
+|---|---|---|
+| Save a session note | `proofable_session_receipt_create` / `proofable_session_receipt_append` | Private receipt in your account; append adds to an existing one. |
+| Create or update a tool | `proofable_skill_tool_create_or_update` | A JavaScript tool or skill, run only when you or an agent invokes it. |
+
+## What a connection does not carry
+
+Three things stay off the MCP endpoint on every plan, because each one holds a credential or relays to a server your client can reach itself:
+
+- **Saving, listing or removing a provider key.** A key typed into an AI app's conversation has already been disclosed to that app. Save keys on [Secrets](./secrets); a job or the assistant in Proofable uses them without the value reaching a client.
+- **Calling a provider with a saved key.** Proofable's own runs do this for you.
+- **Relaying to a remote MCP server.** Add that server to your client directly.
+
+Calling one of these tools here answers `platform_only` and names where the work belongs.
 
 | Topic | Detail |
 |-------|--------|
