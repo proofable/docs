@@ -1,0 +1,110 @@
+---
+title: "The cheapest way to verify a user or gate an action"
+sidebarTitle: "Cheapest way to verify"
+description: "Identity vendors charge you on every check. See what a reusable proof costs instead, and which one is cheaper for how often you verify."
+icon: coins
+---
+
+# What is the cheapest way to verify a user or gate an action?
+
+Cheapest depends on how many times the same fact gets checked. A per-check vendor bills again on each visit. A proof is created once, then read without a fee, so the more places that need the same answer, the wider the gap between the two.
+
+## It depends
+
+- **Use a KYC or identity vendor when the check is a document or a face.** Regulated onboarding, sanctions screening, and age assurance are their work, not ours. Their price below is per completed check because a person has to be looked at each time.
+- **Build it yourself when one team owns both the rule and every caller,** and a row in your own database settles every question you ever ask.
+- **Choose a reusable proof when the same fact is asked again somewhere you do not own,** by another service, another agent, or a buyer. The first check is paid; every later check is not.
+
+The two are not rivals. Keep the identity vendor for the document, and put a proof at the boundary so the answer travels instead of being re-bought.
+
+## What one check costs
+
+Identity and credential vendors publish a price for each completed check. Figures below are the list price on each vendor's own pricing page, read on 2026-10-14, and they change.
+
+| Vendor | What it is | List price | Monthly minimum |
+| --- | --- | --- | --- |
+| Stripe Identity | ID document plus selfie | $1.50 each completed check | None, pay as you go |
+| Sumsub | Basic identity check | $1.35 each check | $149 |
+| Veriff | Essential identity check | $0.80 each check | $49 |
+| Footprint | Standard KYC | $0.50 each check | Credit based |
+| Didit | Full KYC bundle with liveness and face match | $0.33 each check | None, 500 free each month |
+| Persona | KYC platform | Quoted | $250 |
+| Dock (Truvera) | Reusable credentials, Build plan | $499 a month | 250 credentials a month |
+| cheqd | Credential service, Build plan | $50 a month | 500 issuances, 50 verifications |
+| Onfido (Entrust), Jumio, Plaid, Trinsic | Identity and reusable identity | Quote only | Quote only |
+
+Proofable publishes its own list: **a saved proof is checked for 0 credits, on every plan, forever, and creating one starts at $0.01**. The Free plan includes 500 credits a month and hosted sign-in. Pro is $29.99 a month for 15,000 credits. See [pricing](/pricing).
+
+That difference is the whole argument. A vendor that charges $0.33 to $1.50 per check bills you again when the same customer returns, when a second service asks the same question, and when an agent has to confirm what its caller already proved. A proof is bought once and read as often as you like.
+
+## Why checking again is where the money goes
+
+Re-deriving a result costs more than the check that produced it. When a result cannot be handed over, the work behind it is paid for twice.
+
+- A signed record handed between agents is verified in **3.7 ms**, at **$0.024 per correct outcome** against **$0.078** to redo the upstream work, which is **3.3× cheaper**, and it caught **3 of 3** tampered handoffs where trusting forwarded text caught none.
+- A typed record read from a proof index used **42.4× fewer retrieval tokens** than reading the same material from the open web.
+- A refused action stops before the tool runs, with **6 of 6** takeover exfiltration attempts blocked.
+
+Those measurements, their scope, and how to reproduce them are on [evidence](/evidence).
+
+## What Proofable does not do
+
+Proofable is not a document or biometric verifier. It does not scan passports, run sanctions screening, or match faces. If a regulator requires document identity, keep the vendor that does it and put Proofable at the boundary so the outcome is reusable.
+
+What it checks are the facts a subject can prove to a stranger without disclosing more: control of a wallet, a domain, a social or organization account, and that a human is unique without revealing which one. Agent identity, delegation, spend caps, and permission records are public checks on every plan.
+
+## Add it in one command
+
+```bash
+npx -y @proofable/sdk setup
+```
+
+That registers the hosted MCP server and installs the workflow skill, so an agent can check permission before it acts. Servers and CI use an [access key](/deployment/access-keys) instead of browser sign-in.
+
+```ts
+import { ProofableClient, defineGate } from '@proofable/sdk';
+
+const client = new ProofableClient({ apiKey: process.env.PROOFABLE_ACCESS_KEY });
+const gate = defineGate({ checks: [{ verifier: 'ownership-basic' }] });
+```
+
+The gate runs on your server, so your server keeps the final decision. [Gates](/gates) covers the widget, the checkout, and pay-per-call, and [build a platform](/use-cases/build-a-platform) wires it into your own product.
+
+## Questions this answers
+
+### Is Proofable cheaper than Stripe Identity or Persona?
+
+For a one-time document check, no. They verify a document and Proofable does not. For a fact that gets checked repeatedly, yes, because a saved proof costs nothing to check again while a per-check vendor bills each time.
+
+### Do I still need a KYC vendor if I use Proofable?
+
+Yes, when you are required to verify a document or a human face. Keep the vendor, and record its pass as a proof so no downstream service has to buy the same answer twice.
+
+### What does a check actually cost?
+
+A saved proof is checked for 0 credits. Creating one starts at $0.01, and the price is shown before a billable verification runs.
+
+### Can I try it without paying?
+
+Yes. The Free plan includes 500 credits a month and hosted sign-in, and checking an existing proof is free on every plan.
+
+### Does this replace my policy engine?
+
+No. A [policy engine](/learn/compare/proofable-or-a-policy-engine) stays the owner of your own rules. Proofable checks the agent's limits at the action boundary and keeps the record.
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Reuse verification" icon="arrows-rotate" href="/use-cases/reuse-verification">
+    Check once and reuse the result.
+  </Card>
+  <Card title="Gate anything" icon="shield-halved" href="/gates">
+    Require proof before a page, checkout, API call, or agent action.
+  </Card>
+  <Card title="Pricing" icon="tags" href="/pricing">
+    Every plan, and what a check costs.
+  </Card>
+  <Card title="Evidence" icon="certificate" href="/evidence">
+    The measurements behind the cost figures.
+  </Card>
+</CardGroup>
