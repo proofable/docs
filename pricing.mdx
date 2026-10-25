@@ -34,6 +34,12 @@ Hosted sign-in and profile, Hosted Verify and reusable proofs, agent identity an
 | Your own model key | 0 for tokens |
 | Hosted computer or job machine | 2 per vCPU for each started minute; the standard browser machine is 2 vCPUs, so 4 a minute |
 
+## What a tool call costs
+
+Signing in, checking a saved proof, and reading your own profile, proofs and agents are free. Creating a proof is charged as a check below; the trust layer adds nothing on top of it.
+
+The platform runtime is not on the MCP endpoint. Jobs, the hosted computer, connected apps, a saved provider key, remote MCP servers, web search and page fetch run in Proofable and are charged there as the job or the inference above. [MCP tools](/mcp/tools) lists what a connection does carry.
+
 ## What checks cost
 
 One credit lists at $0.0025.
