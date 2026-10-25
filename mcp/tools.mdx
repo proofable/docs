@@ -4,7 +4,7 @@ description: "The hosted MCP trust layer: prove something once, reuse the proof,
 icon: wrench
 ---
 
-Proofable's MCP endpoint carries the trust layer. Prove identity, ownership or permission once; reuse the proof instead of verifying again; hold an agent to a permission you can revoke. Work that needs the Proofable platform to *run* something happens in Proofable — the proof it produces comes back here to be checked, shared and reused.
+Proofable's MCP endpoint carries the trust layer. Prove identity, ownership or permission once; reuse the proof instead of verifying again; hold an agent to a permission you can revoke. Work that needs the Proofable platform to *run* something happens in Proofable, and the proof it produces comes back here to be checked, shared and reused.
 
 Call **`proofable_context`** once, then pick the tool for the job.
 
@@ -29,12 +29,12 @@ Call **`proofable_context`** once, then pick the tool for the job.
 
 The platform runtime stays in the product, not on the protocol surface:
 
-- **Work the platform runs** — background and scheduled jobs, the hosted browser, sandboxes, hosted model inference.
-- **Integrations** — connected apps (Gmail, Drive, GitHub, Slack and similar), a saved provider key, remote MCP servers.
-- **Storage** — the encrypted vault, and the private records Proofable writes to hold something for you.
-- **What your client already does** — web search and page fetch.
+- **Work the platform runs:** background and scheduled jobs, the hosted browser, sandboxes, hosted model inference.
+- **Integrations:** connected apps (Gmail, Drive, GitHub, Slack and similar), a saved provider key, remote MCP servers.
+- **Storage:** the encrypted vault, and the private records Proofable writes to hold something for you.
+- **What your client already does:** web search and page fetch.
 
-Those run in Proofable or in the SDK against the product API, where the run holds its own permission, a human approves side effects, and the result is a proof — which comes back to this endpoint to be checked and reused. Calling one of them here returns `platform_only` and says where the work belongs.
+Those run in Proofable or in the SDK against the product API, where the run holds its own permission, a human approves side effects, and the result is a proof, which comes back to this endpoint to be checked and reused. Calling one of them here returns `platform_only` and says where the work belongs.
 
 That is a boundary, not a plan limit: no plan unlocks the runtime through a connection, and the refusal never sells one. A connection should carry proof and authority. A general execution surface would rent out the platform, bill for work the client can already do, and turn a trust primitive into a proxy.
 
