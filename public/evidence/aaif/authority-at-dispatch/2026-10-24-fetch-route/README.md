@@ -76,7 +76,7 @@ node verify.mjs
 
 `verify.mjs` prints `MATCH` for each of these, and exits non-zero on any mismatch:
 
-1. Each envelope's signature recovers to the service key, and its qHash recomputes from the
+1. Each envelope's signature recovers to the service wallet address, and its qHash recomputes from the
    envelope (SHAKE-256, 32 bytes, over the sorted canonical JSON of `did`, `verifierIds`, `data`,
    `signedTimestamp` and `chainId`).
 2. `argsDigest` recomputes from `2-request-arguments.json`.
