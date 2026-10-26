@@ -1,0 +1,130 @@
+{
+  "success": true,
+  "data": {
+    "proofs": [
+      {
+        "id": "f810f2ef-a29c-4c24-80ec-4702f188695e",
+        "qHash": "0x74c441e6dad0d45b4804ada7a849d67f617dc064c8357b74fe9766b0d2f44f11",
+        "walletAddress": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+        "did": "did:pkh:eip155:8453:0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+        "chainId": 8453,
+        "chain": "eip155:8453",
+        "transport": "offchain_only",
+        "signedTimestamp": 1792864052261,
+        "status": "verified",
+        "verifierIds": [
+          "ownership-basic"
+        ],
+        "verifiedVerifiers": [
+          {
+            "verifierId": "ownership-basic",
+            "verified": true,
+            "data": {
+              "owner": "0x0d...ca15",
+              "reference": {
+                "type": "agent-job-authority-decision",
+                "id": "aaif-authority-review-prod-fresh2:1792864052261"
+              },
+              "verifierContentHash": "0x5e9ac8d77e024984e1275ce8cf7825f52d3674cd32a80ce03a4e61ba05d0c2e6",
+              "contentHash": "0x5e9ac8d77e024984e1275ce8cf7825f52d3674cd32a80ce03a4e61ba05d0c2e6",
+              "timestamp": 1792864052370
+            },
+            "status": "ownership_verified"
+          }
+        ],
+        "meta": {
+          "title": "Job authority decision — ALLOW",
+          "contentText": "Job dispatch ALLOW.",
+          "tags": [
+            "agent-job-authority-decision",
+            "authority:allow",
+            "agent:aaif-authority-review-prod-fresh2"
+          ]
+        },
+        "createdAt": 1792864052267,
+        "completedAt": 1792864052371,
+        "options": {
+          "enableIpfs": false,
+          "publicDisplay": false,
+          "storeOriginalContent": true,
+          "privacyLevel": "private",
+          "disclosePortableProof": false,
+          "view": {
+            "crosschain": {
+              "enabled": false,
+              "targetChains": []
+            },
+            "storage": {
+              "ipfs": false
+            },
+            "content": {
+              "public": false,
+              "storeOriginal": true
+            },
+            "privacy": {
+              "level": "private",
+              "meta": {}
+            }
+          }
+        },
+        "metrics": {
+          "totalDurationMs": 105,
+          "durationMs": 105,
+          "requestCount": 1,
+          "lastAccessed": 1792864055538
+        },
+        "publicContent": {
+          "content": "{\"version\":1,\"kind\":\"agent-job-authority-decision\",\"action\":\"job.dispatch\",\"outcome\":\"ALLOW\",\"reason\":null,\"risk\":\"medium\",\"policyVersion\":\"authority-policy.v2\",\"principal\":\"0x0d4e513a3a7eb92bab65c97786c67b198d9dca15\",\"agentId\":\"aaif-authority-review-prod-fresh2\",\"agentWallet\":\"0x765289f0902dc872e631bb16595b8fcf14b3b489\",\"delegationQHash\":\"0x51ce38eabe8bc1b540911a8f483581da16981d88f3a4637d93958d7f26e19f2f\",\"agentIdentityQHash\":\"0x40a5a0a052e2318dae7d3e2e4726739ff75cfd6475e464de12eebe714ca65ddb\",\"argsDigest\":\"245cd3cefe248e532ba867b8735484485c26d3809ad909ef47348f449b0b7b07\",\"jobId\":null,\"requestedAtMs\":1792864052261,\"effect\":\"none\"}",
+          "contentType": "text/markdown",
+          "storedAt": 1792864052270,
+          "contentLength": 639,
+          "privacyLevel": "private"
+        },
+        "lastUpdated": 1792864052418,
+        "type": "proof",
+        "viewer": {
+          "role": "owner",
+          "isOwner": true,
+          "hasGrant": false,
+          "authenticated": true,
+          "authType": "session"
+        },
+        "portableProof": {
+          "qHash": "0x74c441e6dad0d45b4804ada7a849d67f617dc064c8357b74fe9766b0d2f44f11",
+          "did": "did:pkh:eip155:8453:0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec",
+          "walletAddress": "0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec",
+          "verifierIds": [
+            "ownership-basic"
+          ],
+          "data": {
+            "owner": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+            "content": "{\"version\":1,\"kind\":\"agent-job-authority-decision\",\"action\":\"job.dispatch\",\"outcome\":\"ALLOW\",\"reason\":null,\"risk\":\"medium\",\"policyVersion\":\"authority-policy.v2\",\"principal\":\"0x0d4e513a3a7eb92bab65c97786c67b198d9dca15\",\"agentId\":\"aaif-authority-review-prod-fresh2\",\"agentWallet\":\"0x765289f0902dc872e631bb16595b8fcf14b3b489\",\"delegationQHash\":\"0x51ce38eabe8bc1b540911a8f483581da16981d88f3a4637d93958d7f26e19f2f\",\"agentIdentityQHash\":\"0x40a5a0a052e2318dae7d3e2e4726739ff75cfd6475e464de12eebe714ca65ddb\",\"argsDigest\":\"245cd3cefe248e532ba867b8735484485c26d3809ad909ef47348f449b0b7b07\",\"jobId\":null,\"requestedAtMs\":1792864052261,\"effect\":\"none\"}",
+            "reference": {
+              "type": "agent-job-authority-decision",
+              "id": "aaif-authority-review-prod-fresh2:1792864052261"
+            }
+          },
+          "signedTimestamp": 1792864052261,
+          "chainId": 8453,
+          "signature": "0x9d68b6d1597e9f7b25609a9536a8591fa4f4695ab4606540c4169a7c4502e9e935ba7abac303f2ef16e0b71a5f45cc5b68adf469f168fb3286bf6acc3c71cc9c1b",
+          "signatureMethod": "eip191"
+        },
+        "contentLength": 639
+      }
+    ],
+    "resolved": {
+      "identifier": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+      "walletAddress": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+      "did": "did:pkh:eip155:8453:0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+      "idType": "wallet",
+      "chain": "eip155:8453"
+    },
+    "pagination": {
+      "limit": 15,
+      "offset": 0,
+      "totalCount": null,
+      "hasMore": false,
+      "nextOffset": null
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "agentId": "aaif-authority-review-prod-fresh2",
+  "agentWallet": "0x765289f0902dc872e631bb16595b8fcf14b3b489",
+  "prompt": "Fetch this exact URL once and reply with its visible text verbatim and nothing else: https://webhook.site/b008feae-131e-45bc-850b-c3a759865b88",
+  "acceptance": {
+    "criterion": "target-ack",
+    "criteria": [
+      "target-ack"
+    ],
+    "mode": "text"
+  },
+  "runNowFirst": true
+}

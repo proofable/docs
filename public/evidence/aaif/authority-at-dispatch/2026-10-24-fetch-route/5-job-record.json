@@ -1,0 +1,186 @@
+{
+  "jobId": "d259c7cc-0701-4624-a148-77b149f84e06",
+  "runId": "d259c7cc-0701-4624-a148-77b149f84e06",
+  "qHash": "0xc21e33aa6f0f0308096b816a2bcce767fc2606bc20afeacc5e4874833e04b2f8",
+  "terminalQHash": "0xc21e33aa6f0f0308096b816a2bcce767fc2606bc20afeacc5e4874833e04b2f8",
+  "status": "completed",
+  "source": "redis",
+  "agentWallet": "0x765289f0902dc872e631bb16595b8fcf14b3b489",
+  "agentId": "aaif-authority-review-prod-fresh2",
+  "model": null,
+  "provider": null,
+  "prompt": "Fetch this exact URL once and reply with its visible text verbatim and nothing else: https://webhook.site/b008feae-131e-45bc-850b-c3a759865b88",
+  "systemPrompt": null,
+  "createdAt": 1792864053741,
+  "runAtMs": 1792864053741,
+  "nextRunAt": null,
+  "startedAt": 1792864053769,
+  "completedAt": 1792864063824,
+  "durationMs": 10055,
+  "recurrenceId": null,
+  "runNumber": null,
+  "schedule": {
+    "type": "once",
+    "runAtMs": 1792864053741
+  },
+  "result": {
+    "response": "target-ack 6b86b1f0cd3adaced3f1",
+    "structuredOutput": null,
+    "model": "default",
+    "provider": "neus",
+    "zeus": {
+      "reasoning": null,
+      "toolActivity": [
+        {
+          "tool": "proofable_url_fetch",
+          "args": {
+            "url": "https://webhook.site/b008feae-131e-45bc-850b-c3a759865b88"
+          },
+          "ok": true,
+          "at": 1792864060599
+        }
+      ],
+      "receipts": null
+    },
+    "usage": {
+      "inputTokens": 5492,
+      "cachedInputTokens": 4480,
+      "outputTokens": 133,
+      "modelCalls": 2
+    }
+  },
+  "error": null,
+  "executionSteps": [
+    {
+      "id": "dispatch",
+      "label": "Queued for execution",
+      "status": "completed",
+      "at": "2026-10-24T17:47:43.824Z"
+    },
+    {
+      "id": "zeus-runtime",
+      "label": "Run Agent runtime",
+      "status": "completed",
+      "at": "2026-10-24T17:47:43.824Z"
+    },
+    {
+      "id": "complete",
+      "label": "Finish and record result",
+      "status": "completed",
+      "at": "2026-10-24T17:47:43.824Z"
+    }
+  ],
+  "tags": [
+    "agent-job",
+    "job",
+    "job:completed",
+    "receipt:ownership-basic",
+    "job:schedule_once_1792864053741"
+  ],
+  "walletAddress": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+  "delegationQHash": "0x51ce38eabe8bc1b540911a8f483581da16981d88f3a4637d93958d7f26e19f2f",
+  "agentIdentityQHash": "0x40a5a0a052e2318dae7d3e2e4726739ff75cfd6475e464de12eebe714ca65ddb",
+  "runtime": null,
+  "bindingPolicy": null,
+  "outputSchema": null,
+  "acceptance": {
+    "criterion": "target-ack",
+    "criteria": [
+      "target-ack"
+    ],
+    "mode": "text"
+  },
+  "output": null,
+  "partialResult": null,
+  "skills": [],
+  "tools": [],
+  "requiresReceipt": false,
+  "origin": null,
+  "evaluation": {
+    "version": 2,
+    "jobId": "d259c7cc-0701-4624-a148-77b149f84e06",
+    "attempt": 1,
+    "taskClass": "general",
+    "agentId": "aaif-authority-review-prod-fresh2",
+    "agentWallet": "0x765289f0902dc872e631bb16595b8fcf14b3b489",
+    "model": "z-ai/glm-5.3-flash",
+    "provider": "neus",
+    "requestedModel": null,
+    "requestedProvider": null,
+    "inferenceFallback": false,
+    "harness": "operator",
+    "transport": null,
+    "policy": {
+      "policyVersion": null,
+      "harnessVersion": null
+    },
+    "status": "completed",
+    "rawTaskSuccess": true,
+    "accepted": true,
+    "acceptedOutcome": true,
+    "evaluator": "job-acceptance",
+    "failureClass": null,
+    "authoritySignal": "clean",
+    "approval": {
+      "required": false,
+      "decided": false,
+      "decision": null,
+      "decidedBy": null,
+      "parkedAt": null,
+      "resolvedAt": null,
+      "waitMs": null,
+      "steps": {
+        "approved": 0,
+        "declined": 0
+      },
+      "humanIntervention": false
+    },
+    "checks": [],
+    "artifacts": [],
+    "workRefs": [],
+    "toolActions": {
+      "count": 1,
+      "failed": 0
+    },
+    "retrieval": {
+      "indexVersion": null,
+      "proofRefs": null,
+      "count": null
+    },
+    "cost": {
+      "tokens": 5625,
+      "modelCalls": 2,
+      "currency": null
+    },
+    "durationMs": 10055,
+    "createdAt": 1792864053741,
+    "completedAt": 1792864063824,
+    "qHash": null,
+    "terminalQHash": null,
+    "recurrenceId": null,
+    "runNumber": null,
+    "evidenceComplete": true
+  },
+  "attempt": 1,
+  "recoveryCount": null,
+  "runtimeClass": "general",
+  "attemptHistory": [
+    {
+      "attemptId": "912a03bc-37b0-4edf-a469-9ae1e0250478",
+      "attempt": 1,
+      "stepRound": 0,
+      "provider": "neus",
+      "model": "default",
+      "harness": "operator",
+      "status": "completed",
+      "startedAt": 1792864055632,
+      "actualProvider": "neus",
+      "actualModel": "z-ai/glm-5.3-flash",
+      "actualHarness": "operator",
+      "completedAt": 1792864063796
+    }
+  ],
+  "devOutcome": null,
+  "lastHeartbeat": 1792864053787,
+  "stepRound": null
+}

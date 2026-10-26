@@ -1,0 +1,16 @@
+{
+  "surface": "Proofable hosted MCP",
+  "endpoint": "https://mcp.proofable.me/mcp",
+  "transport": "MCP streamable HTTP, JSON-RPC 2.0",
+  "method": "tools/call",
+  "tool": "proofable_job_create",
+  "argumentsFile": "2-request-arguments.json",
+  "mcpVersion": "0.1.7",
+  "serviceRevision": "18433a48d74af913550de7a018f02c7c724cc1c9",
+  "ranAt": "2026-10-24T17:47:33Z",
+  "principal": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+  "agentId": "aaif-authority-review-prod-fresh2",
+  "agentWallet": "0x765289f0902dc872e631bb16595b8fcf14b3b489",
+  "serviceSigner": "0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec",
+  "credential": "omitted"
+}
