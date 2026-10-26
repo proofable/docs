@@ -8,8 +8,9 @@ record offline.
 - Node.js 20 or later
 - An access key (`npk_…`) from your own Proofable account: open
   [Profile, Account tab, Access keys](https://proofable.me/profile?tab=account) and create one. The
-  cases run agent jobs, which use your account's credits on any plan. The agent wallet and the run folder are
-  created on your machine. Keep the key out of chat and version control.
+  cases run agent jobs, which use your account's credits on any plan. The agent's private key is kept in
+  `~/.proofable/aad`, outside this folder, and the run folder is created here. Keep both keys out of chat and
+  version control.
 
 ## Run it
 
@@ -52,5 +53,6 @@ as the service observed them.
 | `AAD_OPERATOR` | required | your name or organization, recorded in every record |
 | `AAD_AGENT_ID` | `aaif-authority-review` | review agent id; give each reviewer sharing an account their own |
 | `AAD_RUN_ID` | `aad-<timestamp>` | run folder name |
+| `AAD_STATE_DIR` | `~/.proofable/aad` | where the agent's private key is kept; keep it outside any repository |
 | `AAD_APPROVAL_HOLD_MS` | `0` | how long an approval stays unanswered before the hold ends |
 | `AAD_REVOKE_AFTER_MS` | `12000` | delay before the mid-job revocation |
