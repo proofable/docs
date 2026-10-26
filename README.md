@@ -1,6 +1,6 @@
 # Proofable Docs
 
-Put AI agents on real work without handing over your keys. These are the docs for Proofable: agent permissions, approvals, signed proof, and human and domain checks you can reuse in your app.
+Proofable is the trust harness for AI. Give agents identity, scoped access and proof of what they did, and add verification and reusable proof to your app.
 
 Published site: [docs.proofable.me](https://docs.proofable.me)
 
