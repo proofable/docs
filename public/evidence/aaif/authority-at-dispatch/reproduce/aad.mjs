@@ -18,12 +18,14 @@
  *   AAD_RUN_ID             run id (default aad-<utc timestamp>)
  *   PROOFABLE_MCP_URL      default https://mcp.proofable.me/mcp
  *   PROOFABLE_API_URL      default https://api.proofable.me
+ *   AAD_STATE_DIR          where the agent key is kept (default ~/.proofable/aad, outside this folder)
  *
  * Every value in a record is read from the live service; a value it did not produce stays
  * null or an explicit not_* state. Revocation latency is not measured.
  */
 import { createHash } from 'node:crypto';
-import { chmodSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import { verifyPortableProofEnvelope } from '@proofable/sdk';
@@ -34,8 +36,11 @@ const CONTRACT_ID = 'https://probityai.github.io/agent-evidence-observer/contrac
 const MCP_URL = process.env.PROOFABLE_MCP_URL || 'https://mcp.proofable.me/mcp';
 const API_URL = process.env.PROOFABLE_API_URL || 'https://api.proofable.me';
 const AGENT_ID = process.env.AAD_AGENT_ID || 'aaif-authority-review';
-const STATE_DIR = resolve('.aad');
+// The agent key lives outside the working tree, so a commit, archive or copy of this folder can
+// never carry it. Earlier kit versions kept it in ./.aad; that file is moved on first use.
+const STATE_DIR = process.env.AAD_STATE_DIR ? resolve(process.env.AAD_STATE_DIR) : join(homedir(), '.proofable', 'aad');
 const WALLET_FILE = join(STATE_DIR, 'agent-wallet.json');
+const LEGACY_WALLET_FILE = resolve('.aad', 'agent-wallet.json');
 const GRANT_CHAIN = 'eip155:8453';
 const BASE_ACTIONS = ['read_context', 'read_proofs', 'create_proof', 'execute_jobs', 'run_command', 'manage_runtime'];
 const NO_RUN_ACTIONS = ['read_context', 'read_proofs', 'create_proof', 'execute_jobs', 'manage_runtime'];
@@ -104,7 +109,15 @@ async function controllerWallet() {
   if (!/^0x[0-9a-f]{40}$/.test(address)) throw new Error('proofable_context returned no EVM primary account for this access key.');
   return address;
 }
+function moveLegacyWallet() {
+  if (existsSync(WALLET_FILE) || !existsSync(LEGACY_WALLET_FILE)) return;
+  mkdirSync(STATE_DIR, { recursive: true, mode: 0o700 });
+  writeFileSync(WALLET_FILE, readFileSync(LEGACY_WALLET_FILE), { mode: 0o600 });
+  unlinkSync(LEGACY_WALLET_FILE);
+  console.log(`Moved the agent key from ${LEGACY_WALLET_FILE} to ${WALLET_FILE}, outside this folder.`);
+}
 function agentWallet() {
+  moveLegacyWallet();
   if (!existsSync(WALLET_FILE)) throw new Error('No agent wallet yet: run `node aad.mjs setup` first.');
   const record = JSON.parse(readFileSync(WALLET_FILE, 'utf8'));
   return { address: lower(record.address), signer: new Wallet(String(record.privateKey)) };
@@ -113,10 +126,11 @@ function agentWallet() {
 // ── setup: the operator's own review agent and delegation ───────────────────────────────
 async function setup() {
   const operator = requireOperator();
-  mkdirSync(STATE_DIR, { recursive: true });
+  mkdirSync(STATE_DIR, { recursive: true, mode: 0o700 });
+  moveLegacyWallet();
   if (!existsSync(WALLET_FILE)) {
     const wallet = Wallet.createRandom();
-    writeFileSync(WALLET_FILE, `${JSON.stringify({ address: wallet.address, privateKey: wallet.privateKey, createdAt: nowIso() }, null, 2)}\n`);
+    writeFileSync(WALLET_FILE, `${JSON.stringify({ address: wallet.address, privateKey: wallet.privateKey, createdAt: nowIso() }, null, 2)}\n`, { mode: 0o600 });
     try { chmodSync(WALLET_FILE, 0o600); } catch { /* best effort on Windows */ }
     console.log(`Created agent wallet ${wallet.address} in ${WALLET_FILE} (keep it private; it never leaves this machine).`);
   }
