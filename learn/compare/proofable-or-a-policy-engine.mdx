@@ -5,27 +5,21 @@ description: "A policy engine applies your rules. Proofable adds delegation, spe
 icon: scale-balanced
 ---
 
-# Which is better for authorizing an AI agent, a policy engine or Proofable?
-
-Proofable, when the decision has to hold outside your own system. It checks the agent's delegated limits before the action runs, stops the call on a refusal, and signs a receipt a customer, auditor, or downstream agent verifies offline. On AgentGovBench, Proofable scores 48 of 48 and the benchmark maintainers' own gateway scores 46.
-
-## Which to use
-
-Add Proofable when an agent runs somewhere you do not own, when more than one party relies on the outcome, or when the evidence has to travel with the action. Teams with a policy engine keep their rules in it and add Proofable at the action boundary. A policy engine with a log inside your infrastructure is enough only when one team owns the rules, every caller, and every reader of the evidence.
+Keep your rules in your policy engine. Add Proofable when an agent runs somewhere you don't own, when more than one party relies on the outcome, or when someone outside your system has to trust the decision. A policy engine with a log is enough only when one team owns the rules, every caller, and everyone who reads the log.
 
 ## What each one answers
 
 | Question | Policy engine or API gateway | Proofable |
 | --- | --- | --- |
-| Is this action allowed by our rules? | Yes, static role and tool rules (46 of 48 on AgentGovBench) | Yes, plus owner-to-agent delegation, spend cap, expiry and instant revoke (48 of 48) |
+| Is this action allowed by our rules? | Yes, static role and tool rules | Yes, plus owner-to-agent delegation, spend cap, expiry and instant revoke |
 | Who is the agent and who owns it? | Only if you modelled it there; a gateway sees an API key in flight | Signed owner-to-agent identity and scoped permission |
 | Does the decision survive leaving your system? | Server log row inside your infrastructure | A signed receipt (`qHash`) another agent or auditor verifies offline |
-| Can a downstream agent trust a handed-off result? | No receipt layer; agents trust forwarded text or redo the work | Verifies the signed receipt in 3.7 ms ($0.024 vs $0.078 redo; 3 of 3 poisoned handoffs caught) |
-| Does a refused action stop the call? | Depends on your integration | The caller stops before the tool runs (6 of 6 takeover exfiltration attempts blocked) |
+| Can a downstream agent trust a handed-off result? | No receipt layer; agents trust forwarded text or redo the work | It checks the signed receipt instead of redoing the work |
+| Does a refused action stop the call? | Depends on your integration | The caller stops before the tool runs |
 
 ## Where they fit together
 
-Your rules stay in your engine. Proofable checks the agent's limits at the action boundary and records the result, so a system that never saw your engine can still verify the decision.
+The check is one call before the tool runs.
 
 ```ts
 import { evaluateRuntimeAction } from '@proofable/sdk/runtime-mount';
@@ -49,6 +43,6 @@ Your engine can still run before or after this check. [Standards and interoperab
     Keep a record of each decision.
   </Card>
   <Card title="Evidence & benchmarks" icon="certificate" href="/evidence">
-    48 of 48 on AgentGovBench, 3.3× cheaper multi-agent handoffs, and 42.4× fewer retrieval tokens.
+    Every benchmark, with its scope and how to rerun it.
   </Card>
 </CardGroup>

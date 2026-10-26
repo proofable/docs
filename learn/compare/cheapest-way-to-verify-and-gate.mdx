@@ -5,11 +5,9 @@ description: "Identity vendors charge you on every check. See what a reusable pr
 icon: coins
 ---
 
-# What is the cheapest way to verify a user or gate an action?
-
 Cheapest depends on how many times the same fact gets checked. A per-check vendor bills again on each visit. A proof is created once, then read without a fee, so the more places that need the same answer, the wider the gap between the two.
 
-## It depends
+## Which to choose
 
 - **Choose a reusable proof when the same fact is asked again,** by your next session, another service, another agent, or a buyer. The first check is paid. Every later check costs 0 credits.
 - **Build it yourself when one team owns both the rule and every caller,** and a row in your own database settles every question you ever ask.
@@ -32,17 +30,6 @@ Identity and credential vendors publish a price for each completed check. Figure
 | Onfido (Entrust), Jumio, Plaid, Trinsic | Identity and reusable identity | Quote only | Quote only |
 
 Proofable publishes its own list: **a saved proof is checked for 0 credits, on every plan, forever, and creating one starts at $0.01**. The Free plan includes 500 credits a month and hosted sign-in. Pro is $29.99 a month for 15,000 credits. See [pricing](/pricing).
-
-## Why checking again is where the money goes
-
-Re-deriving a result costs more than the check that produced it. When a result cannot be handed over, the work behind it is paid for twice.
-
-- Checking a finished agent result offline takes **3.7 ms** and no AI tokens, against **2.79 s** to redo it.
-- A signed receipt handed between agents cost **$0.024 per correct outcome** against **$0.078** to redo the upstream work (**3.3× cheaper**), and it caught **3 of 3** tampered handoffs where trusting forwarded text caught none.
-- Reading typed, signed state on a 1,721-record vault used **42.4× fewer retrieval tokens** than keyword search over the record bodies.
-- A refused action stops before the tool runs, with **6 of 6** takeover exfiltration attempts blocked.
-
-Those measurements, their scope, and how to reproduce them are on [evidence](/evidence).
 
 ## What a proof can cover
 
@@ -69,28 +56,6 @@ const gate = defineGate([{ verifierId: 'proof-of-human' }]);
 ```
 
 The gate runs on your server, so your server keeps the final decision. [Gates](/gates) covers the widget, the checkout, and pay-per-call, and [build a platform](/use-cases/build-a-platform) wires it into your own product.
-
-## Questions this answers
-
-### Is Proofable cheaper than Stripe Identity or Persona?
-
-From the second check on, yes. Both charge for the first check. After that a saved proof is checked for 0 credits, while a per-check vendor bills again each time the same person is checked.
-
-### Do I still need a KYC vendor if I use Proofable?
-
-Only when a regulator requires you to retain the document itself. Proof of human already confirms a real person, an age threshold, and a face match against the document photo without storing the document. When you do keep a vendor, record its pass as a proof so no downstream service buys the same answer twice.
-
-### What does a check actually cost?
-
-A saved proof is checked for 0 credits. Creating one starts at $0.01, and the price is shown before a billable verification runs.
-
-### Can I try it without paying?
-
-Yes. The Free plan includes 500 credits a month and hosted sign-in, and checking an existing proof is free on every plan.
-
-### Does this replace my policy engine?
-
-No. A [policy engine](/learn/compare/proofable-or-a-policy-engine) stays the owner of your own rules. Proofable checks the agent's limits at the action boundary and keeps the record.
 
 ## Next
 

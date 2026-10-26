@@ -89,7 +89,6 @@
           {
             "group": "Compare",
             "pages": [
-              "learn/compare/control-what-an-agent-can-do",
               "learn/compare/proofable-or-an-identity-provider",
               "learn/compare/proofable-or-a-policy-engine",
               "learn/compare/cheapest-way-to-verify-and-gate"
@@ -202,6 +201,10 @@
     ]
   },
   "redirects": [
+    {
+      "source": "/learn/compare/control-what-an-agent-can-do",
+      "destination": "/use-cases/control-agent-actions"
+    },
     {
       "source": "/benchmarks",
       "destination": "/evidence"

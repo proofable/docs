@@ -5,10 +5,6 @@ description: "An identity provider says who an agent is. Proofable decides wheth
 icon: scale-balanced
 ---
 
-# Which is better for controlling an AI agent, an identity provider or Proofable?
-
-Proofable, as soon as an agent acts. An identity provider answers who signed in. Proofable answers whether this agent may take this action right now, stops the call when it may not, and leaves a signed proof another system can check.
-
 ## Which to use
 
 Use Proofable when an agent acts on its own schedule, when permission has to be checked at the moment of the call, or when a customer, auditor, or downstream agent must confirm the decision afterwards. Keep your identity provider for sign-in. It issues the session and Proofable governs what runs under it. An identity provider alone covers only agents that act inside a signed-in person's session and never need a spend cap, an expiry, or a record of the action.
@@ -43,7 +39,7 @@ Keep the provider for sign-in and add Proofable for the authority decision in th
 2. [Give the agent limits](/use-cases/control-agent-actions): allowed actions, denied actions, spend cap, expiry.
 3. [Check before the tool call](/mcp/guarded-action) and stop when the decision is not allowed.
 
-The identity proves who is asking. The permission decides whether the action runs. [Standards and interoperability](/learn/standards) covers how Proofable works with OAuth, OIDC, AuthZEN and agent SSO.
+[Standards and interoperability](/learn/standards) covers how Proofable works with OAuth, OIDC, AuthZEN and agent SSO.
 
 ## Next
 
