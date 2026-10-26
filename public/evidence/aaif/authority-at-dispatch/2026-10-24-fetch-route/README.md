@@ -44,12 +44,10 @@ job made one tool call, a fetch of the URL in the prompt, and returned the marke
 
 ## Who signed what
 
-Both envelopes are signed by the Proofable service key
-`0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec` (EIP-191 over the CAIP-380 verification message).
-The signature means Proofable attests a statement its service observed. The `owner` inside each
-envelope is the principal `0x0d4e513a3a7eb92bab65c97786c67b198d9dca15`, named by the service. The
-principal signed nothing in this packet. The delegation the decision names is referenced by its
-qHash and is not included.
+The Proofable service wallet, address `0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec`, signs both
+records (EIP-191 over the CAIP-380 verification message). The `owner` field in each record is the
+account the job ran under, `0x0d4e513a3a7eb92bab65c97786c67b198d9dca15`. The decision names that
+account's permission grant by its qHash. The grant itself is not in this packet.
 
 The decision commits to the request through `argsDigest`: SHA-256 of `JSON.stringify` over this
 object, in this key order.
@@ -78,7 +76,7 @@ node verify.mjs
 
 `verify.mjs` prints `MATCH` for each of these, and exits non-zero on any mismatch:
 
-1. Each envelope's signature recovers to the service key, and its qHash recomputes from the
+1. Each envelope's signature recovers to the service wallet address, and its qHash recomputes from the
    envelope (SHAKE-256, 32 bytes, over the sorted canonical JSON of `did`, `verifierIds`, `data`,
    `signedTimestamp` and `chainId`).
 2. `argsDigest` recomputes from `2-request-arguments.json`.
