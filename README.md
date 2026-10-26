@@ -1,6 +1,6 @@
 # Proofable Docs
 
-Give AI agents identity, scoped access, and proof of what they did. Add verification and reusable proof to your app.
+Put AI agents on real work without handing over your keys. These are the docs for Proofable: agent permissions, approvals, signed proof, and human and domain checks you can reuse in your app.
 
 Published site: [docs.proofable.me](https://docs.proofable.me)
 

@@ -59,10 +59,11 @@
     }
   },
   "navbar": {
+    "links": [{ "label": "Sign in", "href": "https://proofable.me/verify?intent=login" }],
     "primary": {
       "type": "button",
-      "label": "Sign in",
-      "href": "https://proofable.me/verify?intent=login"
+      "label": "Start free",
+      "href": "https://proofable.me/connect"
     }
   },
   "navigation": {
