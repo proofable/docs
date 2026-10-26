@@ -44,12 +44,10 @@ job made one tool call, a fetch of the URL in the prompt, and returned the marke
 
 ## Who signed what
 
-Both envelopes are signed by the Proofable service key
-`0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec` (EIP-191 over the CAIP-380 verification message).
-The signature means Proofable attests a statement its service observed. The `owner` inside each
-envelope is the principal `0x0d4e513a3a7eb92bab65c97786c67b198d9dca15`, named by the service. The
-principal signed nothing in this packet. The delegation the decision names is referenced by its
-qHash and is not included.
+Proofable's service key `0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec` signs both records (EIP-191
+over the CAIP-380 verification message). The `owner` field in each record is the account the job ran
+under, `0x0d4e513a3a7eb92bab65c97786c67b198d9dca15`. The decision names that account's permission
+grant by its qHash. The grant itself is not in this packet.
 
 The decision commits to the request through `argsDigest`: SHA-256 of `JSON.stringify` over this
 object, in this key order.
