@@ -83,13 +83,13 @@ main > span.absolute.inset-0.overflow-hidden.pointer-events-none:not(#background
   text-shadow: none !important;
 }
 
-#navbar a.flex.items-center:not([href*="proofable.me/verify"]),
+#navbar a.flex.items-center:not([href*="proofable.me/connect"]),
 #navbar a[href*="github.com"],
 #navbar a[href*="discussions"] {
   color: var(--proofable-text-secondary) !important;
 }
 
-#navbar a.flex.items-center:not([href*="proofable.me/verify"]):hover,
+#navbar a.flex.items-center:not([href*="proofable.me/connect"]):hover,
 #navbar a[href*="github.com"]:hover,
 #navbar a[href*="discussions"]:hover {
   color: var(--proofable-text-primary) !important;
@@ -625,7 +625,7 @@ a.card:focus-visible {
   box-shadow: 0 0 0 2px rgb(var(--proofable-rgb-accent-primary)) !important;
 }
 
-#header a:not([href*="proofable.me/verify"]):not([class*="button"]),
+#header a:not([href*="proofable.me/connect"]):not([class*="button"]),
 #table-of-contents-content a {
   color: var(--proofable-text-secondary) !important;
 }
@@ -740,8 +740,8 @@ a#topbar-cta-button,
 [data-testid="topbar-primary-button"],
 .navbar-primary-button,
 .navbar-button-primary,
-#navbar a[href*="proofable.me/verify"],
-#header a[href*="proofable.me/verify"] {
+#navbar a[href*="proofable.me/connect"],
+#header a[href*="proofable.me/connect"] {
   background: var(--proofable-accent) !important;
   background-color: var(--proofable-accent) !important;
   background-image: none !important;
@@ -771,8 +771,8 @@ a#topbar-cta-button:hover,
 [data-testid="topbar-primary-button"]:hover,
 .navbar-primary-button:hover,
 .navbar-button-primary:hover,
-#navbar a[href*="proofable.me/verify"]:hover,
-#header a[href*="proofable.me/verify"]:hover {
+#navbar a[href*="proofable.me/connect"]:hover,
+#header a[href*="proofable.me/connect"]:hover {
   background: var(--proofable-accent-dim) !important;
   background-color: var(--proofable-accent-dim) !important;
   background-image: none !important;
@@ -783,14 +783,14 @@ a#topbar-cta-button:hover,
 #topbar-cta-button-wrapper,
 .navbar-primary-wrapper,
 .navbar-button-wrapper,
-#navbar div:has(> a[href*="proofable.me/verify"]),
-#navbar li:has(> a[href*="proofable.me/verify"]),
-#header div:has(> a[href*="proofable.me/verify"]),
-#header li:has(> a[href*="proofable.me/verify"]),
-#header span:has(> a[href*="proofable.me/verify"]),
-#header [class*="button"]:has(a[href*="proofable.me/verify"]),
-#header [class*="Button"]:has(a[href*="proofable.me/verify"]),
-#header [class*="primary"]:has(a[href*="proofable.me/verify"]) {
+#navbar div:has(> a[href*="proofable.me/connect"]),
+#navbar li:has(> a[href*="proofable.me/connect"]),
+#header div:has(> a[href*="proofable.me/connect"]),
+#header li:has(> a[href*="proofable.me/connect"]),
+#header span:has(> a[href*="proofable.me/connect"]),
+#header [class*="button"]:has(a[href*="proofable.me/connect"]),
+#header [class*="Button"]:has(a[href*="proofable.me/connect"]),
+#header [class*="primary"]:has(a[href*="proofable.me/connect"]) {
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
@@ -833,8 +833,8 @@ a#topbar-cta-button *,
 [data-testid="topbar-primary-button"] *,
 .navbar-primary-button *,
 .navbar-button-primary *,
-#navbar a[href*="proofable.me/verify"] *,
-#header a[href*="proofable.me/verify"] * {
+#navbar a[href*="proofable.me/connect"] *,
+#header a[href*="proofable.me/connect"] * {
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
@@ -847,8 +847,8 @@ a#topbar-cta-button *,
 a#topbar-cta-button:focus-visible,
 [data-testid="navbar-primary-button"]:focus-visible,
 [data-testid="topbar-primary-button"]:focus-visible,
-#navbar a[href*="proofable.me/verify"]:focus-visible,
-#header a[href*="proofable.me/verify"]:focus-visible {
+#navbar a[href*="proofable.me/connect"]:focus-visible,
+#header a[href*="proofable.me/connect"]:focus-visible {
   outline: 2px solid var(--proofable-cta-focus) !important;
   outline-offset: 2px !important;
 }

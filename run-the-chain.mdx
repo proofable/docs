@@ -54,6 +54,21 @@ node aad.mjs run          # eight permission cases
 node aad.mjs verify runs/<run-id>
 ```
 
+On the published 24 October run, `verify` prints:
+
+```text
+hosted_allow             PASS     2/2 envelopes
+binding_veto             PASS     2/2 envelopes
+approval_reachable       PASS     2/2 envelopes
+approval_unavailable     PASS     2/2 envelopes
+revoke_before_dispatch   PASS     1/1 envelopes
+expiry_before_dispatch   PASS     1/1 envelopes
+stale_authority          PASS     4/4 envelopes
+post_dispatch_revoke     PASS     3/3 envelopes
+
+all checks pass
+```
+
 `verify` needs no network and no account. The eight cases cover an allowed job, an action outside the
 delegation, an approval that arrives, an approval that never arrives, revocation before dispatch,
 expiry before dispatch, reuse of a revoked grant against a valid control, and revocation while a job is
