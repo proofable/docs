@@ -126,7 +126,7 @@
               },
               {
                 "group": "Gates",
-                "pages": ["gates/sell-access", "gates/checkout", "gates/nft-gating", "gates/pay-per-call"]
+                "pages": ["gates/sell-access", "gates/your-server", "gates/checkout", "gates/nft-gating", "gates/pay-per-call"]
               },
               {
                 "group": "Integrations",
