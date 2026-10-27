@@ -20,7 +20,10 @@ cd "$LIB" || exit 1
 uv venv -q .venv > "$OUT/install.log" 2>&1 && . .venv/bin/activate && uv pip install -q -e . >> "$OUT/install.log" 2>&1
 
 # The agent frameworks the repository uses, each with the library's native runner.
-has() { rg -q -i --no-messages -g '!.git' -g '!node_modules' -g '!*.md' -e "$1" "$REPO"; }
+has() {
+  if command -v rg > /dev/null; then rg -q -i --no-messages -g '!.git' -g '!node_modules' -g '!*.md' -e "$1" "$REPO"
+  else grep -rqiE --exclude-dir=.git --exclude-dir=node_modules --exclude='*.md' -e "$1" "$REPO"; fi
+}
 RUNNERS="vanilla"
 has '(^|[^a-z_])crewai'                                        && RUNNERS="$RUNNERS crewai_native"
 has '(langgraph|langchain_core|@langchain/)'                   && RUNNERS="$RUNNERS langgraph_native"
@@ -40,7 +43,7 @@ done
 python3 - "$OUT" "$LIB_COMMIT" $RUNNERS <<'PY'
 import json, os, sys
 out, commit, runners = sys.argv[1], sys.argv[2], sys.argv[3:]
-summary = {"library": "agentic-control-plane/agentgovbench", "commit": commit, "runs": {}}
+summary = {"library": "agentic-control-plane/agentgovbench", "commit": commit, "frameworkRunners": [r for r in runners if r != "vanilla"], "runs": {}}
 for r in runners:
     path = os.path.join(out, f"{r}.json")
     try:
