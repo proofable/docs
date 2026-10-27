@@ -7,7 +7,7 @@ icon: diagram-project
 
 Proofable plugs into the sign-in, policy engine, agent runtime, and payment processor you already run. It checks each action at the boundary and turns the result into a portable proof every one of those systems can verify.
 
-Wallet-signed checks and Proofable-signed outcome statements use the [CAIP-380](/learn/standards/caip-380) format. The [Technical Whitepaper](/whitepaper#6-standards-and-interoperability) covers the architecture.
+Wallet-signed checks and Proofable-signed outcome statements use [CAIP-380](/learn/standards/caip-380), the open Portable Proof standard Proofable's founder wrote. The [Technical Whitepaper](/whitepaper#6-standards-and-interoperability) covers the architecture.
 
 <Note>
 A signed CAIP-380 envelope proves who signed and that the statement is unchanged, and anyone can check that offline. Proofable adds the check result and whether it is still current.
@@ -18,7 +18,7 @@ A signed CAIP-380 envelope proves who signed and that the statement is unchanged
 | Standard | What it provides | How Proofable uses it | Status | See |
 | --- | --- | --- | --- | --- |
 | CAIP-2 / CAIP-10 | Network and account identifiers | Accounts, agents, and profiles use the same chain and account IDs | Available | [Portable proofs](/learn/standards/caip-380), [Discover agents](/agents/named-agent-card) |
-| CAIP-380 Portable Proof | A wallet-signed request format with a stable proof ID | Wallet-signed Proofable checks use this format; Proofable also signs statements about its own results | Draft | [CAIP-380 spec](https://standards.chainagnostic.org/CAIPs/caip-380), [Portable proofs](/learn/standards/caip-380), [Examples](https://github.com/proofable/sdk/tree/main/examples/caip-380) |
+| CAIP-380 Portable Proof | A wallet-signed request format with a stable proof ID | Wallet-signed Proofable checks use this format; Proofable also signs statements about its own results | Draft; Review proposed | [CAIP-380 spec](https://standards.chainagnostic.org/CAIPs/caip-380), [Portable proofs](/learn/standards/caip-380), [Examples](https://github.com/proofable/sdk/tree/main/examples/caip-380) |
 | MCP | Tools and context for any MCP client | Hosted MCP carries profile, proofs, listings, permissions, and checks before sensitive tools run | Available | [MCP setup](/mcp/setup) |
 | OAuth / OIDC | Sign-in for people and MCP clients | Hosted MCP and app Connect | Available | [MCP setup](/mcp/setup) |
 | ACP | Client to an agent session | Optional self-hosted session (OpenCode, Hermes, Claude ACP). Hosted jobs stay on Proofable | Works with | [Private cloud agents](/deployment/private-cloud) |
@@ -31,13 +31,9 @@ A signed CAIP-380 envelope proves who signed and that the statement is unchanged
 | x402 | Pay for a single HTTP call | Payment settles the call. Proofable can still require a current proof before the call proceeds | Available | [Pay per call](/gates/pay-per-call) |
 | Phala | Confidential compute | Hosted AI can run in a Phala-backed confidential environment. The same proofs work on a private deploy | Available | [Private cloud agents](/deployment/private-cloud) |
 
-[CAIP-380](https://standards.chainagnostic.org/CAIPs/caip-380), the open specification for the signed request format, was written by Proofable's founder.
-
 ## Related standards by layer
 
-Proofable is the portable evidence layer that connects identity, authorization, credential, and attestation standards:
-
-> SPIFFE and A2A can establish or describe an agent. OAuth and AuthZEN can determine what it may do. RATS/EAT can attest its environment or claims. VC and OpenID4VP can carry credentials across parties. CAEP can communicate trust-state changes. SCITT can add transparency and independent receipt verification. Proofable preserves the resulting identity, authority, decision, and effect records as portable proofs another relying party can independently appraise.
+Each layer answers a different question: who the agent is, what it may do, what was decided, what happened, and how strongly another party can rely on the record. Portable Proof keeps those answers as separate, linked records.
 
 | Layer | Existing work | Proofable relation |
 | --- | --- | --- |
@@ -50,21 +46,13 @@ Proofable is the portable evidence layer that connects identity, authorization, 
 | Transparency | [SCITT (RFC 9943)](https://www.rfc-editor.org/rfc/rfc9943) | Complementary model for signed statements that gain verifiable transparency later |
 | Portable proof | [CAIP-380](/learn/standards/caip-380) | The canonical Proofable envelope that carries the record |
 
-Each layer answers a different question: who the agent is, what it may do, what was decided, what happened, and how strongly another party can rely on the record. Portable Proof keeps those answers as separate, linked records rather than collapsing them into one credential.
+## Where we contribute
 
-## Check an example
+- **[CAIP-380](https://github.com/ChainAgnostic/CAIPs/pull/412)** at the Chain Agnostic Standards Alliance. Proofable's founder wrote it, and the move to Review is open with the editors.
+- **The Agentic AI Foundation's working groups at the Linux Foundation.** Our authority tests and signed records are in [Identity & Trust](https://github.com/aaif/wg-identity-and-trust/issues/13), [Observability & Traceability](https://github.com/aaif/wg-observability-and-traceability/issues/66) and [Security & Privacy](https://github.com/aaif/wg-security-and-privacy/pull/39).
+- **[AgenTrust integrations](https://github.com/agentrust-io/integrations/issues/333).** The maintainers chose our records as the dispatch evidence for their authority comparison.
 
-Use a signed request from a check, or the published example:
-
-```javascript
-import { verifyPortableProofEnvelope } from '@proofable/sdk';
-import envelope from '../../../examples/caip-380/minimal-evm.json' with { type: 'json' };
-
-const result = await verifyPortableProofEnvelope(envelope);
-if (!result.valid) throw new Error(result.errors.join('; '));
-```
-
-This checks the proof ID, account binding, and signature on your machine. Current status still comes from Proofable or another service that stores the result. See [Portable proofs](/learn/standards/caip-380).
+To check a CAIP-380 envelope on your own machine, see [Offline verification](/learn/standards/caip-380#offline-verification).
 
 ## Next
 
