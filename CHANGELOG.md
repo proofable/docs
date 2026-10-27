@@ -13,6 +13,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 - **Changelog entries for `@proofable/mcp` 0.1.7 and `@proofable/sdk` 0.1.6.**
 - **Eligibility clause in the Terms of Use.** Section 4 states the minimum age and the capacity to contract.
+- **One-time purchases in the Terms of Use.** Section 13 says one-time purchases, including the early partner pilot, are final like credit purchases, that pilot setup has no fixed delivery date, and that pilot credits stay on your account after the pilot closes.
 - **Background jobs keep proofs private and offchain.** [Proofs](/proofs) says that a background job's request for a blockchain record, a public or link-only proof, or a visibility change is refused with `JOB_ONCHAIN_PUBLISH_DENIED`, `JOB_PUBLIC_PROOF_DENIED` or `JOB_VISIBILITY_CHANGE_DENIED`.
 
 ### Changed
