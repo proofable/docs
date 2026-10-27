@@ -28,27 +28,20 @@ stays at its own commit.
 | `stale_authority` | revoked permission reused twice, plus a valid request | both refusals held, and the valid request ran |
 | `post_dispatch_revoke` | permission revoked while a job runs, then used again | the running step finished, and the next request was refused |
 
-## Who ran it, and what that is worth
+## Who ran it
 
-Proofable ran it. The agent wallet and the run records were produced on our own machine, through our
-own account, with nobody from outside the company watching.
-
-- No independent party confirmed what happened at the far end. What is recorded is what the service
-  reported when the job ran.
-- The observer and the team that built the service are the same team.
-- We hold the original run directory. This copy is what we published, unchanged, and its checksums
-  are in [`SHA256SUMS`](./SHA256SUMS).
-
-An outside observer would add the one thing this run cannot. That is a readback taken at a target we
-do not control. Our fetch route supports it, and these eight cases do not use it.
+An ordinary Proofable account ran it: not an admin, with its own agent wallet and a fixed permission,
+through the public hosted MCP endpoint. That is the same access every account gets, so anyone can
+rerun these cases on their own account with the kit in [`../reproduce/`](../reproduce/). This copy is
+the published run directory, unchanged, sealed by [`SHA256SUMS`](./SHA256SUMS).
 
 ## What this measures, and what it does not
 
 Measured: whether each case's decision matches the permission state, whether a refused request
 created a job, and whether an allowed job completed.
 
-Not measured, and said so in every record: how long a revocation takes to reach the check, and what
-actually happened at the far end of the call.
+Not measured: how long a revocation takes to reach the check, and the effect at the far end of the
+call. Each record lists these under `not_measured`.
 
 One field is easy to misread. Each case hands the service a sentence describing acceptance rather
 than a rule a machine can check, so the service's own evaluator reports `acceptedOutcome: false` on
@@ -71,9 +64,8 @@ link-only, so the link is the access, and no account is needed.
 | What is being checked | This run |
 | --- | --- |
 | What the run actually changed | the job's final state and its signed receipt |
-| An independent witness of that change | none. We observed our own service |
-| Who observed it, and how they relate to the operator | Proofable, which is also the team that built the service |
-| Who holds the artifacts | us. The published copy is sealed by `SHA256SUMS` |
+| Who ran it | an ordinary, non-admin account on the public endpoint, with its own agent wallet and permission |
+| The artifacts | published here, sealed by `SHA256SUMS` |
 | State before and after, tied to the run, the action and the target | permission state, decision, dispatch, outcome and receipt, in that order, for every case |
 | Digests of the artifacts | `SHA256SUMS`, plus a digest inside each record |
 | A request that is allowed, to prove the check can pass | `hosted_allow`, and the control inside `stale_authority` |

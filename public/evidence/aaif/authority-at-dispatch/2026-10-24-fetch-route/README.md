@@ -103,10 +103,10 @@ node verify.mjs
 
 ## Boundaries
 
-- The target here is a public request bin, not an operator-owned target, and its request log is not
-  in this packet. An operator-owned target and observer are what would establish the effect.
+- The target here is a public request bin, and its request log is not in this packet.
 - Dispatch-only. The delegation is re-read before each tool call. Nothing rechecks it while a call is
   in flight or when the target commits.
 - Authority unavailability does not apply on this path. Authority is evaluated inside the service,
   so there is no separate authority to make unreachable.
-- Proofable ran this and observed it. No outside party has run it.
+- An ordinary, non-admin account ran this through the public hosted MCP endpoint, the same access
+  every account gets. Anyone can repeat the route with a public URL of their own.

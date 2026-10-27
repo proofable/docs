@@ -92,7 +92,7 @@ AgentGovBench is the open agent-governance benchmark, with 48 scenarios such as 
 
 **8 of 8 permission tests passed on the live service.** Every action outside the agent's permission was stopped before it ran, and the actions it was allowed to take ran.
 
-We ran each test on the live service on October 8, 2026, with a dedicated agent under its own fixed permission. Each link opens that test's signed record.
+We ran each test on the live service on October 8, 2026, with a dedicated agent under its own fixed permission, and again on October 24 on the revision production serves ([records](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/2026-10-24-served)), 8 of 8 both times. Each link opens that test's signed record.
 
 | Test | What happened |
 |---|---|
@@ -137,7 +137,7 @@ node aad.mjs run
 node aad.mjs verify runs/<run-id>
 ```
 
-The same records are part of the [AAIF Identity & Trust working-group comparison](https://github.com/aaif/wg-identity-and-trust/issues/13) at the Linux Foundation.
+On October 26, 2026, a reviewer in the AgenTrust integrations project [checked our published records](https://github.com/agentrust-io/integrations/issues/333#issuecomment-6414048198) on their own machine, the latest run of these eight tests included: every checksum matched and every signature verified. The project's maintainers then [chose our records](https://github.com/agentrust-io/integrations/issues/333#issuecomment-6436264551) as the dispatch evidence for their authority comparison.
 
 ### Run it on every pull request
 
