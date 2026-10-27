@@ -1,25 +1,11 @@
-# Benchmarks
+# Trust Harness Benchmark
 
-The scripts behind the two benchmarks Proofable runs for anyone on proofable.me. Each one reads what it checks and changes nothing, so you can run it yourself and see exactly what a report rests on.
-
-Every report scores its target out of 100: the checks it passed over the checks that apply. A check that could not be run, or does not apply, leaves the score. Proofable tracks every score in public standings.
-
-## MCP Server Benchmark
-
-Reads one MCP server's discovery, its tool, prompt and resource lists and its public sign-in metadata. It never calls a tool and never sends a credential. The report scores what it read against the MCP specification (revisions 2026-07-28 and 2025-11-25) and the OWASP MCP Top 10.
+The script behind the Trust Harness Benchmark Proofable runs for anyone on proofable.me. It runs [AgentGovBench](https://github.com/agentic-control-plane/agentgovbench), the open library of 48 agent-governance scenarios, against an agent repository, at the same library commit as the table on [docs.proofable.me/evidence](https://docs.proofable.me/evidence). Every scenario is deterministic, so a rerun on the same commit gives the same score.
 
 ```sh
-node mcp-server/probe.mjs https://your-server.example/mcp
+bash agentgovbench.sh path/to/your-agent /tmp/trust-harness
 ```
 
-Needs Node.js 22 or later. It prints one JSON object that lists every request it made.
+It runs the library's no-governance floor and the native runner for each agent framework the repository uses (CrewAI, LangGraph, the OpenAI Agents SDK, the Anthropic Agent SDK, Claude Code, Codex or Cursor), and prints each score out of 48 with its eight categories and the scenarios that failed. Needs Linux with git, uv, ripgrep and Python 3.10 or later.
 
-## Agent Repo Benchmark
-
-Runs OSV-Scanner, Gitleaks and Semgrep Community Edition on a repository under fixed time limits, and lists the lines each code check reads. The report scores them against the OWASP Top 10 for Agentic Applications 2026 and the OWASP MCP Top 10. It runs none of the repository's code.
-
-```sh
-bash agent-repo/scan.sh path/to/repo /tmp/agent-repo-benchmark
-```
-
-Needs Linux with curl, ripgrep and Python 3. It downloads the latest scanner releases from their official GitHub release pages.
+To score your agent's own permission code, add a runner for it to the library's `runners/` folder, as its contributing guide describes, and run `python -m benchmark.cli run --runner <name>`.
