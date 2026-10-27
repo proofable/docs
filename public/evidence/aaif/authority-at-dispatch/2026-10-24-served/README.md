@@ -13,16 +13,16 @@ stays at its own commit.
 | --- | --- |
 | Cases | 8 of 8 passed, no errors |
 | Signed records | 17, every one verified offline |
-| Requests that should have been refused | all refused before a job was created |
+| Requests that should have been refused | none ran. `binding_veto` and `approval_unavailable` each created a job that ended without an executor; every other refusal came before a job was created |
 | Control | `stale_authority` also includes a valid request, and that one ran and completed |
 | Reading the records | no account needed. Each record is link-only, so the link is the access |
 
 | Case | What it tests | Result |
 | --- | --- | --- |
 | `hosted_allow` | the permission covers the job | ran and completed |
-| `binding_veto` | the job needs something the permission leaves out | refused before anything ran |
+| `binding_veto` | the job needs something the permission leaves out | a job was created and refused before any executor ran; it ended failed |
 | `approval_reachable` | the job needs approval, and the operator approves | held, then ran |
-| `approval_unavailable` | the job needs approval, and nobody answers | never ran. A late approval was refused too |
+| `approval_unavailable` | the job needs approval, and nobody answers | a job was created and held. The owner cancelled it, so it never ran. A late approval was refused too |
 | `revoke_before_dispatch` | permission revoked, then used again | refused, and no job was created |
 | `expiry_before_dispatch` | permission used after it expires | refused, and no job was created |
 | `stale_authority` | revoked permission reused twice, plus a valid request | both refusals held, and the valid request ran |
