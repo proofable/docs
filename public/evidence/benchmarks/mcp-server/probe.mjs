@@ -104,4 +104,29 @@ if (challenge) {
     }
   }
 }
+// The score: each check is pass, fail, review (a poisoning hit a reader must confirm), not run
+// or not applicable. Not run and not applicable leave the score; review counts as applicable.
+const listed = Array.isArray(out.tools?.items) && out.tools.status === 200;
+const answered = Boolean(out.discover?.result || out.initialize?.protocolVersion);
+const revision = (out.discover?.result?.supportedVersions || []).includes('2026-07-28') ? '2026-07-28' : out.initialize?.protocolVersion || null;
+const check = (id, name, reference, status, evidence) => ({ id, name, reference, status, evidence });
+out.checks = [
+  check(1, 'HTTPS with a valid certificate', 'MCP specification, transport security', out.tls?.authorized ? 'pass' : 'fail', out.tls?.error || `${out.tls?.subject || ''} by ${out.tls?.issuer || ''}`),
+  check(2, 'Speaks a current revision', 'MCP specification, versioning', !answered ? 'not run' : ['2026-07-28', '2025-11-25'].includes(revision) ? 'pass' : 'fail', revision || 'no revision answered'),
+  check(3, 'Unique tools with object input schemas', 'MCP specification, tools', !listed ? 'not run' : out.schemaProblems.length || out.duplicateNames.length ? 'fail' : 'pass', listed ? `${out.tools.items.length} tools; schema problems ${JSON.stringify(out.schemaProblems)}; duplicates ${JSON.stringify(out.duplicateNames)}` : 'tool list not readable without sign-in'),
+  check(4, 'No instructions aimed at the model in descriptions', 'OWASP MCP03 Tool Poisoning; MCPTox', !listed ? 'not run' : out.poisoningHits.length ? 'review' : 'pass', listed ? `${out.poisoningHits.length} pattern hits` : 'tool list not readable without sign-in'),
+];
+if (out.challenge) {
+  const doc = out.resourceMetadata?.doc || {};
+  const same = (a, b) => String(a || '').replace(/\/+$/, '') === String(b || '').replace(/\/+$/, '');
+  out.checks.push(
+    check(5, 'Sign-in challenge names protected resource metadata that lists an authorization server', 'MCP authorization; RFC 9728', out.resourceMetadata?.named && (doc.authorization_servers || []).length ? 'pass' : 'fail', out.challenge),
+    check(6, 'Tokens are bound to this server', 'MCP authorization; RFC 8707', same(doc.resource, url.href) ? 'pass' : 'fail', `resource ${doc.resource || 'missing'}`),
+    check(7, 'PKCE with S256', 'MCP authorization; OAuth 2.1', (out.authServer?.pkce || []).includes('S256') ? 'pass' : 'fail', `code_challenge_methods_supported ${JSON.stringify(out.authServer?.pkce || null)}`),
+  );
+}
+const applicable = out.checks.filter((c) => ['pass', 'fail', 'review'].includes(c.status));
+const passed = applicable.filter((c) => c.status === 'pass').length;
+out.revision = revision;
+out.score = { passed, applicable: applicable.length, review: applicable.filter((c) => c.status === 'review').map((c) => c.id), outOf100: applicable.length ? Math.round((100 * passed) / applicable.length) : null };
 console.log(JSON.stringify(out, null, 1));

@@ -89,16 +89,32 @@ else:
     high = [r for r in rows if r["score"] >= 7 and r["fixed"]]
     summary["osv"] = {"ran": True, "vulnerabilities": len(rows), "highOrCriticalWithFix": len(high), "worst": sorted(high, key=lambda r: -r["score"])[:10]}
 gl = load("gitleaks.json")
-summary["gitleaks"] = {"ran": gl is not None, "exit": text("gitleaks.exit"), "findings": [{"rule": g.get("RuleID"), "file": rel(g.get("File")), "line": g.get("StartLine")} for g in (gl or [])][:25]}
+summary["gitleaks"] = {"ran": gl is not None, "exit": text("gitleaks.exit"), "findings": [{"rule": g.get("RuleID"), "file": rel(g.get("File")), "line": g.get("StartLine")} for g in (gl or [])][:300]}
 sg = load("semgrep.json")
 if sg is None:
     summary["semgrep"] = {"ran": False, "exit": text("semgrep.exit"), "install": (text("semgrep.install") or "")[-300:]}
 else:
     errors = [r for r in sg.get("results", []) if r.get("extra", {}).get("severity") == "ERROR"]
     summary["semgrep"] = {"ran": True, "results": len(sg.get("results", [])), "errors": [{"rule": r.get("check_id", "").split(".")[-1], "file": rel(r.get("path")), "line": r.get("start", {}).get("line")} for r in errors][:25]}
+# The three scanner checks. A hit outside test, fixture and example paths is "review": a reader
+# opens the line and fails the check only when it holds up.
+import re
+testish = re.compile(r"(^|/)(tests?|__tests__|fixtures?|examples?|docs?|spec)(/|$)|\.(test|spec)\.[a-z]+$|(^|/)test_[^/]*\.py$|_test\.(py|go)$")
+def scanner_check(cid, name, reference, ran, hits):
+    status = "not run" if not ran else ("review" if hits else "pass")
+    return {"id": cid, "name": name, "reference": reference, "status": status, "hits": hits[:15]}
+leaks = [f for f in summary["gitleaks"]["findings"] if not testish.search(str(f["file"]))]
+summary["checks"] = [
+    {"id": 1, "name": "No known high or critical vulnerability with a fix", "reference": "OWASP ASI04; MCP04",
+     "status": "not run" if not summary["osv"].get("ran") else ("fail" if summary["osv"]["highOrCriticalWithFix"] else "pass"),
+     "hits": summary["osv"].get("worst", [])},
+    scanner_check(2, "No real credential in the tree", "OWASP MCP01", summary["gitleaks"]["ran"], leaks),
+    scanner_check(3, "No error-severity code finding that holds up", "OWASP ASI05; MCP05", summary["semgrep"].get("ran"), summary["semgrep"].get("errors", [])),
+]
 summary["candidates"] = {}
 for name in ("tools", "exec", "sandbox", "confirm", "destructive", "credentials", "scope"):
     lines = (text(f"cand-{name}.txt") or "").splitlines()
     summary["candidates"][name] = lines[:15]
+summary["gitleaks"]["findings"] = summary["gitleaks"]["findings"][:25]
 print(json.dumps(summary, indent=1))
 PY

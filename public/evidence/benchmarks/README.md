@@ -2,6 +2,8 @@
 
 The scripts behind the two benchmarks Proofable runs for anyone on proofable.me. Each one reads what it checks and changes nothing, so you can run it yourself and see exactly what a report rests on.
 
+Every report scores its target out of 100: the checks it passed over the checks that apply. A check that could not be run, or does not apply, leaves the score. Proofable tracks every score in public standings.
+
 ## MCP Server Benchmark
 
 Reads one MCP server's discovery, its tool, prompt and resource lists and its public sign-in metadata. It never calls a tool and never sends a credential. The report scores what it read against the MCP specification (revisions 2026-07-28 and 2025-11-25) and the OWASP MCP Top 10.
