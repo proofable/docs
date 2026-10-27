@@ -118,7 +118,17 @@ npm install
 node reuse-check.mjs
 ```
 
-It verifies a finished job's signed receipt locally and prints the time and AI tokens used. Pass any public record id to time that record instead.
+It reads a finished job by its id and verifies the signed receipt on your machine:
+
+```text
+Record 0xcf67dcc3cc9c203136daf9905a422601652fd76cce437e2cbf56967e3a8117e6
+Signature valid offline: yes
+Read by id, no account: 197 ms median over 10
+Verify offline: 4.2 ms median over 10
+AI tokens used: 0
+```
+
+Pass any public record id to time that record instead.
 
 Rerun the eight tests on any account you control with the kit in [Run the chain](/run-the-chain#run-it-end-to-end). To put receipts on your own agent's work, [add Proofable to your AI tool](/mcp/setup).
 
