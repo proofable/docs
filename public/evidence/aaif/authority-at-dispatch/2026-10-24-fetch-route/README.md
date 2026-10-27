@@ -2,8 +2,9 @@
 
 One job created through the released hosted MCP on 2026-10-24 at 17:47 UTC, on service revision
 `18433a48d74af913550de7a018f02c7c724cc1c9` with hosted MCP `0.1.7`. The job's one permitted action
-was a fetch of a public URL carrying a marker generated for this run. Every file here was produced by
-that run and is unedited. Checksums are in [`SHA256SUMS`](./SHA256SUMS).
+was a fetch of a public URL unique to this run, which answered with a marker generated for it.
+The six numbered files and `health-at-run.json` were produced by that run and are unedited.
+Checksums are in [`SHA256SUMS`](./SHA256SUMS).
 
 This answers the request in
 [agentrust-io/integrations#333](https://github.com/agentrust-io/integrations/issues/333) for a
@@ -64,7 +65,10 @@ object, in this key order.
 ```
 
 Fields outside it, here `runNowFirst` and the `criteria` alias, are not committed. The run-unique URL
-and marker are inside `prompt`, so the decision commits to them.
+is inside `prompt`, so the decision commits to it. The marker is not in the request.
+`acceptance.criterion` carries only the generic value `target-ack`, so the decision does not commit
+to the marker. The full marker, `target-ack 6b86b1f0cd3adaced3f1`, first appears in the signed
+terminal receipt, as the text the job returned.
 
 ## Check it
 
@@ -92,7 +96,8 @@ node verify.mjs
    request. Two jobs sent with identical requests would share a digest. The run-unique URL is what
    makes this one distinct.
 2. **Executor to target.** The fetch is a plain GET with no executor signature. Target ingress is
-   tied to the job only by the run-unique URL and marker in the prompt.
+   tied to the job only by the run-unique URL in the prompt. The marker the target served comes back
+   in the signed receipt; nothing signed before the fetch commits to it.
 3. **Service responses.** The create response, the job record and the health response are what the
    service returned. They are not signed records.
 
