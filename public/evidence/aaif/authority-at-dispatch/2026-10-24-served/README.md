@@ -3,6 +3,10 @@
 Proofable ran this on 2026-10-24 at 02:29 UTC, against the service revision production was serving
 at the time, `61724c9f4592f00858a31ef0ac7fa4dcdc67e160`, with hosted MCP `0.1.7`. The run used the
 kit in [`../reproduce/`](../reproduce/) unchanged, exactly as that page describes.
+The code that graded it is `reproduce/aad.mjs` at
+[`9d1307b`](https://github.com/proofable/docs/blob/9d1307b/public/evidence/aaif/authority-at-dispatch/reproduce/aad.mjs),
+SHA-256 `afbb0cf8541c3916967707143b5be56556051b32797b2a6b52aae6f423234f79`. Check that version out to
+grade the run with the exact code that graded it.
 
 This is the current run. It replaces [`../2026-10-08-eight-case/`](../2026-10-08-eight-case/), which
 stays at its own commit.
