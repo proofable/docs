@@ -9,28 +9,25 @@ Drop a package, pick a GitHub repo, or paste a card or runtime link. Proofable i
 
 Supported inputs include OpenClaw workspace files, Hermes config and skills, Agent Skills `SKILL.md` folders, A2A Agent Cards, MCP URLs, GitHub repositories, and zip or tar packages.
 
+## From your terminal or coding agent
+
+Run these yourself, or ask Claude Code, Cursor, Codex, or any agent with a shell to run them:
+
+```bash
+npx -y @proofable/sdk auth --oauth
+npx -y @proofable/sdk import <repository, URL, or folder>
+npx -y @proofable/sdk mount <agentId> --apply <host>
+```
+
+`import` accepts a path, a directory, or a URL, and prints a link to register the agent's identity. Secrets in `.env` files, keys, and token stores stay out of the preview. `mount` connects the agent to your project: `<host>` is `hermes`, `openclaw`, `opencode`, `cursor`, `claude`, or `codex`, and VS Code uses `--apply cursor`. Host files are written by this command in your project, never by the browser.
+
 ## From the product
 
 1. Open **Import your agent**.
 2. Drop files or paste a link.
 3. Review the detected label, skills, and apps that need reconnect.
 4. Continue to register identity. Set spend and action limits as a separate step.
-5. Connect the runtime from the project:
-
-```bash
-npx -y @proofable/sdk mount <agentId> --apply <host>
-```
-
-`<host>` is `hermes`, `openclaw`, `opencode`, `cursor`, `claude`, or `codex`. VS Code uses `--apply cursor`. Host files are written by this command in your project, never by the browser.
-
-## From the CLI
-
-```bash
-npx -y @proofable/sdk auth --oauth
-npx -y @proofable/sdk import ./agent-pack.zip
-```
-
-`import` accepts a path, a directory, or a URL. It prints a hosted register link. Secrets in `.env` files, keys, and token stores stay out of the preview.
+5. Connect the runtime from the project with the `mount` command above.
 
 ## HTTP
 
