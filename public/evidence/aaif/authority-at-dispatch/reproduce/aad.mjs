@@ -27,6 +27,7 @@ import { createHash } from 'node:crypto';
 import { chmodSync, existsSync, mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { isDeepStrictEqual } from 'node:util';
 import { verifyPortableProofEnvelope } from '@proofable/sdk';
 import { Wallet } from 'ethers';
@@ -55,6 +56,8 @@ const nowIso = () => new Date().toISOString();
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const lower = (v) => String(v || '').toLowerCase();
 const sha256 = (data) => createHash('sha256').update(data).digest('hex');
+// The grading code's own digest, over LF line endings so every checkout agrees.
+const VERIFIER_SHA256 = sha256(readFileSync(fileURLToPath(import.meta.url), 'utf8').replace(/\r\n/g, '\n'));
 const writeLf = (file, text) => writeFileSync(file, Buffer.from(text.replace(/\r\n/g, '\n'), 'utf8'));
 
 // ── hosted MCP ─────────────────────────────────────────────────────────────────────────
@@ -468,6 +471,8 @@ function seal(dir, identity) {
   const manifest = {
     schema: 'proofable-aad-run-manifest/v1',
     kit: KIT_VERSION,
+    verifier: 'reproduce/aad.mjs',
+    verifier_sha256: VERIFIER_SHA256,
     ...identity,
     sealed_at: nowIso(),
     expected_cases: CASE_ORDER,
@@ -508,6 +513,9 @@ async function verify(dirArg) {
     rows.push([name, ok ? 'PASS' : 'FAIL', `${envelopes.length - bad}/${envelopes.length} envelopes`]);
   }
   console.log(`run ${manifest.run_id}, revision ${manifest.product_revision}, custody ${manifest.custody}`);
+  if (manifest.verifier_sha256 && manifest.verifier_sha256 !== VERIFIER_SHA256) {
+    console.log(`graded by aad.mjs ${manifest.verifier_sha256.slice(0, 12)}; this copy is ${VERIFIER_SHA256.slice(0, 12)}. Check out the grading version to repeat the verdict exactly.`);
+  }
   for (const r of rows) console.log(`${r[0].padEnd(24)} ${r[1].padEnd(8)} ${r[2]}`);
   console.log(failures ? `\n${failures} failure(s)` : '\nall checks pass');
   process.exitCode = failures ? 1 : 0;
