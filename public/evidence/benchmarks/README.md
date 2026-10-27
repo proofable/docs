@@ -1,6 +1,6 @@
 # Trust Harness Benchmark
 
-The script behind the Trust Harness Benchmark Proofable runs for anyone on proofable.me. It runs [AgentGovBench](https://github.com/agentic-control-plane/agentgovbench), the open library of 48 agent-governance scenarios, against an agent repository, at the same library commit as the table on [docs.proofable.me/evidence](https://docs.proofable.me/evidence). Every scenario is deterministic, so a rerun on the same commit gives the same score.
+The script behind Proofable's Trust Harness Benchmark. It runs [AgentGovBench](https://github.com/agentic-control-plane/agentgovbench), the open library of 48 agent-governance scenarios, against an agent repository, at the same library commit as the table on [docs.proofable.me/evidence](https://docs.proofable.me/evidence). Every scenario is deterministic, so a rerun on the same commit gives the same score.
 
 ```sh
 bash agentgovbench.sh path/to/your-agent /tmp/trust-harness
