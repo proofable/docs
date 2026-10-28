@@ -11,6 +11,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Added
 
+- **Sell a service your server runs.** [Your server runs it](/gates/your-server) covers a listing whose orders go to your own URL with the buyer's inputs and repository, and whose result you post back onto the buyer's receipt.
 - **Changelog entries for `@proofable/mcp` 0.1.7 and `@proofable/sdk` 0.1.6.**
 - **Eligibility clause in the Terms of Use.** Section 4 states the minimum age and the capacity to contract.
 - **One-time purchases in the Terms of Use.** Section 13 says one-time purchases, including the early partner pilot, are final like credit purchases, that pilot setup has no fixed delivery date, and that pilot credits stay on your account after the pilot closes.

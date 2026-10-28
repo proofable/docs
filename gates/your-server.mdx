@@ -1,0 +1,94 @@
+---
+title: "Sell a service your server runs"
+sidebarTitle: "Your server runs it"
+description: "Sell a service on Proofable and run every order on your own system. Proofable takes the payment and keeps the receipt."
+icon: server
+"og:image": "/images/og-default.png"
+"twitter:image": "/images/og-default.png"
+---
+
+You do the work on your own system. Proofable sells it, sends you each paid order, and shows your result on the buyer's receipt.
+
+Your code, your model and your machines stay yours. You need no Proofable key.
+
+## Set it up
+
+<Steps>
+  <Step title="Create the listing">
+    [Create a listing](https://proofable.me/profile/listings/new), choose **Run a job**, then **Where it runs: Your server**, and paste the https URL that receives your orders.
+
+    Add the inputs buyers fill in. To work on the buyer's code, add **Connections → GitHub**, and the buyer picks one repository at checkout.
+
+    Set a price and publish. Copy the signing secret the listing shows.
+  </Step>
+  <Step title="Receive each order">
+    Every paid order is a `POST` to your URL:
+
+    ```json
+    {
+      "event": "listing.checkout.completed",
+      "gateId": "gate_your-listing",
+      "qHash": "0x…",
+      "buyer": "0x…",
+      "at": "2026-10-27T18:00:00.000Z",
+      "order": {
+        "inputs": { "contracts_or_all": "all" },
+        "repository": {
+          "slug": "owner/name",
+          "commit": "<40-character sha>",
+          "archiveUrl": "https://codeload.github.com/…"
+        },
+        "resultUrl": "https://api.proofable.me/api/v1/profile/gates/gate_your-listing/orders/0x…/result?token=…"
+      }
+    }
+    ```
+
+    - `qHash` is the buyer's receipt and the order id. You may receive an order more than once, so ignore a repeat.
+    - `repository` is there when the listing asks for GitHub. `archiveUrl` downloads that one commit and expires within minutes, so fetch it first.
+    - Answer with any 2xx status, then do the work. An order your server does not accept is retried for about two and a half minutes.
+  </Step>
+  <Step title="Check the signature">
+    The `X-Proofable-Signature` header is `sha256=` plus the hex HMAC-SHA256 of the raw request body, keyed with your signing secret.
+
+    ```js
+    import { createHmac, timingSafeEqual } from 'node:crypto';
+
+    function isFromProofable(rawBody, header, secret) {
+      const expected = 'sha256=' + createHmac('sha256', secret).update(rawBody).digest('hex');
+      return header?.length === expected.length && timingSafeEqual(Buffer.from(header), Buffer.from(expected));
+    }
+    ```
+  </Step>
+  <Step title="Post the result">
+    Send the outcome to the order's `resultUrl`. The token in it authorizes that one order.
+
+    ```bash
+    curl -X POST "$RESULT_URL" \
+      -H "Content-Type: application/json" \
+      -d '{ "status": "completed", "result": "42 findings on 4 files. Two are critical.", "reportUrl": "https://you.example/reports/123" }'
+    ```
+
+    | Field | Value |
+    |---|---|
+    | `status` | `running`, `completed` or `failed` |
+    | `result` | What the buyer reads on their receipt, in markdown, up to 8,000 characters |
+    | `reportUrl` | Optional https link to your full report |
+
+    Post `running` as often as you like. A `completed` or `failed` order is final.
+  </Step>
+</Steps>
+
+## What the buyer sees
+
+Their receipt shows the order as sent, then your status, then your result and report link. The receipt is theirs to keep and share.
+
+## Next
+
+<CardGroup cols={2}>
+  <Card title="Gate checkout" icon="door-open" href="/gates/checkout">
+    How checkout, payment and receipts work.
+  </Card>
+  <Card title="Pricing" icon="coins" href="/pricing">
+    Card, USDC and what Proofable keeps.
+  </Card>
+</CardGroup>
