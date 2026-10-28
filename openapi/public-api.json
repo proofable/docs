@@ -4331,6 +4331,126 @@
         }
       }
     },
+    "/api/v1/profile/gates/{gateId}/orders/{qHash}/result": {
+      "post": {
+        "operationId": "postListingOrderResult",
+        "summary": "Post the result of an order your server ran",
+        "description": "For a listing your own server runs. Each order your server receives carries order.resultUrl; post the outcome there and it appears on the buyer's receipt. The token in that URL authorizes this one order, so no Proofable key is needed. status is running, completed or failed; result is markdown up to 8,000 characters; reportUrl links the full report. A completed or failed order cannot be changed.",
+        "tags": [
+          "Gates"
+        ],
+        "parameters": [
+          {
+            "name": "gateId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9:_-]+$",
+              "maxLength": 80
+            }
+          },
+          {
+            "name": "qHash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{64}$"
+            },
+            "description": "The buyer's receipt, which is the order id."
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "status"
+                ],
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "running",
+                      "completed",
+                      "failed"
+                    ]
+                  },
+                  "result": {
+                    "type": "string",
+                    "maxLength": 8000,
+                    "description": "What the buyer reads on their receipt, in markdown."
+                  },
+                  "reportUrl": {
+                    "type": "string",
+                    "description": "https link to the full report."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Result recorded on the receipt"
+          },
+          "400": {
+            "description": "Invalid status, result or reportUrl"
+          },
+          "401": {
+            "description": "The token does not match this order"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order not found"
+          },
+          "409": {
+            "description": "The order already finished"
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/payments/pricing": {
       "get": {
         "operationId": "getPaymentPricing",
