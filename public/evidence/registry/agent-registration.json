@@ -1,0 +1,78 @@
+{
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
+  "name": "Proofable",
+  "description": "Proofable is the portable proof layer for people, businesses and AI agents. It gives every agent a portable identity, scoped authority and proof of what it did, so another party can check before acting: who the agent is, who approved it, what it may do, and what it actually did. Proofable issues and resolves agent identities, runs hosted checks and gates, and records receipts. Agents reach it over MCP; paid per-call access settles with x402.",
+  "image": "https://proofable.me/images/proofable-brand-pack/web/proofable-mark-512.png",
+  "services": [
+    {
+      "name": "web",
+      "endpoint": "https://proofable.me/"
+    },
+    {
+      "name": "A2A",
+      "endpoint": "https://proofable.me/.well-known/agent-card.json",
+      "version": "1.0"
+    },
+    {
+      "name": "MCP",
+      "endpoint": "https://mcp.proofable.me/mcp",
+      "version": "2026-07-28"
+    },
+    {
+      "name": "OASF",
+      "endpoint": "https://proofable.me/.well-known/oasf.json",
+      "version": "0.7.0",
+      "skills": [
+        "proofs.check",
+        "proofs.read",
+        "verification.create",
+        "agent.setup",
+        "mcp.tools",
+        "payments.verify"
+      ],
+      "domains": [
+        "trust",
+        "verification",
+        "agent-permissions"
+      ]
+    },
+    {
+      "name": "Proofable API",
+      "endpoint": "https://api.proofable.me/api/v1",
+      "version": "v1"
+    },
+    {
+      "name": "Agent directory",
+      "endpoint": "https://proofable.me/hub?view=agents"
+    },
+    {
+      "name": "agentWallet",
+      "endpoint": "eip155:8453:0x929BCAe13Cac6ac1C53EbEd8266F02F8c056F00c"
+    }
+  ],
+  "x402Support": true,
+  "active": true,
+  "registrations": [
+    {
+      "agentId": 1135859,
+      "agentRegistry": "eip155:8453:0x8004A169FB4a3325136EB29fA0ceB6D2e539a432"
+    }
+  ],
+  "supportedTrust": [],
+  "x_proofable": {
+    "perAgentCard": {
+      "endpoint": "https://api.proofable.me/api/v1/agents/card/{agentId}"
+    },
+    "perAgentA2aCard": {
+      "endpoint": "https://proofable.me/api/agent/{agentId}?format=a2a"
+    },
+    "perAgentRegistration": {
+      "endpoint": "https://proofable.me/api/agent/{agentId}?format=erc8004&accountId={accountId}"
+    },
+    "receiptSigner": {
+      "account": "eip155:8453:0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec",
+      "signs": "Records the Proofable service issues itself, including job dispatch decisions and terminal receipts",
+      "signatureMethod": "EIP-191 over the CAIP-380 verification message"
+    }
+  }
+}

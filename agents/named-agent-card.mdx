@@ -19,7 +19,7 @@ Every registered Proofable agent has a **public card** with its owner, identity,
 | Platform metadata | `https://proofable.me/.well-known/agent-card.json` | Service discovery and registration status |
 | Per-agent metadata | `https://api.proofable.me/.well-known/agent-card.json?agentId={agentId}` | Per-agent discovery metadata |
 
-Per-agent cards resolve to `GET https://api.proofable.me/api/v1/agents/card/{agentId}`. The platform A2A card is also available at `/api/agent/config?format=a2a`. Proofable is agent `1135859` in the ERC-8004 Identity Registry on Base (`eip155:8453:0x8004A169FB4a3325136EB29fA0ceB6D2e539a432`). Its registration file is `https://proofable.me/.well-known/agent-registration.json`, and the platform metadata reports the same entry under `erc8004`. Each public agent has its own registration file at the per-agent ERC-8004 URL above; a private agent's URL returns 403.
+Per-agent cards resolve to `GET https://api.proofable.me/api/v1/agents/card/{agentId}`. The platform A2A card is also available at `/api/agent/config?format=a2a`. Proofable is agent `1135859` in the ERC-8004 Identity Registry on Base (`eip155:8453:0x8004A169FB4a3325136EB29fA0ceB6D2e539a432`). Its registration file is `https://proofable.me/.well-known/agent-registration.json`, and the platform metadata reports the same entry under `erc8004`. The pinned bytes of that file, with the registry read that binds the URI to the signing account, are in [`public/evidence/registry`](https://github.com/proofable/docs/tree/main/public/evidence/registry). Each public agent has its own registration file at the per-agent ERC-8004 URL above; a private agent's URL returns 403.
 
 ## Examples
 
