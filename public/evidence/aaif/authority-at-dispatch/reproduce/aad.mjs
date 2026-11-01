@@ -9,7 +9,13 @@
  *   node aad.mjs setup                 register your review agent and its delegation
  *   node aad.mjs run [case ...]        run all cases (default) or the named ones
  *   node aad.mjs verify <run-dir>      offline: checksums, every envelope, every verdict
+ *   node aad.mjs report <run-dir>      offline: per-case typed outcomes, typed cost, grading scope
  *   node aad.mjs cases                 list the cases
+ *
+ * verify also takes `--expect-signer 0x…`, the address you read out of band (for the published
+ * packets, the receipt signer named in the pinned registration document at docs/public/evidence/
+ * registry). With it, a record whose declared wallet is not that address fails rather than passing
+ * on its own envelope's word.
  *
  * Environment (see README.md):
  *   PROOFABLE_ACCESS_KEY   npk_… access key (required)
@@ -415,6 +421,16 @@ function envelopesOf(rec) {
   for (const a of rec.replayAttempts || []) add(a.authorityDecision);
   return out;
 }
+/** The signed record bodies inside a case's envelopes, parsed. Used by report only. */
+function signedContents(rec) {
+  const out = [];
+  for (const e of envelopesOf(rec)) {
+    const raw = e?.data?.content;
+    if (typeof raw !== 'string' || !raw.startsWith('{')) continue;
+    try { out.push(JSON.parse(raw)); } catch { /* not a record body */ }
+  }
+  return out;
+}
 
 // ── run ─────────────────────────────────────────────────────────────────────────────────
 function requireOperator() {
@@ -487,9 +503,11 @@ function seal(dir, identity) {
 }
 
 // ── verify: offline, from the files alone ───────────────────────────────────────────────
-async function verify(dirArg) {
+async function verify(dirArg, options = {}) {
   const dir = resolve(String(dirArg || ''));
   if (!existsSync(join(dir, 'SHA256SUMS'))) throw new Error('Pass a run directory that contains SHA256SUMS.');
+  const expectSigner = options.expectSigner ? lower(String(options.expectSigner).trim()) : '';
+  if (expectSigner && !/^0x[0-9a-f]{40}$/.test(expectSigner)) throw new Error('--expect-signer needs a 0x address.');
   let failures = 0;
   for (const line of readFileSync(join(dir, 'SHA256SUMS'), 'utf8').split('\n').filter(Boolean)) {
     const [digest, name] = line.split(/\s+/);
@@ -498,6 +516,7 @@ async function verify(dirArg) {
   const manifest = JSON.parse(readFileSync(join(dir, 'MANIFEST.json'), 'utf8'));
   const owner = lower(manifest.delegationRoot.split(':').pop());
   const rows = [];
+  let signerFailures = 0;
   for (const name of CASE_ORDER) {
     const file = join(dir, `${name}.json`);
     if (!existsSync(file)) { rows.push([name, 'MISSING', '-']); failures += 1; continue; }
@@ -507,12 +526,14 @@ async function verify(dirArg) {
     for (const e of envelopes) {
       const v = await verifyPortableProofEnvelope(e);
       if (!v.valid || lower(e.data?.owner) !== owner) bad += 1;
+      else if (expectSigner && lower(e.walletAddress) !== expectSigner) { bad += 1; signerFailures += 1; }
     }
     const ok = verdict(rec) && bad === 0 && envelopes.length > 0;
     if (!ok) failures += 1;
     rows.push([name, ok ? 'PASS' : 'FAIL', `${envelopes.length - bad}/${envelopes.length} envelopes`]);
   }
   console.log(`run ${manifest.run_id}, revision ${manifest.product_revision}, custody ${manifest.custody}`);
+  if (expectSigner) console.log(`signer pin ${expectSigner}: ${signerFailures ? `${signerFailures} record(s) signed by another address` : 'every record is signed by it'}`);
   if (manifest.verifier_sha256 && manifest.verifier_sha256 !== VERIFIER_SHA256) {
     console.log(`graded by aad.mjs ${manifest.verifier_sha256.slice(0, 12)}; this copy is ${VERIFIER_SHA256.slice(0, 12)}. Check out the grading version to repeat the verdict exactly.`);
   }
@@ -521,16 +542,89 @@ async function verify(dirArg) {
   process.exitCode = failures ? 1 : 0;
 }
 
+// ── report: typed outcomes, typed cost and the grading scope, read offline ──────────────
+const msBetween = (from, to) => {
+  const a = Date.parse(from); const b = Date.parse(to);
+  return Number.isFinite(a) && Number.isFinite(b) && b >= a ? b - a : null;
+};
+function report(dirArg) {
+  const dir = resolve(String(dirArg || ''));
+  if (!existsSync(join(dir, 'MANIFEST.json'))) throw new Error('Pass a run directory that contains MANIFEST.json.');
+  const manifest = JSON.parse(readFileSync(join(dir, 'MANIFEST.json'), 'utf8'));
+  console.log(`run ${manifest.run_id}, revision ${manifest.product_revision}, custody ${manifest.custody}`);
+  console.log('grading scope: the authority decision in each case, and nothing beyond it. Every case hands the');
+  console.log('service a sentence rather than a rule a machine can check, so the job\'s own acceptance flag is');
+  console.log('recorded and not graded.');
+  console.log('');
+  const rows = [];
+  for (const name of CASE_ORDER) {
+    const file = join(dir, `${name}.json`);
+    const row = { case: name, attempted: 'no', dispatch: 'record missing', observed: 'not_emitted', accepted: 'not_emitted', effects: 'not_measured', elapsed_ms: null, job_ms: null, permitted: 'unknown' };
+    if (existsSync(file)) {
+      const rec = JSON.parse(readFileSync(file, 'utf8'));
+      const bodies = signedContents(rec);
+      const decisions = bodies.filter((b) => b.kind === 'agent-job-authority-decision');
+      const job = bodies.find((b) => b.kind === 'agent-job');
+      const evaluation = job?.evaluation || {};
+      Object.assign(row, {
+        attempted: decisions.length || rec.jobId ? 'yes' : 'no',
+        dispatch: decisions.map((d) => `${d.outcome}${d.reason ? `: ${d.reason}` : ''}`).join(' | ') || 'none',
+        observed: job ? `job:${lower(job.status) || 'unknown'}` : 'no job',
+        accepted: Object.hasOwn(evaluation, 'accepted') ? String(evaluation.accepted) : 'not_emitted',
+        effects: 'not_measured',
+        elapsed_ms: msBetween(rec.started, rec.finished),
+        job_ms: typeof job?.durationMs === 'number' ? job.durationMs : null,
+        permitted: rec.control
+          ? `the valid control request ran and ${lower(rec.control.status) || 'was recorded'}`
+          : (job ? (lower(job.status) === 'completed' ? 'the permitted request ran and completed' : `the permitted request did not complete (${lower(job.status)})`) : 'not applicable'),
+        detail: rec.observed_effect ? `${rec.observed_effect.evidence}, committed ${rec.observed_effect.committed}` : '',
+      });
+    }
+    rows.push(row);
+  }
+  const head = ['case', 'attempted', 'observed', 'accepted', 'elapsed_ms', 'job_ms'];
+  const widths = [24, 10, 14, 12, 11, 8];
+  console.log(head.map((h, i) => h.padEnd(widths[i])).join(''));
+  for (const r of rows) {
+    console.log([
+      r.case.padEnd(widths[0]), r.attempted.padEnd(widths[1]), r.observed.padEnd(widths[2]),
+      r.accepted.padEnd(widths[3]),
+      String(r.elapsed_ms ?? 'not_measured').padEnd(widths[4]), String(r.job_ms ?? 'not_applicable').padEnd(widths[5]),
+    ].join(''));
+  }
+  console.log('');
+  console.log('Per case, what the authority decided, how far the action got, and the legitimate work:');
+  for (const r of rows) {
+    console.log(`  ${r.case}`);
+    console.log(`    dispatch:  ${r.dispatch}`);
+    console.log(`    effect:    ${r.detail || 'no separate effect record'}`);
+    console.log(`    permitted: ${r.permitted}`);
+  }
+  console.log('');
+  console.log('Benign cost, typed. elapsed_ms is measured on this kit\'s clock, scope the whole case including');
+  console.log('setup and waits. job_ms is measured by the service inside the signed job record, scope the');
+  console.log('executed portion of the job. Model tokens are not_measured: the kit does not count them.');
+  console.log('');
+  console.log('effects_verified is not_measured for every case: effects are observed by the service, with no');
+  console.log('target-side witness (the same entry as not_measured in MANIFEST.json). Read this report from the');
+  console.log('sealed records only; it writes nothing.');
+}
+
 // ── entry ───────────────────────────────────────────────────────────────────────────────
 const [command, ...rest] = process.argv.slice(2);
+const flag = (name) => {
+  const i = rest.indexOf(name);
+  return i === -1 ? undefined : rest[i + 1];
+};
 const commands = {
   setup: () => setup(),
-  run: () => run(rest),
-  verify: () => verify(rest[0]),
+  run: () => run(rest.filter((a) => !a.startsWith('--'))),
+  verify: () => verify(rest[0], { expectSigner: flag('--expect-signer') }),
+  report: async () => report(rest[0]),
   cases: async () => console.log(CASE_ORDER.join('\n')),
 };
 if (!commands[command]) {
-  console.log('usage: node aad.mjs <setup|run [case ...]|verify <run-dir>|cases>');
+  console.log('usage: node aad.mjs <setup|run [case ...]|verify <run-dir> [--expect-signer 0x…]|report <run-dir>|cases>');
   process.exitCode = command ? 1 : 0;
 } else {
   commands[command]().catch((error) => { console.error(`FAILED: ${error?.message || error}`); process.exitCode = 1; });
