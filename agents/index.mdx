@@ -34,6 +34,7 @@ The agent lives on your signed-in profile by default. Ask for a dedicated spend 
 ## Use it where you work
 
 - **Chat and jobs on Proofable.** Chat now, or start a [job](/jobs) for background and scheduled work.
+- **Any app or runtime.** Talk to it with one call from your app, your server, or another runtime. Nothing to deploy. [Talk from any app](/agents/talk-to-an-agent)
 - **Any MCP client.** Load the same agent with `npx -y @proofable/sdk mount <agentId> --apply cursor`.
 - **Your servers.** Point the runtime at the same endpoint with an [access key](/deployment/access-keys), or deploy to a [private cloud](/deployment/private-cloud).
 - **Other apps and marketplaces.** Each agent has a public card that others can check before they trust it. [Discover agents](/agents/named-agent-card)
@@ -45,6 +46,7 @@ Keep your model, runtime, and enterprise sign-in such as Okta. Proofable keeps t
 | Where the agent runs | What Proofable provides |
 |---|---|
 | Chat and jobs on Proofable | Enforces permissions, tool access, and proof checks |
+| Your app, calling the agent | Runs the turn as the agent and checks every tool call against its permission |
 | MCP clients | Loads the agent's rules and context. Start a new session after you mount. |
 | Your workers and backends | Returns the permission bundle for your code to enforce |
 

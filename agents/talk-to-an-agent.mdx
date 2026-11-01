@@ -1,0 +1,102 @@
+---
+title: Talk to your agent from any app
+sidebarTitle: Talk from any app
+description: Your agent runs on Proofable. Any app, server, or runtime talks to it with one call, inside the limits you signed, and every answer cites the records it read.
+icon: comments
+---
+
+Your agent runs on Proofable, so there is nothing to deploy and no machine to keep. Any app, server, or runtime talks to it with one call. It answers as itself, inside the limits you signed, and cites the records it read.
+
+## One call
+
+```javascript
+import { ProofableClient } from '@proofable/sdk';
+
+const client = new ProofableClient({ apiKey: process.env.PROOFABLE_ACCESS_KEY });
+
+const turn = await client.agentChat({
+  agentId: 'my-agent',
+  messages: [{ role: 'user', content: 'Summarize this week for the client.' }],
+  onEvent: (type, data) => {
+    if (type === 'answer.delta') process.stdout.write(data.text);
+  },
+});
+
+turn.answer;     // the agent's answer
+turn.citations;  // the records it read
+turn.credits;    // what the turn spent
+```
+
+Sign the client in with an [access key](/deployment/access-keys) on a server, or with the signed-in person's session in a browser. Never ship an access key in browser code.
+
+## What happens on each turn
+
+1. Proofable finds the [permission](/agents/agent-delegation) you signed for the agent. No active permission from your account, no turn.
+2. The turn runs as the agent: its own instructions and skills from its [identity](/agents/agent-identity), and the connected apps you bound to it.
+3. Every tool call is checked against the permission before it runs, read again for each call. Revoke the permission and the next call stops, in every app that talks to the agent.
+4. The answer comes back with the records the agent read. Each one opens at `proofable.me/proof/<qHash>`, so anyone you share it with can check where the answer came from.
+
+## Over HTTP
+
+`POST https://api.proofable.me/api/v1/agent/chat/turn` with `Authorization: Bearer <token>` streams the turn as Server-Sent Events.
+
+```bash
+curl -N https://api.proofable.me/api/v1/agent/chat/turn \
+  -H "Authorization: Bearer $PROOFABLE_ACCESS_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"agentId":"my-agent","messages":[{"role":"user","content":"What changed today?"}]}'
+```
+
+| Field | What it does |
+|---|---|
+| `agentId` | Run the turn as this agent. Omit it to run as yourself. |
+| `agentWallet` | The agent's account, when two of your agents share an id |
+| `messages` | The conversation, `user` and `assistant` turns, ending with the user |
+| `systemPrompt` | Context from your app. The agent reads it as data, after its own instructions. |
+| `model` | `default` or `advanced`. With `provider`, that provider's model id. |
+| `provider`, `providerSecretProofQHash` | Run on your own model key from the vault instead of hosted inference |
+
+The stream sends `turn.start`, `answer.delta` as the answer arrives, `tool.start` and `tool.result` for each call, and ends with one `final` event:
+
+```json
+{
+  "outcome": "succeeded",
+  "answer": "…",
+  "citations": [{ "qHash": "0x…", "title": "Chapter 1", "facet": "memory", "visibility": "public" }],
+  "agent": { "agentId": "my-agent", "agentWallet": "0x…", "identityQHash": "0x…", "delegationQHash": "0x…" },
+  "credits": { "spent": 2 }
+}
+```
+
+A request Proofable refuses never opens the stream. It answers JSON with the reason:
+
+| Status | Code | Why |
+|---|---|---|
+| 401 | `AUTH_REQUIRED` | No session, OAuth token, or access key |
+| 402 | `INSUFFICIENT_CREDITS` | Not enough credits for a hosted turn |
+| 403 | `AGENT_DELEGATION_REQUIRED` | No active permission from your account to this agent |
+| 403 | `ADVANCED_REQUIRES_PRO` | Advanced runs on paid plans |
+
+## What it costs
+
+A hosted turn spends credits from the account that calls it, by the tokens it used and the model that served them, the same rate as a [job](/jobs) step. A turn on your own model key spends no platform credits. See [pricing](/pricing).
+
+Read your balance and spend at any time, by line and by day:
+
+```javascript
+const { credits, usage } = await client.getUsage({ from: '2026-11-01', to: '2026-11-30' });
+usage.summary.debitedByDay; // { '2026-11-01': 14, … }
+```
+
+Over HTTP it is `GET /api/v1/profile/usage?from=YYYY-MM-DD&to=YYYY-MM-DD` with the same token. In an MCP client, `proofable_context` carries the balance.
+
+## Other ways to reach the same agent
+
+- **In an MCP client.** `npx -y @proofable/sdk mount my-agent --apply claude` loads the agent into Claude, Cursor, Codex, Hermes, OpenClaw, or OpenCode. [Connect agent context](/agents/runtime-mount)
+- **As background work.** Start a [job](/jobs) for scheduled or long work, on an isolated computer when it needs one.
+
+## Related
+
+- [Agent permissions](/agents/agent-delegation)
+- [Agent identity](/agents/agent-identity)
+- [Import an agent](/agents/import)
