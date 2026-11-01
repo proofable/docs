@@ -526,7 +526,7 @@ async function verify(dirArg, options = {}) {
     for (const e of envelopes) {
       const v = await verifyPortableProofEnvelope(e);
       if (!v.valid || lower(e.data?.owner) !== owner) bad += 1;
-      else if (expectSigner && lower(e.walletAddress) !== expectSigner) { bad += 1; signerFailures += 1; }
+      else if (expectSigner && lower(String(e.did || '').split(':').pop() || e.walletAddress) !== expectSigner) { bad += 1; signerFailures += 1; }
     }
     const ok = verdict(rec) && bad === 0 && envelopes.length > 0;
     if (!ok) failures += 1;

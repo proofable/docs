@@ -12,6 +12,6 @@
     "reuse": "node reuse-check.mjs"
   },
   "dependencies": {
-    "@proofable/sdk": "0.1.6"
+    "@proofable/sdk": "0.1.10"
   }
 }

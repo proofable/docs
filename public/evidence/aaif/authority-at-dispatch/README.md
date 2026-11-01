@@ -12,7 +12,7 @@ link to every record, is at
 | [`action/`](./action/) | The same run as a GitHub Action, which writes a `trustharness.report/v1` report |
 | [`2026-10-08-eight-case/`](./2026-10-08-eight-case/) | Earlier run at revision `e1217327a`: 15 signed records and an offline checker |
 
-To check the current run:
+To check the latest published run:
 
 ```sh
 cd 2026-10-24-served
@@ -21,7 +21,7 @@ cd ../reproduce
 node aad.mjs verify ../2026-10-24-served
 ```
 
-The October 8 packet has its own pin. Run `npm install @proofable/sdk@0.1.6` inside
+To check the October 8 packet, run `npm install @proofable/sdk@0.1.10` inside
 `2026-10-08-eight-case/`, then `node verify-portable-proofs.mjs`.
 
 Earlier packets stay where they were:
