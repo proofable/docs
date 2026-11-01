@@ -12,7 +12,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 ### Added
 
 - **Sell a service your server runs.** [Your server runs it](/gates/your-server) covers a listing whose orders go to your own URL with the buyer's inputs and repository, and whose result you post back onto the buyer's receipt.
-- **Changelog entries for `@proofable/mcp` 0.1.7 and `@proofable/sdk` 0.1.6.**
+- **Changelog entries for `@proofable/mcp` 0.1.7 and 0.1.8, and `@proofable/sdk` 0.1.6 through 0.1.10.**
 - **Eligibility clause in the Terms of Use.** Section 4 states the minimum age and the capacity to contract.
 - **One-time purchases in the Terms of Use.** Section 13 says one-time purchases, including the early partner pilot, are final like credit purchases, that pilot setup has no fixed delivery date, and that pilot credits stay on your account after the pilot closes.
 - **Background jobs keep proofs private and offchain.** [Proofs](/proofs) says that a background job's request for a blockchain record, a public or link-only proof, or a visibility change is refused with `JOB_ONCHAIN_PUBLISH_DENIED`, `JOB_PUBLIC_PROOF_DENIED` or `JOB_VISIBILITY_CHANGE_DENIED`.
@@ -25,6 +25,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 - **Two checks you can run on the published records.** `public/evidence/checks/tamper-check.mjs` forges each signed record ten ways and confirms every copy is rejected offline; `reuse-check.mjs` times reading and verifying a finished result with no account.
 - **A fresh run of the eight authority cases on the live service.** All eight passed on the revision production was serving, with 17 signed records. Requests that should not have been allowed were refused before any job ran; the case that needs approval waited for it and then ran; and a valid request ran alongside the refusals to show the check can pass. The records need no account to read or verify, and the run lives at `public/evidence/aaif/authority-at-dispatch/2026-10-24-served/`.
 - **Jobs run on credits on every plan.** [Jobs](/jobs) says what a run costs and lists the job tools a connection carries, and the team-agents and reproduce guides no longer say jobs need Pro.
+- **Every published check installs `@proofable/sdk` 0.1.10.** The reproduction kit, the forged-record checks and the October 8 packet verify CAIP-380 envelopes that omit `walletAddress`, and `aad.mjs verify --expect-signer` requires the receipt signer you read out of band. Each authority-at-dispatch packet says what it establishes and what it does not.
 - **Agent id format is in the schemas.** `agentId` in `agent-identity` and `agent-delegation` is 1 to 128 letters, digits, hyphens or underscores, the same id the agent page uses.
 
 ### Removed
