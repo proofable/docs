@@ -3971,6 +3971,108 @@
         }
       }
     },
+    "/api/v1/profile/usage": {
+      "get": {
+        "operationId": "getProfileUsage",
+        "summary": "Read your credits and spend, by line and by day",
+        "tags": [
+          "Profile"
+        ],
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "First UTC day of the period (YYYY-MM-DD)."
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Last UTC day of the period (YYYY-MM-DD)."
+          },
+          {
+            "name": "appId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Only spend recorded under this app or namespace."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 500
+            },
+            "description": "Most events returned, newest first (default 500)."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Balance, events and summary"
+          },
+          "400": {
+            "description": "Invalid period"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/profile/gates/discoverable": {
       "get": {
         "operationId": "listDiscoverableGates",
@@ -4698,6 +4800,136 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/agent/chat/turn": {
+      "post": {
+        "operationId": "streamAgentChatTurn",
+        "summary": "Talk to an agent: run one chat turn as it, streamed as Server-Sent Events",
+        "description": "Runs one turn on the hosted agent runtime. With agentId the turn runs as that agent: its instructions and skills, under the delegation you signed, every tool call checked against it. The final event carries the answer, the records it read as citations, and the credits it spent. Nothing to deploy: call it from any app or runtime with a session, an OAuth token or a profile access key.",
+        "tags": [
+          "Agents"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "messages"
+                ],
+                "properties": {
+                  "agentId": {
+                    "type": "string",
+                    "description": "Run the turn as this agent, under the delegation the caller signed for it."
+                  },
+                  "agentWallet": {
+                    "type": "string",
+                    "description": "The agent's account, when two of the caller's agents share an agentId."
+                  },
+                  "messages": {
+                    "type": "array",
+                    "description": "The visible conversation; the last message is from the user.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "role",
+                        "content"
+                      ],
+                      "properties": {
+                        "role": {
+                          "type": "string",
+                          "enum": [
+                            "user",
+                            "assistant"
+                          ]
+                        },
+                        "content": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "model": {
+                    "type": "string",
+                    "description": "A hosted tier (\"default\", \"advanced\") or, with a provider, that provider's model id. Defaults to \"default\"."
+                  },
+                  "provider": {
+                    "type": "string",
+                    "description": "Omit for hosted inference; name a provider to run on your own key."
+                  },
+                  "providerSecretProofQHash": {
+                    "type": "string",
+                    "description": "The vault secret holding your provider key."
+                  },
+                  "systemPrompt": {
+                    "type": "string",
+                    "description": "Context from your app. With agentId it follows the agent's own instructions, as data."
+                  },
+                  "responseMode": {
+                    "type": "string",
+                    "enum": [
+                      "agent",
+                      "plan"
+                    ]
+                  },
+                  "turnId": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "text/event-stream in the agent-turn-events/1 contract"
+          },
+          "400": {
+            "description": "Invalid turn request"
+          },
+          "401": {
+            "description": "Authentication required"
+          },
+          "402": {
+            "description": "Not enough credits for a hosted turn"
+          },
+          "403": {
+            "description": "No active delegation for this agent, or Advanced without a paid plan"
           },
           "404": {
             "description": "Not found",
