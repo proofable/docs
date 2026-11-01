@@ -88,7 +88,7 @@ Live web pages change between requests and cause unpredictable token spikes when
 
 **8 of 8 permission tests passed on the live service.** Every action outside the agent's permission was stopped before it ran, and the actions it was allowed to take ran.
 
-We ran each test on the live service on October 8, 2026, with a dedicated agent under its own fixed permission, and again on October 24 on the revision production serves ([records](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/2026-10-24-served)), 8 of 8 both times. Each link opens that test's signed record.
+We ran each test on the live service on October 8, 2026, with a dedicated agent under its own fixed permission, and again on October 24 on the revision production was serving then ([records](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/2026-10-24-served)), 8 of 8 both times. Each link opens that test's signed record.
 
 | Test | What happened |
 |---|---|
@@ -202,7 +202,7 @@ Unlike the live LLM and governance runs above, portable identity reuse is a **pr
     git clone --depth 1 https://github.com/proofable/docs
     cd docs/public/evidence/aaif/authority-at-dispatch/2026-10-08-eight-case
     sha256sum -c SHA256SUMS
-    npm install @proofable/sdk@0.1.6
+    npm install @proofable/sdk@0.1.10
     node verify-portable-proofs.mjs
     ```
   </Accordion>

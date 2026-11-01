@@ -10,6 +10,27 @@ This answers the request in
 [agentrust-io/integrations#333](https://github.com/agentrust-io/integrations/issues/333) for a
 copyable example of the dispatch-only, correlation-only route.
 
+## What this establishes, and what it does not
+
+Classified against AAIF Identity & Trust [#21](https://github.com/aaif/wg-identity-and-trust/issues/21)
+and [agentrust-io/integrations#333](https://github.com/agentrust-io/integrations/issues/333), the
+defensible statement for this packet is **a service-attested job decision with correlation links**.
+Prior authorisation is not established by it. Three links are missing:
+
+1. **The grant is named by commitment only.** `delegationQHash` cannot be resolved to the mandate
+   being evaluated, so its bounds cannot be checked from this packet.
+2. **Nothing binds the mandate digest and version to what the counterparty received.** The
+   decision-to-job tie is an unsigned create response, and the target kept no log. The full marker
+   first appears in the signed terminal receipt, after the call.
+3. **The ordering rests on the deciding service's signed timestamp.** A token taken later dates the
+   record; it does not witness the dispatch.
+
+What it does establish: the decision is signed before the job exists, it commits to the grant's
+`delegationQHash` and to an `argsDigest` over a declared field projection of the request, and the
+terminal receipt is signed by the same service account. That account is published outside this
+packet, in the pinned registration document whose bytes and registry read are at
+[`public/evidence/registry`](https://github.com/proofable/docs/blob/f81b8416a4f6fc1f1439ef43216078261fb206d2/public/evidence/registry/README.md).
+
 ## Files
 
 | File | What it is | Signed |

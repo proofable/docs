@@ -13,7 +13,7 @@
     "verify": "node aad.mjs verify"
   },
   "dependencies": {
-    "@proofable/sdk": "0.1.6",
+    "@proofable/sdk": "0.1.10",
     "ethers": "6.17.0"
   }
 }

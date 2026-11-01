@@ -8,8 +8,9 @@ The code that graded it is `reproduce/aad.mjs` at
 SHA-256 `afbb0cf8541c3916967707143b5be56556051b32797b2a6b52aae6f423234f79`. Check that version out to
 grade the run with the exact code that graded it.
 
-This is the current run. It replaces [`../2026-10-08-eight-case/`](../2026-10-08-eight-case/), which
-stays at its own commit.
+This run replaces [`../2026-10-08-eight-case/`](../2026-10-08-eight-case/), which stays at its own
+commit. Both are dated runs on the revision each was taken against; the service moved on afterwards, so
+read the revision here as what production served on 24 October, not as what it serves now.
 
 ## What happened
 

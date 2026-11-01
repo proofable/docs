@@ -17,6 +17,54 @@ Published APIs and verifier schemas may change between minor versions. Breaking 
 </Note>
 
 <Update
+  label="November 1, 2026"
+  description="v0.1.8"
+  tags={["MCP"]}
+  rss={{
+    title: "Proofable MCP v0.1.8",
+    description: "A dedicated ChatGPT endpoint, keys saved only on your profile, and a prompt injection test for your own agent."
+  }}
+>
+## A ChatGPT endpoint, and keys stay on your profile
+
+`@proofable/mcp@0.1.8` adds `https://mcp.proofable.me/mcp/openai`, which serves the eight read and guided-verification tools to the ChatGPT plugin with the same OAuth sign-in. Cursor, Claude Code, Codex and every other client keep the full tool list on `https://mcp.proofable.me/mcp`.
+
+**Breaking:** `/mcp` no longer accepts a key as a tool argument. The tool that saved one is gone from `tools/list`, and a call to it is rejected as an unknown tool. Save keys on your profile; listing, removing and calling a provider with a saved key still work, and never return the key.
+
+The release also adds `examples/injection-test`, which hides the five AgentDojo attack templates in a note your agent reads and grades every run from its signed receipt.
+
+```bash
+npm install @proofable/mcp@0.1.8
+```
+
+</Update>
+
+<Update
+  label="October 28, 2026"
+  description="v0.1.10"
+  tags={["SDK"]}
+  rss={{
+    title: "Proofable SDK v0.1.10",
+    description: "Verify any CAIP-380 envelope, import an agent in one step, and complete AI service orders."
+  }}
+>
+## Verify any CAIP-380 envelope, import an agent in one step
+
+`@proofable/sdk@0.1.10` covers 0.1.7 through 0.1.10.
+
+- **Any CAIP-380 envelope verifies (0.1.9).** `verifyPortableProofEnvelope` takes the signer from the envelope's `did:pkh` identifier, so an envelope without `walletAddress`, including the specification's test vectors, verifies instead of throwing. Use 0.1.9 or later to verify envelopes from other implementations.
+- **`proofable import` creates the agent (0.1.10).** A signed-in terminal creates the agent on your profile with its full instructions and mounts it into the current project. `--expires-at` sets an end to its permissions, `--no-mount` skips the mount, and `--dry-run` shows what would happen.
+- **`proofable auth --oauth` signs in the CLI only (0.1.10).** It no longer writes its short-lived token into your editors; pass `--client` to write it to one.
+- **`fulfillGate()` completes AI service orders (0.1.7).** It sends `serviceParameters` for the listing's `serviceInputs`, and the run's answer appears on the buyer's receipt at `meta.marketplace.serviceJob.result`.
+- **The CLI exits with code 1 after an error on Windows (0.1.8),** and a dry-run mount lists files as "would write".
+
+```bash
+npm install @proofable/sdk@0.1.10
+```
+
+</Update>
+
+<Update
   label="October 12, 2026"
   description="v0.1.6"
   tags={["SDK"]}

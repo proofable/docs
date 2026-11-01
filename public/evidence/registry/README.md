@@ -7,6 +7,14 @@
 This exists so the document can be read, hashed and quoted from a fixed commit without depending on a
 live HTTP request to proofable.me.
 
+Pinned bytes: [`agent-registration.json`](https://github.com/proofable/docs/blob/f81b8416a4f6fc1f1439ef43216078261fb206d2/public/evidence/registry/agent-registration.json)
+at commit `f81b841`, and the same file served at
+`https://docs.proofable.me/public/evidence/registry/agent-registration.json`.
+
+Re-read 2026-11-01: the document served at the `.well-known` URL is byte-identical to the pinned copy
+above, same SHA-256. The registry read below was repeated the same day against the head block
+(`53381986`) on two public Base RPC endpoints, with the same result.
+
 ## The registry binding
 
 The document is the target of Proofable's on-chain agent registration. Read on Base (`eip155:8453`),

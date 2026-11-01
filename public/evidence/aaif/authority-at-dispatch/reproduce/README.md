@@ -22,10 +22,15 @@ export AAD_OPERATOR="Your Organization"
 node aad.mjs setup        # creates a local agent wallet and registers your review agent
 node aad.mjs run          # all eight cases, about 6 to 8 minutes
 node aad.mjs verify runs/<run-id>
+node aad.mjs report runs/<run-id>
 ```
 
 `verify` needs no network and no account. Run one case with `node aad.mjs run <case>`; list them
 with `node aad.mjs cases`.
+
+Verify with `@proofable/sdk` 0.1.9 or later, which this kit pins. Earlier versions require a
+non-canonical `walletAddress` field on the envelope, so they cannot verify a CAIP-380 envelope that
+omits it, including the CAIP's own test vectors.
 
 ## The cases
 
@@ -44,6 +49,33 @@ with `node aad.mjs cases`.
 
 How long a revocation takes to reach the check, and the effect at the target: effects are recorded
 as the service observed them.
+
+## Typed outcomes, typed cost and the grading scope
+
+`report` reads a run offline and prints one row per case: the separate outcome fields (what was
+attempted, what was observed, what the service accepted, whether effects were verified) each with a
+typed reason where the case refused or skipped, the benign cost of the check and the legitimate work
+it must not forbid, and a statement of what the run does not grade. It writes nothing.
+
+- `elapsed_ms` is measured on the kit's clock, over the whole case including setup and waits.
+- `job_ms` is measured by the service inside the signed job record, over the executed part of the job,
+  and is `not_applicable` where no job ran.
+- Model tokens are `not_measured`: the kit does not count them.
+- `effects_verified` is `not_measured` for every case. Effects are observed by the service, with no
+  target-side witness, and `MANIFEST.json` carries the same entry.
+
+## Pin the signer
+
+`verify` recovers each signature against the address declared inside that same envelope. To also
+require the address you read out of band:
+
+```sh
+node aad.mjs verify runs/<run-id> --expect-signer 0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec
+```
+
+That address is the receipt signer named in the registration document published at
+[`docs/public/evidence/registry`](https://github.com/proofable/docs/tree/main/public/evidence/registry),
+together with the registry read that binds the document to Proofable's on-chain agent identity.
 
 ## Settings
 
