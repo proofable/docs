@@ -6,7 +6,7 @@ link to every record, is at
 
 | Folder | What it is |
 | --- | --- |
-| [`2026-10-24-served/`](./2026-10-24-served/) | **Current run.** Eight cases on revision `61724c9f4`, 17 signed records, checksums, and a result for each case |
+| [`2026-10-24-served/`](./2026-10-24-served/) | **Latest published run, 24 October.** Eight cases on revision `61724c9f4`, 17 signed records, checksums, and a result for each case |
 | [`2026-10-24-fetch-route/`](./2026-10-24-fetch-route/) | One job on the fetch route: the call, the raw response, the signed decision and receipt, and an offline checker |
 | [`reproduce/`](./reproduce/) | Run the same cases under your own account |
 | [`action/`](./action/) | The same run as a GitHub Action, which writes a `trustharness.report/v1` report |

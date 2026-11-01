@@ -66,9 +66,13 @@ your own Proofable account, so the records it writes are yours, not Proofable's.
 `SHA256SUMS` covers every payload file in this directory except itself. Verify with
 `sha256sum -c SHA256SUMS`.
 
-Install the pinned `@proofable/sdk@0.1.6` package once. Then verify every signature and qHash offline:
+Install `@proofable/sdk@0.1.10` (or later) once, then verify every signature and qHash offline:
 
 `node verify-portable-proofs.mjs`
+
+Use 0.1.9 or later. Earlier versions require a non-canonical `walletAddress` field and cannot verify a
+CAIP-380 envelope that omits it; 0.1.9 and later read the signer from the envelope's `did`. This packet's
+envelopes verify under 0.1.10, checked offline.
 
 Disclosure controls which fields of the Proofable record are shared; non-public fields are not
 required to evaluate these results.

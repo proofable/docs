@@ -28,6 +28,10 @@ node aad.mjs report runs/<run-id>
 `verify` needs no network and no account. Run one case with `node aad.mjs run <case>`; list them
 with `node aad.mjs cases`.
 
+Verify with `@proofable/sdk` 0.1.9 or later, which this kit pins. Earlier versions require a
+non-canonical `walletAddress` field on the envelope, so they cannot verify a CAIP-380 envelope that
+omits it, including the CAIP's own test vectors.
+
 ## The cases
 
 | Case | What it does | Expected |
