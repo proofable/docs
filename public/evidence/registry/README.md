@@ -42,12 +42,27 @@ not a URL quoted in prose.
 Both records in the published authority evidence are signed by the account named in
 `x_proofable.receiptSigner`: `0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec`, EIP-191 over the CAIP-380
 verification message. Recovering that account from a record's bytes shows the record was signed by it.
-Attribution of that account to Proofable is what the binding above records.
+
+The registry binds that account to the agent on-chain. The agent's owner (the Safe above) wrote it with
+`setMetadata` in tx `0xe3c783072848a66c247f0f6a6b6bb4c84afded3f9453758c8e3df116f6054a24`, Base block
+`53386669` (2026-11-01). Read it from chain state:
+
+```js
+const reg = new ethers.Contract('0x8004A169FB4a3325136EB29fA0ceB6D2e539a432',
+  ['function getMetadata(uint256,string) view returns (bytes)'],
+  new ethers.JsonRpcProvider('https://mainnet.base.org'));
+ethers.toUtf8String(await reg.getMetadata(1135859n, 'x_proofable.receiptSigner'));
+// {"schema":"proofable.service-key/v1",...,"receiptSigner":"0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec",
+//  "scheme":"eip191-caip380","validFrom":"2026-11-01","registrationSha256":"f297f8fb…"}
+```
+
+`ownerOf` gives the Safe, `getMetadata` gives the key, and the signature recovers to that key.
+`registrationSha256` is the SHA-256 of `agent-registration.json` in this folder.
 
 ## What this does not cover
 
-- No key validity window or rotation history is published. The account named above is the signing
-  account, and this document carries no expiry or rotation record.
+- The binding carries a `validFrom` and no expiry. A rotation writes the same key again, so the
+  registry's `MetadataSet` events are the rotation log.
 - This snapshot is a point in time. The live document at the URL is authoritative and can change; hash
   the bytes you actually read before quoting them.
 - A valid signature shows which account signed a statement. It does not show that the statement is
