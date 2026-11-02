@@ -73,7 +73,7 @@
         "groups": [
           {
             "group": "Overview",
-            "pages": ["index", "run-the-chain", "pricing", "security", "evidence", "enterprise", "migrate"]
+            "pages": ["index", "run-the-chain", "pricing", "security", "benchmark", "enterprise", "migrate"]
           },
           {
             "group": "Use cases",
@@ -208,11 +208,15 @@
     },
     {
       "source": "/benchmarks",
-      "destination": "/evidence"
+      "destination": "/benchmark"
+    },
+    {
+      "source": "/evidence",
+      "destination": "/benchmark"
     },
     {
       "source": "/use-cases/authority-at-dispatch",
-      "destination": "/evidence"
+      "destination": "/benchmark"
     },
     {
       "source": "/openapi.json",
