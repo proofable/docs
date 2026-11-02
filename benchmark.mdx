@@ -119,7 +119,7 @@ Redoing a finished agent job took 2.79 s and 2,426 AI tokens. Checking its signe
 
 When one agent hands a finished result to another (LangGraph, CrewAI, AutoGen), the receiving agent normally either trusts the forwarded text blindly or pays to re-run the upstream work. With Proofable, the producing agent emits a 66-byte signed receipt (`qHash`) binding input, policy state and output, and the receiving agent checks it before acting.
 
-- **3.3× cheaper than redoing the work:** **\$0.024 per correct outcome** (33,240 tokens, 2 model calls per task) against **\$0.078** (124,715 tokens, 3 to 5 model calls per task).
+- **3.3× cheaper than redoing the work:** \$0.024 per correct outcome (33,240 tokens, 2 model calls per task) against \$0.078 (124,715 tokens, 3 to 5 model calls per task).
 - **Trusting forwarded text is cheap and wrong:** it costs \$0.009 on untouched input, but when the text was changed in transit it used the tampered value **3 of 3** times. Checking the receipt caught every change **3 of 3** times and still completed every task.
 - **29× smaller handoffs:** across a 10-hop chain, passing the signed reference carried **9,900 bytes** per hop instead of **289,410 bytes** of full evidence.
 
