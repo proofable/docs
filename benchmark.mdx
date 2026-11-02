@@ -15,11 +15,11 @@ Proofable stops every agent action you never allowed before it runs, and lets th
 | [Actions outside an agent's permission](#agents-only-do-what-you-allowed) | **Stopped before they run**, 8 of 8 live tests | Every allowed action still ran; reviewers verified the records independently |
 | [Private data a hijacked agent sends out](#a-hijacked-agent-cannot-send-your-data-out) | **0 of 6** attempts got out | 6 of 6 got out on an all-purpose key |
 | [Forged or altered records](#records-nobody-can-fake) | **150 of 150** caught | A format-only check accepted all 150 |
-| [Work handed to another agent](#handoffs-between-agents) | **$0.024** per correct outcome, 3 of 3 tampered handoffs caught | $0.078 to redo the work; trusting the forwarded text caught 0 of 3 |
+| [Work handed to another agent](#handoffs-between-agents) | **\$0.024** per correct outcome, 3 of 3 tampered handoffs caught | \$0.078 to redo the work; trusting the forwarded text caught 0 of 3 |
 | [Reusing finished work](#reuse-instead-of-redo) | **3.7 ms, 0 tokens** | 2.79 s and 2,426 tokens to redo it, 750× slower |
 | [Agent memory that knows which rule is current](#memory-that-knows-what-is-current) | **42× fewer tokens**, 8.8× faster | 4,462,980 tokens and 493 s searching every record body |
 | [Worst-case research spend](#research-with-a-cost-ceiling) | **16,301 tokens** | 50,554 on the open web, 3.1× higher, at about twice the cost per answer |
-| [One identity check reused by 100 apps](#identity-checks-paid-for-once) | **$1.75** | $150.00 re-running Stripe Identity in each, 85× more |
+| [One identity check reused by 100 apps](#identity-checks-paid-for-once) | **\$1.75** | \$150.00 re-running Stripe Identity in each, 85× more |
 
 ## Where it covers you
 
@@ -119,8 +119,8 @@ Redoing a finished agent job took 2.79 s and 2,426 AI tokens. Checking its signe
 
 When one agent hands a finished result to another (LangGraph, CrewAI, AutoGen), the receiving agent normally either trusts the forwarded text blindly or pays to re-run the upstream work. With Proofable, the producing agent emits a 66-byte signed receipt (`qHash`) binding input, policy state and output, and the receiving agent checks it before acting.
 
-- **3.3× cheaper than redoing the work:** **$0.024 per correct outcome** (33,240 tokens, 2 model calls per task) against **$0.078** (124,715 tokens, 3 to 5 model calls per task).
-- **Trusting forwarded text is cheap and wrong:** it costs $0.009 on untouched input, but when the text was changed in transit it used the tampered value **3 of 3** times. Checking the receipt caught every change **3 of 3** times and still completed every task.
+- **3.3× cheaper than redoing the work:** **\$0.024 per correct outcome** (33,240 tokens, 2 model calls per task) against **\$0.078** (124,715 tokens, 3 to 5 model calls per task).
+- **Trusting forwarded text is cheap and wrong:** it costs \$0.009 on untouched input, but when the text was changed in transit it used the tampered value **3 of 3** times. Checking the receipt caught every change **3 of 3** times and still completed every task.
 - **29× smaller handoffs:** across a 10-hop chain, passing the signed reference carried **9,900 bytes** per hop instead of **289,410 bytes** of full evidence.
 
 ### Memory that knows what is current
@@ -141,18 +141,18 @@ On a 1,721-record production vault, the same questions took **105,347 tokens in 
 <img className="evid-light evid-tall" src="/images/evidence/save-records-stacked-light.svg" alt="Reading typed Proofable records capped worst-case tokens at 16,301 against 50,554 on the open web and halved cost per correct answer ($0.020 vs $0.039)." />
 <img className="evid-dark evid-tall" src="/images/evidence/save-records-stacked-dark.svg" alt="Reading typed Proofable records capped worst-case tokens at 16,301 against 50,554 on the open web and halved cost per correct answer ($0.020 vs $0.039)." />
 
-Live pages change between requests: two fetches of the same page 221 seconds apart returned 96,713 characters, then 1,129, handing two agents different evidence with no way to prove what the page said when the decision was made. On public questions about standards, agent protocols and regulation, reading signed Proofable records **halved the cost per correct answer ($0.020 vs $0.039)**, held the worst case to **16,301 tokens** where open-web search spiked to **50,554 tokens** and 104 seconds (**3.1× lower**), and cited a checkable source on **every answer** (6 of 6, against 5 of 6 on the open web).
+Live pages change between requests: two fetches of the same page 221 seconds apart returned 96,713 characters, then 1,129, handing two agents different evidence with no way to prove what the page said when the decision was made. On public questions about standards, agent protocols and regulation, reading signed Proofable records **halved the cost per correct answer (\$0.020 vs \$0.039)**, held the worst case to **16,301 tokens** where open-web search spiked to **50,554 tokens** and 104 seconds (**3.1× lower**), and cited a checkable source on **every answer** (6 of 6, against 5 of 6 on the open web).
 
 ### Identity checks paid for once
 
-A person or business completes an interactive check once, and downstream apps and agents verify the portable proof instead of paying the vendor to run the flow again. Priced from published vendor list prices and Proofable's $0.0025 per check:
+A person or business completes an interactive check once, and downstream apps and agents verify the portable proof instead of paying the vendor to run the flow again. Priced from published vendor list prices and Proofable's \$0.0025 per check:
 
 | Vendor check | 100 apps, each re-running the check | 100 apps reusing one check | Published source |
 |---|---|---|---|
-| Stripe Identity ($1.50 pay-as-you-go) | **$150.00** | **$1.75**, 85× lower | stripe.com/pricing |
-| Sumsub Basic ($1.35 per check) | **$135.00** | **$1.60**, 84× lower | sumsub.com/pricing |
-| Veriff Essential ($0.80 per check) | **$80.00** | **$1.05**, 76× lower | veriff.com/pricing |
-| Footprint KYC ($0.50 per check) | **$50.00** | **$0.75**, 67× lower | onefootprint.com/pricing |
+| Stripe Identity (\$1.50 pay-as-you-go) | **\$150.00** | **\$1.75**, 85× lower | stripe.com/pricing |
+| Sumsub Basic (\$1.35 per check) | **\$135.00** | **\$1.60**, 84× lower | sumsub.com/pricing |
+| Veriff Essential (\$0.80 per check) | **\$80.00** | **\$1.05**, 76× lower | veriff.com/pricing |
+| Footprint KYC (\$0.50 per check) | **\$50.00** | **\$0.75**, 67× lower | onefootprint.com/pricing |
 
 ## Run it yourself
 
@@ -213,7 +213,7 @@ Pin both refs to the same commit so a rerun measures the same kit. The action wr
     - **Permissions:** each test on the live service with a dedicated agent under its own fixed permission, and the full suite again on a production release. A revocation that lands while an action is in flight is re-checked at the executor's own boundary and refused with a typed reason.
     - **Takeover:** 84 live runs across five published attack templates and two models, with a signed record for each run.
     - **Reuse:** the median of ten runs on one finished job on the live service.
-    - **Handoffs:** three public downstream tasks, one run per option, code-graded, with a separate producer and consumer agent on the same model. Dollar figures price the measured tokens at the Claude Sonnet 5.5 list rate ($2 input, $10 output per million). The 10-hop payload sizes are over the 15 published records.
+    - **Handoffs:** three public downstream tasks, one run per option, code-graded, with a separate producer and consumer agent on the same model. Dollar figures price the measured tokens at the Claude Sonnet 5.5 list rate (\$2 input, \$10 output per million). The 10-hop payload sizes are over the 15 published records.
     - **Memory:** the same agent and model on both options, one run each. It compares typed lookup of active state (by record scope and status before a body is fetched) with full-text keyword search over record bodies; it is not an embedding-similarity benchmark.
     - **Research:** six public questions, one run per option, same agent and model. Both options answered 6 of 6 correctly, so it measures cost ceiling, tail spread (1.3× against 6.1×) and provenance rather than accuracy.
     - **Identity:** a pricing model from published list prices, not a live run.
