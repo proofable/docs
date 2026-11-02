@@ -6,7 +6,8 @@ link to every record, is at
 
 | Folder | What it is |
 | --- | --- |
-| [`2026-11-01-suite/`](./2026-11-01-suite/) | **Latest published run, 1 November.** The eight permission cases on revision `0d1b934f4`, with the cost of each case typed, the grading scope stated, and what the run covered reported against the expected set |
+| [`2026-11-01-suite-c1/`](./2026-11-01-suite-c1/) | **Latest published run, 1 November, corrected 2 November.** The same run and the same records as the packet below, with the match flag's grading bound and the post-revocation wording reconciled to what the executor actually did. Nothing was re-run; `CORRECTION.md` shows which payloads moved |
+| [`2026-11-01-suite/`](./2026-11-01-suite/) | The same run as first published, retained and hash-pinned. Corrected by `2026-11-01-suite-c1/` — wording and grading scope only |
 | [`2026-10-24-served/`](./2026-10-24-served/) | Previous run, 24 October. Eight cases on revision `61724c9f4`, 17 signed records, checksums, and a result for each case |
 | [`2026-10-24-fetch-route/`](./2026-10-24-fetch-route/) | One job on the fetch route: the call, the raw response, the signed decision and receipt, and an offline checker |
 | [`reproduce/`](./reproduce/) | Run the same cases under your own account |
@@ -16,11 +17,16 @@ link to every record, is at
 To check the latest published run:
 
 ```sh
-cd 2026-10-24-served
+cd 2026-11-01-suite-c1
 sha256sum -c SHA256SUMS
 cd ../reproduce
-node aad.mjs verify ../2026-10-24-served
+node aad.mjs verify ../2026-11-01-suite-c1
+node aad.mjs report ../2026-11-01-suite-c1
 ```
+
+`verify` recomputes every checksum, the trace digest, all 15 disclosed envelopes offline and the coverage the
+packet declares; `report` prints the typed cost and the grading scope from the sealed records. Both read the
+older packets too, which carry one file per case.
 
 To check the October 8 packet, run `npm install @proofable/sdk@0.1.10` inside
 `2026-10-08-eight-case/`, then `node verify-portable-proofs.mjs`.

@@ -502,6 +502,71 @@ function seal(dir, identity) {
   writeLf(join(dir, 'SHA256SUMS'), `${sums}\n`);
 }
 
+const isV3Packet = (dir) => {
+  const p = join(dir, 'manifest.json');
+  if (!existsSync(p)) return false;
+  try {
+    const m = readJsonFile(p);
+    return Boolean(m.public_trace || m.case_coverage || m.portable_proofs?.references);
+  } catch { return false; }
+};
+const readJsonFile = (p) => JSON.parse(readFileSync(p, 'utf8'));
+
+/**
+ * Verify a v3 packet from its manifest: the checksums above, the trace digest the manifest claims, every
+ * disclosed envelope offline, and the coverage it declares. Nothing here trusts the manifest over the
+ * bytes: every claim it makes is recomputed from the files beside it.
+ */
+async function verifyV3(dir, checksumFailures, expectSigner) {
+  let failures = checksumFailures;
+  const manifest = readJsonFile(join(dir, 'manifest.json'));
+  console.log(`run ${manifest.run_id}, revision ${manifest.deployed_revision || 'not named'}, custody ${manifest.custody}`);
+  if (manifest.supersedes) {
+    console.log(`supersedes ${manifest.supersedes}${manifest.correction ? ` — correction: ${manifest.correction.statement}` : ''}`);
+  }
+  const trace = manifest.public_trace || {};
+  const traceName = trace.file || 'trace.jsonl';
+  if (!existsSync(join(dir, traceName))) { console.log(`trace MISSING ${traceName}`); failures += 1; }
+  else if (trace.sha256 && sha256(readFileSync(join(dir, traceName))) !== trace.sha256) { console.log(`trace digest FAIL ${traceName}`); failures += 1; }
+  else console.log(`trace digest OK (${traceName}, ${trace.record_count ?? '?'} records)`);
+  const proofs = manifest.portable_proofs || {};
+  const proofsName = proofs.file || 'portable-proofs.json';
+  const envelopes = existsSync(join(dir, proofsName)) ? readJsonFile(join(dir, proofsName)) : [];
+  const referenced = new Set((proofs.references || []).map((r) => lower(r.qHash)));
+  const present = new Set();
+  let bad = 0;
+  let signerFailures = 0;
+  for (const e of envelopes) {
+    const v = await verifyPortableProofEnvelope(e);
+    if (!v.valid) bad += 1;
+    else if (expectSigner && lower(String(e.did || '').split(':').pop() || e.walletAddress) !== expectSigner) { bad += 1; signerFailures += 1; }
+    present.add(lower(e.qHash));
+  }
+  const absent = [...referenced].filter((q) => !present.has(q));
+  if (!envelopes.length) { console.log(`envelopes FAIL: ${proofsName} carries none`); failures += 1; }
+  else if (Number(proofs.count ?? envelopes.length) !== envelopes.length || absent.length) {
+    console.log(`envelope set FAIL (${envelopes.length} present, ${proofs.count} declared, ${absent.length} referenced but absent)`);
+    failures += 1;
+  } else console.log(`envelopes OK (${envelopes.length} verified offline against ${referenced.size} declared references)`);
+  if (bad) { console.log(`envelope verification FAIL (${bad})`); failures += 1; }
+  if (expectSigner) console.log(`signer pin ${expectSigner}: ${signerFailures ? `${signerFailures} envelope(s) signed by another address` : 'every envelope is signed by it'}`);
+  const cov = manifest.case_coverage || {};
+  const named = Array.isArray(cov.missing) ? cov.missing : [];
+  if (cov.expected === undefined || cov.covered === undefined) {
+    console.log('coverage NOT DECLARED: this packet does not state what it covered');
+    failures += 1;
+  } else if (Number(cov.expected) !== Number(cov.covered) || named.length) {
+    console.log(`coverage FAIL: expected ${cov.expected}, covered ${cov.covered}, missing ${named.length ? named.join(', ') : 'none declared'}`);
+    failures += 1;
+  } else console.log(`coverage OK (${cov.passed}/${cov.expected} passed, nothing missing)`);
+  if (manifest.grading_scope?.binding) {
+    console.log('grading scope: bound to the authority predicate and the typed boundary capture, not to an expectation revised after the run');
+  }
+  for (const [name, verdict] of Object.entries(manifest.results || {})) console.log(`${name.padEnd(24)} ${verdict}`);
+  console.log(failures ? `\n${failures} failure(s)` : '\nall checks pass');
+  process.exitCode = failures ? 1 : 0;
+}
+
 // ── verify: offline, from the files alone ───────────────────────────────────────────────
 async function verify(dirArg, options = {}) {
   const dir = resolve(String(dirArg || ''));
@@ -513,6 +578,9 @@ async function verify(dirArg, options = {}) {
     const [digest, name] = line.split(/\s+/);
     if (sha256(readFileSync(join(dir, name))) !== digest) { console.log(`checksum FAIL ${name}`); failures += 1; }
   }
+  // A v3 packet (manifest.json, trace.jsonl, portable-proofs.json) is verified by its manifest; the earlier
+  // shape is verified per case file below. A reader should not have to know which one a date implies.
+  if (isV3Packet(dir)) return verifyV3(dir, failures, expectSigner);
   const manifest = JSON.parse(readFileSync(join(dir, 'MANIFEST.json'), 'utf8'));
   const owner = lower(manifest.delegationRoot.split(':').pop());
   const rows = [];
@@ -549,6 +617,7 @@ const msBetween = (from, to) => {
 };
 function report(dirArg) {
   const dir = resolve(String(dirArg || ''));
+  if (isV3Packet(dir)) return reportV3(dir);
   if (!existsSync(join(dir, 'MANIFEST.json'))) throw new Error('Pass a run directory that contains MANIFEST.json.');
   const manifest = JSON.parse(readFileSync(join(dir, 'MANIFEST.json'), 'utf8'));
   console.log(`run ${manifest.run_id}, revision ${manifest.product_revision}, custody ${manifest.custody}`);
@@ -608,6 +677,31 @@ function report(dirArg) {
   console.log('effects_verified is not_measured for every case: effects are observed by the service, with no');
   console.log('target-side witness (the same entry as not_measured in MANIFEST.json). Read this report from the');
   console.log('sealed records only; it writes nothing.');
+}
+
+
+/** A v3 packet seals the same fields in manifest.json: typed cost and the declared grading scope. */
+function reportV3(dir) {
+  const manifest = readJsonFile(join(dir, 'manifest.json'));
+  console.log(`run ${manifest.run_id}, revision ${manifest.deployed_revision || 'not named'}, custody ${manifest.custody}`);
+  const scope = manifest.grading_scope || {};
+  console.log(`grading scope: ${scope.graded || 'not declared'}`);
+  if (scope.binding) console.log(`binds: ${scope.binding}`);
+  console.log(`not graded: ${scope.not_graded || 'not declared'}`);
+  console.log('');
+  const rows = (manifest.benign_cost || {}).cases || [];
+  if (!rows.length) { console.log('no typed cost is declared in this packet'); return; }
+  const cell = (v) => (v?.status === 'measured' ? `${v.value}${v.unit || ''}` : (v?.status || 'not_declared'));
+  const widths = [24, 14, 14, 14];
+  console.log(['case', 'elapsed_ms', 'job_ms', 'tokens'].map((h, i) => h.padEnd(widths[i])).join(''));
+  for (const r of rows) {
+    console.log([String(r.case).padEnd(widths[0]), cell(r.elapsed_ms).padEnd(widths[1]), cell(r.job_duration_ms).padEnd(widths[2]), cell(r.tokens).padEnd(widths[3])].join(''));
+  }
+  console.log('');
+  console.log('Per case, the legitimate work the check must not forbid, and what happened to it:');
+  for (const r of rows) console.log(`  ${r.case}\n    permitted: ${r.legitimate_work}`);
+  console.log('');
+  console.log('Read this report from the sealed records only; it writes nothing.');
 }
 
 // ── entry ───────────────────────────────────────────────────────────────────────────────

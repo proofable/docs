@@ -80,7 +80,7 @@ Against the agent tools teams already use, from the maintainers' [published resu
 | [Permission revoked](https://proofable.me/proof/0x8a3e5ff89c8a86423bae61db96c9732f319a6f6cdb34f4bde560c90d25366c95) | Stopped; no job created |
 | [Permission expired](https://proofable.me/proof/0xf1880cba0876acc2364e31892b261a47299c0a70177b61b32d465fcd1b61447a) | Stopped; no job created |
 | [Revoked permission reused](https://proofable.me/proof/0x1d987781eb519337fa9e62043831ee187340f6e589f217b16b99ed98be5acfbc) | Stopped every time |
-| [Revoked mid-job](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/2026-11-01-suite) | The call in flight was refused with its reason, nothing committed, and the next one was refused |
+| [Revoked mid-job](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/2026-11-01-suite-c1) | The call in flight was refused with its reason, nothing committed, and the next one was refused |
 
 Reviewers in the AgenTrust integrations project [verified the records offline](https://github.com/agentrust-io/integrations/issues/333#issuecomment-6414048198) on their own machines: every checksum matched and every signature verified. Its maintainers then [chose them](https://github.com/agentrust-io/integrations/issues/333#issuecomment-6436264551) as the dispatch evidence for their authority comparison. Rerun all eight on your own account with [Run the chain](/run-the-chain#run-it-end-to-end).
 
@@ -199,11 +199,13 @@ Pin both refs to the same commit so a rerun measures the same kit. The action wr
 
     ```sh
     git clone --depth 1 https://github.com/proofable/docs
-    cd docs/public/evidence/aaif/authority-at-dispatch/2026-11-01-suite
+    cd docs/public/evidence/aaif/authority-at-dispatch/2026-11-01-suite-c1
     sha256sum -c SHA256SUMS
     npm install @proofable/sdk@0.1.11
     node verify-portable-proofs.mjs
     ```
+
+    Then, from `../reproduce/`, `node aad.mjs verify ../2026-11-01-suite-c1` recomputes every checksum, the trace digest, all 15 envelopes offline and the coverage the packet declares, and `node aad.mjs report ../2026-11-01-suite-c1` prints the typed cost and the grading scope. The packet states which of its payloads a 2 November correction moved and which it did not.
   </Accordion>
 
   <Accordion title="How each result was measured">
