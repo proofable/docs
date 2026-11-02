@@ -11,6 +11,8 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Added
 
+- **Benchmark.** [Benchmark](/benchmark) replaces the Evidence page. It opens on one table of outcomes, each beside the setup it was measured against: 48 of 48 governance scenarios, every out-of-permission action stopped before it runs, 0 of 6 data-theft attempts out of a hijacked agent, 150 of 150 forged records caught, $0.024 against $0.078 per handed-off result, reuse 750 times faster than redoing the work, 42 times fewer tokens for agent memory, a 3.1 times lower worst-case research spend, and one identity check reused by 100 apps for $1.75 against $150. How each result was measured is in one section for reviewers. `/evidence`, `/benchmarks` and `/use-cases/authority-at-dispatch` open it.
+
 - **Sell a service your server runs.** [Your server runs it](/gates/your-server) covers a listing whose orders go to your own URL with the buyer's inputs and repository, and whose result you post back onto the buyer's receipt.
 - **Changelog entries for `@proofable/mcp` 0.1.7 and 0.1.8, and `@proofable/sdk` 0.1.6 through 0.1.10.**
 - **Eligibility clause in the Terms of Use.** Section 4 states the minimum age and the capacity to contract.
