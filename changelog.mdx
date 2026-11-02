@@ -18,6 +18,28 @@ Published APIs and verifier schemas may change between minor versions. Breaking 
 
 <Update
   label="November 1, 2026"
+  description="v0.1.11"
+  tags={["SDK"]}
+  rss={{
+    title: "Proofable SDK v0.1.11",
+    description: "Talk to a hosted agent from any app, and read your credits and spend."
+  }}
+>
+## Talk to a hosted agent from any app, and read your spend
+
+`@proofable/sdk@0.1.11` adds two client calls.
+
+- **`client.agentChat()` talks to a hosted agent.** Name the agent and send the conversation. The turn runs on Proofable as that agent, under the delegation you signed for it, and every tool call is checked before it runs. Events stream to `onEvent`, and the call resolves with the answer, the records the agent read as `citations`, and the credits it spent. See [Talk to your agent from any app](/agents/talk-to-an-agent).
+- **`client.getUsage()` reads your credits and spend:** the balance, recent spend events, and spend by line and by UTC day, for any period with `from` and `to`.
+
+```bash
+npm install @proofable/sdk@0.1.11
+```
+
+</Update>
+
+<Update
+  label="November 1, 2026"
   description="v0.1.8"
   tags={["MCP"]}
   rss={{
