@@ -15,11 +15,15 @@ Your code, your model and your machines stay yours. You need no Proofable key.
 
 <Steps>
   <Step title="Create the listing">
-    [Create a listing](https://proofable.me/profile/listings/new), choose **Run a job**, then **Where it runs: Your server**, and paste the https URL that receives your orders.
+    [Create a listing](https://proofable.me/profile/listings/new) and fill it in from the top:
 
-    Add the inputs buyers fill in. To work on the buyer's code, add **Connections → GitHub**, and the buyer picks one repository at checkout.
+    - **What people get**: choose **Run a job**, then **Where it runs: Your server**.
+    - **Inputs**: add one for each thing the buyer gives you. Each reaches your server under a key made from its label, so **Contracts (or all)** arrives as `contracts_or_all`.
+    - **Your server URL**: the https address that receives your orders.
+    - **Requirements**: to work on the buyer's code, choose **Add requirement**, open **Connections** and pick **GitHub**. The buyer picks one repository at checkout, and your server receives it at one commit. Checks such as **Be human** run at checkout, before the order reaches you.
+    - **Price per run** and **Visibility**: set a price, keep the listing **Unlisted** while you test, and publish.
 
-    Set a price and publish. Copy the signing secret the listing shows.
+    Copy the **Signing secret** the listing shows.
   </Step>
   <Step title="Receive each order">
     Every paid order is a `POST` to your URL:
@@ -76,11 +80,18 @@ Your code, your model and your machines stay yours. You need no Proofable key.
 
     Post `running` as often as you like. A `completed` or `failed` order is final.
   </Step>
+  <Step title="Test, then list">
+    Buy once from the listing's share link. Watch the order reach your server, post a result and open the receipt. When it reads right, set **Visibility** to **Listed** so buyers find it in the Marketplace.
+  </Step>
 </Steps>
 
 ## What the buyer sees
 
 Their receipt shows the order as sent, then your status, then your result and report link. The receipt is theirs to keep and share.
+
+## Get paid
+
+Card sales need a payout account, connected once under [Payouts](https://proofable.me/profile?tab=credits). Until then the listing sells in USDC only. On card sales you keep 90%, and Proofable pays the card processing.
 
 ## Next
 
