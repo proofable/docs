@@ -1,0 +1,324 @@
+{
+  "schema": "proofable-authority-at-dispatch-evidence/v3",
+  "supersedes": null,
+  "implementation": "Proofable",
+  "deployed_revision": "327e50de35bbc50d05b3c5fb9a459dd59c210e25",
+  "run_id": "aad-2026-11-02T18-03-58-000Z",
+  "source_runs": [
+    {
+      "run_id": "aad-2026-11-02T18-03-58-000Z",
+      "role": "eight-case authority suite",
+      "records": 8
+    },
+    {
+      "run_id": "aad-2026-11-02T18-03-58-000Z",
+      "role": "ordered post-revocation probe",
+      "records": 1
+    }
+  ],
+  "disclosure": "public",
+  "source_record_visibility": "public_link_only_for_disclosed_receipts",
+  "independent_reproduction": false,
+  "custody": "SELF (author-operated; no independent witness)",
+  "boundary": "authority → decision → dispatch → effect/outcome → receipt",
+  "authority_policy_version": "authority-policy.v1",
+  "authority_policy_boundary": "identity is independent of how authority is received; authority may be native or delegated, and when delegated the grant is evaluated from current state at the action boundary",
+  "evidence_scope": "author-operated; independent reproduction not yet claimed; revocation latency not measured",
+  "portable_proof_signer": "each disclosed envelope is signed by the Proofable service wallet, which attests a server-observed statement; the envelope subject/owner names whose record is stored, not who signed it",
+  "signer_address": "0xa41494e1e5f9e5eaf786961e6ef84cd1a3071eec",
+  "subject_controller_address": "0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+  "contract": {
+    "reference": "probityai/agent-evidence-observer",
+    "commit": "c897659ba452bd2fc5a080531aa5bfadb72ad529",
+    "file": "interop/authority-unreachable-2026-10-03/CONTRACT.md",
+    "contract_id": "https://probityai.github.io/agent-evidence-observer/contract/authority-at-dispatch/v1",
+    "trace_fields": "every trace record carries contractId, evidenceAgeSeconds, freshnessLimitSeconds, delegationRoot and delegationHops; this is a field-level implementation mapping, not a native reference-profile trace"
+  },
+  "reproduction": {
+    "kit": "reproduce/ (sibling directory): an operator runs the same eight cases plus the ordered probe against the hosted MCP service under its own Proofable account and keys",
+    "operator_custody": "records produced by the kit name the operator, not Proofable, as custodian"
+  },
+  "results": {
+    "binding_veto": "SUPPORTED",
+    "revoked_stale": "SUPPORTED",
+    "unreachable": "NOT_APPLICABLE_CURRENT_PATH",
+    "human_unavailable": "SUPPORTED",
+    "post_dispatch_revoke": "SUPPORTED"
+  },
+  "case_coverage": {
+    "note": "A missing case is not a passing case. The expected set is fixed by the suite, and this run reports what it produced.",
+    "expected": 8,
+    "covered": 8,
+    "passed": 8,
+    "missing": [],
+    "statement": "8 of 8 expected cases produced a record in this run"
+  },
+  "benign_cost": {
+    "note": "Typed cost per case, so a check that blocks valid work shows up as a cost instead of being assumed zero. Elapsed is measured; model tokens are not measured and are never reported as zero. Where a case records no permitted request, that is a limit of the case rather than evidence that the check forbids nothing.",
+    "cases": [
+      {
+        "case": "hosted_allow",
+        "elapsed_ms": {
+          "status": "measured",
+          "value": 32411,
+          "unit": "ms",
+          "scope": "the whole case including setup and waits, on the runner clock"
+        },
+        "job_duration_ms": {
+          "status": "measured",
+          "value": 4064,
+          "unit": "ms",
+          "scope": "the executed part of the job, as recorded inside the signed job record"
+        },
+        "tokens": {
+          "status": "not_measured",
+          "reason": "the runner does not count model tokens"
+        },
+        "legitimate_work": "the permitted request ran and completed"
+      },
+      {
+        "case": "binding_veto",
+        "elapsed_ms": {
+          "status": "measured",
+          "value": 28423,
+          "unit": "ms",
+          "scope": "the whole case including setup and waits, on the runner clock"
+        },
+        "job_duration_ms": {
+          "status": "measured",
+          "value": 2035,
+          "unit": "ms",
+          "scope": "the executed part of the job, as recorded inside the signed job record"
+        },
+        "tokens": {
+          "status": "not_measured",
+          "reason": "the runner does not count model tokens"
+        },
+        "legitimate_work": "the permitted request did not complete (failed)"
+      },
+      {
+        "case": "approval_reachable",
+        "elapsed_ms": {
+          "status": "measured",
+          "value": 38428,
+          "unit": "ms",
+          "scope": "the whole case including setup and waits, on the runner clock"
+        },
+        "job_duration_ms": {
+          "status": "measured",
+          "value": 4835,
+          "unit": "ms",
+          "scope": "the executed part of the job, as recorded inside the signed job record"
+        },
+        "tokens": {
+          "status": "not_measured",
+          "reason": "the runner does not count model tokens"
+        },
+        "legitimate_work": "the permitted request ran and completed"
+      },
+      {
+        "case": "approval_unavailable",
+        "elapsed_ms": {
+          "status": "measured",
+          "value": 36749,
+          "unit": "ms",
+          "scope": "the whole case including setup and waits, on the runner clock"
+        },
+        "job_duration_ms": {
+          "status": "not_applicable"
+        },
+        "tokens": {
+          "status": "not_measured",
+          "reason": "the runner does not count model tokens"
+        },
+        "legitimate_work": "the permitted request did not complete (cancelled)"
+      },
+      {
+        "case": "revoke_before_dispatch",
+        "elapsed_ms": {
+          "status": "measured",
+          "value": 19532,
+          "unit": "ms",
+          "scope": "the whole case including setup and waits, on the runner clock"
+        },
+        "job_duration_ms": {
+          "status": "not_applicable"
+        },
+        "tokens": {
+          "status": "not_measured",
+          "reason": "the runner does not count model tokens"
+        },
+        "legitimate_work": "no permitted request in this case: no job created; no side effect"
+      },
+      {
+        "case": "expiry_before_dispatch",
+        "elapsed_ms": {
+          "status": "measured",
+          "value": 105708,
+          "unit": "ms",
+          "scope": "the whole case including setup and waits, on the runner clock"
+        },
+        "job_duration_ms": {
+          "status": "not_applicable"
+        },
+        "tokens": {
+          "status": "not_measured",
+          "reason": "the runner does not count model tokens"
+        },
+        "legitimate_work": "no permitted request in this case: no job created; delegation past expiry"
+      },
+      {
+        "case": "stale_authority",
+        "elapsed_ms": {
+          "status": "measured",
+          "value": 30436,
+          "unit": "ms",
+          "scope": "the whole case including setup and waits, on the runner clock"
+        },
+        "job_duration_ms": {
+          "status": "not_applicable"
+        },
+        "tokens": {
+          "status": "not_measured",
+          "reason": "the runner does not count model tokens"
+        },
+        "legitimate_work": "no permitted request in this case: revoked grant replayed twice; no job created"
+      },
+      {
+        "case": "post_dispatch_revoke",
+        "elapsed_ms": {
+          "status": "measured",
+          "value": 62342,
+          "unit": "ms",
+          "scope": "the whole case including setup and waits, on the runner clock"
+        },
+        "job_duration_ms": {
+          "status": "measured",
+          "value": 33929,
+          "unit": "ms",
+          "scope": "the executed part of the job, as recorded inside the signed job record"
+        },
+        "tokens": {
+          "status": "not_measured",
+          "reason": "the runner does not count model tokens"
+        },
+        "legitimate_work": "the permitted request did not complete (failed)"
+      }
+    ]
+  },
+  "grading_scope": {
+    "graded": "the authority decision in each case: whether it matches the permission state, whether a refused request created a job, and whether an allowed job reached a terminal signed receipt",
+    "not_graded": "acceptance of the job text criterion, revocation latency, and any effect at a target the runner does not control",
+    "binding": "observed_matches_expected grades the authority predicate of each case (the decision matching the permission state, a refused request creating no job, an allowed job reaching a terminal signed receipt) together with the typed boundary capture for post_dispatch_revoke. It does not grade the literal wording of an expectation that was revised after the run: where that happened, the trace record carries expectation_status superseded_by_revision and expectation_revised.",
+    "statement": "A case can pass on authority while the service records acceptedOutcome false, because the criterion is a sentence rather than a machine-checkable rule. The verdicts here rest on the decision and the terminal receipt, not on that flag."
+  },
+  "public_trace": {
+    "file": "trace.jsonl",
+    "record_count": 8,
+    "sha256": "66163f10db0c33707e66425c8d4fa5c4d5b98d8054cdeb4976760afb8cd21f9a"
+  },
+  "portable_proofs": {
+    "file": "portable-proofs.json",
+    "count": 15,
+    "references": [
+      {
+        "case_id": "hosted_allow",
+        "relation": "job-outcome",
+        "qHash": "0x03ce9321248769b72e4c7d630d34bafbb00c60eb1c6799c6089bdb6791fa7813"
+      },
+      {
+        "case_id": "hosted_allow",
+        "relation": "authority-decision",
+        "qHash": "0xa03744a0d12c41b3d491403cd1e197c45855b8be24dec4ffb966963e71490bff"
+      },
+      {
+        "case_id": "binding_veto",
+        "relation": "job-outcome",
+        "qHash": "0xab4a4049a2902398a71e7a5e87993a8dd341da85134beb63d73fc607ff489954"
+      },
+      {
+        "case_id": "binding_veto",
+        "relation": "authority-decision",
+        "qHash": "0x3b80f87c6b610fcf29dc63342882780d29b1a6bf30cee2632bcb543f1c846844"
+      },
+      {
+        "case_id": "approval_reachable",
+        "relation": "job-outcome",
+        "qHash": "0x5d476c527c886fda358d542fdc322525ce7c3fef5933a911c4903166ee60ae7e"
+      },
+      {
+        "case_id": "approval_reachable",
+        "relation": "authority-decision",
+        "qHash": "0xaacbfee73fd4db710a3b55f97b242553f19ee8abacda4aada9e132bc87fa5d4a"
+      },
+      {
+        "case_id": "approval_unavailable",
+        "relation": "job-outcome",
+        "qHash": "0x1a66066e51ade3bdbb110ab6f9e88abd2967f6b52967f8345edc3d6ab7e48d8d"
+      },
+      {
+        "case_id": "approval_unavailable",
+        "relation": "authority-decision",
+        "qHash": "0x59ae734cdd784df5e18ca18a58efecb553326fc742356840d4099801dce58bcd"
+      },
+      {
+        "case_id": "revoke_before_dispatch",
+        "relation": "authority-decision",
+        "qHash": "0xb84a54c04bb32a65c327f2045c6c53d262775050e1b52672b14f2b9eecdfee01"
+      },
+      {
+        "case_id": "expiry_before_dispatch",
+        "relation": "authority-decision",
+        "qHash": "0xb0dc6b40444f41635e4c0d06ad71ced9ce6ce00cbce79490ff77d7eddc6519d9"
+      },
+      {
+        "case_id": "stale_authority",
+        "relation": "authority-decision",
+        "qHash": "0x308df7fa625b481429069cc72a3288b1661d10146fc19b9d0533ea54243a1fdd"
+      },
+      {
+        "case_id": "stale_authority",
+        "relation": "authority-decision",
+        "qHash": "0x3d7b233cbfb24d4999e5e61bd235724d4d4009b40fe9468bca51da62346e46e2"
+      },
+      {
+        "case_id": "post_dispatch_revoke_ordered",
+        "relation": "job-outcome",
+        "qHash": "0x45606ad5d655a20abb838440cae024353b31a4a9a611680c152e2ff6e325b793"
+      },
+      {
+        "case_id": "post_dispatch_revoke_ordered",
+        "relation": "authority-decision",
+        "qHash": "0x9281d10d2c7c11d4c35f1af0370453b46477ed329e247ee0b748773dc42f7a31"
+      },
+      {
+        "case_id": "post_dispatch_revoke_ordered",
+        "relation": "authority-decision",
+        "qHash": "0xe08509853fc3bda2ca180d3d6f0d6e1f4480d03f792504e0bda31e17f2d1bdd4"
+      }
+    ]
+  },
+  "offline_verifier": {
+    "package": "@proofable/sdk",
+    "version": "0.1.11",
+    "command": "node verify-portable-proofs.mjs"
+  },
+  "reader_appraisal": {
+    "trace_check": "recompute SHA-256 of trace.jsonl and compare with manifest.public_trace.sha256",
+    "record_check": "run node verify-portable-proofs.mjs from this packet with @proofable/sdk installed; every disclosed envelope must pass qHash and signature verification offline",
+    "policy_digest": "not emitted by the deployed system; authority_policy_version is the policy identifier"
+  },
+  "post_dispatch_revocation": {
+    "record": "authority-effect-results.json → cases[case_id=post_dispatch_revoke].temporal_revocation",
+    "trace": "trace.jsonl → post_dispatch_revoke.dispatch_sequence",
+    "separates": "the next dispatch refusal (with its reason) from the earlier action's boundary outcome, which this run recorded as the running attempt stopped with a typed reason, its prior effect not observed",
+    "earlier_effect_this_run": "stopped_on_revocation"
+  },
+  "public_references": {
+    "sdk": "https://www.npmjs.com/package/@proofable/sdk",
+    "mcp": "https://github.com/proofable/mcp",
+    "docs": "https://docs.proofable.me",
+    "caip380": "https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-380.md",
+    "hosted_mcp_endpoint": "https://mcp.proofable.me/mcp"
+  }
+}
