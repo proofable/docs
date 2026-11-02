@@ -23,13 +23,17 @@ sha256sum -c SHA256SUMS
 cd ../reproduce
 node aad.mjs verify ../2026-11-02-suite
 node aad.mjs report ../2026-11-02-suite
+node aad.mjs controls ../2026-11-02-suite
 ```
 
 `verify` recomputes every checksum, the trace digest and all 15 disclosed envelopes offline. It counts the
 trace rows and computes the coverage from them: each of the eight cases must appear exactly once, and a case
 passes only when its row says so and every record it cites verifies. A count or coverage the manifest declares
 that differs from that computation fails. `report` prints the typed cost and the grading scope from the sealed
-records. Both read the older packets too, which carry one file per case.
+records. Both read the older packets too, which carry one file per case. `controls` checks the verifier itself:
+it alters a copy of the packet (a case removed, a case duplicated, a verdict flipped, a cited record removed),
+re-seals every digest so the integrity checks pass, and requires `verify` to reject each one while accepting the
+unaltered copy. The packet is never touched.
 
 To check the October 8 packet, run `npm install @proofable/sdk@0.1.10` inside
 `2026-10-08-eight-case/`, then `node verify-portable-proofs.mjs`.

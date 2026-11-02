@@ -10,6 +10,7 @@
  *   node aad.mjs run [case ...]        run all cases (default) or the named ones
  *   node aad.mjs verify <run-dir>      offline: checksums, every envelope, every verdict
  *   node aad.mjs report <run-dir>      offline: per-case typed outcomes, typed cost, grading scope
+ *   node aad.mjs controls <packet>     offline: altered copies the verifier must reject (missing, duplicate, flipped, unbacked)
  *   node aad.mjs cases                 list the cases
  *
  * verify also takes `--expect-signer 0x…`, the address you read out of band (for the published
@@ -29,9 +30,10 @@
  * Every value in a record is read from the live service; a value it did not produce stays
  * null or an explicit not_* state. Revocation latency is not measured.
  */
+import { spawnSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { chmodSync, existsSync, mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from 'node:fs';
-import { homedir } from 'node:os';
+import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
+import { homedir, tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { isDeepStrictEqual } from 'node:util';
@@ -768,6 +770,74 @@ function reportV3(dir) {
   console.log('Read this report from the sealed records only; it writes nothing.');
 }
 
+// ── controls: altered copies the verifier must reject, offline ──────────────────────────
+/**
+ * Negative controls for a published packet. Each control alters a copy of the transcript or the
+ * envelope set, then re-seals every digest (the manifest's trace digest and SHA256SUMS), so the
+ * integrity checks pass on the altered bytes and only the coverage and evidence checks can catch
+ * it. `verify` must accept the unaltered copy and reject every altered one. The packet itself is
+ * never touched.
+ */
+function controls(dirArg) {
+  const dir = resolve(String(dirArg || ''));
+  if (!isV3Packet(dir)) throw new Error('Pass a published packet directory (manifest.json and trace.jsonl).');
+  const self = fileURLToPath(import.meta.url);
+  const lfBytes = (text) => Buffer.from(text.replace(/\r\n/g, '\n'), 'utf8');
+  const alteredCopy = (alter) => {
+    const copy = mkdtempSync(join(tmpdir(), 'aad-control-'));
+    cpSync(dir, copy, { recursive: true });
+    const m = readJsonFile(join(copy, 'manifest.json'));
+    const traceName = m.public_trace?.file || 'trace.jsonl';
+    const proofsName = m.portable_proofs?.file || 'portable-proofs.json';
+    const trace = readFileSync(join(copy, traceName), 'utf8').split('\n').filter((l) => l.trim()).map((l) => JSON.parse(l));
+    const envelopes = readJsonFile(join(copy, proofsName));
+    const out = alter({ manifest: m, trace, envelopes }) || {};
+    const traceText = `${(out.trace || trace).map((r) => JSON.stringify(r)).join('\n')}\n`;
+    writeFileSync(join(copy, traceName), lfBytes(traceText));
+    writeFileSync(join(copy, proofsName), lfBytes(`${JSON.stringify(out.envelopes || envelopes, null, 2)}\n`));
+    m.public_trace.sha256 = sha256(lfBytes(traceText));
+    writeFileSync(join(copy, 'manifest.json'), lfBytes(`${JSON.stringify(m, null, 2)}\n`));
+    const sums = readFileSync(join(copy, 'SHA256SUMS'), 'utf8').split('\n').filter((l) => l.trim())
+      .map((l) => { const name = l.split(/\s+/)[1].replace(/^\*/, ''); return `${sha256(readFileSync(join(copy, name)))}  ${name}`; });
+    writeFileSync(join(copy, 'SHA256SUMS'), lfBytes(`${sums.join('\n')}\n`));
+    return copy;
+  };
+  const verdictOf = (copy) => {
+    const r = spawnSync(process.execPath, [self, 'verify', copy], { encoding: 'utf8' });
+    rmSync(copy, { recursive: true, force: true });
+    const reason = String(r.stdout || '').split('\n').filter((l) => /FAIL|NOT DECLARED/.test(l)).map((l) => l.trim()).join('; ');
+    return { accepted: r.status === 0, reason };
+  };
+  const last = CASE_ORDER[CASE_ORDER.length - 1];
+  const cited = (row) => String(row?.terminal_receipt?.qHash || row?.authority_decision_qHashes?.[0] || row?.authority_decision_qHash || '').toLowerCase();
+  const alterations = [
+    ['missing case: drop a case, re-seal the digests', ({ trace }) => ({ trace: trace.filter((r) => r.case_id !== last) })],
+    ['missing case: drop a case and re-declare the record count', ({ manifest, trace }) => {
+      manifest.public_trace.record_count = trace.length - 1;
+      return { trace: trace.filter((r) => r.case_id !== last) };
+    }],
+    ['duplicate case: one case twice, another gone, same count', ({ trace }) => ({ trace: [...trace.filter((r) => r.case_id !== last), trace[0]] })],
+    ['flipped verdict: one case fails, the declared pass count kept', ({ trace }) => ({ trace: trace.map((r, i) => (i === 0 ? { ...r, observed_matches_expected: false } : r)) })],
+    ['missing evidence: a record a case cites removed from the envelopes', ({ manifest, trace, envelopes }) => {
+      const q = cited(trace[0]);
+      const kept = envelopes.filter((e) => String(e.qHash).toLowerCase() !== q);
+      manifest.portable_proofs.count = kept.length;
+      manifest.portable_proofs.references = (manifest.portable_proofs.references || []).filter((r) => String(r.qHash).toLowerCase() !== q);
+      return { envelopes: kept };
+    }],
+  ];
+  const baseline = verdictOf(alteredCopy(() => ({})));
+  console.log(`${'unaltered copy'.padEnd(64)} ${baseline.accepted ? 'accepted' : `REJECTED ${baseline.reason}`}`);
+  let failures = baseline.accepted ? 0 : 1;
+  for (const [label, alter] of alterations) {
+    const v = verdictOf(alteredCopy(alter));
+    if (v.accepted) failures += 1;
+    console.log(`${label.padEnd(64)} ${v.accepted ? 'ACCEPTED (the verifier missed it)' : `rejected: ${v.reason}`}`);
+  }
+  console.log(failures ? `\n${failures} control(s) failed` : `\nthe verifier accepts the packet and rejects all ${alterations.length} re-sealed alterations`);
+  process.exitCode = failures ? 1 : 0;
+}
+
 // ── entry ───────────────────────────────────────────────────────────────────────────────
 const [command, ...rest] = process.argv.slice(2);
 const flag = (name) => {
@@ -779,10 +849,11 @@ const commands = {
   run: () => run(rest.filter((a) => !a.startsWith('--'))),
   verify: () => verify(rest[0], { expectSigner: flag('--expect-signer') }),
   report: async () => report(rest[0]),
+  controls: async () => controls(rest[0]),
   cases: async () => console.log(CASE_ORDER.join('\n')),
 };
 if (!commands[command]) {
-  console.log('usage: node aad.mjs <setup|run [case ...]|verify <run-dir> [--expect-signer 0x…]|report <run-dir>|cases>');
+  console.log('usage: node aad.mjs <setup|run [case ...]|verify <run-dir> [--expect-signer 0x…]|report <run-dir>|controls <packet-dir>|cases>');
   process.exitCode = command ? 1 : 0;
 } else {
   commands[command]().catch((error) => { console.error(`FAILED: ${error?.message || error}`); process.exitCode = 1; });
