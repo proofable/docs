@@ -24,9 +24,11 @@ node aad.mjs verify ../2026-11-01-suite-c1
 node aad.mjs report ../2026-11-01-suite-c1
 ```
 
-`verify` recomputes every checksum, the trace digest, all 15 disclosed envelopes offline and the coverage the
-packet declares; `report` prints the typed cost and the grading scope from the sealed records. Both read the
-older packets too, which carry one file per case.
+`verify` recomputes every checksum, the trace digest and all 15 disclosed envelopes offline. It counts the
+trace rows and computes the coverage from them: each of the eight cases must appear exactly once, and a case
+passes only when its row says so and every record it cites verifies. A count or coverage the manifest declares
+that differs from that computation fails. `report` prints the typed cost and the grading scope from the sealed
+records. Both read the older packets too, which carry one file per case.
 
 To check the October 8 packet, run `npm install @proofable/sdk@0.1.10` inside
 `2026-10-08-eight-case/`, then `node verify-portable-proofs.mjs`.

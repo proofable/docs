@@ -364,10 +364,13 @@ function makeRun(ids) {
         dispatch_sequence: [
           { step: 1, event: 'dispatch', decision: 'ALLOW', at: dispatchedAt, job_id: jobId },
           { step: 2, event: 'revocation', at: revokedAt, success: revocation?.success ?? null, status_at_revocation: statusAtRevocation, observed_in_flight: !TERMINAL.includes(statusAtRevocation) },
-          { step: 3, event: 'original_effect', at: finishedAt, terminal_outcome: outcome, committed_effect: outcome === 'completed' ? 'observed_at_platform' : outcome === 'cancelled' ? 'none_cancelled' : 'unknown' },
+          { step: 3, event: 'original_effect', at: finishedAt, terminal_outcome: outcome, committed_effect: revocationOutcome(job) },
           { step: 4, event: 'next_dispatch', at: nextAt, decision: next.refused ? 'DENY' : 'ALLOWED_UNEXPECTED', job_created: !next.refused, reason: next.response?.error || next.response?.code || null },
         ],
-        observed: { status: job.status, response: job.result?.response || null, executor: job.result?.executor || null, error: job.error || null },
+        observed: {
+          status: job.status, response: job.result?.response || null, executor: job.result?.executor || null, error: job.error || null,
+          attempts: (job.attemptHistory || []).map((a) => ({ attempt: a.attempt ?? null, status: a.status || null, error: a.error || null })),
+        },
         receipt: terminalReceipt,
         next_dispatch_authority_decision: next.authorityDecision,
         limitations: ['The original effect is observed at the platform boundary (job terminal state), not by a target-side readback.', 'Revocation latency is not measured.'],
@@ -375,6 +378,20 @@ function makeRun(ids) {
     },
   };
   return cases;
+}
+
+/**
+ * What the in-flight run did once its grant was revoked, from the job record. A run that completed is a
+ * platform-observed effect; a run the service stopped with JOB_AUTHORITY_REVOKED is a typed stop whose
+ * prior effect is not observed. Anything else (a stall, or a retry refused after one) does not exercise
+ * the boundary and stays `unknown`.
+ */
+function revocationOutcome(job) {
+  const status = lower(job?.status);
+  if (status === 'completed') return 'observed_at_platform';
+  if (/JOB_AUTHORITY_REVOKED/.test(String(job?.error || ''))) return 'stopped_on_revocation';
+  if (status === 'cancelled') return 'none_cancelled';
+  return 'unknown';
 }
 
 // ── verdicts: expected versus observed, from the record alone ───────────────────────────
@@ -402,7 +419,7 @@ function verdict(rec) {
       const s = rec.dispatch_sequence || [];
       const times = s.map((x) => Date.parse(x.at));
       return s.map((x) => x.event).join() === 'dispatch,revocation,original_effect,next_dispatch'
-        && s[1].observed_in_flight === true && s[2].committed_effect === 'observed_at_platform'
+        && s[1].observed_in_flight === true && ['observed_at_platform', 'stopped_on_revocation'].includes(s[2].committed_effect)
         && s[3].decision === 'DENY' && Boolean(s[3].reason) && times.every((t, i) => Number.isFinite(t) && (i === 0 || t > times[i - 1]))
         && proofOk(rec.receipt, { job: true }) && proofOk(rec.next_dispatch_authority_decision);
     }
@@ -512,10 +529,20 @@ const isV3Packet = (dir) => {
 };
 const readJsonFile = (p) => JSON.parse(readFileSync(p, 'utf8'));
 
+/** The signed records a trace row cites as its evidence: the terminal receipt and every authority decision. */
+const citedRecords = (row) => [
+  row?.terminal_receipt?.qHash,
+  row?.authority_decision_qHash,
+  ...(Array.isArray(row?.authority_decision_qHashes) ? row.authority_decision_qHashes : []),
+  row?.next_authority_decision_qHash,
+].filter(Boolean).map(lower);
+
 /**
  * Verify a v3 packet from its manifest: the checksums above, the trace digest the manifest claims, every
- * disclosed envelope offline, and the coverage it declares. Nothing here trusts the manifest over the
- * bytes: every claim it makes is recomputed from the files beside it.
+ * disclosed envelope offline, and the coverage. Nothing here trusts the manifest over the bytes: the record
+ * count and the coverage are computed from the trace rows themselves (case identities and multiplicities
+ * against the suite's fixed case set, each passing row backed by the envelopes it cites), and what the
+ * manifest declares is checked against that computation.
  */
 async function verifyV3(dir, checksumFailures, expectSigner) {
   let failures = checksumFailures;
@@ -526,20 +553,34 @@ async function verifyV3(dir, checksumFailures, expectSigner) {
   }
   const trace = manifest.public_trace || {};
   const traceName = trace.file || 'trace.jsonl';
+  const traceRows = [];
   if (!existsSync(join(dir, traceName))) { console.log(`trace MISSING ${traceName}`); failures += 1; }
-  else if (trace.sha256 && sha256(readFileSync(join(dir, traceName))) !== trace.sha256) { console.log(`trace digest FAIL ${traceName}`); failures += 1; }
-  else console.log(`trace digest OK (${traceName}, ${trace.record_count ?? '?'} records)`);
+  else {
+    const traceBytes = readFileSync(join(dir, traceName));
+    if (trace.sha256 && sha256(traceBytes) !== trace.sha256) { console.log(`trace digest FAIL ${traceName}`); failures += 1; }
+    else console.log(`trace digest OK (${traceName})`);
+    const lines = traceBytes.toString('utf8').split('\n').filter((l) => l.trim());
+    for (const [i, line] of lines.entries()) {
+      try { traceRows.push(JSON.parse(line)); } catch { console.log(`trace line ${i + 1} FAIL: not JSON`); failures += 1; }
+    }
+    if (trace.record_count !== undefined && Number(trace.record_count) !== lines.length) {
+      console.log(`trace count FAIL: the manifest declares ${trace.record_count} records, ${traceName} holds ${lines.length}`);
+      failures += 1;
+    } else console.log(`trace count OK (${lines.length} records read from ${traceName})`);
+  }
   const proofs = manifest.portable_proofs || {};
   const proofsName = proofs.file || 'portable-proofs.json';
   const envelopes = existsSync(join(dir, proofsName)) ? readJsonFile(join(dir, proofsName)) : [];
   const referenced = new Set((proofs.references || []).map((r) => lower(r.qHash)));
   const present = new Set();
+  const verified = new Set();
   let bad = 0;
   let signerFailures = 0;
   for (const e of envelopes) {
     const v = await verifyPortableProofEnvelope(e);
     if (!v.valid) bad += 1;
     else if (expectSigner && lower(String(e.did || '').split(':').pop() || e.walletAddress) !== expectSigner) { bad += 1; signerFailures += 1; }
+    else verified.add(lower(e.qHash));
     present.add(lower(e.qHash));
   }
   const absent = [...referenced].filter((q) => !present.has(q));
@@ -550,15 +591,38 @@ async function verifyV3(dir, checksumFailures, expectSigner) {
   } else console.log(`envelopes OK (${envelopes.length} verified offline against ${referenced.size} declared references)`);
   if (bad) { console.log(`envelope verification FAIL (${bad})`); failures += 1; }
   if (expectSigner) console.log(`signer pin ${expectSigner}: ${signerFailures ? `${signerFailures} envelope(s) signed by another address` : 'every envelope is signed by it'}`);
+  // Coverage follows the rows, not the summary: a case is covered when exactly one row carries its id, and
+  // passes only when that row says so and every record it cites verified above.
+  const rowsById = new Map();
+  for (const row of traceRows) {
+    const id = String(row?.case_id || row?.case || '');
+    rowsById.set(id, [...(rowsById.get(id) || []), row]);
+  }
+  const missing = CASE_ORDER.filter((id) => !rowsById.has(id));
+  const duplicated = CASE_ORDER.filter((id) => (rowsById.get(id) || []).length > 1);
+  const unexpected = [...rowsById.keys()].filter((id) => !CASE_ORDER.includes(id));
+  const unbacked = [];
+  const passedIds = CASE_ORDER.filter((id) => {
+    const rows = rowsById.get(id) || [];
+    if (rows.length !== 1) return false;
+    const absent = citedRecords(rows[0]).filter((q) => !verified.has(q));
+    if (absent.length) { unbacked.push(`${id} (${absent.length} cited record(s) not verified here)`); return false; }
+    return rows[0].observed_matches_expected === true;
+  });
+  const computed = { expected: CASE_ORDER.length, covered: CASE_ORDER.length - missing.length - duplicated.length, passed: passedIds.length };
+  for (const [label, ids] of [['missing', missing], ['duplicated', duplicated], ['outside the suite', unexpected], ['not backed by its records', unbacked]]) {
+    if (ids.length) { console.log(`coverage FAIL: ${label}: ${ids.join(', ')}`); failures += 1; }
+  }
   const cov = manifest.case_coverage || {};
-  const named = Array.isArray(cov.missing) ? cov.missing : [];
+  const declaredMissing = Array.isArray(cov.missing) ? [...cov.missing].sort().join() : '';
   if (cov.expected === undefined || cov.covered === undefined) {
-    console.log('coverage NOT DECLARED: this packet does not state what it covered');
+    console.log(`coverage NOT DECLARED: this packet does not state what it covered (the trace gives ${computed.passed}/${computed.expected} passed, ${computed.covered} covered)`);
     failures += 1;
-  } else if (Number(cov.expected) !== Number(cov.covered) || named.length) {
-    console.log(`coverage FAIL: expected ${cov.expected}, covered ${cov.covered}, missing ${named.length ? named.join(', ') : 'none declared'}`);
+  } else if (Number(cov.expected) !== computed.expected || Number(cov.covered) !== computed.covered
+    || (cov.passed !== undefined && Number(cov.passed) !== computed.passed) || declaredMissing !== [...missing].sort().join()) {
+    console.log(`coverage FAIL: the manifest declares ${cov.passed}/${cov.expected} passed, ${cov.covered} covered, missing [${declaredMissing}]; the trace gives ${computed.passed}/${computed.expected} passed, ${computed.covered} covered, missing [${missing.join()}]`);
     failures += 1;
-  } else console.log(`coverage OK (${cov.passed}/${cov.expected} passed, nothing missing)`);
+  } else console.log(`coverage OK (${computed.passed}/${computed.expected} passed, ${computed.covered} covered, computed from the trace rows)`);
   if (manifest.grading_scope?.binding) {
     console.log('grading scope: bound to the authority predicate and the typed boundary capture, not to an expectation revised after the run');
   }
