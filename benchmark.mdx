@@ -5,7 +5,7 @@ description: "What Proofable stops and what it saves your agents, measured on th
 icon: chart-simple
 ---
 
-Proofable stops every agent action you never allowed before it runs, and lets the next agent or system check finished work instead of paying to redo it. Each result below comes from the live service, compared with the setup teams use today, and links to a record you can check or a test you can rerun.
+Proofable makes every check a portable proof: private, signed, and checkable by any app or agent without redoing the work. Because the proof travels, agents stop actions you never allowed before they run, and the next agent or system checks finished work instead of paying to redo it. Each result below comes from the live service, compared with the setup teams use today, and links to a record you can check or a test you can rerun.
 
 ## Results
 
@@ -17,7 +17,7 @@ Proofable stops every agent action you never allowed before it runs, and lets th
 | [Forged or altered records](#records-nobody-can-fake) | **150 of 150** caught | A format-only check accepted all 150 |
 | [Work handed to another agent](#handoffs-between-agents) | **\$0.024** per correct outcome, 3 of 3 tampered handoffs caught | \$0.078 to redo the work; trusting the forwarded text caught 0 of 3 |
 | [Reusing finished work](#reuse-instead-of-redo) | **3.7 ms, 0 tokens** | 2.79 s and 2,426 tokens to redo it, 750× slower |
-| [Agent memory that knows which rule is current](#memory-that-knows-what-is-current) | **42× fewer tokens**, 8.8× faster | 4,462,980 tokens and 493 s searching every record body |
+| [Agent memory that knows which rule is current](#memory-that-knows-what-is-current) | **42.4× fewer tokens**, 8.8× faster | 4,462,980 tokens and 493 s searching every record body |
 | [Worst-case research spend](#research-with-a-cost-ceiling) | **16,301 tokens** | 50,554 on the open web, 3.1× higher, at about twice the cost per answer |
 | [One identity check reused by 100 apps](#identity-checks-paid-for-once) | **\$1.75** | \$150.00 re-running Stripe Identity in each, 85× more |
 
@@ -42,7 +42,7 @@ Proofable stops every agent action you never allowed before it runs, and lets th
 
 | Setup | Scenarios handled |
 |---|---|
-| Proofable policy engine | **48 of 48** |
+| Proofable policy engine | **48/48** |
 | ACP, the maintainers' gateway ([published run](https://github.com/agentic-control-plane/agentgovbench/actions/runs/37759892335)) | 46 of 48 |
 | A gate that allows everything | 20 of 48 |
 | No governance | 5 of 48 |
@@ -51,7 +51,7 @@ Against the agent tools teams already use, from the maintainers' [published resu
 
 | Setup | Scenarios handled |
 |---|---|
-| Proofable policy engine | **48 of 48** |
+| Proofable policy engine | **48/48** |
 | Anthropic Agent SDK with the ACP gateway | 46 of 48 |
 | OpenAI Agents SDK with the ACP gateway | 45 of 48 |
 | Claude Code or Codex CLI with ACP hooks | 43 of 48 |
@@ -65,7 +65,7 @@ Against the agent tools teams already use, from the maintainers' [published resu
 - **A stateless API/MCP gateway (46):** a proxy in front of tool calls enforces rate limits, role-based access, tool allowlists and server logs.
 - **The two checks a stateless gateway cannot pass (48):** a proxy only sees the request in flight. It cannot verify (1) an **owner-signed, revocable delegation** binding the person to that specific agent, task scope, spend cap and expiry, such as holding a sub-agent to a narrower scope than its parent, or (2) a **signed execution receipt** (`qHash`) binding input, policy state and output, so the next agent or an outside reviewer can verify what ran offline without trusting the gateway's database.
 
-**See where your own agent stands.** Paste your agent's repository and one run scores it on the same 48 scenarios beside Proofable, scans the repository and its MCP surface, and probes your MCP endpoint when the repository names one: [run the audit on your agent](https://proofable.me/verify?gateId=gate_25cfeb508d484170a2ce).
+**See where your own agent stands.** Paste your agent's repository. In about ten minutes you get what it can do without permission, with the file and line for each gap, where it lands on the same 48 scenarios, and the one command that puts your limits in front of every tool call: [audit your agent](https://proofable.me/verify?gateId=gate_208670b624d543f6b0b5).
 
 ### Agents only do what you allowed
 
@@ -132,7 +132,7 @@ When one agent hands a finished result to another (LangGraph, CrewAI, AutoGen), 
 
 Most agent memory layers (Mem0, Zep, vector stores) return text chunks with no active or revoked status and no signer, so the agent keeps reading full bodies to work out which rule is current. Proofable stores typed, revocable, owner-signed records (`rules`, `instruction`, `receipts`), so the agent asks for active state by type and reads about 1 KB of verified metadata before opening a body.
 
-On a 1,721-record production vault, the same questions took **105,347 tokens in 56 seconds** (7 model calls) by typed lookup against **4,462,980 tokens in 493 seconds** (55 model calls) searching record bodies by keyword: **42× fewer tokens, 8.8× faster**, and 14.6× to 18.9× lower model cost across Claude Sonnet 5.5, Gemini 3.1 Pro and GPT-6 Astra. On three direct probes, typed lookup ranked the target record first every time; keyword search pulled 61 KB to 63 KB of bodies, ranked the right plan fourth, and missed the active model-provider rule entirely.
+On a 1,721-record production vault, the same questions took **105,347 tokens in 56 seconds** (7 model calls) by typed lookup against **4,462,980 tokens in 493 seconds** (55 model calls) searching record bodies by keyword: **42.4× fewer tokens, 8.8× faster**, and 14.6× to 18.9× lower model cost across Claude Sonnet 5.5, Gemini 3.1 Pro and GPT-6 Astra. On three direct probes, typed lookup ranked the target record first every time; keyword search pulled 61 KB to 63 KB of bodies, ranked the right plan fourth, and missed the active model-provider rule entirely.
 
 ### Research with a cost ceiling
 
@@ -233,7 +233,8 @@ Pin both refs to the same commit so a rerun measures the same kit. The action wr
     | 150 of 150 changed copies rejected across ten kinds of forgery; 15 of 15 real records accepted; a check that only reads the format accepts all 150 | OWASP ASI07 Insecure Inter-Agent Communication | Records nobody can fake |
     | A finished result verified offline in 3.7 ms with zero AI tokens and no account; producing it took 2.79 s and 2,426 tokens | CAIP-380 Portable Proof | Reuse instead of redo |
     | AgentGovBench, current library: 48 of 48, against 46 for the maintainers' gateway, 20 for a gate that allows everything and 5 with no governance | NIST AI RMF GOVERN-1.1, 1.2, 1.4; MAP-2.1, 4.1; MEASURE-2.3, 2.6, 2.7; MANAGE-2.1, 2.2, 4.1 (the controls tagged on the scenarios) | Governance coverage |
+    | AgentGovBench 48 of 48, the eight live permission tests and the decision records that verify offline | AARM (CSA) selected runtime-authorization controls. Evaluated against those controls with coverage and limitations documented; not a conformance assessment, a certification or a compliance opinion | Governance coverage |
 
-    The frameworks: [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/), the [EU AI Act](https://eur-lex.europa.eu/eli/reg/2024/1689/oj), the [NIST AI RMF](https://www.nist.gov/itl/ai-risk-management-framework), the [NIST NCCoE agent identity and authorization project](https://www.nccoe.nist.gov/projects/software-and-ai-agent-identity-and-authorization) and [CAIP-380](https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-380.md).
+    The frameworks: [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/), the [EU AI Act](https://eur-lex.europa.eu/eli/reg/2024/1689/oj), the [NIST AI RMF](https://www.nist.gov/itl/ai-risk-management-framework), the [NIST NCCoE agent identity and authorization project](https://www.nccoe.nist.gov/projects/software-and-ai-agent-identity-and-authorization) and [CAIP-380](https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-380.md). [AARM](https://aarm.dev/) frames the runtime-authorization controls, and the evidence also sits in the [AAIF Identity & Trust](https://github.com/aaif/wg-identity-and-trust/issues/13) working-group comparison.
   </Accordion>
 </AccordionGroup>

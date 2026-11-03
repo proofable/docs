@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Trust Harness Benchmark: runs the open AgentGovBench library (48 agent-governance scenarios)
-# against an agent repository, the same library and commit docs.proofable.me/evidence reports.
+# Trust Harness Audit: runs the open AgentGovBench library (48 agent-governance scenarios)
+# against an agent repository, the same library and commit docs.proofable.me/benchmark reports.
 # It clones the library, runs its no-governance floor and the native runner for each agent
 # framework the repository uses, and prints every score as one JSON object.
 # Usage: bash agentgovbench.sh <repository directory> <output directory>
