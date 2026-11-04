@@ -36,7 +36,8 @@ Sign your users in with Proofable, then make the same call as them. Each person 
 ```javascript
 import { ProofableClient, ProofableSignIn } from '@proofable/sdk';
 
-const signIn = new ProofableSignIn({ redirectUri: 'https://your.app/proofable/callback', clientId });
+// clientId: what register() returned the first time, kept with your app's settings.
+const signIn = new ProofableSignIn({ redirectUri: 'https://your.app/proofable/callback', clientId: settings.proofableClientId });
 
 // 1. Send the person to Proofable. Keep `state` and `verifier` until they are back; a signed cookie works.
 const started = await signIn.start();
@@ -55,7 +56,7 @@ const person = new ProofableClient({
 const who = await person.me();                                     // { handle, address, ... }
 const turn = await person.agentChat({
   agentId: 'my-agent',
-  agentWallet: '0xYourAccount',                                    // your account: the agent runs as a template in the person's profile
+  agentWallet: '0xYourAccount',                                    // your account: the agent runs in the person's own profile
   turnId: `u-${yourUserKey}-${Date.now()}`,                        // your key for the person; every spend record carries it
   messages: [{ role: 'user', content: 'Where does the case start?' }],
 });
@@ -63,15 +64,21 @@ const turn = await person.agentChat({
 
 **Sign-in** is the one every MCP host uses ([MCP OAuth](/mcp/oauth)). `start()` with no `clientId` registers your callback and returns the id; store it with your app's settings and pass it to every later instance. Renew with `signIn.refresh(tokens.refreshToken)` before the token expires.
 
-**Who pays.** Without `appId` and `billingWallet`, each person spends their own credits. With them, the client sends your app's sponsor grant with each turn and your organization is billed, within the daily cap you signed, with the spend recorded under your app and your `turnId`. The one-time setup is a Sponsor Authorization on your account naming the app, its origin, the scope `agent-chat` and the daily cap; it is the same authorization that sponsors your users' checks, and per-person limits are yours to apply from that record of spend.
+**Who pays.** Your app does. Turn it on once, signed in as yourself:
 
-**What the agent may do** for the person is fixed: read and add to the person's own records, and search the web. It cannot spend, grant, change keys or run code, and a high-risk action is refused. The agent must be public or link-only on your account. When it keeps words the person confirms, the record is the person's own, and they can open it at `proofable.me/proof/<qHash>`.
+```bash
+npx -y @proofable/sdk sponsor --app your-app --origin https://your.app --credits-per-day 2000
+```
+
+From then on a client built with `appId` and `billingWallet` carries your sponsorship: your organization pays for your users' checks and their chats with your agents, within the daily cap you set, and every spend record names your app and your `turnId`, so limits per person are yours to apply. Without `appId` and `billingWallet`, each person spends their own credits. In code, the same step is `client.sponsorApp({ appId, origin, creditsPerDay })`.
+
+**What the agent may do** for the person is fixed: read and add to the person's own records, and search the web. It cannot spend, grant, change keys or run code, and a high-risk action is refused. The agent must be public or link-only on your account. When it keeps words the person confirms, the record is the person's own, and they can open it at `proofable.me/proof/<qHash>`. Keeping it is one credit from the person's own allowance, which every account has; the turns are what your app pays.
 
 ## What happens on each turn
 
-1. Proofable finds the [permission](/agents/agent-delegation) you signed for the agent. No active permission from your account, no turn.
-2. The turn runs as the agent: its own instructions and skills from its [identity](/agents/agent-identity), and the connected apps you bound to it.
-3. Every tool call is checked against the permission before it runs, read again for each call. Revoke the permission and the next call stops, in every app that talks to the agent.
+1. Proofable finds the [permission](/agents/agent-delegation) you signed for the agent. With none, the turn runs only if `agentWallet` names someone else's public agent, in your own profile, under the fixed rule above.
+2. The turn runs as the agent: its own instructions and skills from its [identity](/agents/agent-identity), and, for your own agent, the connected apps you bound to it.
+3. Every tool call is checked before it runs, against the permission or the fixed rule, read again for each call. Revoke the permission and the next call stops, in every app that talks to the agent.
 4. The answer comes back with the records the agent read. Each one opens at `proofable.me/proof/<qHash>`, so anyone you share it with can check where the answer came from.
 
 ## Over HTTP
@@ -88,7 +95,7 @@ curl -N https://api.proofable.me/api/v1/agent/chat/turn \
 | Field | What it does |
 |---|---|
 | `agentId` | Run the turn as this agent. Omit it to run as yourself. |
-| `agentWallet` | The agent's account: when two of your agents share an id, or to talk to someone else's public agent, which then runs as a template in your own profile |
+| `agentWallet` | The agent's account: when two of your agents share an id, or to talk to someone else's public agent, which then runs in your own profile |
 | `messages` | The conversation, `user` and `assistant` turns, ending with the user |
 | `systemPrompt` | Context from your app. The agent reads it as data, after its own instructions. |
 | `model` | `default` or `advanced`. With `provider`, that provider's model id. |
@@ -106,7 +113,7 @@ The stream sends `turn.start`, `answer.delta` as the answer arrives, `tool.start
 }
 ```
 
-For someone else's public agent, `delegationQHash` is `null`: there is no permission between you, the agent ran as a template in your profile.
+For someone else's public agent, `delegationQHash` is `null`: there is no permission between you, the agent ran in your own profile.
 
 A request Proofable refuses never opens the stream. It answers JSON with the reason:
 
@@ -116,6 +123,7 @@ A request Proofable refuses never opens the stream. It answers JSON with the rea
 | 402 | `INSUFFICIENT_CREDITS` | Not enough credits for a hosted turn, on the account that pays |
 | 402 | `SPONSOR_CAP_EXCEEDED` | The sponsoring app has used its daily cap |
 | 403 | `AGENT_DELEGATION_REQUIRED` | No active permission from your account to this agent, and no public agent of that id at `agentWallet` |
+| 403 | `SPONSOR_GRANT_INVALID` | The app's sponsor grant was sent but not accepted: expired, already used, for another app or origin, or for an agent that is not the sponsoring account's. The person is never charged instead |
 | 403 | `ADVANCED_REQUIRES_PRO` | Advanced runs on paid plans |
 
 ## What it costs
