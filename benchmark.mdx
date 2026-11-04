@@ -44,20 +44,16 @@ Proofable makes every check a portable proof: private, signed, and checkable by 
 |---|---|
 | Proofable policy engine | **48/48** |
 | ACP, the maintainers' gateway ([published run](https://github.com/agentic-control-plane/agentgovbench/actions/runs/37759892335)) | 46 of 48 |
-| A gate that allows everything | 20 of 48 |
-| No governance | 5 of 48 |
-
-Against the agent tools teams already use, from the maintainers' [published results](https://github.com/agentic-control-plane/agentgovbench/tree/main/results), where Proofable also handles 48 of 48:
-
-| Setup | Scenarios handled |
-|---|---|
-| Proofable policy engine | **48/48** |
 | Anthropic Agent SDK with the ACP gateway | 46 of 48 |
 | OpenAI Agents SDK with the ACP gateway | 45 of 48 |
 | Claude Code or Codex CLI with ACP hooks | 43 of 48 |
 | CrewAI or LangGraph with the ACP gateway | 40 of 48 |
 | Cursor with ACP over MCP | 37 of 48 |
-| Claude Code, Codex CLI, Cursor, the OpenAI or Anthropic agent SDK, CrewAI or LangGraph on its own | 13 of 48 |
+| A gate that allows everything | 20 of 48 |
+| No governance | 5 of 48 |
+| Claude Code, Codex CLI, Cursor, the agent SDKs, CrewAI or LangGraph on their own | 13 of 48 |
+
+Our row is the policy module the live service runs, pinned by hash, on the maintainers' current library (`479c5f0`). The ACP and agent-tool rows are the maintainers' [published runs](https://github.com/agentic-control-plane/agentgovbench/tree/main/results), the agent-tool rows on the earlier library (`e0ce93a`), where the same engine also handles 48 of 48.
 
 **Why coding agents on their own handle 13, the best gateway handles 46, and Proofable handles 48:**
 
