@@ -4838,7 +4838,7 @@
       "post": {
         "operationId": "streamAgentChatTurn",
         "summary": "Talk to an agent: run one chat turn as it, streamed as Server-Sent Events",
-        "description": "Runs one turn on the hosted agent runtime. With agentId the turn runs as that agent: its instructions and skills, under the delegation you signed, every tool call checked against it. Name agentWallet to talk to someone else's public agent: it then runs as a template in your own profile, on your records and credits, and nothing of its owner's is part of the conversation. The final event carries the answer, the records it read as citations, and the credits it spent. Nothing to deploy: call it from any app or runtime with a session, an OAuth token or a profile access key.",
+        "description": "Runs one turn on the hosted agent runtime. With agentId the turn runs as that agent: its instructions and skills, under the delegation you signed, every tool call checked against it. Name agentWallet to talk to someone else's public agent: it then runs in your own profile, on your records, and nothing of its owner's is part of the conversation; with your app's sponsor grant, your app pays. The final event carries the answer, the records it read as citations, and the credits it spent. Nothing to deploy: call it from any app or runtime with a session, an OAuth token or a profile access key.",
         "tags": [
           "Agents"
         ],
@@ -4859,7 +4859,7 @@
                   },
                   "agentWallet": {
                     "type": "string",
-                    "description": "The agent's account: when two of the caller's agents share an agentId, or to talk to someone else's public agent, which then runs as a template in the caller's own profile."
+                    "description": "The agent's account: when two of the caller's agents share an agentId, or to talk to someone else's public agent, which then runs in the caller's own profile, with nothing of its owner's in the conversation."
                   },
                   "messages": {
                     "type": "array",
@@ -4926,10 +4926,10 @@
             "description": "Authentication required"
           },
           "402": {
-            "description": "Not enough credits for a hosted turn"
+            "description": "Not enough credits for a hosted turn on the account that pays, or the sponsoring app has used its daily cap (SPONSOR_CAP_EXCEEDED)"
           },
           "403": {
-            "description": "No active delegation for this agent, or Advanced without a paid plan"
+            "description": "No active delegation for this agent and no public agent of that id at agentWallet, Advanced without a paid plan, or a sponsor grant that was not accepted (SPONSOR_GRANT_INVALID)"
           },
           "404": {
             "description": "Not found",
