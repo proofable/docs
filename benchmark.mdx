@@ -209,7 +209,7 @@ Pin both refs to the same commit so a rerun measures the same kit. The action wr
   </Accordion>
 
   <Accordion title="How each result was measured">
-    - **Governance:** the current AgentGovBench library (commit `479c5f0`) run against the exact policy code the live service runs, matched to it by hash, beside a gate that allows everything and no governance. It measures the decision logic rather than the hosted service end to end. The agent-tool rows are the maintainers' published end-to-end runs on the earlier library (commit `e0ce93a`), where the same engine also handles 48 of 48.
+    - **Governance:** AgentGovBench at the maintainers' current library (commit `479c5f0`), run through the library's own runner against the policy code the live service runs, matched to it by hash, beside a gate that allows everything and a no-governance arm. The agent-tool rows are the maintainers' published runs on the earlier library (commit `e0ce93a`), where the same engine also handles 48 of 48.
     - **Permissions:** each test on the live service with a dedicated agent under its own fixed permission, and the full suite again on a production release. A revocation that lands while an action is in flight is re-checked at the executor's own boundary and refused with a typed reason.
     - **Takeover:** 84 live runs across five published attack templates and two models, with a signed record for each run.
     - **Reuse:** the median of ten runs on one finished job on the live service.
