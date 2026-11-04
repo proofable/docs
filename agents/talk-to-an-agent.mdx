@@ -29,6 +29,32 @@ turn.credits;    // what the turn spent
 
 Sign the client in with an [access key](/deployment/access-keys) on a server, or with the signed-in person's session in a browser. Never ship an access key in browser code.
 
+## Let your app's users talk to your agent
+
+Sign your users in with Proofable, then make the same call as them. Each person talks to your public agent inside their own Proofable profile: their records, their credits, and nothing of yours in the conversation. What the agent knows is its instructions and the records you made public.
+
+```javascript
+import { ProofableClient, ProofableSignIn } from '@proofable/sdk';
+
+// 1. Sign-in. Register your callback once and keep the client id.
+const signIn = new ProofableSignIn({ redirectUri: 'https://your.app/proofable/callback', clientId });
+const { url, state, verifier } = await signIn.start();            // send the person to url; keep state and verifier
+const tokens = await signIn.finish({ code, verifier, state, expectedState });   // when they are back
+
+// 2. Act as the person.
+const person = new ProofableClient({ apiKey: tokens.accessToken });
+const who = await person.me();                                     // { handle, address, ... }
+const turn = await person.agentChat({
+  agentId: 'my-agent',
+  agentWallet: '0xYourAccount',                                    // your account: the agent runs as a template in theirs
+  messages: [{ role: 'user', content: 'Where does the case start?' }],
+});
+```
+
+What the agent may do for the person is fixed: read and add to the person's own records, and search the web. It cannot spend, grant, change keys or run code, and a high-risk action waits for the person. When it keeps words the person confirms, the record is the person's own, and they can open it at `proofable.me/proof/<qHash>`.
+
+The sign-in is the one every MCP host uses ([MCP OAuth](/mcp/oauth)). `start()` with no `clientId` registers your callback and returns the id; store it with your app's settings. Renew with `signIn.refresh(tokens.refreshToken)` before the token expires.
+
 ## What happens on each turn
 
 1. Proofable finds the [permission](/agents/agent-delegation) you signed for the agent. No active permission from your account, no turn.
@@ -50,7 +76,7 @@ curl -N https://api.proofable.me/api/v1/agent/chat/turn \
 | Field | What it does |
 |---|---|
 | `agentId` | Run the turn as this agent. Omit it to run as yourself. |
-| `agentWallet` | The agent's account, when two of your agents share an id |
+| `agentWallet` | The agent's account: when two of your agents share an id, or to talk to someone else's public agent, which then runs as a template in your own profile |
 | `messages` | The conversation, `user` and `assistant` turns, ending with the user |
 | `systemPrompt` | Context from your app. The agent reads it as data, after its own instructions. |
 | `model` | `default` or `advanced`. With `provider`, that provider's model id. |
