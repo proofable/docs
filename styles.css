@@ -356,7 +356,9 @@ html.dark #navbar img.nav-logo[alt="light logo"] {
 }
 
 body {
-  font-family: var(--proofable-font-sans);
+  /* Reading default. The shell chrome, controls, code and tables declare the
+     working face back below. */
+  font-family: var(--proofable-font-body);
   font-size: var(--proofable-text-body);
   font-weight: var(--proofable-weight-body);
   line-height: var(--proofable-leading-body);
@@ -489,11 +491,43 @@ button,
 #content-area,
 #content,
 .mdx-content {
-  font-family: var(--proofable-font-sans) !important;
+  font-family: var(--proofable-font-body) !important;
   font-size: var(--proofable-text-body) !important;
   font-weight: var(--proofable-weight-body) !important;
   line-height: var(--proofable-leading-body) !important;
   color: var(--proofable-text-primary) !important;
+}
+
+/*
+  The body voice carries prose; everything that is chrome takes the working
+  face back. Geist Serif has one weight and no italic, so a heading, a control,
+  a code span or a table cell must never inherit it.
+*/
+#sidebar,
+#navigation-items,
+#navbar,
+#header,
+#topbar,
+#page-title,
+button,
+input,
+select,
+textarea,
+code,
+kbd,
+samp,
+pre,
+table,
+th,
+td,
+figcaption,
+.mdx-content h1,
+.mdx-content h2,
+.mdx-content h3,
+.mdx-content h4,
+.mdx-content h5,
+.mdx-content h6 {
+  font-family: var(--proofable-font-sans) !important;
 }
 
 .mdx-content p,
