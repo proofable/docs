@@ -180,7 +180,7 @@ Gates may carry a `schedule` (`startsAt` / `endsAt`). Outside the window, gate c
 
 ## Prior listings
 
-A listing can require that the visitor already completed other listings: an earlier campaign, the listing that awards a badge, or any step in a series. The gate stores them under `policy.prerequisites` as `[{ "gateId": "gate_season-1" }]`, up to five, all required.
+A listing can require that the visitor already completed other listings, such as an earlier campaign, the listing that awards a badge, or any step in a series. The gate stores them under `policy.prerequisites` as `[{ "gateId": "gate_season-1" }]`, up to five, all required.
 
 A prerequisite is met when the visitor's wallet holds that listing's completed checkout receipt. Proofable reads the gate link it stamps on the receipt at checkout, never a proof tag, so a visitor cannot claim a listing they did not complete. Revoking the receipt removes the qualification. A visitor who already completed this listing keeps qualifying if the seller adds a prerequisite later.
 

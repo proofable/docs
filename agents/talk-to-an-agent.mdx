@@ -31,7 +31,7 @@ Sign the client in with an [access key](/deployment/access-keys) on a server, or
 
 ## Let your app's users talk to your agent
 
-Sign your users in with Proofable, then make the same call as them. Each person talks to your public agent inside their own Proofable profile: their records, and nothing of yours in the conversation. What the agent knows is its instructions and the records you made public. Your app pays.
+Sign your users in with Proofable, then make the same call as them. Each person talks to your public agent inside their own Proofable profile, with their records and nothing of yours in the conversation. What the agent knows is its instructions and the records you made public. Your app pays.
 
 ```javascript
 import { ProofableClient, ProofableSignIn } from '@proofable/sdk';
@@ -70,9 +70,9 @@ const turn = await person.agentChat({
 npx -y @proofable/sdk sponsor --app your-app --origin https://your.app --credits-per-day 2000
 ```
 
-From then on a client built with `appId` and `billingWallet` carries your sponsorship: your organization pays for your users' checks and their chats with your agents, within the daily cap you set, and every spend record names your app and your `turnId`, so limits per person are yours to apply. Without `appId` and `billingWallet`, each person spends their own credits. In code, the same step is `client.sponsorApp({ appId, origin, creditsPerDay })`.
+From then on a client built with `appId` and `billingWallet` carries your sponsorship. Your organization pays for your users' checks and their chats with your agents, within the daily cap you set, and every spend record names your app and your `turnId`, so limits per person are yours to apply. Without `appId` and `billingWallet`, each person spends their own credits. In code, the same step is `client.sponsorApp({ appId, origin, creditsPerDay })`.
 
-**What the agent may do** for the person is fixed: read and add to the person's own records, and search the web. It cannot spend, grant, change keys or run code, and a high-risk action is refused. The agent must be public or link-only on your account. When it keeps words the person confirms, the record is the person's own, and they can open it at `proofable.me/proof/<qHash>`. Keeping it is one credit from the person's own allowance, which every account has; the turns are what your app pays.
+**What the agent may do** for the person is fixed. It can read and add to the person's own records, and search the web. It cannot spend, grant, change keys or run code, and a high-risk action is refused. The agent must be public or link-only on your account. When it keeps words the person confirms, the record is the person's own, and they can open it at `proofable.me/proof/<qHash>`. Keeping it is one credit from the person's own allowance, which every account has; the turns are what your app pays.
 
 ## What happens on each turn
 
@@ -113,7 +113,7 @@ The stream sends `turn.start`, `answer.delta` as the answer arrives, `tool.start
 }
 ```
 
-For someone else's public agent, `delegationQHash` is `null`: there is no permission between you, the agent ran in your own profile.
+For someone else's public agent, `delegationQHash` is `null`. There is no permission between you, and the agent ran in your own profile.
 
 A request Proofable refuses never opens the stream. It answers JSON with the reason:
 
@@ -123,7 +123,7 @@ A request Proofable refuses never opens the stream. It answers JSON with the rea
 | 402 | `INSUFFICIENT_CREDITS` | Not enough credits for a hosted turn, on the account that pays |
 | 402 | `SPONSOR_CAP_EXCEEDED` | The sponsoring app has used its daily cap |
 | 403 | `AGENT_DELEGATION_REQUIRED` | No active permission from your account to this agent, and no public agent of that id at `agentWallet` |
-| 403 | `SPONSOR_GRANT_INVALID` | The app's sponsor grant was sent but not accepted: expired, already used, for another app or origin, or for an agent that is not the sponsoring account's. The person is never charged instead |
+| 403 | `SPONSOR_GRANT_INVALID` | The app's sponsor grant was sent but not accepted because it expired, was already used, was for another app or origin, or was for an agent that is not the sponsoring account's. The person is never charged instead |
 | 403 | `ADVANCED_REQUIRES_PRO` | Advanced runs on paid plans |
 
 ## What it costs

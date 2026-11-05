@@ -19,7 +19,7 @@ npx -y @proofable/sdk import <owner/name, URL, or folder>
 npx -y @proofable/sdk mount <agentId> --apply <host>
 ```
 
-`import` accepts a GitHub `owner/name`, a path, a directory, or a URL. Signed in, it creates the agent on your profile and mounts it into this project in one step, then prints what the agent may do and when its permissions end. Add `--dry-run` to see that first, or `--no-mount` to skip the mount. Secrets in `.env` files, keys, and token stores stay out of the preview. `mount` connects the agent to your project: `<host>` is `hermes`, `openclaw`, `opencode`, `cursor`, `claude`, or `codex`, and VS Code uses `--apply cursor`. Host files are written by this command in your project, never by the browser.
+`import` accepts a GitHub `owner/name`, a path, a directory, or a URL. Signed in, it creates the agent on your profile and mounts it into this project in one step, then prints what the agent may do and when its permissions end. Add `--dry-run` to see that first, or `--no-mount` to skip the mount. Secrets in `.env` files, keys, and token stores stay out of the preview. `mount` connects the agent to your project, where `<host>` is `hermes`, `openclaw`, `opencode`, `cursor`, `claude`, or `codex`, and VS Code uses `--apply cursor`. Host files are written by this command in your project, never by the browser.
 
 ## From the product
 

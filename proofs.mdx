@@ -43,7 +43,7 @@ To share a private proof without making it public, create a signed access grant 
 
 ## Storage
 
-Proofs are stored offchain by default. A blockchain record is optional: request it with `options.publishToHub: true` or `targetChains`. IPFS pinning is optional with `enableIpfs: true`. Neither changes who can read the proof, and neither replaces a status check.
+Proofs are stored offchain by default. A blockchain record is optional. Request one with `options.publishToHub: true` or `targetChains`. IPFS pinning is optional with `enableIpfs: true`. Neither changes who can read the proof, and neither replaces a status check.
 
 A background job keeps its proofs private and offchain. Its prompt or a page it reads can carry injected instructions, so a job's request for a blockchain record, a public or link-only proof, or a visibility change is refused (`JOB_ONCHAIN_PUBLISH_DENIED`, `JOB_PUBLIC_PROOF_DENIED`, `JOB_VISIBILITY_CHANGE_DENIED`). Publish from your own signed-in session instead.
 
