@@ -785,7 +785,7 @@ async function verify(dirArg, options = {}) {
     cited.push({ id: name, qHashes: citations.map((c) => lower(c.qHash)).filter(Boolean), jobIds: [rec.jobId, rec.control?.jobId].filter(Boolean) });
     const ok = verdict(rec) && bad === 0 && envelopes.length > 0 && unbound.length === 0;
     if (!ok) failures += 1;
-    rows.push([name, ok ? 'PASS' : 'FAIL', `${envelopes.length - bad}/${envelopes.length} envelopes${unbound.length ? `; not bound to its own execution: ${unbound.join('; ')}` : ''}`]);
+    rows.push([name, ok ? 'PASS' : 'FAIL', `${envelopes.length - bad}/${envelopes.length} envelopes`, unbound]);
   }
   const shared = sharedCitations(cited);
   if (shared.length) failures += 1;
@@ -794,7 +794,10 @@ async function verify(dirArg, options = {}) {
   if (manifest.verifier_sha256 && manifest.verifier_sha256 !== VERIFIER_SHA256) {
     console.log(`graded by aad.mjs ${manifest.verifier_sha256.slice(0, 12)}; this copy is ${VERIFIER_SHA256.slice(0, 12)}. Check out the grading version to repeat the verdict exactly.`);
   }
-  for (const r of rows) console.log(`${r[0].padEnd(24)} ${r[1].padEnd(8)} ${r[2]}`);
+  for (const r of rows) {
+    console.log(`${r[0].padEnd(24)} ${r[1].padEnd(8)} ${r[2]}`);
+    for (const problem of r[3] || []) console.log(`    not bound to its own execution: ${problem}`);
+  }
   if (shared.length) console.log(`evidence FAIL: shared between cases: ${shared.join(', ')}`);
   console.log(failures ? `\n${failures} failure(s)` : '\nall checks pass');
   process.exitCode = failures ? 1 : 0;

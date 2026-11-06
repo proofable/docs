@@ -100,8 +100,8 @@ Published runs, with the records and a script that verifies every envelope in th
 - The effect at a target you control. Records state effects as the service observed them at the job
   boundary. A readback taken at a target outside that boundary is a separate observation, and the kit's
   URL fetch is where to add one.
-- How long a revocation takes to reach the check. A revocation lands on the next dispatch. A job
-  already running is not cancelled mid-flight, and its receipt says so.
+- How long a revocation takes to reach the check. A job running when its permission is revoked is
+  stopped with a typed reason, and the next dispatch is refused. No bound on that delay is claimed.
 
 ## Build on it
 

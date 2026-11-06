@@ -224,7 +224,7 @@ Pin both refs to the same commit so a rerun measures the same kit. The action wr
     |---|---|---|
     | An action outside the permission, or under a revoked, expired or reused revoked permission, was stopped before it ran; the granted action ran. 5 of 5 | OWASP Top 10 for Agentic Applications 2026: ASI03 Identity and Privilege Abuse, ASI02 Tool Misuse | Agents only do what you allowed |
     | An action that needs approval was held until approved; with no answer it never ran, and a late approval was refused. 2 of 2 | EU AI Act Article 14, human oversight | Agents only do what you allowed |
-    | A permission revoked mid-job: the call in flight was refused with its reason, nothing committed, and the next was refused. 1 of 1 | OWASP ASI10 Rogue Agents | Agents only do what you allowed |
+    | A permission revoked mid-job: the running job was stopped with its reason, and the next was refused. 1 of 1 | OWASP ASI10 Rogue Agents | Agents only do what you allowed |
     | 15 of 15 signed decision records verify offline, with no account | EU AI Act Article 12, record-keeping; NIST NCCoE Software and AI Agent Identity and Authorization project, auditing (concept paper) | Verify every record offline |
     | 150 of 150 changed copies rejected across ten kinds of forgery; 15 of 15 real records accepted; a check that only reads the format accepts all 150 | OWASP ASI07 Insecure Inter-Agent Communication | Records nobody can fake |
     | A finished result verified offline in 3.7 ms with zero AI tokens and no account; producing it took 2.79 s and 2,426 tokens | CAIP-380 Portable Proof | Reuse instead of redo |
