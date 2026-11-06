@@ -28,12 +28,19 @@ node aad.mjs controls ../2026-11-02-suite
 
 `verify` recomputes every checksum, the trace digest and all 15 disclosed envelopes offline. It counts the
 trace rows and computes the coverage from them: each of the eight cases must appear exactly once, and a case
-passes only when its row says so and every record it cites verifies. A count or coverage the manifest declares
-that differs from that computation fails. `report` prints the typed cost and the grading scope from the sealed
-records. Both read the older packets too, which carry one file per case. `controls` checks the verifier itself:
-it alters a copy of the packet (a case removed, a case duplicated, a verdict flipped, a cited record removed),
-re-seals every digest so the integrity checks pass, and requires `verify` to reject each one while accepting the
-unaltered copy. The packet is never touched.
+passes only when its row says so, every record it cites verifies, and each record is the one the case needs
+from its own run: the receipt of its own job, and the decision under its own permission with the outcome the
+case states. No record or job may be cited by two cases. A count or coverage the manifest declares that differs
+from that computation fails. `report` prints the typed cost and the grading scope from the sealed records. Both
+read the older packets too, which carry one file per case. Both 1 November packets fail `verify` on
+`post_dispatch_revoke`: the job record does not show the refusal the case states, as the table above says.
+
+`controls` checks the verifier itself. It alters a copy of the packet in eight ways: a case removed, removed
+again with the record count changed to match, a case duplicated, a verdict flipped, a cited record removed, every
+citation stripped from a passing case, two passing cases swapping their job receipts, and two swapping their
+decisions. It re-seals every digest so the integrity checks pass, and requires `verify` to reject each one while
+accepting the unaltered copy. In the last three every record is still genuine and verified, so only the binding
+to the case's own run can reject them. The packet is never touched.
 
 To check the October 8 packet, run `npm install @proofable/sdk@0.1.10` inside
 `2026-10-08-eight-case/`, then `node verify-portable-proofs.mjs`.

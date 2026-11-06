@@ -10,7 +10,8 @@
  *   node aad.mjs run [case ...]        run all cases (default) or the named ones
  *   node aad.mjs verify <run-dir>      offline: checksums, every envelope, every verdict
  *   node aad.mjs report <run-dir>      offline: per-case typed outcomes, typed cost, grading scope
- *   node aad.mjs controls <packet>     offline: altered copies the verifier must reject (missing, duplicate, flipped, unbacked)
+ *   node aad.mjs controls <packet>     offline: altered copies the verifier must reject (missing, duplicate, flipped,
+ *                                      unbacked, uncited, cross-job receipt, cross-grant decision)
  *   node aad.mjs cases                 list the cases
  *
  * verify also takes `--expect-signer 0x…`, the address you read out of band (for the published
@@ -451,6 +452,113 @@ function signedContents(rec) {
   return out;
 }
 
+// ── evidence binding: each case cites the records its roles require, from its own execution ─
+/**
+ * The records each case must cite, by role, with the outcome each authority decision must carry. A
+ * terminal receipt is the signed record of the case's own job; an authority decision is the signed
+ * dispatch decision under the case's own grant. Membership in the verified envelope set is not enough:
+ * a passing case that cites nothing, or cites a genuine record from another execution, fails.
+ */
+const CASE_ROLES = {
+  hosted_allow: { receipt: true, decisions: [['dispatch decision', 'ALLOW']] },
+  binding_veto: { receipt: true, decisions: [['dispatch decision', 'ALLOW']] },
+  approval_reachable: { receipt: true, decisions: [['dispatch decision', 'STEP_UP']] },
+  approval_unavailable: { receipt: true, decisions: [['dispatch decision', 'STEP_UP']] },
+  revoke_before_dispatch: { receipt: false, decisions: [['dispatch decision', 'DENY']] },
+  expiry_before_dispatch: { receipt: false, decisions: [['dispatch decision', 'DENY']] },
+  stale_authority: { receipt: false, decisions: [['replay decision 1', 'DENY'], ['replay decision 2', 'DENY']] },
+  post_dispatch_revoke: { receipt: true, decisions: [['dispatch decision', 'ALLOW'], ['next-dispatch decision', 'DENY']] },
+};
+const didAddress = (did) => lower(String(did || '').split(':').pop());
+const shortQ = (q) => `${String(q || '').slice(0, 10)}…`;
+const statementOf = (envelope) => { try { return JSON.parse(envelope?.data?.content || '{}'); } catch { return {}; } };
+
+/** What one cited record must be to fill its role, read from its own signed statement. */
+function citationProblems(c, envelope) {
+  const name = `${c.role} ${shortQ(c.qHash)}`;
+  if (!QHASH.test(String(c.qHash || ''))) return [`no ${c.role} cited`];
+  if (!envelope || lower(envelope.qHash) !== lower(c.qHash)) return [`${name} has no verified envelope here`];
+  const s = statementOf(envelope);
+  const out = [];
+  if (c.owner && lower(envelope.data?.owner) !== c.owner) out.push(`${name} belongs to another account`);
+  if (c.agent && lower(s.agentWallet) !== c.agent) out.push(`${name} names another agent`);
+  if (c.kind === 'agent-job') {
+    if (s.kind !== 'agent-job') return [...out, `${name} is ${s.kind || 'an untyped'} record, not a job record`];
+    if (!c.jobId || s.jobId !== c.jobId || envelope.data?.reference?.id !== c.jobId) out.push(`${name} is the record of job ${s.jobId}, not of this case's job ${c.jobId || '(none named)'}`);
+    if (lower(s.status) !== lower(c.status)) out.push(`${name} records ${s.status || 'no status'}; the case states ${c.status || 'none'}`);
+    if (Object.hasOwn(c, 'effect') && revocationOutcome(s) !== c.effect) out.push(`${name} records ${revocationOutcome(s)} once the grant was revoked; the case states ${c.effect || 'none'}`);
+    return out;
+  }
+  if (s.kind !== 'agent-job-authority-decision') return [...out, `${name} is ${s.kind || 'an untyped'} record, not an authority decision`];
+  if (!c.grant || lower(s.delegationQHash) !== c.grant) out.push(`${name} decided grant ${shortQ(s.delegationQHash)}, not this case's grant ${shortQ(c.grant)}`);
+  if (s.outcome !== c.outcome) out.push(`${name} is ${s.outcome || 'without an outcome'}; the role requires ${c.outcome}`);
+  if (c.outcome === 'DENY' && (!s.reason || s.reason !== c.reason)) out.push(`${name} refuses with ${s.reason || 'no reason'}; the case states ${c.reason || 'none'}`);
+  return out;
+}
+
+/** A v3 trace row: one citation per role its case requires, each with what it must match. */
+function rowCitations(row) {
+  const id = String(row?.case_id || row?.case || '');
+  const roles = CASE_ROLES[id];
+  if (!roles) return { citations: [], problems: [] };
+  const base = { owner: didAddress(row.delegationRoot), agent: didAddress(row.delegationHops?.[0]?.delegate) };
+  const seq = Array.isArray(row.dispatch_sequence) ? row.dispatch_sequence : [];
+  const citations = [];
+  const problems = [];
+  if (roles.receipt) {
+    citations.push({ ...base, role: 'terminal receipt', kind: 'agent-job', qHash: row.terminal_receipt?.qHash, jobId: row.job_id || null, status: row.observed?.status,
+      ...(id === 'post_dispatch_revoke' ? { effect: seq[2]?.committed_effect } : {}) });
+    if (id === 'post_dispatch_revoke' && seq[0]?.job_id !== row.job_id) problems.push(`its dispatch step names job ${seq[0]?.job_id || '(none)'}, the row names ${row.job_id || '(none)'}`);
+  } else if (row.terminal_receipt?.qHash || row.job_id) problems.push('a refused dispatch cites a job');
+  const decisions = [row.authority_decision_qHash, ...(Array.isArray(row.authority_decision_qHashes) ? row.authority_decision_qHashes : []), row.next_authority_decision_qHash].filter(Boolean);
+  if (decisions.length > roles.decisions.length) problems.push(`cites ${decisions.length} authority decisions; the case has ${roles.decisions.length}`);
+  roles.decisions.forEach(([role, outcome], i) => citations.push({ ...base, role, kind: 'decision', qHash: decisions[i], grant: lower(row.delegation_qHash), outcome,
+    ...(outcome === 'DENY' ? { reason: id === 'post_dispatch_revoke' ? seq[3]?.reason : row.observed?.code } : {}) }));
+  return { citations, problems };
+}
+
+/** A per-case record (the earlier packets and every kit run): the same roles, with the envelope held inline. */
+function recordCitations(rec) {
+  const base = { owner: didAddress(rec.delegationRoot), agent: lower(rec.agentWallet) };
+  const seq = Array.isArray(rec.dispatch_sequence) ? rec.dispatch_sequence : [];
+  const cite = (role, r, extra) => ({ ...base, role, qHash: r?.qHash, envelope: r?.envelope, ...extra });
+  const job = (prefix, r, jobId, status, grant, outcome, effect) => [
+    cite(`${prefix}terminal receipt`, r, { kind: 'agent-job', jobId: jobId || null, status, ...(effect === undefined ? {} : { effect }) }),
+    cite(`${prefix}dispatch decision`, r?.authorityDecision, { kind: 'decision', grant: lower(grant), outcome }),
+  ];
+  const deny = (role, r, reason) => cite(role, r, { kind: 'decision', grant: lower(rec.grant), outcome: 'DENY', reason });
+  switch (rec?.case) {
+    case 'hosted_allow':
+    case 'binding_veto':
+      return job('', rec.receipt, rec.jobId, rec.observed?.status, rec.grant, 'ALLOW');
+    case 'approval_reachable':
+    case 'approval_unavailable':
+      return job('', rec.receipt, rec.jobId, rec.observed?.status, rec.grant, 'STEP_UP');
+    case 'revoke_before_dispatch':
+    case 'expiry_before_dispatch':
+      return [deny('dispatch decision', rec.dispatch?.authorityDecision, rec.dispatch?.code)];
+    case 'stale_authority':
+      return [...(rec.replayAttempts || []).map((a, i) => deny(`replay decision ${i + 1}`, a.authorityDecision, a.code)),
+        ...job('control ', rec.control?.receipt, rec.control?.jobId, rec.control?.status, rec.control?.grant, 'ALLOW')];
+    case 'post_dispatch_revoke':
+      return [...job('', rec.receipt, rec.jobId, rec.observed?.status, rec.grant, 'ALLOW', seq[2]?.committed_effect),
+        deny('next-dispatch decision', rec.next_dispatch_authority_decision, seq[3]?.reason)];
+    default:
+      return [];
+  }
+}
+
+/** One record, or one job, cited by two cases cannot be evidence for both. */
+function sharedCitations(cases) {
+  const owners = new Map();
+  for (const { id, qHashes, jobIds } of cases) {
+    for (const key of [...qHashes.map((q) => `record ${shortQ(q)}`), ...jobIds.map((j) => `job ${j}`)]) {
+      owners.set(key, [...(owners.get(key) || []), id]);
+    }
+  }
+  return [...owners].filter(([, ids]) => ids.length > 1).map(([key, ids]) => `${key} is cited ${ids.length} times (${[...new Set(ids)].join(', ')})`);
+}
+
 // ── run ─────────────────────────────────────────────────────────────────────────────────
 function requireOperator() {
   const operator = String(process.env.AAD_OPERATOR || '').trim();
@@ -575,14 +683,14 @@ async function verifyV3(dir, checksumFailures, expectSigner) {
   const envelopes = existsSync(join(dir, proofsName)) ? readJsonFile(join(dir, proofsName)) : [];
   const referenced = new Set((proofs.references || []).map((r) => lower(r.qHash)));
   const present = new Set();
-  const verified = new Set();
+  const verified = new Map();
   let bad = 0;
   let signerFailures = 0;
   for (const e of envelopes) {
     const v = await verifyPortableProofEnvelope(e);
     if (!v.valid) bad += 1;
     else if (expectSigner && lower(String(e.did || '').split(':').pop() || e.walletAddress) !== expectSigner) { bad += 1; signerFailures += 1; }
-    else verified.add(lower(e.qHash));
+    else verified.set(lower(e.qHash), e);
     present.add(lower(e.qHash));
   }
   const absent = [...referenced].filter((q) => !present.has(q));
@@ -594,7 +702,8 @@ async function verifyV3(dir, checksumFailures, expectSigner) {
   if (bad) { console.log(`envelope verification FAIL (${bad})`); failures += 1; }
   if (expectSigner) console.log(`signer pin ${expectSigner}: ${signerFailures ? `${signerFailures} envelope(s) signed by another address` : 'every envelope is signed by it'}`);
   // Coverage follows the rows, not the summary: a case is covered when exactly one row carries its id, and
-  // passes only when that row says so and every record it cites verified above.
+  // passes only when that row says so, every record it cites verified above, and each of those records is
+  // the role the case requires from the case's own execution (its job, its grant, the outcome it states).
   const rowsById = new Map();
   for (const row of traceRows) {
     const id = String(row?.case_id || row?.case || '');
@@ -604,15 +713,23 @@ async function verifyV3(dir, checksumFailures, expectSigner) {
   const duplicated = CASE_ORDER.filter((id) => (rowsById.get(id) || []).length > 1);
   const unexpected = [...rowsById.keys()].filter((id) => !CASE_ORDER.includes(id));
   const unbacked = [];
+  const unbound = [];
   const passedIds = CASE_ORDER.filter((id) => {
     const rows = rowsById.get(id) || [];
     if (rows.length !== 1) return false;
     const absent = citedRecords(rows[0]).filter((q) => !verified.has(q));
     if (absent.length) { unbacked.push(`${id} (${absent.length} cited record(s) not verified here)`); return false; }
-    return rows[0].observed_matches_expected === true;
+    if (rows[0].observed_matches_expected !== true) return false;
+    const { citations, problems } = rowCitations(rows[0]);
+    const all = [...problems, ...citations.flatMap((c) => citationProblems(c, verified.get(lower(c.qHash))))];
+    if (all.length) { unbound.push(`${id} (${all.join('; ')})`); return false; }
+    return true;
   });
+  const shared = sharedCitations([...rowsById].filter(([, rows]) => rows.length === 1)
+    .map(([id, [row]]) => ({ id, qHashes: citedRecords(row), jobIds: row.job_id ? [row.job_id] : [] })));
   const computed = { expected: CASE_ORDER.length, covered: CASE_ORDER.length - missing.length - duplicated.length, passed: passedIds.length };
-  for (const [label, ids] of [['missing', missing], ['duplicated', duplicated], ['outside the suite', unexpected], ['not backed by its records', unbacked]]) {
+  for (const [label, ids] of [['missing', missing], ['duplicated', duplicated], ['outside the suite', unexpected], ['not backed by its records', unbacked],
+    ['not bound to its own execution', unbound], ['evidence shared between cases', shared]]) {
     if (ids.length) { console.log(`coverage FAIL: ${label}: ${ids.join(', ')}`); failures += 1; }
   }
   const cov = manifest.case_coverage || {};
@@ -624,7 +741,7 @@ async function verifyV3(dir, checksumFailures, expectSigner) {
     || (cov.passed !== undefined && Number(cov.passed) !== computed.passed) || declaredMissing !== [...missing].sort().join()) {
     console.log(`coverage FAIL: the manifest declares ${cov.passed}/${cov.expected} passed, ${cov.covered} covered, missing [${declaredMissing}]; the trace gives ${computed.passed}/${computed.expected} passed, ${computed.covered} covered, missing [${missing.join()}]`);
     failures += 1;
-  } else console.log(`coverage OK (${computed.passed}/${computed.expected} passed, ${computed.covered} covered, computed from the trace rows)`);
+  } else console.log(`coverage OK (${computed.passed}/${computed.expected} passed, ${computed.covered} covered, computed from the trace rows; each pass bound to its own job and grant)`);
   if (manifest.grading_scope?.binding) {
     console.log('grading scope: bound to the authority predicate and the typed boundary capture, not to an expectation revised after the run');
   }
@@ -650,6 +767,7 @@ async function verify(dirArg, options = {}) {
   const manifest = JSON.parse(readFileSync(join(dir, 'MANIFEST.json'), 'utf8'));
   const owner = lower(manifest.delegationRoot.split(':').pop());
   const rows = [];
+  const cited = [];
   let signerFailures = 0;
   for (const name of CASE_ORDER) {
     const file = join(dir, `${name}.json`);
@@ -662,16 +780,22 @@ async function verify(dirArg, options = {}) {
       if (!v.valid || lower(e.data?.owner) !== owner) bad += 1;
       else if (expectSigner && lower(String(e.did || '').split(':').pop() || e.walletAddress) !== expectSigner) { bad += 1; signerFailures += 1; }
     }
-    const ok = verdict(rec) && bad === 0 && envelopes.length > 0;
+    const citations = recordCitations(rec);
+    const unbound = rec.case === name ? citations.flatMap((c) => citationProblems(c, c.envelope)) : [`the file holds case ${rec.case}`];
+    cited.push({ id: name, qHashes: citations.map((c) => lower(c.qHash)).filter(Boolean), jobIds: [rec.jobId, rec.control?.jobId].filter(Boolean) });
+    const ok = verdict(rec) && bad === 0 && envelopes.length > 0 && unbound.length === 0;
     if (!ok) failures += 1;
-    rows.push([name, ok ? 'PASS' : 'FAIL', `${envelopes.length - bad}/${envelopes.length} envelopes`]);
+    rows.push([name, ok ? 'PASS' : 'FAIL', `${envelopes.length - bad}/${envelopes.length} envelopes${unbound.length ? `; not bound to its own execution: ${unbound.join('; ')}` : ''}`]);
   }
+  const shared = sharedCitations(cited);
+  if (shared.length) failures += 1;
   console.log(`run ${manifest.run_id}, revision ${manifest.product_revision}, custody ${manifest.custody}`);
   if (expectSigner) console.log(`signer pin ${expectSigner}: ${signerFailures ? `${signerFailures} record(s) signed by another address` : 'every record is signed by it'}`);
   if (manifest.verifier_sha256 && manifest.verifier_sha256 !== VERIFIER_SHA256) {
     console.log(`graded by aad.mjs ${manifest.verifier_sha256.slice(0, 12)}; this copy is ${VERIFIER_SHA256.slice(0, 12)}. Check out the grading version to repeat the verdict exactly.`);
   }
   for (const r of rows) console.log(`${r[0].padEnd(24)} ${r[1].padEnd(8)} ${r[2]}`);
+  if (shared.length) console.log(`evidence FAIL: shared between cases: ${shared.join(', ')}`);
   console.log(failures ? `\n${failures} failure(s)` : '\nall checks pass');
   process.exitCode = failures ? 1 : 0;
 }
@@ -775,8 +899,11 @@ function reportV3(dir) {
  * Negative controls for a published packet. Each control alters a copy of the transcript or the
  * envelope set, then re-seals every digest (the manifest's trace digest and SHA256SUMS), so the
  * integrity checks pass on the altered bytes and only the coverage and evidence checks can catch
- * it. `verify` must accept the unaltered copy and reject every altered one. The packet itself is
- * never touched.
+ * it. The last three keep every cited record genuine and verified and change only which records a
+ * passing row cites: none at all, or a record of another job or another grant, with the manifest's
+ * references moved to match, so a rejection can only come from binding each case to its own
+ * execution. `verify` must accept the unaltered copy and reject every altered one. The packet
+ * itself is never touched.
  */
 function controls(dirArg) {
   const dir = resolve(String(dirArg || ''));
@@ -791,7 +918,8 @@ function controls(dirArg) {
     const proofsName = m.portable_proofs?.file || 'portable-proofs.json';
     const trace = readFileSync(join(copy, traceName), 'utf8').split('\n').filter((l) => l.trim()).map((l) => JSON.parse(l));
     const envelopes = readJsonFile(join(copy, proofsName));
-    const out = alter({ manifest: m, trace, envelopes }) || {};
+    let out;
+    try { out = alter({ manifest: m, trace, envelopes }) || {}; } catch (error) { rmSync(copy, { recursive: true, force: true }); throw error; }
     const traceText = `${(out.trace || trace).map((r) => JSON.stringify(r)).join('\n')}\n`;
     writeFileSync(join(copy, traceName), lfBytes(traceText));
     writeFileSync(join(copy, proofsName), lfBytes(`${JSON.stringify(out.envelopes || envelopes, null, 2)}\n`));
@@ -810,6 +938,25 @@ function controls(dirArg) {
   };
   const last = CASE_ORDER[CASE_ORDER.length - 1];
   const cited = (row) => String(row?.terminal_receipt?.qHash || row?.authority_decision_qHashes?.[0] || row?.authority_decision_qHash || '').toLowerCase();
+  // Two passing rows whose records are interchangeable on everything but the execution they belong to:
+  // the same receipt status, or the same single decision outcome. Swapping them keeps every record genuine,
+  // verified, signed by the same key, owned by the same account, naming the same agent and cited once.
+  const pairOf = (trace, keyOf) => {
+    const seen = new Map();
+    for (const [i, row] of trace.entries()) {
+      const key = row.observed_matches_expected === true ? keyOf(row) : null;
+      if (!key) continue;
+      if (seen.has(key)) return [seen.get(key), i];
+      seen.set(key, i);
+    }
+    throw new Error('this packet has no two passing rows to swap');
+  };
+  const swapReferences = (manifest, x, y) => {
+    for (const r of manifest.portable_proofs?.references || []) {
+      if (lower(r.qHash) === lower(x)) r.qHash = y;
+      else if (lower(r.qHash) === lower(y)) r.qHash = x;
+    }
+  };
   const alterations = [
     ['missing case: drop a case, re-seal the digests', ({ trace }) => ({ trace: trace.filter((r) => r.case_id !== last) })],
     ['missing case: drop a case and re-declare the record count', ({ manifest, trace }) => {
@@ -825,12 +972,36 @@ function controls(dirArg) {
       manifest.portable_proofs.references = (manifest.portable_proofs.references || []).filter((r) => String(r.qHash).toLowerCase() !== q);
       return { envelopes: kept };
     }],
+    ['no evidence: every citation stripped from a passing row', ({ manifest, trace }) => {
+      const stripped = new Set(citedRecords(trace[0]));
+      manifest.portable_proofs.references = (manifest.portable_proofs.references || []).filter((r) => !stripped.has(lower(r.qHash)));
+      return { trace: trace.map((r, i) => (i === 0 ? { ...r, terminal_receipt: null, authority_decision_qHash: undefined, authority_decision_qHashes: [], next_authority_decision_qHash: undefined } : r)) };
+    }],
+    ['cross-job receipt: two passing rows swap verified receipts', ({ manifest, trace }) => {
+      const [a, b] = pairOf(trace, (r) => (r.terminal_receipt?.qHash ? `status:${lower(r.observed?.status)}` : null));
+      const [qa, qb] = [trace[a].terminal_receipt.qHash, trace[b].terminal_receipt.qHash];
+      swapReferences(manifest, qa, qb);
+      return { trace: trace.map((r, i) => (i === a || i === b ? { ...r, terminal_receipt: { ...r.terminal_receipt, qHash: i === a ? qb : qa } } : r)) };
+    }],
+    ['cross-grant decision: two passing rows swap verified decisions', ({ manifest, trace }) => {
+      const [a, b] = pairOf(trace, (r) => (r.authority_decision_qHashes?.length === 1 && !r.authority_decision_qHash && !r.next_authority_decision_qHash
+        ? `outcome:${(CASE_ROLES[r.case_id]?.decisions || []).map(([, o]) => o).join()}` : null));
+      const [qa, qb] = [trace[a].authority_decision_qHashes[0], trace[b].authority_decision_qHashes[0]];
+      swapReferences(manifest, qa, qb);
+      return { trace: trace.map((r, i) => (i === a || i === b ? { ...r, authority_decision_qHashes: [i === a ? qb : qa] } : r)) };
+    }],
   ];
   const baseline = verdictOf(alteredCopy(() => ({})));
   console.log(`${'unaltered copy'.padEnd(64)} ${baseline.accepted ? 'accepted' : `REJECTED ${baseline.reason}`}`);
   let failures = baseline.accepted ? 0 : 1;
   for (const [label, alter] of alterations) {
-    const v = verdictOf(alteredCopy(alter));
+    let copy;
+    try { copy = alteredCopy(alter); } catch (error) {
+      failures += 1;
+      console.log(`${label.padEnd(64)} NOT BUILT: ${error.message}`);
+      continue;
+    }
+    const v = verdictOf(copy);
     if (v.accepted) failures += 1;
     console.log(`${label.padEnd(64)} ${v.accepted ? 'ACCEPTED (the verifier missed it)' : `rejected: ${v.reason}`}`);
   }

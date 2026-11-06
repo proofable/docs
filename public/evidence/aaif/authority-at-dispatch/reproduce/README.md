@@ -43,7 +43,7 @@ omits it, including the CAIP's own test vectors.
 | `revoke_before_dispatch` | Permission revoked, then used | Refused; no job created |
 | `expiry_before_dispatch` | Permission used after it expires | Refused; no job created |
 | `stale_authority` | Revoked permission reused twice, plus a valid control | Both refused; the control runs |
-| `post_dispatch_revoke` | Permission revoked while a job runs, then used again | The running step finishes; the next is refused |
+| `post_dispatch_revoke` | Permission revoked while a job runs, then used again | The running job is stopped, or had already finished; the next is refused |
 
 ## Not measured
 
