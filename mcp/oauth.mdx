@@ -49,7 +49,7 @@ GET https://mcp.proofable.me/.well-known/oauth-protected-resource/mcp
 }
 ```
 
-A signed-out handshake and the four signed-out tools answer normally. Every other call without a usable token returns the challenge that starts DCR and PKCE. An access key uses the same URL as a Bearer token.
+A signed-out handshake, the full tool list and the four signed-out tools answer normally. Calling any other tool without a usable token returns the challenge that starts DCR and PKCE, and the host signs in and retries that call. An access key uses the same URL as a Bearer token.
 
 ```http
 HTTP/1.1 401 Unauthorized

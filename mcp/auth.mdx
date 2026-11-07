@@ -22,7 +22,7 @@ The terminal installer writes the same URL:
 npx -y @proofable/sdk setup
 ```
 
-A signed-out connection can complete the handshake, list tools, and run `proofable_context`, `proofable_verifiers_catalog`, `proofable_proofs_check` and `proofable_verify_or_guide`. Any other tool call returns `401` with a `WWW-Authenticate` challenge, which starts the host's OAuth flow (DCR, PKCE and token exchange):
+A signed-out connection can complete the handshake, list every tool, and run `proofable_context`, `proofable_verifiers_catalog`, `proofable_proofs_check` and `proofable_verify_or_guide`. Calling any other tool returns `401` with a `WWW-Authenticate` challenge, which starts the host's OAuth flow (DCR, PKCE and token exchange). Claude shows a **Connect** button in the chat and runs the same call once you sign in. In Claude Code, run `/mcp`. In Codex, run `codex mcp login proofable`.
 
 ```http
 HTTP/1.1 401 Unauthorized
