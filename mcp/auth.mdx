@@ -22,7 +22,7 @@ The terminal installer writes the same URL:
 npx -y @proofable/sdk setup
 ```
 
-A signed-out connection can complete the handshake, list every tool, and run `proofable_context`, `proofable_verifiers_catalog`, `proofable_proofs_check` and `proofable_verify_or_guide`. Calling any other tool returns `401` with a `WWW-Authenticate` challenge, which starts the host's OAuth flow (DCR, PKCE and token exchange). Claude shows a **Connect** button in the chat and runs the same call once you sign in. In Claude Code, run `/mcp`. In Codex, run `codex mcp login proofable`.
+Adding Proofable to a client asks you to sign in straight away. A request with no credential returns `401` with a `WWW-Authenticate` challenge on every method, `initialize` included, and that challenge is what opens the host's OAuth flow (DCR, PKCE and token exchange). Claude shows a **Connect** button in the chat and runs the call once you sign in. In Claude Code, run `/mcp`. In Codex, run `codex mcp login proofable`.
 
 ```http
 HTTP/1.1 401 Unauthorized
@@ -30,6 +30,8 @@ WWW-Authenticate: Bearer resource_metadata="https://mcp.proofable.me/mcp/.well-k
 ```
 
 An expired or invalid Bearer gets the same challenge on every request, including `initialize`, so OAuth-capable hosts refresh silently. The endpoint is stateless streamable HTTP: GET and DELETE on `/mcp` return `405` without a challenge.
+
+Without an account, `proofable_context`, `proofable_verifiers_catalog`, `proofable_proofs_check` and `proofable_verify_or_guide` run on `https://mcp.proofable.me/mcp/public`. That is the anonymous surface directory listings and account-free checks use. Anything that needs a profile is challenged there too, so a client that lands on it signs in and moves to `/mcp`.
 
 [MCP OAuth](./oauth) covers discovery, token exchange and scopes.
 
