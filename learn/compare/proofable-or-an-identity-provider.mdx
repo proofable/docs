@@ -1,13 +1,15 @@
 ---
 title: "Proofable or an identity provider for agent access"
 sidebarTitle: "Proofable or an IdP"
-description: "An identity provider says who an agent is. Proofable decides whether each action may run at the moment of the call, and records the decision."
+description: "Proofable can serve as sign-in and as the authority check. An identity provider decides once; Proofable decides whether each action may run, and records it."
 icon: scale-balanced
 ---
 
 ## Which to use
 
-Use Proofable when an agent acts on its own schedule, when the permission check has to happen at each call, or when a customer, auditor, or downstream agent must confirm the decision afterwards. Keep your identity provider for sign-in. It issues the session and Proofable governs what runs under it. An identity provider alone covers only agents that act inside a signed-in person's session and never need a spend cap, an expiry, or a record of the action.
+Use Proofable when an agent acts on its own schedule, when the permission check has to happen at each call, or when a customer, auditor, or downstream agent must confirm the decision afterwards. Proofable can also be the sign-in. One account across every app, with passkeys, email codes, social accounts and wallets, and each check a person passed reused instead of repeated. Keep an existing identity provider only when an organization requires it, and let it issue the session while Proofable decides what runs under it. An identity provider alone covers only agents that act inside a signed-in person's session and never need a spend cap, an expiry, or a record of the action.
+
+OAuth grants an app access to an account. Proofable records what a person or an organization proved, what an agent may do, and what actually happened, for anyone who needs to check it later without repeating the work.
 
 ## What each one answers
 
@@ -33,7 +35,7 @@ Decision       Blocked
 
 ## Running both
 
-Keep the provider for sign-in and add Proofable for the authority decision in three steps:
+When an organization requires its own identity provider, keep it for sign-in and add Proofable for the authority decision in three steps:
 
 1. [Add Proofable](/mcp/setup) to your assistant or app.
 2. [Give the agent limits](/use-cases/control-agent-actions): allowed actions, denied actions, spend cap, expiry.
