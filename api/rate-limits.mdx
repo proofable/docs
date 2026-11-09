@@ -5,7 +5,7 @@ description: "What each tier allows, how to read the limit headers, and the retr
 icon: clock
 ---
 
-Limits apply per minute or per 15-minute window. Higher plans raise API call throughput.
+Every limit is a per-minute budget. Higher plans raise both API call throughput and how many new proofs you can create a minute. Credits meter how much you create; these limits only stop bursts.
 
 ## Limits by tier
 
@@ -13,11 +13,11 @@ Limits apply per minute or per 15-minute window. Higher plans raise API call thr
 |---------|------|-----|------------|
 | API calls (burst) | 60 / min | 240 / min | 600 / min |
 | API calls (sustained) | 30 / min | 120 / min | 300 / min |
-| Verification (new proof) | 50 / 15 min | 50 / 15 min | 50 / 15 min |
+| New proofs created | 30 / min | 120 / min | 300 / min |
 | Sign-in attempts | 10 / 15 min | 10 / 15 min | 10 / 15 min |
 | Status reads | 100 / min | 100 / min | 100 / min |
 
-New-proof, sign-in, and status limits are the same on every plan. API call throughput is where higher plans scale.
+Sign-in and status limits are the same on every plan. API calls and new proofs scale with the plan: Pro is 4× the free budget and Enterprise is 10×. The budget belongs to the caller who pays: a signed-in account or access key is counted on its own wallet even when it writes into a delegated agent's vault, and a wallet-signed request with no session is counted on the wallet that signed it. Limits are counted once across the whole service, not per server.
 
 ## When you hit a limit
 
@@ -37,9 +37,9 @@ CORS exposes `Retry-After`, `RateLimit`, and `RateLimit-Policy` so browsers and 
 
 ## Tips
 
-- **Reuse proofs.** Checking an existing proof is free. Creating a new one costs 4 to 73 credits and counts against the verification window, so cache the proof ID and check it.
+- **Reuse proofs.** Checking an existing proof is free. Creating a new one costs 4 to 73 credits and counts against the new-proof budget, so cache the proof ID and check it.
 - **Check before you create.** Use `gateCheck` with your `gateId` for access decisions. It reads saved proofs, so you create a new proof only for a missing check.
-- **Need higher limits?** Pro raises API throughput four times. Enterprise raises it ten times, by agreement. See [Pricing](/pricing).
+- **Need higher limits?** Pro raises both budgets four times. Enterprise raises them ten times, by agreement. See [Pricing](/pricing).
 
 ## 402 and credits
 

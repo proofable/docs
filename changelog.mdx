@@ -17,6 +17,25 @@ Published APIs and verifier schemas may change between minor versions. Breaking 
 </Note>
 
 <Update
+  label="November 9, 2026"
+  description="API"
+  tags={["API"]}
+  rss={{
+    title: "Proofable API: rate limits scale with your plan",
+    description: "New proofs and API calls are per-minute budgets that grow with Pro and Enterprise, counted on the account that pays."
+  }}
+>
+## Rate limits now scale with your plan
+
+- **New proofs scale with the plan.** Creating proofs was capped at 50 per 15 minutes on every plan. It is now a per-minute budget: 30 a minute on Free, 120 on Pro, 300 on Enterprise. API calls stay at 60, 240 and 600 a minute.
+- **The budget follows the account that pays.** A signed-in account or access key is counted on its own wallet, including when it writes into one of its agents' vaults. A wallet-signed request with no session is counted on the wallet that signed it.
+- **One count across the service.** Limits are counted once for the whole service rather than per server, so the number in `RateLimit-Policy` is the number you get.
+
+Read the headers and the retry pattern in [Rate limits](/api/rate-limits).
+
+</Update>
+
+<Update
   label="November 1, 2026"
   description="v0.1.11"
   tags={["SDK"]}

@@ -1,0 +1,177 @@
+{
+  "user_task_0": {
+    "tools": [
+      "read_file",
+      "send_money"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_1": {
+    "tools": [
+      "get_most_recent_transactions"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_2": {
+    "tools": [
+      "get_scheduled_transactions",
+      "read_file",
+      "update_scheduled_transaction"
+    ],
+    "allowedActions": [
+      "manage_runtime",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_3": {
+    "tools": [
+      "get_most_recent_transactions",
+      "send_money"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_4": {
+    "tools": [
+      "get_most_recent_transactions",
+      "send_money"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_5": {
+    "tools": [
+      "get_most_recent_transactions",
+      "send_money"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_6": {
+    "tools": [
+      "get_most_recent_transactions",
+      "schedule_transaction"
+    ],
+    "allowedActions": [
+      "execute_jobs",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_7": {
+    "tools": [
+      "get_most_recent_transactions"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_8": {
+    "tools": [
+      "get_most_recent_transactions"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_9": {
+    "tools": [
+      "get_most_recent_transactions",
+      "update_scheduled_transaction"
+    ],
+    "allowedActions": [
+      "manage_runtime",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_10": {
+    "tools": [
+      "get_most_recent_transactions"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_11": {
+    "tools": [
+      "get_most_recent_transactions",
+      "send_money"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_12": {
+    "tools": [
+      "get_scheduled_transactions",
+      "read_file",
+      "update_scheduled_transaction"
+    ],
+    "allowedActions": [
+      "manage_runtime",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_13": {
+    "tools": [
+      "read_file",
+      "update_user_info"
+    ],
+    "allowedActions": [
+      "manage_proofs",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_14": {
+    "tools": [
+      "get_most_recent_transactions",
+      "update_password"
+    ],
+    "allowedActions": [
+      "manage_delegations",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_15": {
+    "tools": [
+      "get_most_recent_transactions",
+      "get_scheduled_transactions",
+      "send_money",
+      "update_scheduled_transaction",
+      "update_user_info"
+    ],
+    "allowedActions": [
+      "manage_proofs",
+      "manage_runtime",
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  }
+}

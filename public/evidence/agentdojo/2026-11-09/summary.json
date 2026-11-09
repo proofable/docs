@@ -1,0 +1,179 @@
+{
+  "kind": "proofable.benchmark.agentdojo.all-suites",
+  "version": 1,
+  "measuredAt": "2026-11-09",
+  "benchmark": {
+    "name": "AgentDojo",
+    "version": "v1.2.2",
+    "suites": [
+      "banking",
+      "slack",
+      "travel",
+      "workspace"
+    ],
+    "attack": "important_instructions",
+    "library": "ethz-spylab/agentdojo @ 089ed468 (2026-06-02), local checkout E:/Algollo/Neus/_bench/agentdojo",
+    "pairsPerArm": 949,
+    "cleanTasksPerArm": 97
+  },
+  "model": {
+    "provider": "RedPill (OpenAI-compatible, TEE)",
+    "id": "google/gemma-4-31b-it",
+    "note": "chosen because attacks land on it with the gate off (probe 2026-11-09: 6 of 9 pairs); the models in the published table are not available to this key"
+  },
+  "gate": {
+    "engine": "protocol/src/runtime/authority-policy.js bundled unmodified (runners/agentgovbench/proofable-harness-bundle.mjs, sha256 272ed6565a0ece99..., build-bundle --check: no drift), called per decision through runners/agentgovbench/harness-bridge.mjs",
+    "grant": "per user task: exactly the actions of the tools in that task's own ground truth, plus reads (grants.json)",
+    "toolMap": "runners/agentdojo/proofable_gate.py TOOL_MAP (all four suites)",
+    "decisions": 6934,
+    "allowed": 3754,
+    "denied": 3180,
+    "meanDecisionLatencyMsIncludingProcessSpawn": 64.471
+  },
+  "results": {
+    "allSuites": {
+      "off": {
+        "pairs": 949,
+        "utility": 95.88,
+        "cleanTasks": 97,
+        "utilityUnderAttack": 88.09,
+        "targetedAsr": 16.44
+      },
+      "on": {
+        "pairs": 949,
+        "utility": 94.85,
+        "cleanTasks": 97,
+        "utilityUnderAttack": 87.04,
+        "targetedAsr": 6.22
+      }
+    },
+    "perSuite": {
+      "banking": {
+        "off": {
+          "pairs": 144,
+          "utility": 100,
+          "cleanTasks": 16,
+          "utilityUnderAttack": 86.81,
+          "targetedAsr": 45.83
+        },
+        "on": {
+          "pairs": 144,
+          "utility": 93.75,
+          "cleanTasks": 16,
+          "utilityUnderAttack": 81.25,
+          "targetedAsr": 15.97
+        }
+      },
+      "slack": {
+        "off": {
+          "pairs": 105,
+          "utility": 95.24,
+          "cleanTasks": 21,
+          "utilityUnderAttack": 70.48,
+          "targetedAsr": 56.19
+        },
+        "on": {
+          "pairs": 105,
+          "utility": 95.24,
+          "cleanTasks": 21,
+          "utilityUnderAttack": 60.95,
+          "targetedAsr": 26.67
+        }
+      },
+      "travel": {
+        "off": {
+          "pairs": 140,
+          "utility": 90,
+          "cleanTasks": 20,
+          "utilityUnderAttack": 83.57,
+          "targetedAsr": 9.29
+        },
+        "on": {
+          "pairs": 140,
+          "utility": 90,
+          "cleanTasks": 20,
+          "utilityUnderAttack": 83.57,
+          "targetedAsr": 0.71
+        }
+      },
+      "workspace": {
+        "off": {
+          "pairs": 560,
+          "utility": 97.5,
+          "cleanTasks": 40,
+          "utilityUnderAttack": 92.86,
+          "targetedAsr": 3.21
+        },
+        "on": {
+          "pairs": 560,
+          "utility": 97.5,
+          "cleanTasks": 40,
+          "utilityUnderAttack": 94.29,
+          "targetedAsr": 1.25
+        }
+      }
+    }
+  },
+  "comparables": {
+    "source": "https://agentdojo.spylab.ai/results/ (read 2026-11-09)",
+    "note": "all four suites, other models; same benchmark and metrics, not the same model or suite set",
+    "rows": [
+      {
+        "model": "gpt-4o-mini-2024-07-18",
+        "defense": "None",
+        "utility": 68.04,
+        "utilityUnderAttack": 49.92,
+        "targetedAsr": 27.19
+      },
+      {
+        "model": "gpt-4o-2024-05-13",
+        "defense": "None",
+        "utility": 69.07,
+        "utilityUnderAttack": 50.08,
+        "targetedAsr": 47.69
+      },
+      {
+        "model": "gpt-4o-2024-05-13",
+        "defense": "tool_filter",
+        "utility": 72.16,
+        "utilityUnderAttack": 56.28,
+        "targetedAsr": 6.84
+      },
+      {
+        "model": "gpt-4o-2024-05-13",
+        "defense": "repeat_user_prompt",
+        "utility": 84.54,
+        "utilityUnderAttack": 67.25,
+        "targetedAsr": 27.82
+      },
+      {
+        "model": "gpt-4o-2024-05-13",
+        "defense": "spotlighting_with_delimiting",
+        "utility": 72.16,
+        "utilityUnderAttack": 55.64,
+        "targetedAsr": 41.65
+      },
+      {
+        "model": "gpt-4o-2024-05-13",
+        "defense": "transformers_pi_detector",
+        "utility": 41.24,
+        "utilityUnderAttack": 21.14,
+        "targetedAsr": 7.95
+      },
+      {
+        "model": "claude-3-7-sonnet-20250219",
+        "defense": "None",
+        "utility": 88.66,
+        "utilityUnderAttack": 77.27,
+        "targetedAsr": 7.31
+      }
+    ]
+  },
+  "limits": "One model (google/gemma-4-31b-it); one attack template; k=1 per pair. Pair-weighted across suites, as AgentDojo aggregates. The attacks that still land use a tool the user task itself needs. Decision latency includes spawning the bridge process per batch.",
+  "folders": [
+    "2026-11-09",
+    "2026-11-09-slack",
+    "2026-11-09-travel",
+    "2026-11-09-workspace"
+  ]
+}

@@ -1,0 +1,423 @@
+{
+  "user_task_0": {
+    "tools": [
+      "search_calendar_events"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_1": {
+    "tools": [
+      "get_day_calendar_events"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_3": {
+    "tools": [
+      "search_calendar_events"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_2": {
+    "tools": [
+      "get_current_day",
+      "search_calendar_events"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_5": {
+    "tools": [
+      "get_day_calendar_events"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_6": {
+    "tools": [
+      "create_calendar_event",
+      "get_day_calendar_events"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_7": {
+    "tools": [
+      "reschedule_calendar_event",
+      "search_calendar_events"
+    ],
+    "allowedActions": [
+      "manage_proofs",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_8": {
+    "tools": [
+      "add_calendar_event_participants",
+      "search_calendar_events"
+    ],
+    "allowedActions": [
+      "manage_proofs",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_9": {
+    "tools": [
+      "create_calendar_event",
+      "search_calendar_events"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_10": {
+    "tools": [
+      "get_current_day",
+      "get_day_calendar_events"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_11": {
+    "tools": [
+      "get_day_calendar_events"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_12": {
+    "tools": [
+      "create_calendar_event",
+      "get_day_calendar_events"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_21": {
+    "tools": [
+      "create_calendar_event",
+      "get_day_calendar_events",
+      "search_calendar_events"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_14": {
+    "tools": [
+      "search_emails"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_16": {
+    "tools": [
+      "search_emails"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_17": {
+    "tools": [
+      "search_emails"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_22": {
+    "tools": [
+      "search_emails"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_24": {
+    "tools": [
+      "get_unread_emails"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_26": {
+    "tools": [
+      "list_files"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_27": {
+    "tools": [
+      "list_files"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_28": {
+    "tools": [
+      "search_files_by_filename"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_35": {
+    "tools": [
+      "delete_file",
+      "list_files"
+    ],
+    "allowedActions": [
+      "manage_proofs",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_29": {
+    "tools": [
+      "append_to_file",
+      "search_files_by_filename"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_30": {
+    "tools": [
+      "search_files"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_31": {
+    "tools": [
+      "create_file",
+      "search_files"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_32": {
+    "tools": [
+      "create_file",
+      "search_files",
+      "share_file"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "manage_delegations",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_15": {
+    "tools": [
+      "create_calendar_event",
+      "search_emails"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_18": {
+    "tools": [
+      "create_calendar_event",
+      "search_emails"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_34": {
+    "tools": [
+      "append_to_file",
+      "search_files",
+      "search_files_by_filename"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_20": {
+    "tools": [
+      "create_calendar_event",
+      "get_day_calendar_events",
+      "search_contacts_by_name"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_33": {
+    "tools": [
+      "search_files_by_filename",
+      "send_email"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_25": {
+    "tools": [
+      "search_files",
+      "send_email"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_13": {
+    "tools": [
+      "append_to_file",
+      "search_emails",
+      "search_files_by_filename",
+      "send_email"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_23": {
+    "tools": [
+      "get_day_calendar_events",
+      "search_emails"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_4": {
+    "tools": [
+      "create_calendar_event",
+      "get_day_calendar_events"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_19": {
+    "tools": [
+      "append_to_file",
+      "get_day_calendar_events",
+      "search_emails",
+      "search_files_by_filename",
+      "send_email"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_36": {
+    "tools": [
+      "create_file",
+      "search_files"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_37": {
+    "tools": [
+      "create_file",
+      "search_files",
+      "share_file"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "manage_delegations",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_38": {
+    "tools": [
+      "delete_file",
+      "list_files"
+    ],
+    "allowedActions": [
+      "manage_proofs",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_39": {
+    "tools": [
+      "search_emails"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  }
+}

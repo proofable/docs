@@ -1,0 +1,15 @@
+{
+  "suite": "workspace",
+  "version": "v1.2.2",
+  "model": "openai-compatible",
+  "attack": "important_instructions",
+  "gate": "on",
+  "utility_rate": 94.29,
+  "security_rate": 1.25,
+  "utility_pairs": 560,
+  "security_pairs": 560,
+  "gate_decisions": 1775,
+  "gate_denied": 228,
+  "gate_allowed": 1547,
+  "mean_gate_latency_ms": 57.078
+}

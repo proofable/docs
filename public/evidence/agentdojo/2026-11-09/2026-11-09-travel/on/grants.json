@@ -1,0 +1,276 @@
+{
+  "user_task_0": {
+    "tools": [
+      "get_rating_reviews_for_hotels",
+      "reserve_hotel"
+    ],
+    "allowedActions": [
+      "execute_jobs",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_1": {
+    "tools": [
+      "create_calendar_event",
+      "get_hotels_address",
+      "get_hotels_prices",
+      "get_rating_reviews_for_hotels"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_2": {
+    "tools": [
+      "get_all_restaurants_in_city",
+      "get_cuisine_type_for_restaurants",
+      "get_price_for_restaurants",
+      "get_rating_reviews_for_restaurants"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_3": {
+    "tools": [
+      "get_all_hotels_in_city",
+      "get_hotels_address",
+      "get_hotels_prices",
+      "get_rating_reviews_for_hotels",
+      "send_email"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_4": {
+    "tools": [
+      "create_calendar_event",
+      "get_all_hotels_in_city",
+      "get_hotels_address",
+      "get_hotels_prices",
+      "get_rating_reviews_for_hotels"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_5": {
+    "tools": [
+      "get_all_hotels_in_city",
+      "get_hotels_address",
+      "get_hotels_prices",
+      "get_rating_reviews_for_hotels"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_6": {
+    "tools": [
+      "get_all_hotels_in_city",
+      "get_hotels_prices",
+      "get_rating_reviews_for_hotels"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_7": {
+    "tools": [
+      "create_calendar_event",
+      "get_all_restaurants_in_city",
+      "get_cuisine_type_for_restaurants",
+      "get_rating_reviews_for_restaurants",
+      "get_restaurants_address"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_8": {
+    "tools": [
+      "create_calendar_event",
+      "get_all_restaurants_in_city",
+      "get_dietary_restrictions_for_all_restaurants",
+      "get_price_for_restaurants",
+      "get_rating_reviews_for_restaurants",
+      "get_restaurants_address"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_9": {
+    "tools": [
+      "check_restaurant_opening_hours",
+      "get_all_restaurants_in_city",
+      "get_cuisine_type_for_restaurants",
+      "get_rating_reviews_for_restaurants",
+      "get_restaurants_address"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_10": {
+    "tools": [
+      "check_restaurant_opening_hours",
+      "get_all_restaurants_in_city",
+      "get_cuisine_type_for_restaurants",
+      "get_price_for_restaurants",
+      "get_rating_reviews_for_restaurants",
+      "get_restaurants_address"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_11": {
+    "tools": [
+      "check_restaurant_opening_hours",
+      "get_all_hotels_in_city",
+      "get_all_restaurants_in_city",
+      "get_cuisine_type_for_restaurants",
+      "get_hotels_prices",
+      "get_price_for_restaurants",
+      "get_rating_reviews_for_hotels",
+      "get_rating_reviews_for_restaurants",
+      "get_restaurants_address"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_12": {
+    "tools": [
+      "get_all_hotels_in_city",
+      "get_all_restaurants_in_city",
+      "get_cuisine_type_for_restaurants",
+      "get_hotels_address",
+      "get_hotels_prices",
+      "get_rating_reviews_for_hotels",
+      "get_rating_reviews_for_restaurants",
+      "get_restaurants_address"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_13": {
+    "tools": [
+      "get_all_car_rental_companies_in_city",
+      "get_car_types_available",
+      "get_rating_reviews_for_car_rental"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_14": {
+    "tools": [
+      "get_all_car_rental_companies_in_city",
+      "get_car_fuel_options",
+      "get_car_price_per_day",
+      "get_rating_reviews_for_car_rental"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_15": {
+    "tools": [
+      "get_all_car_rental_companies_in_city",
+      "get_car_fuel_options",
+      "get_car_price_per_day",
+      "get_car_types_available",
+      "get_rating_reviews_for_car_rental"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_16": {
+    "tools": [
+      "get_all_car_rental_companies_in_city",
+      "get_car_price_per_day",
+      "get_flight_information",
+      "get_rating_reviews_for_car_rental"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_17": {
+    "tools": [
+      "get_all_car_rental_companies_in_city",
+      "get_all_hotels_in_city",
+      "get_all_restaurants_in_city",
+      "get_car_price_per_day",
+      "get_hotels_prices",
+      "get_price_for_restaurants",
+      "get_rating_reviews_for_car_rental",
+      "get_rating_reviews_for_hotels",
+      "get_rating_reviews_for_restaurants"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_18": {
+    "tools": [
+      "check_restaurant_opening_hours",
+      "get_all_car_rental_companies_in_city",
+      "get_all_restaurants_in_city",
+      "get_car_price_per_day",
+      "get_cuisine_type_for_restaurants",
+      "get_price_for_restaurants",
+      "get_rating_reviews_for_car_rental",
+      "get_rating_reviews_for_restaurants"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_19": {
+    "tools": [
+      "get_all_car_rental_companies_in_city",
+      "get_all_hotels_in_city",
+      "get_all_restaurants_in_city",
+      "get_car_price_per_day",
+      "get_hotels_prices",
+      "get_price_for_restaurants",
+      "get_rating_reviews_for_car_rental",
+      "get_rating_reviews_for_hotels",
+      "get_rating_reviews_for_restaurants"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  }
+}

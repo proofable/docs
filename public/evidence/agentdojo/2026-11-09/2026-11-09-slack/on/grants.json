@@ -1,0 +1,257 @@
+{
+  "user_task_0": {
+    "tools": [
+      "get_webpage"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_1": {
+    "tools": [
+      "get_webpage",
+      "read_channel_messages",
+      "send_direct_message"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_2": {
+    "tools": [
+      "get_webpage",
+      "invite_user_to_slack"
+    ],
+    "allowedActions": [
+      "manage_delegations",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_3": {
+    "tools": [
+      "get_webpage",
+      "send_channel_message"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_4": {
+    "tools": [
+      "get_webpage",
+      "post_webpage",
+      "read_inbox"
+    ],
+    "allowedActions": [
+      "create_proof",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_5": {
+    "tools": [
+      "get_channels",
+      "get_users_in_channel",
+      "send_channel_message"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_6": {
+    "tools": [
+      "get_webpage",
+      "read_channel_messages",
+      "send_direct_message"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_7": {
+    "tools": [
+      "add_user_to_channel",
+      "get_channels"
+    ],
+    "allowedActions": [
+      "manage_delegations",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_8": {
+    "tools": [
+      "get_channels",
+      "read_channel_messages",
+      "send_channel_message"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_9": {
+    "tools": [
+      "add_user_to_channel",
+      "get_channels",
+      "get_users_in_channel"
+    ],
+    "allowedActions": [
+      "manage_delegations",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_10": {
+    "tools": [
+      "add_user_to_channel",
+      "get_channels",
+      "get_users_in_channel"
+    ],
+    "allowedActions": [
+      "manage_delegations",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_11": {
+    "tools": [
+      "add_user_to_channel",
+      "get_webpage",
+      "invite_user_to_slack",
+      "read_inbox"
+    ],
+    "allowedActions": [
+      "manage_delegations",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_12": {
+    "tools": [
+      "get_channels",
+      "send_channel_message"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_13": {
+    "tools": [
+      "get_channels",
+      "read_channel_messages",
+      "send_direct_message"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_14": {
+    "tools": [
+      "get_channels",
+      "read_channel_messages",
+      "send_direct_message"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_15": {
+    "tools": [
+      "get_webpage",
+      "read_channel_messages",
+      "send_channel_message"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_16": {
+    "tools": [
+      "get_webpage",
+      "invite_user_to_slack",
+      "send_direct_message"
+    ],
+    "allowedActions": [
+      "manage_delegations",
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_17": {
+    "tools": [
+      "get_webpage",
+      "invite_user_to_slack"
+    ],
+    "allowedActions": [
+      "manage_delegations",
+      "read_context",
+      "read_proofs"
+    ]
+  },
+  "user_task_18": {
+    "tools": [
+      "get_channels",
+      "get_users_in_channel",
+      "get_webpage",
+      "read_channel_messages",
+      "send_channel_message",
+      "send_direct_message"
+    ],
+    "allowedActions": [
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_19": {
+    "tools": [
+      "add_user_to_channel",
+      "get_channels",
+      "get_users_in_channel",
+      "read_channel_messages",
+      "send_channel_message"
+    ],
+    "allowedActions": [
+      "manage_delegations",
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  },
+  "user_task_20": {
+    "tools": [
+      "get_webpage",
+      "invite_user_to_slack",
+      "read_channel_messages",
+      "send_channel_message",
+      "send_direct_message"
+    ],
+    "allowedActions": [
+      "manage_delegations",
+      "read_context",
+      "read_proofs",
+      "send_message"
+    ]
+  }
+}

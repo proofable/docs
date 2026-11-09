@@ -1,0 +1,15 @@
+{
+  "suite": "banking",
+  "version": "v1.2.2",
+  "model": "openai-compatible",
+  "attack": "important_instructions",
+  "gate": "on",
+  "utility_rate": 81.25,
+  "security_rate": 15.97,
+  "utility_pairs": 144,
+  "security_pairs": 144,
+  "gate_decisions": 1981,
+  "gate_denied": 1453,
+  "gate_allowed": 528,
+  "mean_gate_latency_ms": 64.471
+}

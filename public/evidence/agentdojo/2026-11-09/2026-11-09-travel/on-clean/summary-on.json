@@ -1,0 +1,15 @@
+{
+  "suite": "travel",
+  "version": "v1.2.2",
+  "model": "openai-compatible",
+  "attack": "",
+  "gate": "on",
+  "utility_rate": 90.0,
+  "security_rate": null,
+  "utility_pairs": 20,
+  "security_pairs": 20,
+  "gate_decisions": 117,
+  "gate_denied": 0,
+  "gate_allowed": 117,
+  "mean_gate_latency_ms": 40.842
+}
