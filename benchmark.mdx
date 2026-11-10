@@ -1,68 +1,35 @@
 ---
 title: "Benchmark"
 sidebarTitle: "Benchmark"
-description: "Perfect scores on agent memory and governance: 77/77 on PrecisionMemBench, 48/48 on AgentGovBench, 93.8% of AgentDojo attacks stopped, 0/6 data leaks."
+description: "See how Proofable compares with the tools teams run today, on memory, agent rules, injection and cost, with every result you can rerun."
 "og:image": "https://proofable.me/og/benchmarks"
 "twitter:image": "https://proofable.me/og/benchmarks"
 icon: chart-simple
 ---
 
-**Perfect scores on agent memory and governance.** Every result below is a public benchmark or a test you can rerun, set beside the tool teams use today, with a public proof you can check yourself.
+**Perfect scores on agent memory and governance.** Every result below is a public benchmark or a test you can rerun, and each one links to the record behind it.
+
+<img className="evid-light evid-wide" src="/images/evidence/memory-precision-light.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
+<img className="evid-dark evid-wide" src="/images/evidence/memory-precision-dark.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
+<img className="evid-light evid-tall" src="/images/evidence/memory-precision-stacked-light.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
+<img className="evid-dark evid-tall" src="/images/evidence/memory-precision-stacked-dark.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
 
 <CardGroup cols={2}>
   <Card title="77/77 memory" icon="brain" href="https://proofable.me/benchmarks/memory">
-    Every PrecisionMemBench case. Mem0 and Zep passed 9.
+    The current fact every time, on all 43 cases that need it. Mem0 and Zep passed 9.
   </Card>
   <Card title="48/48 agent rules" icon="shield-check" href="https://proofable.me/benchmarks/governance">
-    Every AgentGovBench scenario. The best gateway handled 46.
+    Every governance scenario. The best gateway handled 46, coding agents on their own 13.
   </Card>
   <Card title="93.8% of attacks stopped" icon="shield-halved" href="https://proofable.me/benchmarks/security">
-    On AgentDojo, with 87% of tasks still done under attack.
+    On AgentDojo, with 87% of tasks still finished under attack.
   </Card>
   <Card title="0/6 data leaks" icon="lock" href="https://proofable.me/benchmarks/security">
-    A hijacked agent got nothing out. An all-purpose key let all 6 through.
+    A hijacked agent left with nothing.
   </Card>
 </CardGroup>
 
-<Note>The charts and side-by-side comparisons are at [proofable.me/benchmarks](https://proofable.me/benchmarks). This page has every result in full, how each one was run, and how to check it yourself.</Note>
-
-## Results
-
-<CardGroup cols={2}>
-  <Card title="Remembers what is true now" href="#memory-that-returns-only-the-current-fact">
-    **77 of 77** PrecisionMemBench cases. Hindsight 66 on the same toolkit; Mem0, Zep and Cognee 9 on the benchmark’s own table.
-  </Card>
-  <Card title="Follows your rules" href="#governance-coverage">
-    **48 of 48** AgentGovBench scenarios. The best gateway 46, coding agents on their own 13.
-  </Card>
-  <Card title="Stops actions you never allowed" href="#agents-only-do-what-you-allowed">
-    **8 of 8** live tests stopped before they ran, and every allowed action still ran.
-  </Card>
-  <Card title="Stops injected instructions" href="#prompt-injection-on-agentdojo">
-    **93.8%** of AgentDojo attacks stopped, against 83.6% for the same agent and model without it. 94.9% of tasks still done.
-  </Card>
-  <Card title="Keeps your data in" href="#a-hijacked-agent-cannot-send-your-data-out">
-    **0 of 6** theft attempts got out of a hijacked agent. An all-purpose key let all 6 through.
-  </Card>
-  <Card title="Proves what it did" href="#records-nobody-can-fake">
-    **150 of 150** forged records caught. A basic file check accepted all 150.
-  </Card>
-  <Card title="Hands work to another agent" href="#handoffs-between-agents">
-    **\$0.024** per correct handoff and 3 of 3 tampered handoffs caught. Redoing the work cost \$0.078.
-  </Card>
-  <Card title="Checks work without redoing it" href="#reuse-instead-of-redo">
-    **3.7 ms and no tokens**, against 2.79 s and 2,426 tokens to redo it. 750× faster.
-  </Card>
-  <Card title="Finds the current rule cheaply" href="#memory-that-knows-what-is-current">
-    **11.1× fewer tokens** and 2.7× faster than searching every record.
-  </Card>
-  <Card title="Caps research spend" href="#research-with-a-cost-ceiling">
-    **16,301 tokens** at worst, against 50,554 on the open web.
-  </Card>
-  <Card title="Reuses one ID check across 100 apps" href="#identity-checks-paid-for-once">
-    **\$1.75**, against \$150.00 re-running Stripe Identity in each app. 85× less.
-  </Card>
-</CardGroup>
+<Note>Side-by-side pages for each benchmark are at [proofable.me/benchmarks](https://proofable.me/benchmarks). This page carries every run in full and the commands to check it.</Note>
 
 ## Where it covers you
 
@@ -78,17 +45,32 @@ icon: chart-simple
 
 Redoing a finished agent job took 2.79 s and 2,426 AI tokens. Checking its signed receipt took 3.7 ms and no tokens: 750× faster, which is 1 hour instead of 32 days at a million checks. [Time it yourself](#run-it-yourself).
 
+<img className="evid-light evid-wide" src="/images/evidence/save-reuse-light.svg" alt="Bar chart of the time to trust a finished result. Checking the Proofable receipt took 3.7 milliseconds and redoing the job took 2.79 seconds, about 750 times faster." />
+<img className="evid-dark evid-wide" src="/images/evidence/save-reuse-dark.svg" alt="Bar chart of the time to trust a finished result. Checking the Proofable receipt took 3.7 milliseconds and redoing the job took 2.79 seconds, about 750 times faster." />
+<img className="evid-light evid-tall" src="/images/evidence/save-reuse-stacked-light.svg" alt="Bar chart of the time to trust a finished result. Checking the Proofable receipt took 3.7 milliseconds and redoing the job took 2.79 seconds, about 750 times faster." />
+<img className="evid-dark evid-tall" src="/images/evidence/save-reuse-stacked-dark.svg" alt="Bar chart of the time to trust a finished result. Checking the Proofable receipt took 3.7 milliseconds and redoing the job took 2.79 seconds, about 750 times faster." />
+
 ### Handoffs between agents
 
 When one agent hands a finished result to another (LangGraph, CrewAI, AutoGen), the receiving agent normally either trusts the forwarded text blindly or pays to re-run the upstream work. With Proofable, the producing agent emits a 66-byte signed receipt (`qHash`) binding input, policy state and output, and the receiving agent checks it before acting.
 
+<img className="evid-light evid-wide" src="/images/evidence/save-handoff-light.svg" alt="Bar chart of the cost per correct outcome. Handing off with a Proofable receipt cost $0.024, redoing the work $0.078, and trusting forwarded text $0.009." />
+<img className="evid-dark evid-wide" src="/images/evidence/save-handoff-dark.svg" alt="Bar chart of the cost per correct outcome. Handing off with a Proofable receipt cost $0.024, redoing the work $0.078, and trusting forwarded text $0.009." />
+<img className="evid-light evid-tall" src="/images/evidence/save-handoff-stacked-light.svg" alt="Bar chart of the cost per correct outcome. Handing off with a Proofable receipt cost $0.024, redoing the work $0.078, and trusting forwarded text $0.009." />
+<img className="evid-dark evid-tall" src="/images/evidence/save-handoff-stacked-dark.svg" alt="Bar chart of the cost per correct outcome. Handing off with a Proofable receipt cost $0.024, redoing the work $0.078, and trusting forwarded text $0.009." />
+
 - **3.3× cheaper than redoing the work:** \$0.024 per correct outcome (33,240 tokens, 2 model calls per task) against \$0.078 (124,715 tokens, 3 to 5 model calls per task).
-- **Trusting forwarded text is cheap and wrong:** it costs \$0.009 on untouched input, but when the text was changed in transit it used the tampered value **3 of 3** times. Checking the receipt caught every change **3 of 3** times and still completed every task.
+- **Trusting forwarded text is cheap and wrong:** it costs \$0.009 on untouched input, but when the text was changed in transit it used the tampered value **3 of 3** times. Checking the receipt caught every change **3 of 3** times and still completed every task, where blind trust caught **0 of 3**.
 - **29× smaller handoffs:** across a 10-hop chain, passing the signed reference carried **9,900 bytes** per hop instead of **289,410 bytes** of full evidence.
 
 ### Memory that knows what is current
 
 Most agent memory layers (Mem0, Zep, vector stores) return text chunks with no active or revoked status and no signer, so the agent keeps reading full bodies to work out which rule is current. Proofable stores typed, revocable, owner-signed records (`rules`, `instruction`, `receipts`), so the agent asks for active state by type and reads about 1 KB of verified metadata before opening a body.
+
+<img className="evid-light evid-wide" src="/images/evidence/save-vault-light.svg" alt="Bar chart of the tokens to find the current rule on a 3,621-record vault. Typed Proofable state used 43,169 tokens and keyword search over record bodies used 479,623, about 11 times fewer." />
+<img className="evid-dark evid-wide" src="/images/evidence/save-vault-dark.svg" alt="Bar chart of the tokens to find the current rule on a 3,621-record vault. Typed Proofable state used 43,169 tokens and keyword search over record bodies used 479,623, about 11 times fewer." />
+<img className="evid-light evid-tall" src="/images/evidence/save-vault-stacked-light.svg" alt="Bar chart of the tokens to find the current rule on a 3,621-record vault. Typed Proofable state used 43,169 tokens and keyword search over record bodies used 479,623, about 11 times fewer." />
+<img className="evid-dark evid-tall" src="/images/evidence/save-vault-stacked-dark.svg" alt="Bar chart of the tokens to find the current rule on a 3,621-record vault. Typed Proofable state used 43,169 tokens and keyword search over record bodies used 479,623, about 11 times fewer." />
 
 On a 3,621-record production vault, the questions both methods answered correctly took **43,169 tokens in 66 seconds** (6 model calls) by typed lookup against **479,623 tokens in 178 seconds** (10 model calls) searching record bodies by keyword: **11.1× fewer tokens, 2.7× faster**, and 11.8× to 12.7× lower model cost across Claude Sonnet 5.5, Gemini 3.1 Pro and GPT-6 Astra.
 
@@ -110,6 +92,11 @@ Proofable and Hindsight ran on the same toolkit, so those two rows compare direc
 
 Live pages change between requests: two fetches of the same page 221 seconds apart returned 96,713 characters, then 1,129, handing two agents different evidence with no way to prove what the page said when the decision was made. On public questions about standards, agent protocols and regulation, reading signed Proofable records **halved the cost per correct answer (\$0.020 vs \$0.039)**, held the worst case to **16,301 tokens** where open-web search spiked to **50,554 tokens** and 104 seconds (**3.1× lower**), and cited a checkable source on **every answer** (6 of 6, against 5 of 6 on the open web).
 
+<img className="evid-light evid-wide" src="/images/evidence/save-records-light.svg" alt="Bar chart of the worst-case tokens on six public questions. Typed Proofable records used 16,301 and the open web 50,554, about 3 times lower." />
+<img className="evid-dark evid-wide" src="/images/evidence/save-records-dark.svg" alt="Bar chart of the worst-case tokens on six public questions. Typed Proofable records used 16,301 and the open web 50,554, about 3 times lower." />
+<img className="evid-light evid-tall" src="/images/evidence/save-records-stacked-light.svg" alt="Bar chart of the worst-case tokens on six public questions. Typed Proofable records used 16,301 and the open web 50,554, about 3 times lower." />
+<img className="evid-dark evid-tall" src="/images/evidence/save-records-stacked-dark.svg" alt="Bar chart of the worst-case tokens on six public questions. Typed Proofable records used 16,301 and the open web 50,554, about 3 times lower." />
+
 ### Identity checks paid for once
 
 A person or business completes an interactive check once, and downstream apps and agents verify the portable proof instead of paying the vendor to run the flow again. Priced from published vendor list prices and Proofable's \$0.0025 per check:
@@ -126,6 +113,11 @@ A person or business completes an interactive check once, and downstream apps an
 ### Governance coverage
 
 [AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) is the open library of 48 agent-governance scenarios in eight areas: audit completeness, cross-tenant isolation, delegation provenance, fail-mode discipline, identity propagation, per-user policy, rate limits and scope inheritance. Each scenario is tagged with the NIST AI RMF controls it tests, and nothing passes on a technicality.
+
+<img className="evid-light evid-wide" src="/images/evidence/stop-tools-light.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
+<img className="evid-dark evid-wide" src="/images/evidence/stop-tools-dark.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
+<img className="evid-light evid-tall" src="/images/evidence/stop-tools-stacked-light.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
+<img className="evid-dark evid-tall" src="/images/evidence/stop-tools-stacked-dark.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
 
 | Setup | Scenarios handled |
 |---|---|
@@ -180,7 +172,12 @@ For scale, these are AgentDojo's published results on other models. With no defe
 
 ### A hijacked agent cannot send your data out
 
-**When an agent was taken over, 0 of 6 attempts to send private data out got past a scoped permission; an all-purpose key let all 6 through.** Five of the six were refused by the permission before they ran and one was never attempted. The scoped agent finished every task and never used a tool outside it (0 of 42 runs); under the all-purpose key, 7 of 42 runs did, with a signed record for each run. [Run the test on your own agent](https://github.com/proofable/mcp/tree/main/examples/injection-test).
+**When an agent was taken over, 0 of 6 attempts to send private data out got past a scoped permission. On an all-purpose key, 6 of 6 got out.** Five of the six were refused by the permission before they ran and one was never attempted. The scoped agent finished every task and never used a tool outside it (0 of 42 runs); under the all-purpose key, 7 of 42 runs did, with a signed record for each run. [Run the test on your own agent](https://github.com/proofable/mcp/tree/main/examples/injection-test).
+
+<img className="evid-light evid-wide" src="/images/evidence/stop-exfil-light.svg" alt="Bar chart of attempts to send private data out of a hijacked agent. 6 of 6 got out on an all-purpose key and 0 of 6 on an owner-scoped permission." />
+<img className="evid-dark evid-wide" src="/images/evidence/stop-exfil-dark.svg" alt="Bar chart of attempts to send private data out of a hijacked agent. 6 of 6 got out on an all-purpose key and 0 of 6 on an owner-scoped permission." />
+<img className="evid-light evid-tall" src="/images/evidence/stop-exfil-stacked-light.svg" alt="Bar chart of attempts to send private data out of a hijacked agent. 6 of 6 got out on an all-purpose key and 0 of 6 on an owner-scoped permission." />
+<img className="evid-dark evid-tall" src="/images/evidence/stop-exfil-stacked-dark.svg" alt="Bar chart of attempts to send private data out of a hijacked agent. 6 of 6 got out on an all-purpose key and 0 of 6 on an owner-scoped permission." />
 
 ### Records nobody can fake
 
