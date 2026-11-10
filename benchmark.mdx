@@ -183,12 +183,7 @@ For scale, these are AgentDojo's published results on other models. With no defe
 
 **150 of 150 forged records caught.** Each of 15 real records was changed ten ways, such as editing the content, swapping the owner or flipping one bit of the signature. Every changed copy failed offline signature verification and every real record passed. A check that only reads the format accepted all 150.
 
-```sh
-git clone --depth 1 https://github.com/proofable/docs
-cd docs/public/evidence/checks
-npm install
-node tamper-check.mjs
-```
+Rerun it from the kit in [Run it yourself](#run-it-yourself): `node tamper-check.mjs` changes all 15 records ten ways and verifies every copy offline.
 
 ## Run it yourself
 
@@ -198,7 +193,8 @@ Time a reuse on your own machine, with no account and no API key:
 git clone --depth 1 https://github.com/proofable/docs
 cd docs/public/evidence/checks
 npm install
-node reuse-check.mjs
+node reuse-check.mjs     # read a finished job by id, verify its receipt
+node tamper-check.mjs    # change 15 records ten ways, watch every copy fail
 ```
 
 It reads a finished job by its id and verifies the signed receipt on your machine:
@@ -234,7 +230,7 @@ Pin both refs to the same commit so a rerun measures the same kit. The action wr
     The latest run of the permission tests produced 15 signed records. Check all of them on your machine, with no account:
 
     ```sh
-    git clone --depth 1 https://github.com/proofable/docs
+    # from the clone in "Run it yourself"
     cd docs/public/evidence/aaif/authority-at-dispatch/2026-11-02-suite
     sha256sum -c SHA256SUMS
     npm install @proofable/sdk@0.1.11
