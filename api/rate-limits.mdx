@@ -17,7 +17,7 @@ Every limit is a per-minute budget. Higher plans raise both API call throughput 
 | Sign-in attempts | 10 / 15 min | 10 / 15 min | 10 / 15 min |
 | Status reads | 100 / min | 100 / min | 100 / min |
 
-Sign-in and status limits are the same on every plan. API calls and new proofs scale with the plan: Pro is 4× the free budget and Enterprise is 10×. The budget belongs to the caller who pays: a signed-in account or access key is counted on its own wallet even when it writes into a delegated agent's vault, and a wallet-signed request with no session is counted on the wallet that signed it. Limits are counted once across the whole service, not per server.
+Sign-in and status limits are the same on every plan. API calls and new proofs scale with the plan. Pro is 4× the free budget and Enterprise is 10×. The budget belongs to the caller who pays. A signed-in account or access key is counted on its own wallet even when it writes into a delegated agent's vault, and a wallet-signed request with no session is counted on the wallet that signed it. Limits are counted once across the whole service, not per server.
 
 ## When you hit a limit
 
