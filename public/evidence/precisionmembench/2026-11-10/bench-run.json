@@ -1,6 +1,21 @@
 {
   "schemaVersion": "universal-bench/v1",
-  "title": "PrecisionMemBench single-turn, retrieval mode: 76 of 77 (active 43 of 43, precision 0.96, recall 1.00)",
+  "title": "PrecisionMemBench: Proofable passed 76 of 77 cases",
+  "summary": "PrecisionMemBench checks whether a memory returns the current fact and nothing stale. Proofable passed 76 of 77 cases, including all 43 that need the memory to pick the right facts, with precision 0.96 and recall 1.00. Hindsight passed 66 of 77 on the same test setup. Run 2026-11-10; the per-case results and the code that ran are published with this receipt.",
+  "highlights": [
+    {
+      "label": "Cases passed",
+      "value": "76 of 77"
+    },
+    {
+      "label": "Active cases",
+      "value": "43 of 43"
+    },
+    {
+      "label": "Precision",
+      "value": "0.96, recall 1.00"
+    }
+  ],
   "pillar": "memory-precision",
   "suite": "precisionmembench",
   "mode": "full-canonical",
