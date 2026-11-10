@@ -42,6 +42,18 @@ decisions. It re-seals every digest so the integrity checks pass, and requires `
 accepting the unaltered copy. In the last three every record is still genuine and verified, so only the binding
 to the case's own run can reject them. The packet is never touched.
 
+## The acceptance criterion
+
+A packet is accepted, on the same bytes, only when both commands pass:
+
+- `verify` passes: every checksum, the trace digest and all disclosed envelopes recompute offline, each of the
+  eight cases appears exactly once, and each record a case cites is the one its own run produced.
+- `controls` passes: `verify` rejects all eight re-sealed alterations and accepts the unaltered packet.
+
+Either one failing is a rejection of the packet, not a note on it. This kit is held to that criterion, and we
+propose the same control set as the criterion for a packet in this comparison, so a reviewer applies one rule to
+any implementation's packet rather than arguing each packet's shape.
+
 To check the October 8 packet, run `npm install @proofable/sdk@0.1.10` inside
 `2026-10-08-eight-case/`, then `node verify-portable-proofs.mjs`.
 
