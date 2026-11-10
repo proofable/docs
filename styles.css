@@ -1340,3 +1340,16 @@ html {
   background: var(--proofable-scrollbar-thumb-hover);
 }
 
+
+/* Tables on phones: tighter type and padding inside Mintlify's own horizontal scroll area. */
+@media (max-width: 639px) {
+  .mdx-content table {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+  .mdx-content table th,
+  .mdx-content table td {
+    padding: 0.5rem 0.625rem;
+    min-width: 7.5rem;
+  }
+}

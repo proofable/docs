@@ -1,31 +1,68 @@
 ---
 title: "Benchmark"
 sidebarTitle: "Benchmark"
-description: "Proofable on public agent benchmarks: 77 of 77 on PrecisionMemBench, 48 of 48 on AgentGovBench, prompt-injection attacks cut from 16.4% to 6.2% on AgentDojo. Every result signed and rerunnable."
+description: "Perfect scores on agent memory and governance: 77/77 on PrecisionMemBench, 48/48 on AgentGovBench, 93.8% of AgentDojo attacks stopped, 0/6 data leaks."
 "og:image": "https://proofable.me/og/benchmarks"
 "twitter:image": "https://proofable.me/og/benchmarks"
 icon: chart-simple
 ---
 
-Proofable makes every check a portable proof that is private, signed, and checkable by any app or agent without redoing the work. Because the proof travels, agents stop actions you never allowed before they run, and the next agent or system checks finished work instead of paying to redo it. Each result below comes from the live service, compared with the setup teams use today, and links to a record you can check or a test you can rerun.
+**Perfect scores on agent memory and governance.** Every result below is a public benchmark or a test you can rerun, set beside the tool teams use today, with a public proof you can check yourself.
+
+<CardGroup cols={2}>
+  <Card title="77/77 memory" icon="brain" href="https://proofable.me/benchmarks/memory">
+    Every PrecisionMemBench case. Mem0 and Zep passed 9.
+  </Card>
+  <Card title="48/48 agent rules" icon="shield-check" href="https://proofable.me/benchmarks/governance">
+    Every AgentGovBench scenario. The best gateway handled 46.
+  </Card>
+  <Card title="93.8% of attacks stopped" icon="shield-halved" href="https://proofable.me/benchmarks/security">
+    On AgentDojo, with 87% of tasks still done under attack.
+  </Card>
+  <Card title="0/6 data leaks" icon="lock" href="https://proofable.me/benchmarks/security">
+    A hijacked agent got nothing out. An all-purpose key let all 6 through.
+  </Card>
+</CardGroup>
 
 <Note>The charts and side-by-side comparisons are at [proofable.me/benchmarks](https://proofable.me/benchmarks). This page has every result in full, how each one was run, and how to check it yourself.</Note>
 
 ## Results
 
-| Your outcome | With Proofable | Compared with |
-|---|---|---|
-| [Memory that returns the current fact and nothing stale](#memory-that-returns-only-the-current-fact) | **77 of 77** PrecisionMemBench cases | Hindsight 66 of 77 on the same test setup; Mem0, Zep and Cognee 9 of 77 on the benchmark’s own table |
-| [Agent governance coverage](#governance-coverage) | **48 of 48** scenarios | 46 for the best gateway, 43 for Claude Code or Codex with a gateway, 13 for coding agents on their own |
-| [Actions outside an agent's permission](#agents-only-do-what-you-allowed) | **Stopped before they run**, 8 of 8 live tests | Every allowed action still ran; reviewers verified the records independently |
-| [Prompt injection on AgentDojo](#prompt-injection-on-agentdojo) | Attacks that landed fell from **16.4% to 6.2%** across all four suites, with the task still done 94.9% of the time | 16.4% for the same agent and model without it |
-| [Private data a hijacked agent sends out](#a-hijacked-agent-cannot-send-your-data-out) | **0 of 6** attempts got out | 6 of 6 got out on an all-purpose key |
-| [Forged or altered records](#records-nobody-can-fake) | **150 of 150** caught | A format-only check accepted all 150 |
-| [Work handed to another agent](#handoffs-between-agents) | **\$0.024** per correct outcome, 3 of 3 tampered handoffs caught | \$0.078 to redo the work; trusting the forwarded text caught 0 of 3 |
-| [Reusing finished work](#reuse-instead-of-redo) | **3.7 ms, 0 tokens** | 2.79 s and 2,426 tokens to redo it, 750× slower |
-| [Agent memory that knows which rule is current](#memory-that-knows-what-is-current) | **11.1× fewer tokens**, 2.7× faster | 479,623 tokens and 178 s searching every record body |
-| [Worst-case research spend](#research-with-a-cost-ceiling) | **16,301 tokens** | 50,554 on the open web, 3.1× higher, at about twice the cost per answer |
-| [One identity check reused by 100 apps](#identity-checks-paid-for-once) | **\$1.75** | \$150.00 re-running Stripe Identity in each, 85× more |
+<CardGroup cols={2}>
+  <Card title="Remembers what is true now" href="#memory-that-returns-only-the-current-fact">
+    **77 of 77** PrecisionMemBench cases. Hindsight 66 on the same toolkit; Mem0, Zep and Cognee 9 on the benchmark’s own table.
+  </Card>
+  <Card title="Follows your rules" href="#governance-coverage">
+    **48 of 48** AgentGovBench scenarios. The best gateway 46, coding agents on their own 13.
+  </Card>
+  <Card title="Stops actions you never allowed" href="#agents-only-do-what-you-allowed">
+    **8 of 8** live tests stopped before they ran, and every allowed action still ran.
+  </Card>
+  <Card title="Stops injected instructions" href="#prompt-injection-on-agentdojo">
+    **93.8%** of AgentDojo attacks stopped, against 83.6% for the same agent and model without it. 94.9% of tasks still done.
+  </Card>
+  <Card title="Keeps your data in" href="#a-hijacked-agent-cannot-send-your-data-out">
+    **0 of 6** theft attempts got out of a hijacked agent. An all-purpose key let all 6 through.
+  </Card>
+  <Card title="Proves what it did" href="#records-nobody-can-fake">
+    **150 of 150** forged records caught. A basic file check accepted all 150.
+  </Card>
+  <Card title="Hands work to another agent" href="#handoffs-between-agents">
+    **\$0.024** per correct handoff and 3 of 3 tampered handoffs caught. Redoing the work cost \$0.078.
+  </Card>
+  <Card title="Checks work without redoing it" href="#reuse-instead-of-redo">
+    **3.7 ms and no tokens**, against 2.79 s and 2,426 tokens to redo it. 750× faster.
+  </Card>
+  <Card title="Finds the current rule cheaply" href="#memory-that-knows-what-is-current">
+    **11.1× fewer tokens** and 2.7× faster than searching every record.
+  </Card>
+  <Card title="Caps research spend" href="#research-with-a-cost-ceiling">
+    **16,301 tokens** at worst, against 50,554 on the open web.
+  </Card>
+  <Card title="Reuses one ID check across 100 apps" href="#identity-checks-paid-for-once">
+    **\$1.75**, against \$150.00 re-running Stripe Identity in each app. 85× less.
+  </Card>
+</CardGroup>
 
 ## Where it covers you
 
@@ -59,13 +96,13 @@ On a 3,621-record production vault, the questions both methods answered correctl
 
 **On PrecisionMemBench, the public test of whether a memory returns the current fact and nothing stale, Proofable passed all 77 cases, including all 43 where the memory has to pick the right facts for the question, with precision 0.98 and recall 1.00.** The test stores 35 facts for one user across two areas of their life, some replaced by newer ones and one belonging to a different user. It then asks 77 questions and checks exactly which facts come back. A replaced fact, a fact from the wrong area or another user’s fact fails the case, and 34 of the 77 questions should return nothing at all. Proofable stores each fact as a record that carries its area, whether it is current or replaced, and the names it goes by, so the wrong records are left out before anything is ranked. The [Agent Memory Benchmark](https://agentmemorybenchmark.ai) toolkit scores the test without a model. The run is a [public record](https://proofable.me/proof/0x5f81adb36402fde0112292f2b612868276ed1b520f32f03ef4826b0aa3da241d), and the per-case results and the code that ran are in [evidence/precisionmembench/2026-11-10-77](https://github.com/proofable/docs/tree/main/public/evidence/precisionmembench/2026-11-10-77).
 
-| Memory | Cases passed | Active cases | Precision | Recall | Run by | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| Proofable | **77 of 77** | **43 of 43** | 0.98 | 1.00 | Proofable, Agent Memory Benchmark toolkit | [results](https://github.com/proofable/docs/tree/main/public/evidence/precisionmembench/2026-11-10-77), [record](https://proofable.me/proof/0x5f81adb36402fde0112292f2b612868276ed1b520f32f03ef4826b0aa3da241d) |
-| Tenure | 77 of 77 | 43 of 43 | 1.00 | 1.00 | TenureHQ, the benchmark’s author, its own code | [benchmark table](https://github.com/tenurehq/precisionMemBench) |
-| Hindsight (cloud) | 66 of 77 | 33 of 43 | 0.85 | 1.00 | Vectorize, same toolkit | [published run](https://github.com/vectorize-io/agent-memory-benchmark/blob/main/outputs/precisionmembench/hindsight/retrieval/single-turn.json.gz) |
-| Supermemory | 15 of 77 | 2 of 43 | 0.18 | 0.82 | TenureHQ, its own code | [benchmark table](https://github.com/tenurehq/precisionMemBench) |
-| Mem0, Zep, Cognee | 9 of 77 | 0 of 43 | 0.06 | 0.66 to 0.99 | TenureHQ, its own code | [benchmark table](https://github.com/tenurehq/precisionMemBench) |
+| Memory | Cases passed | Active cases | Precision | Run by and source |
+| --- | --- | --- | --- | --- |
+| Proofable | **77 of 77** | **43 of 43** | 0.98 | Proofable, Agent Memory Benchmark toolkit: [results](https://github.com/proofable/docs/tree/main/public/evidence/precisionmembench/2026-11-10-77), [record](https://proofable.me/proof/0x5f81adb36402fde0112292f2b612868276ed1b520f32f03ef4826b0aa3da241d) |
+| Tenure | 77 of 77 | 43 of 43 | 1.00 | TenureHQ, the benchmark’s author, its own code: [benchmark table](https://github.com/tenurehq/precisionMemBench) |
+| Hindsight (cloud) | 66 of 77 | 33 of 43 | 0.85 | Vectorize, same toolkit: [published run](https://github.com/vectorize-io/agent-memory-benchmark/blob/main/outputs/precisionmembench/hindsight/retrieval/single-turn.json.gz) |
+| Supermemory | 15 of 77 | 2 of 43 | 0.18 | TenureHQ, its own code: [benchmark table](https://github.com/tenurehq/precisionMemBench) |
+| Mem0, Zep, Cognee | 9 of 77 | 0 of 43 | 0.06 | TenureHQ, its own code: [benchmark table](https://github.com/tenurehq/precisionMemBench) |
 
 Proofable and Hindsight ran on the same toolkit, so those two rows compare directly. The other rows are the benchmark author’s own results with its own code, and Tenure is the author’s own product. High recall with low precision means the right fact came back buried among unrelated ones.
 
