@@ -1,0 +1,131 @@
+{
+  "schemaVersion": "universal-bench/v1",
+  "title": "PrecisionMemBench: Proofable passed 77 of 77 cases",
+  "summary": "PrecisionMemBench checks whether a memory returns the current fact and nothing stale. Proofable passed all 77 cases, including all 43 that need the memory to pick the right facts, with precision 0.98 and recall 1.00. Hindsight passed 66 of 77 on the same toolkit. Three full runs on this code scored 77, 77 and 74; every run is published with this record.",
+  "highlights": [
+    {
+      "label": "Cases passed",
+      "value": "77 of 77"
+    },
+    {
+      "label": "Active cases",
+      "value": "43 of 43"
+    },
+    {
+      "label": "Full runs",
+      "value": "77, 77 and 74"
+    }
+  ],
+  "pillar": "memory-precision",
+  "suite": "precisionmembench",
+  "mode": "full-canonical",
+  "dataset": {
+    "name": "tenurehq/precisionMemBench, single-turn split, as ported by vectorize-io/agent-memory-benchmark",
+    "version": "harness 28b644bd4dd653c0207c7507280439390c829155 (2026-11-02); fixtures pinned to upstream b95d6ab",
+    "sha256": "70f28ad6cc0e0dc55cd735ee590bb35be5eda8e6edf882cdaa74cddad5c6b1d9",
+    "sha256Of": "outputs/precisionmembench/proofable/retrieval/single-turn.json (the harness result file, per-case records included)",
+    "totalCases": 77,
+    "activeCases": 43,
+    "beliefs": 35
+  },
+  "subject": {
+    "provider": "proofable",
+    "providerDescription": "Proofable typed memory behind the harness interface: each belief stored as one private record with the dataset's scope tags plus state and name tags; retrieval applies the dataset's filter as exact tag matching, then gemini-2.5-flash selects among the filtered candidates and may select none",
+    "model": "gemini-2.5-flash",
+    "modelRole": "label extraction at ingest (35 calls) and candidate selection at retrieval (77 calls); the harness scores retrieval mode with no model",
+    "adapter": "src/memory_bench/memory/proofable.py in the Agent Memory Benchmark harness (branch proofable-provider)",
+    "adapterSha256": "d46f8671682dd1d3a0a6ac9b5da619e903a8836a32c9ae394a3d5ebfe43e1a18",
+    "targetUrl": "https://api.proofable.me",
+    "benchProfile": "0x226fc211c8aa9fa460b302cd616204e1d84c467c",
+    "ranAt": "2026-11-10T07:35:00Z",
+    "adapterCommit": "1642d44 on branch proofable-provider"
+  },
+  "headlineScore": {
+    "primaryMetric": "cases passed",
+    "value": 1,
+    "display": "77 of 77 (100%)",
+    "rank": null,
+    "rankNote": "No rank is claimed. On this toolkit the other published row is Hindsight at 66 of 77. The benchmark author’s own table (its own code) lists its product Tenure at 77 of 77."
+  },
+  "subMetrics": {
+    "activePasses": "43/43",
+    "structuralPasses": "25/25",
+    "triviallyEmptyPasses": "9/9",
+    "meanPrecision": 0.9773,
+    "meanRecall": 1,
+    "harnessModelCalls": 0,
+    "providerModelCalls": 112,
+    "durationMs": 232322,
+    "costUsd": null,
+    "costNote": "Vertex AI credits; not metered per run"
+  },
+  "baselines": [
+    {
+      "provider": "hindsight",
+      "display": "66 of 77 (85.7%), precision 0.85, recall 1.00",
+      "value": 0.857,
+      "source": "vectorize-io/agent-memory-benchmark outputs/precisionmembench/hindsight/retrieval/single-turn.json.gz (hindsight-cloud, same harness)"
+    },
+    {
+      "provider": "tenure",
+      "display": "77 of 77, active 43 of 43 (upstream harness)",
+      "value": 1,
+      "source": "tenurehq/precisionMemBench README, evaluated 2026-09-16"
+    },
+    {
+      "provider": "supermemory",
+      "display": "15 of 77, active 2 of 43 (upstream harness)",
+      "value": 0.195,
+      "source": "tenurehq/precisionMemBench README, evaluated 2026-09-17"
+    },
+    {
+      "provider": "hindsight (upstream)",
+      "display": "11 of 77, active 0 of 43 (upstream harness)",
+      "value": 0.143,
+      "source": "tenurehq/precisionMemBench README, evaluated 2026-09-12"
+    },
+    {
+      "provider": "mem0",
+      "display": "9 of 77, active 0 of 43 (upstream harness)",
+      "value": 0.117,
+      "source": "tenurehq/precisionMemBench README, evaluated 2026-09-15"
+    },
+    {
+      "provider": "zep",
+      "display": "9 of 77, active 0 of 43 (upstream harness)",
+      "value": 0.117,
+      "source": "tenurehq/precisionMemBench README, evaluated 2026-09-15"
+    },
+    {
+      "provider": "cognee",
+      "display": "9 of 77, active 0 of 43 (upstream harness)",
+      "value": 0.117,
+      "source": "tenurehq/precisionMemBench README, evaluated 2026-09-15"
+    }
+  ],
+  "failures": [],
+  "reproduce": {
+    "command": "uv run amb run --dataset precisionmembench --split single-turn --memory proofable --mode retrieval",
+    "env": "PROOFABLE_ACCESS_KEY (the bench profile), PROOFABLE_MEMORY_MODEL=gemini-2.5-flash, a Gemini client configuration (Vertex AI or an API key)",
+    "artifacts": "https://docs.proofable.me/evidence/precisionmembench/2026-11-10-77/ (per-case result files for all three runs, the adapter, SHA256SUMS)"
+  },
+  "tags": [
+    "bench:amb",
+    "k:1"
+  ],
+  "repeatability": {
+    "fullRuns": 3,
+    "results": [
+      "77 of 77",
+      "77 of 77",
+      "74 of 77"
+    ],
+    "note": "Each full run re-ingests every belief, and the label model (gemini-2.5-flash) tags names a little differently each time. The run that scored 74 missed two aliases and kept one extra belief.",
+    "files": [
+      "single-turn.json",
+      "runs/run-2-77of77.json",
+      "runs/run-3-74of77.json"
+    ]
+  },
+  "supersedes": "0xfda24cf9df011f53c8a84fe28d46a51e4dc7bf120c4f2d3b073ff8eb91876886"
+}

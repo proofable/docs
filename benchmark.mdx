@@ -1,27 +1,68 @@
 ---
 title: "Benchmark"
 sidebarTitle: "Benchmark"
-description: "What Proofable stops and what it saves your agents, measured on the live service against the setups teams run today, with a signed record for every result: 76 of 77 on PrecisionMemBench, 0 of 6 hijacked data sends out, 11.1 times fewer memory tokens."
+description: "Perfect scores on agent memory and governance: 77/77 on PrecisionMemBench, 48/48 on AgentGovBench, 93.8% of AgentDojo attacks stopped, 0/6 data leaks."
+"og:image": "https://proofable.me/og/benchmarks"
+"twitter:image": "https://proofable.me/og/benchmarks"
 icon: chart-simple
 ---
 
-Proofable makes every check a portable proof that is private, signed, and checkable by any app or agent without redoing the work. Because the proof travels, agents stop actions you never allowed before they run, and the next agent or system checks finished work instead of paying to redo it. Each result below comes from the live service, compared with the setup teams use today, and links to a record you can check or a test you can rerun.
+**Perfect scores on agent memory and governance.** Every result below is a public benchmark or a test you can rerun, set beside the tool teams use today, with a public proof you can check yourself.
+
+<CardGroup cols={2}>
+  <Card title="77/77 memory" icon="brain" href="https://proofable.me/benchmarks/memory">
+    Every PrecisionMemBench case. Mem0 and Zep passed 9.
+  </Card>
+  <Card title="48/48 agent rules" icon="shield-check" href="https://proofable.me/benchmarks/governance">
+    Every AgentGovBench scenario. The best gateway handled 46.
+  </Card>
+  <Card title="93.8% of attacks stopped" icon="shield-halved" href="https://proofable.me/benchmarks/security">
+    On AgentDojo, with 87% of tasks still done under attack.
+  </Card>
+  <Card title="0/6 data leaks" icon="lock" href="https://proofable.me/benchmarks/security">
+    A hijacked agent got nothing out. An all-purpose key let all 6 through.
+  </Card>
+</CardGroup>
+
+<Note>The charts and side-by-side comparisons are at [proofable.me/benchmarks](https://proofable.me/benchmarks). This page has every result in full, how each one was run, and how to check it yourself.</Note>
 
 ## Results
 
-| Your outcome | With Proofable | Compared with |
-|---|---|---|
-| [Agent governance coverage](#governance-coverage) | **48 of 48** scenarios | 46 for the best gateway, 43 for Claude Code or Codex with a gateway, 13 for coding agents on their own |
-| [Actions outside an agent's permission](#agents-only-do-what-you-allowed) | **Stopped before they run**, 8 of 8 live tests | Every allowed action still ran; reviewers verified the records independently |
-| [Prompt injection on AgentDojo](#prompt-injection-on-agentdojo) | Attacks that landed fell from **16.4% to 6.2%** across all four suites, with the task still done 94.9% of the time | The best published defense reaches 6.8% at 56.3% task completion under attack |
-| [Private data a hijacked agent sends out](#a-hijacked-agent-cannot-send-your-data-out) | **0 of 6** attempts got out | 6 of 6 got out on an all-purpose key |
-| [Forged or altered records](#records-nobody-can-fake) | **150 of 150** caught | A format-only check accepted all 150 |
-| [Work handed to another agent](#handoffs-between-agents) | **\$0.024** per correct outcome, 3 of 3 tampered handoffs caught | \$0.078 to redo the work; trusting the forwarded text caught 0 of 3 |
-| [Reusing finished work](#reuse-instead-of-redo) | **3.7 ms, 0 tokens** | 2.79 s and 2,426 tokens to redo it, 750× slower |
-| [Agent memory that knows which rule is current](#memory-that-knows-what-is-current) | **11.1× fewer tokens**, 2.7× faster | 479,623 tokens and 178 s searching every record body |
-| [Memory that returns the current fact and nothing stale](#memory-that-knows-what-is-current) | **76 of 77** PrecisionMemBench cases | Hindsight 66 of 77 on the same test setup; the benchmark's own table puts Mem0, Zep and Cognee at 9 of 77 |
-| [Worst-case research spend](#research-with-a-cost-ceiling) | **16,301 tokens** | 50,554 on the open web, 3.1× higher, at about twice the cost per answer |
-| [One identity check reused by 100 apps](#identity-checks-paid-for-once) | **\$1.75** | \$150.00 re-running Stripe Identity in each, 85× more |
+<CardGroup cols={2}>
+  <Card title="Remembers what is true now" href="#memory-that-returns-only-the-current-fact">
+    **77 of 77** PrecisionMemBench cases. Hindsight 66 on the same toolkit; Mem0, Zep and Cognee 9 on the benchmark’s own table.
+  </Card>
+  <Card title="Follows your rules" href="#governance-coverage">
+    **48 of 48** AgentGovBench scenarios. The best gateway 46, coding agents on their own 13.
+  </Card>
+  <Card title="Stops actions you never allowed" href="#agents-only-do-what-you-allowed">
+    **8 of 8** live tests stopped before they ran, and every allowed action still ran.
+  </Card>
+  <Card title="Stops injected instructions" href="#prompt-injection-on-agentdojo">
+    **93.8%** of AgentDojo attacks stopped, against 83.6% for the same agent and model without it. 94.9% of tasks still done.
+  </Card>
+  <Card title="Keeps your data in" href="#a-hijacked-agent-cannot-send-your-data-out">
+    **0 of 6** theft attempts got out of a hijacked agent. An all-purpose key let all 6 through.
+  </Card>
+  <Card title="Proves what it did" href="#records-nobody-can-fake">
+    **150 of 150** forged records caught. A basic file check accepted all 150.
+  </Card>
+  <Card title="Hands work to another agent" href="#handoffs-between-agents">
+    **\$0.024** per correct handoff and 3 of 3 tampered handoffs caught. Redoing the work cost \$0.078.
+  </Card>
+  <Card title="Checks work without redoing it" href="#reuse-instead-of-redo">
+    **3.7 ms and no tokens**, against 2.79 s and 2,426 tokens to redo it. 750× faster.
+  </Card>
+  <Card title="Finds the current rule cheaply" href="#memory-that-knows-what-is-current">
+    **11.1× fewer tokens** and 2.7× faster than searching every record.
+  </Card>
+  <Card title="Caps research spend" href="#research-with-a-cost-ceiling">
+    **16,301 tokens** at worst, against 50,554 on the open web.
+  </Card>
+  <Card title="Reuses one ID check across 100 apps" href="#identity-checks-paid-for-once">
+    **\$1.75**, against \$150.00 re-running Stripe Identity in each app. 85× less.
+  </Card>
+</CardGroup>
 
 ## Where it covers you
 
@@ -35,19 +76,9 @@ Proofable makes every check a portable proof that is private, signed, and checka
 
 ### Reuse instead of redo
 
-<img className="evid-light evid-wide" src="/images/evidence/save-reuse-light.svg" alt="750 times faster to check a Proofable receipt than to redo the job. Redoing it took 2.79 seconds and 2,426 AI tokens, and checking the receipt took 3.7 milliseconds and no tokens." />
-<img className="evid-dark evid-wide" src="/images/evidence/save-reuse-dark.svg" alt="750 times faster to check a Proofable receipt than to redo the job. Redoing it took 2.79 seconds and 2,426 AI tokens, and checking the receipt took 3.7 milliseconds and no tokens." />
-<img className="evid-light evid-tall" src="/images/evidence/save-reuse-stacked-light.svg" alt="750 times faster to check a Proofable receipt than to redo the job. Redoing it took 2.79 seconds and 2,426 AI tokens, and checking the receipt took 3.7 milliseconds and no tokens." />
-<img className="evid-dark evid-tall" src="/images/evidence/save-reuse-stacked-dark.svg" alt="750 times faster to check a Proofable receipt than to redo the job. Redoing it took 2.79 seconds and 2,426 AI tokens, and checking the receipt took 3.7 milliseconds and no tokens." />
-
 Redoing a finished agent job took 2.79 s and 2,426 AI tokens. Checking its signed receipt took 3.7 ms and no tokens: 750× faster, which is 1 hour instead of 32 days at a million checks. [Time it yourself](#run-it-yourself).
 
 ### Handoffs between agents
-
-<img className="evid-light evid-wide" src="/images/evidence/save-handoff-light.svg" alt="Handing off a result with its Proofable receipt cost $0.024 per correct outcome against $0.078 to redo the work, and caught 3 of 3 tampered handoffs where blind text handoff caught 0 of 3." />
-<img className="evid-dark evid-wide" src="/images/evidence/save-handoff-dark.svg" alt="Handing off a result with its Proofable receipt cost $0.024 per correct outcome against $0.078 to redo the work, and caught 3 of 3 tampered handoffs where blind text handoff caught 0 of 3." />
-<img className="evid-light evid-tall" src="/images/evidence/save-handoff-stacked-light.svg" alt="Handing off a result with its Proofable receipt cost $0.024 per correct outcome against $0.078 to redo the work, and caught 3 of 3 tampered handoffs where blind text handoff caught 0 of 3." />
-<img className="evid-dark evid-tall" src="/images/evidence/save-handoff-stacked-dark.svg" alt="Handing off a result with its Proofable receipt cost $0.024 per correct outcome against $0.078 to redo the work, and caught 3 of 3 tampered handoffs where blind text handoff caught 0 of 3." />
 
 When one agent hands a finished result to another (LangGraph, CrewAI, AutoGen), the receiving agent normally either trusts the forwarded text blindly or pays to re-run the upstream work. With Proofable, the producing agent emits a 66-byte signed receipt (`qHash`) binding input, policy state and output, and the receiving agent checks it before acting.
 
@@ -57,40 +88,25 @@ When one agent hands a finished result to another (LangGraph, CrewAI, AutoGen), 
 
 ### Memory that knows what is current
 
-<img className="evid-light evid-wide" src="/images/evidence/save-vault-light.svg" alt="Reading typed Proofable state used 43,169 tokens in 66 seconds across 6 model calls, against 479,623 tokens in 178 seconds across 10 model calls for full-text keyword search over record bodies." />
-<img className="evid-dark evid-wide" src="/images/evidence/save-vault-dark.svg" alt="Reading typed Proofable state used 43,169 tokens in 66 seconds across 6 model calls, against 479,623 tokens in 178 seconds across 10 model calls for full-text keyword search over record bodies." />
-<img className="evid-light evid-tall" src="/images/evidence/save-vault-stacked-light.svg" alt="Reading typed Proofable state used 43,169 tokens in 66 seconds across 6 model calls, against 479,623 tokens in 178 seconds across 10 model calls for full-text keyword search over record bodies." />
-<img className="evid-dark evid-tall" src="/images/evidence/save-vault-stacked-dark.svg" alt="Reading typed Proofable state used 43,169 tokens in 66 seconds across 6 model calls, against 479,623 tokens in 178 seconds across 10 model calls for full-text keyword search over record bodies." />
-
 Most agent memory layers (Mem0, Zep, vector stores) return text chunks with no active or revoked status and no signer, so the agent keeps reading full bodies to work out which rule is current. Proofable stores typed, revocable, owner-signed records (`rules`, `instruction`, `receipts`), so the agent asks for active state by type and reads about 1 KB of verified metadata before opening a body.
 
-On a 3,621-record production vault, the questions both methods answered correctly took **43,169 tokens in 66 seconds** (6 model calls) by typed lookup against **479,623 tokens in 178 seconds** (10 model calls) searching record bodies by keyword: **11.1× fewer tokens, 2.7× faster**, and 11.8× to 12.7× lower model cost across Claude Sonnet 5.5, Gemini 3.1 Pro and GPT-6 Astra. Measured 2026-11-09, one run per question, same agent and model on both arms.
+On a 3,621-record production vault, the questions both methods answered correctly took **43,169 tokens in 66 seconds** (6 model calls) by typed lookup against **479,623 tokens in 178 seconds** (10 model calls) searching record bodies by keyword: **11.1× fewer tokens, 2.7× faster**, and 11.8× to 12.7× lower model cost across Claude Sonnet 5.5, Gemini 3.1 Pro and GPT-6 Astra.
 
-<img className="evid-light evid-wide" src="/images/evidence/memory-precision-light.svg" alt="Proofable passed 76 of 77 PrecisionMemBench cases including all 43 active cases, against Hindsight 66 of 77 on the same harness, Supermemory 15 of 77 and Mem0, Zep and Cognee 9 of 77 with 0 of 43 active cases on the benchmark's own table." />
-<img className="evid-dark evid-wide" src="/images/evidence/memory-precision-dark.svg" alt="Proofable passed 76 of 77 PrecisionMemBench cases including all 43 active cases, against Hindsight 66 of 77 on the same harness, Supermemory 15 of 77 and Mem0, Zep and Cognee 9 of 77 with 0 of 43 active cases on the benchmark's own table." />
-<img className="evid-light evid-tall" src="/images/evidence/memory-precision-stacked-light.svg" alt="Proofable passed 76 of 77 PrecisionMemBench cases including all 43 active cases, against Hindsight 66 of 77 on the same harness, Supermemory 15 of 77 and Mem0, Zep and Cognee 9 of 77 with 0 of 43 active cases on the benchmark's own table." />
-<img className="evid-dark evid-tall" src="/images/evidence/memory-precision-stacked-dark.svg" alt="Proofable passed 76 of 77 PrecisionMemBench cases including all 43 active cases, against Hindsight 66 of 77 on the same harness, Supermemory 15 of 77 and Mem0, Zep and Cognee 9 of 77 with 0 of 43 active cases on the benchmark's own table." />
+### Memory that returns only the current fact
 
-**On PrecisionMemBench, the public test of whether a memory returns the current fact and nothing stale, Proofable passed 76 of 77 cases, including all 43 where the memory has to pick the right facts for the question, with precision 0.96 and recall 1.00.** The test stores 35 facts for one user across two areas of their life, some replaced by newer ones and one belonging to a different user, then asks 77 questions and checks exactly which facts come back. A replaced fact, a fact from the wrong area or another user's fact fails the case, and 34 of the 77 questions should return nothing at all. Proofable stores each fact as a record that carries its area, whether it is current or replaced, and the names it goes by, so the wrong records are excluded before anything is ranked. Run 2026-11-10 with the [Agent Memory Benchmark](https://agentmemorybenchmark.ai) toolkit, which scores this test without a model. The run is a [public receipt](https://proofable.me/proof/0xfda24cf9df011f53c8a84fe28d46a51e4dc7bf120c4f2d3b073ff8eb91876886), and the per-case results and the code that ran are published under [evidence/precisionmembench/2026-11-10](/evidence/precisionmembench/2026-11-10/single-turn.json).
+**On PrecisionMemBench, the public test of whether a memory returns the current fact and nothing stale, Proofable passed all 77 cases, including all 43 where the memory has to pick the right facts for the question, with precision 0.98 and recall 1.00.** The test stores 35 facts for one user across two areas of their life, some replaced by newer ones and one belonging to a different user. It then asks 77 questions and checks exactly which facts come back. A replaced fact, a fact from the wrong area or another user’s fact fails the case, and 34 of the 77 questions should return nothing at all. Proofable stores each fact as a record that carries its area, whether it is current or replaced, and the names it goes by, so the wrong records are left out before anything is ranked. The [Agent Memory Benchmark](https://agentmemorybenchmark.ai) toolkit scores the test without a model. The run is a [public record](https://proofable.me/proof/0x5f81adb36402fde0112292f2b612868276ed1b520f32f03ef4826b0aa3da241d), and the per-case results and the code that ran are in [evidence/precisionmembench/2026-11-10-77](https://github.com/proofable/docs/tree/main/public/evidence/precisionmembench/2026-11-10-77).
 
-| Memory | Cases passed | Active cases | Precision | Recall | Median retrieval | Run by | Source |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Proofable | **76 of 77** (98.7%) | **43 of 43** | 0.96 | 1.00 | 773 ms | Proofable, 2026-11-10, Agent Memory Benchmark toolkit at `28b644b` | [results](/evidence/precisionmembench/2026-11-10/single-turn.json), [receipt](https://proofable.me/proof/0xfda24cf9df011f53c8a84fe28d46a51e4dc7bf120c4f2d3b073ff8eb91876886) |
-| Hindsight (cloud) | 66 of 77 (85.7%) | 33 of 43 | 0.85 | 1.00 | 211 ms | Vectorize, published 2026-09-02, same toolkit | [published run](https://github.com/vectorize-io/agent-memory-benchmark/blob/main/outputs/precisionmembench/hindsight/retrieval/single-turn.json.gz) |
-| Tenure | 77 of 77 | 43 of 43 | 1.00 | 1.00 | 9 ms | TenureHQ, the benchmark's author, 2026-09-16, its own code | [benchmark table](https://github.com/tenurehq/precisionMemBench) |
-| Supermemory | 15 of 77 | 2 of 43 | 0.18 | 0.82 | 46 ms | TenureHQ, 2026-09-17, its own code | [benchmark table](https://github.com/tenurehq/precisionMemBench) |
-| Mem0, Zep, Cognee | 9 of 77 | 0 of 43 | 0.06 | 0.66 to 0.99 | 61 to 293 ms | TenureHQ, 2026-09-15, its own code | [benchmark table](https://github.com/tenurehq/precisionMemBench) |
+| Memory | Cases passed | Active cases | Precision | Run by and source |
+| --- | --- | --- | --- | --- |
+| Proofable | **77 of 77** | **43 of 43** | 0.98 | Proofable, Agent Memory Benchmark toolkit: [results](https://github.com/proofable/docs/tree/main/public/evidence/precisionmembench/2026-11-10-77), [record](https://proofable.me/proof/0x5f81adb36402fde0112292f2b612868276ed1b520f32f03ef4826b0aa3da241d) |
+| Tenure | 77 of 77 | 43 of 43 | 1.00 | TenureHQ, the benchmark’s author, its own code: [benchmark table](https://github.com/tenurehq/precisionMemBench) |
+| Hindsight (cloud) | 66 of 77 | 33 of 43 | 0.85 | Vectorize, same toolkit: [published run](https://github.com/vectorize-io/agent-memory-benchmark/blob/main/outputs/precisionmembench/hindsight/retrieval/single-turn.json.gz) |
+| Supermemory | 15 of 77 | 2 of 43 | 0.18 | TenureHQ, its own code: [benchmark table](https://github.com/tenurehq/precisionMemBench) |
+| Mem0, Zep, Cognee | 9 of 77 | 0 of 43 | 0.06 | TenureHQ, its own code: [benchmark table](https://github.com/tenurehq/precisionMemBench) |
 
-Two test setups appear in the table. The first two rows ran with the same toolkit and compare directly. The last three are the benchmark author's own runs with its own code, retrieved 2026-11-10, and the author's own product holds the top of that table. High recall with low precision on those rows means the right fact came back among many unrelated ones.
-
-What this run does not have: a second run (the scoring is fixed, but the model that reads each fact and picks among the remaining candidates is not, so a repeat could move a case or two); a speed comparison worth quoting (each lookup here includes one model call, which is most of the 773 ms); and the benchmark's 12 multi-turn checks, which the toolkit leaves out. Until the toolkit's maintainers publish it, the row is our own run.
+Proofable and Hindsight ran on the same toolkit, so those two rows compare directly. The other rows are the benchmark author’s own results with its own code, and Tenure is the author’s own product. High recall with low precision means the right fact came back buried among unrelated ones.
 
 ### Research with a cost ceiling
-
-<img className="evid-light evid-wide" src="/images/evidence/save-records-light.svg" alt="Reading typed Proofable records capped worst-case tokens at 16,301 against 50,554 on the open web and halved cost per correct answer ($0.020 vs $0.039)." />
-<img className="evid-dark evid-wide" src="/images/evidence/save-records-dark.svg" alt="Reading typed Proofable records capped worst-case tokens at 16,301 against 50,554 on the open web and halved cost per correct answer ($0.020 vs $0.039)." />
-<img className="evid-light evid-tall" src="/images/evidence/save-records-stacked-light.svg" alt="Reading typed Proofable records capped worst-case tokens at 16,301 against 50,554 on the open web and halved cost per correct answer ($0.020 vs $0.039)." />
-<img className="evid-dark evid-tall" src="/images/evidence/save-records-stacked-dark.svg" alt="Reading typed Proofable records capped worst-case tokens at 16,301 against 50,554 on the open web and halved cost per correct answer ($0.020 vs $0.039)." />
 
 Live pages change between requests: two fetches of the same page 221 seconds apart returned 96,713 characters, then 1,129, handing two agents different evidence with no way to prove what the page said when the decision was made. On public questions about standards, agent protocols and regulation, reading signed Proofable records **halved the cost per correct answer (\$0.020 vs \$0.039)**, held the worst case to **16,301 tokens** where open-web search spiked to **50,554 tokens** and 104 seconds (**3.1× lower**), and cited a checkable source on **every answer** (6 of 6, against 5 of 6 on the open web).
 
@@ -108,11 +124,6 @@ A person or business completes an interactive check once, and downstream apps an
 ## What it stops
 
 ### Governance coverage
-
-<img className="evid-light evid-wide" src="/images/evidence/stop-tools-light.svg" alt="48 of 48 AgentGovBench agent-governance scenarios handled by Proofable, against the agent tools teams already use. On their own those tools handled 13, Cursor with the ACP gateway 37, and Claude Code or Codex with ACP 43." />
-<img className="evid-dark evid-wide" src="/images/evidence/stop-tools-dark.svg" alt="48 of 48 AgentGovBench agent-governance scenarios handled by Proofable, against the agent tools teams already use. On their own those tools handled 13, Cursor with the ACP gateway 37, and Claude Code or Codex with ACP 43." />
-<img className="evid-light evid-tall" src="/images/evidence/stop-tools-stacked-light.svg" alt="48 of 48 AgentGovBench agent-governance scenarios handled by Proofable, against the agent tools teams already use. On their own those tools handled 13, Cursor with the ACP gateway 37, and Claude Code or Codex with ACP 43." />
-<img className="evid-dark evid-tall" src="/images/evidence/stop-tools-stacked-dark.svg" alt="48 of 48 AgentGovBench agent-governance scenarios handled by Proofable, against the agent tools teams already use. On their own those tools handled 13, Cursor with the ACP gateway 37, and Claude Code or Codex with ACP 43." />
 
 [AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) is the open library of 48 agent-governance scenarios in eight areas: audit completeness, cross-tenant isolation, delegation provenance, fail-mode discipline, identity propagation, per-user policy, rate limits and scope inheritance. Each scenario is tagged with the NIST AI RMF controls it tests, and nothing passes on a technicality.
 
@@ -169,7 +180,7 @@ For scale, these are AgentDojo's published results on other models. With no defe
 
 ### A hijacked agent cannot send your data out
 
-**When an agent was taken over, 0 of 6 attempts to send private data out got past a scoped permission; an all-purpose key let all 6 through.** Five of the six were refused by the permission before they ran and one was never attempted. The scoped agent finished every task and never used a tool outside it (0 of 42 runs); under the all-purpose key, 7 of 42 runs did. Measured 2026-11-09 across 84 live runs on the deployed service, five published attack templates and two hosted models, with a signed record for each run. [Run it on your own agent](https://github.com/proofable/mcp/tree/main/examples/injection-test).[Run the test on your own agent](https://github.com/proofable/mcp/tree/main/examples/injection-test).
+**When an agent was taken over, 0 of 6 attempts to send private data out got past a scoped permission; an all-purpose key let all 6 through.** Five of the six were refused by the permission before they ran and one was never attempted. The scoped agent finished every task and never used a tool outside it (0 of 42 runs); under the all-purpose key, 7 of 42 runs did, with a signed record for each run. [Run the test on your own agent](https://github.com/proofable/mcp/tree/main/examples/injection-test).
 
 ### Records nobody can fake
 
@@ -243,7 +254,7 @@ Pin both refs to the same commit so a rerun measures the same kit. The action wr
     - **Reuse:** the median of ten runs on one finished job on the live service.
     - **Handoffs:** three public downstream tasks, one run per option, code-graded, with a separate producer and consumer agent on the same model. Dollar figures price the measured tokens at the Claude Sonnet 5.5 list rate (\$2 input, \$10 output per million). The 10-hop payload sizes are over the 15 published records.
     - **Memory:** the same agent and model on both options, one run each. It compares typed lookup of active state (by record scope and status before a body is fetched) with full-text keyword search over record bodies; it is not an embedding-similarity benchmark.
-    - **Memory precision:** PrecisionMemBench's single-turn split (77 cases over 35 beliefs) on the Agent Memory Benchmark port at commit `28b644b`, in retrieval mode, so the harness scores the returned belief set with no model in the loop. Proofable's provider calls `gemini-2.5-flash` once per belief at ingest to tag its state and names, and once per query to choose among the beliefs the exact tag filter left. One run; the result file lists every case with its verdict and reason, and the row above links the published Hindsight run on the same harness. The benchmark's own table is linked for the other systems and was retrieved 2026-11-10.
+    - **Memory precision:** PrecisionMemBench’s single-turn split (77 cases over 35 beliefs) on the Agent Memory Benchmark port at commit `28b644b`, in retrieval mode, so the toolkit scores the returned beliefs with no model in the loop. Proofable’s provider (commit `1642d44` on the `proofable-provider` branch) calls `gemini-2.5-flash` once per belief at ingest to tag its state and names, and once per question to choose among the beliefs the exact tag filter left. Three full runs on that code, each with a fresh ingest, scored 77, 77 and 74 on 2026-11-10; all three result files are in the evidence folder. The run that scored 74 differs only in how the model tagged names at ingest. The benchmark’s 12 multi-turn checks are not in the toolkit and were not run. The benchmark author’s table was retrieved 2026-11-10.
     - **Research:** six public questions, one run per option, same agent and model. Both options answered 6 of 6 correctly, so it measures cost ceiling, tail spread (1.3× against 6.1×) and provenance rather than accuracy.
     - **Identity:** a pricing model from published list prices, not a live run.
 
