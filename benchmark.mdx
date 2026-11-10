@@ -18,7 +18,7 @@ Proofable makes every check a portable proof that is private, signed, and checka
 | [Memory that returns the current fact and nothing stale](#memory-that-returns-only-the-current-fact) | **77 of 77** PrecisionMemBench cases | Hindsight 66 of 77 on the same test setup; Mem0, Zep and Cognee 9 of 77 on the benchmark’s own table |
 | [Agent governance coverage](#governance-coverage) | **48 of 48** scenarios | 46 for the best gateway, 43 for Claude Code or Codex with a gateway, 13 for coding agents on their own |
 | [Actions outside an agent's permission](#agents-only-do-what-you-allowed) | **Stopped before they run**, 8 of 8 live tests | Every allowed action still ran; reviewers verified the records independently |
-| [Prompt injection on AgentDojo](#prompt-injection-on-agentdojo) | Attacks that landed fell from **16.4% to 6.2%** across all four suites, with the task still done 94.9% of the time | The best published defense reaches 6.8% at 56.3% task completion under attack |
+| [Prompt injection on AgentDojo](#prompt-injection-on-agentdojo) | Attacks that landed fell from **16.4% to 6.2%** across all four suites, with the task still done 94.9% of the time | 16.4% for the same agent and model without it |
 | [Private data a hijacked agent sends out](#a-hijacked-agent-cannot-send-your-data-out) | **0 of 6** attempts got out | 6 of 6 got out on an all-purpose key |
 | [Forged or altered records](#records-nobody-can-fake) | **150 of 150** caught | A format-only check accepted all 150 |
 | [Work handed to another agent](#handoffs-between-agents) | **\$0.024** per correct outcome, 3 of 3 tampered handoffs caught | \$0.078 to redo the work; trusting the forwarded text caught 0 of 3 |
