@@ -83,7 +83,7 @@ On a 3,621-record production vault, the questions both methods answered correctl
 
 Two test setups appear in the table. The first two rows ran with the same toolkit and compare directly. The last three are the benchmark author's own runs with its own code, retrieved 2026-11-10, and the author's own product holds the top of that table. High recall with low precision on those rows means the right fact came back among many unrelated ones.
 
-What this run does not have: a second run (the scoring is fixed, but the model that reads each fact and picks among the remaining candidates is not, so a repeat could move a case or two); a speed comparison worth quoting (each lookup here includes one model call, which is most of the 773 ms); and the benchmark's 12 multi-turn checks, which the toolkit does not carry. This is our own run until the toolkit's maintainers publish it.
+What this run does not have: a second run (the scoring is fixed, but the model that reads each fact and picks among the remaining candidates is not, so a repeat could move a case or two); a speed comparison worth quoting (each lookup here includes one model call, which is most of the 773 ms); and the benchmark's 12 multi-turn checks, which the toolkit leaves out. Until the toolkit's maintainers publish it, the row is our own run.
 
 ### Research with a cost ceiling
 
