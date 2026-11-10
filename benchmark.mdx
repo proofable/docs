@@ -1,28 +1,26 @@
 ---
 title: "Benchmark"
 sidebarTitle: "Benchmark"
-description: "See how Proofable compares with the tools teams run today, on memory, agent rules, injection and cost, with every result you can rerun."
+description: "Agents that remember only what is current, follow the rules you set and keep your data in, scored against the tools teams use today. Rerun any result yourself."
 "og:image": "https://proofable.me/og/benchmarks"
 "twitter:image": "https://proofable.me/og/benchmarks"
 icon: chart-simple
 ---
 
 <CardGroup cols={2}>
-  <Card title="77/77 memory" icon="brain" href="https://proofable.me/benchmarks/memory">
-    The current fact every time, on all 43 cases that need it. Mem0 and Zep passed 9.
+  <Card title="77/77 memory precision" icon="brain" href="https://proofable.me/benchmarks/memory">
+    Only the current fact comes back, never a stale or wrong one. Mem0 and Zep passed 9 of 77.
   </Card>
-  <Card title="48/48 agent rules" icon="shield-check" href="https://proofable.me/benchmarks/governance">
-    Every governance scenario. The best gateway handled 46, coding agents on their own 13.
+  <Card title="48/48 governance scenarios" icon="shield-check" href="https://proofable.me/benchmarks/governance">
+    Including the two a gateway cannot check. The best gateway handled 46, coding agents on their own 13.
   </Card>
   <Card title="93.8% of attacks stopped" icon="shield-halved" href="https://proofable.me/benchmarks/security">
-    On AgentDojo, with 87% of tasks still finished under attack.
+    Up from 83.6% for the same agent on AgentDojo, with 87% of tasks still finished under attack.
   </Card>
   <Card title="0/6 data leaks" icon="lock" href="https://proofable.me/benchmarks/security">
-    A hijacked agent left with nothing.
+    A hijacked agent got no private data out. On an all-purpose key, all 6 attempts did.
   </Card>
 </CardGroup>
-
-<Note>Side-by-side pages for each benchmark are at [proofable.me/benchmarks](https://proofable.me/benchmarks). This page carries every run in full and the commands to check it.</Note>
 
 ## Where it covers you
 
@@ -119,7 +117,7 @@ A person or business completes an interactive check once, and downstream apps an
 
 | Setup | Scenarios handled |
 |---|---|
-| Proofable policy engine | **48/48** |
+| Proofable policy engine | **48 of 48** |
 | ACP, the maintainers' gateway ([published run](https://github.com/agentic-control-plane/agentgovbench/actions/runs/37759892335)) | 46 of 48 |
 | Anthropic Agent SDK with the ACP gateway | 46 of 48 |
 | OpenAI Agents SDK with the ACP gateway | 45 of 48 |
