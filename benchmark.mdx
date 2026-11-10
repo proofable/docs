@@ -7,13 +7,6 @@ description: "See how Proofable compares with the tools teams run today, on memo
 icon: chart-simple
 ---
 
-<img className="evid-light evid-wide" src="/images/evidence/memory-precision-light.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
-<img className="evid-dark evid-wide" src="/images/evidence/memory-precision-dark.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
-<img className="evid-light evid-tall" src="/images/evidence/memory-precision-stacked-light.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
-<img className="evid-dark evid-tall" src="/images/evidence/memory-precision-stacked-dark.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
-
-**Perfect scores on agent memory and governance.** Every result below is a public benchmark or a test you can rerun, and each one links to the record behind it.
-
 <CardGroup cols={2}>
   <Card title="77/77 memory" icon="brain" href="https://proofable.me/benchmarks/memory">
     The current fact every time, on all 43 cases that need it. Mem0 and Zep passed 9.
@@ -43,21 +36,21 @@ icon: chart-simple
 
 ### Reuse instead of redo
 
-Redoing a finished agent job took 2.79 s and 2,426 AI tokens. Checking its signed receipt took 3.7 ms and no tokens: 750× faster, which is 1 hour instead of 32 days at a million checks. [Time it yourself](#run-it-yourself).
-
 <img className="evid-light evid-wide" src="/images/evidence/save-reuse-light.svg" alt="Bar chart of the time to trust a finished result. Checking the Proofable receipt took 3.7 milliseconds and redoing the job took 2.79 seconds, about 750 times faster." />
 <img className="evid-dark evid-wide" src="/images/evidence/save-reuse-dark.svg" alt="Bar chart of the time to trust a finished result. Checking the Proofable receipt took 3.7 milliseconds and redoing the job took 2.79 seconds, about 750 times faster." />
 <img className="evid-light evid-tall" src="/images/evidence/save-reuse-stacked-light.svg" alt="Bar chart of the time to trust a finished result. Checking the Proofable receipt took 3.7 milliseconds and redoing the job took 2.79 seconds, about 750 times faster." />
 <img className="evid-dark evid-tall" src="/images/evidence/save-reuse-stacked-dark.svg" alt="Bar chart of the time to trust a finished result. Checking the Proofable receipt took 3.7 milliseconds and redoing the job took 2.79 seconds, about 750 times faster." />
 
-### Handoffs between agents
+Redoing a finished agent job took 2.79 s and 2,426 AI tokens. Checking its signed receipt took 3.7 ms and no tokens: 750× faster, which is 1 hour instead of 32 days at a million checks. [Time it yourself](#run-it-yourself).
 
-When one agent hands a finished result to another (LangGraph, CrewAI, AutoGen), the receiving agent normally either trusts the forwarded text blindly or pays to re-run the upstream work. With Proofable, the producing agent emits a 66-byte signed receipt (`qHash`) binding input, policy state and output, and the receiving agent checks it before acting.
+### Handoffs between agents
 
 <img className="evid-light evid-wide" src="/images/evidence/save-handoff-light.svg" alt="Bar chart of the cost per correct outcome. Handing off with a Proofable receipt cost $0.024, redoing the work $0.078, and trusting forwarded text $0.009." />
 <img className="evid-dark evid-wide" src="/images/evidence/save-handoff-dark.svg" alt="Bar chart of the cost per correct outcome. Handing off with a Proofable receipt cost $0.024, redoing the work $0.078, and trusting forwarded text $0.009." />
 <img className="evid-light evid-tall" src="/images/evidence/save-handoff-stacked-light.svg" alt="Bar chart of the cost per correct outcome. Handing off with a Proofable receipt cost $0.024, redoing the work $0.078, and trusting forwarded text $0.009." />
 <img className="evid-dark evid-tall" src="/images/evidence/save-handoff-stacked-dark.svg" alt="Bar chart of the cost per correct outcome. Handing off with a Proofable receipt cost $0.024, redoing the work $0.078, and trusting forwarded text $0.009." />
+
+When one agent hands a finished result to another (LangGraph, CrewAI, AutoGen), the receiving agent normally either trusts the forwarded text blindly or pays to re-run the upstream work. With Proofable, the producing agent emits a 66-byte signed receipt (`qHash`) binding input, policy state and output, and the receiving agent checks it before acting.
 
 - **3.3× cheaper than redoing the work:** \$0.024 per correct outcome (33,240 tokens, 2 model calls per task) against \$0.078 (124,715 tokens, 3 to 5 model calls per task).
 - **Trusting forwarded text is cheap and wrong:** it costs \$0.009 on untouched input, but when the text was changed in transit it used the tampered value **3 of 3** times. Checking the receipt caught every change **3 of 3** times and still completed every task, where blind trust caught **0 of 3**.
@@ -65,37 +58,42 @@ When one agent hands a finished result to another (LangGraph, CrewAI, AutoGen), 
 
 ### Memory that knows what is current
 
-Most agent memory layers (Mem0, Zep, vector stores) return text chunks with no active or revoked status and no signer, so the agent keeps reading full bodies to work out which rule is current. Proofable stores typed, revocable, owner-signed records (`rules`, `instruction`, `receipts`), so the agent asks for active state by type and reads about 1 KB of verified metadata before opening a body.
-
 <img className="evid-light evid-wide" src="/images/evidence/save-vault-light.svg" alt="Bar chart of the tokens to find the current rule on a 3,621-record vault. Typed Proofable state used 43,169 tokens and keyword search over record bodies used 479,623, about 11 times fewer." />
 <img className="evid-dark evid-wide" src="/images/evidence/save-vault-dark.svg" alt="Bar chart of the tokens to find the current rule on a 3,621-record vault. Typed Proofable state used 43,169 tokens and keyword search over record bodies used 479,623, about 11 times fewer." />
 <img className="evid-light evid-tall" src="/images/evidence/save-vault-stacked-light.svg" alt="Bar chart of the tokens to find the current rule on a 3,621-record vault. Typed Proofable state used 43,169 tokens and keyword search over record bodies used 479,623, about 11 times fewer." />
 <img className="evid-dark evid-tall" src="/images/evidence/save-vault-stacked-dark.svg" alt="Bar chart of the tokens to find the current rule on a 3,621-record vault. Typed Proofable state used 43,169 tokens and keyword search over record bodies used 479,623, about 11 times fewer." />
 
+Most agent memory layers (Mem0, Zep, vector stores) return text chunks with no active or revoked status and no signer, so the agent keeps reading full bodies to work out which rule is current. Proofable stores typed, revocable, owner-signed records (`rules`, `instruction`, `receipts`), so the agent asks for active state by type and reads about 1 KB of verified metadata before opening a body.
+
 On a 3,621-record production vault, the questions both methods answered correctly took **43,169 tokens in 66 seconds** (6 model calls) by typed lookup against **479,623 tokens in 178 seconds** (10 model calls) searching record bodies by keyword: **11.1× fewer tokens, 2.7× faster**, and 11.8× to 12.7× lower model cost across Claude Sonnet 5.5, Gemini 3.1 Pro and GPT-6 Astra.
 
 ### Memory that returns only the current fact
 
+<img className="evid-light evid-wide" src="/images/evidence/memory-precision-light.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
+<img className="evid-dark evid-wide" src="/images/evidence/memory-precision-dark.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
+<img className="evid-light evid-tall" src="/images/evidence/memory-precision-stacked-light.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
+<img className="evid-dark evid-tall" src="/images/evidence/memory-precision-stacked-dark.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
+
 **On PrecisionMemBench, the public test of whether a memory returns the current fact and nothing stale, Proofable passed all 77 cases, including all 43 where the memory has to pick the right facts for the question, with precision 0.98 and recall 1.00.** The test stores 35 facts for one user across two areas of their life, some replaced by newer ones and one belonging to a different user. It then asks 77 questions and checks exactly which facts come back. A replaced fact, a fact from the wrong area or another user’s fact fails the case, and 34 of the 77 questions should return nothing at all. Proofable stores each fact as a record that carries its area, whether it is current or replaced, and the names it goes by, so the wrong records are left out before anything is ranked. The [Agent Memory Benchmark](https://agentmemorybenchmark.ai) toolkit scores the test without a model. The run is a [public record](https://proofable.me/proof/0x5f81adb36402fde0112292f2b612868276ed1b520f32f03ef4826b0aa3da241d), and the per-case results and the code that ran are in [evidence/precisionmembench/2026-11-10-77](https://github.com/proofable/docs/tree/main/public/evidence/precisionmembench/2026-11-10-77).
 
-| Memory | Cases passed | Active cases | Precision | Run by and source |
+| Memory | Cases passed | Active cases | Precision | Source |
 | --- | --- | --- | --- | --- |
-| Proofable | **77 of 77** | **43 of 43** | 0.98 | Proofable, Agent Memory Benchmark toolkit: [results](https://github.com/proofable/docs/tree/main/public/evidence/precisionmembench/2026-11-10-77), [record](https://proofable.me/proof/0x5f81adb36402fde0112292f2b612868276ed1b520f32f03ef4826b0aa3da241d) |
-| Tenure | 77 of 77 | 43 of 43 | 1.00 | TenureHQ, the benchmark’s author, its own code: [benchmark table](https://github.com/tenurehq/precisionMemBench) |
-| Hindsight (cloud) | 66 of 77 | 33 of 43 | 0.85 | Vectorize, same toolkit: [published run](https://github.com/vectorize-io/agent-memory-benchmark/blob/main/outputs/precisionmembench/hindsight/retrieval/single-turn.json.gz) |
-| Supermemory | 15 of 77 | 2 of 43 | 0.18 | TenureHQ, its own code: [benchmark table](https://github.com/tenurehq/precisionMemBench) |
-| Mem0, Zep, Cognee | 9 of 77 | 0 of 43 | 0.06 | TenureHQ, its own code: [benchmark table](https://github.com/tenurehq/precisionMemBench) |
+| Proofable | **77 of 77** | **43 of 43** | 0.98 | [Run results](https://github.com/proofable/docs/tree/main/public/evidence/precisionmembench/2026-11-10-77), [signed record](https://proofable.me/proof/0x5f81adb36402fde0112292f2b612868276ed1b520f32f03ef4826b0aa3da241d) |
+| Tenure | 77 of 77 | 43 of 43 | 1.00 | [Benchmark author’s table](https://github.com/tenurehq/precisionMemBench) |
+| Hindsight (cloud) | 66 of 77 | 33 of 43 | 0.85 | [Vectorize published run](https://github.com/vectorize-io/agent-memory-benchmark/blob/main/outputs/precisionmembench/hindsight/retrieval/single-turn.json.gz) |
+| Supermemory | 15 of 77 | 2 of 43 | 0.18 | Author’s table above |
+| Mem0, Zep, Cognee | 9 of 77 | 0 of 43 | 0.06 | Author’s table above |
 
 Proofable and Hindsight ran on the same toolkit, so those two rows compare directly. The other rows are the benchmark author’s own results with its own code, and Tenure is the author’s own product. High recall with low precision means the right fact came back buried among unrelated ones.
 
 ### Research with a cost ceiling
 
-Live pages change between requests: two fetches of the same page 221 seconds apart returned 96,713 characters, then 1,129, handing two agents different evidence with no way to prove what the page said when the decision was made. On public questions about standards, agent protocols and regulation, reading signed Proofable records **halved the cost per correct answer (\$0.020 vs \$0.039)**, held the worst case to **16,301 tokens** where open-web search spiked to **50,554 tokens** and 104 seconds (**3.1× lower**), and cited a checkable source on **every answer** (6 of 6, against 5 of 6 on the open web).
-
 <img className="evid-light evid-wide" src="/images/evidence/save-records-light.svg" alt="Bar chart of the worst-case tokens on six public questions. Typed Proofable records used 16,301 and the open web 50,554, about 3 times lower." />
 <img className="evid-dark evid-wide" src="/images/evidence/save-records-dark.svg" alt="Bar chart of the worst-case tokens on six public questions. Typed Proofable records used 16,301 and the open web 50,554, about 3 times lower." />
 <img className="evid-light evid-tall" src="/images/evidence/save-records-stacked-light.svg" alt="Bar chart of the worst-case tokens on six public questions. Typed Proofable records used 16,301 and the open web 50,554, about 3 times lower." />
 <img className="evid-dark evid-tall" src="/images/evidence/save-records-stacked-dark.svg" alt="Bar chart of the worst-case tokens on six public questions. Typed Proofable records used 16,301 and the open web 50,554, about 3 times lower." />
+
+Live pages change between requests: two fetches of the same page 221 seconds apart returned 96,713 characters, then 1,129, handing two agents different evidence with no way to prove what the page said when the decision was made. On public questions about standards, agent protocols and regulation, reading signed Proofable records **halved the cost per correct answer (\$0.020 vs \$0.039)**, held the worst case to **16,301 tokens** where open-web search spiked to **50,554 tokens** and 104 seconds (**3.1× lower**), and cited a checkable source on **every answer** (6 of 6, against 5 of 6 on the open web).
 
 ### Identity checks paid for once
 
@@ -112,12 +110,12 @@ A person or business completes an interactive check once, and downstream apps an
 
 ### Governance coverage
 
-[AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) is the open library of 48 agent-governance scenarios in eight areas: audit completeness, cross-tenant isolation, delegation provenance, fail-mode discipline, identity propagation, per-user policy, rate limits and scope inheritance. Each scenario is tagged with the NIST AI RMF controls it tests, and nothing passes on a technicality.
-
 <img className="evid-light evid-wide" src="/images/evidence/stop-tools-light.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
 <img className="evid-dark evid-wide" src="/images/evidence/stop-tools-dark.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
 <img className="evid-light evid-tall" src="/images/evidence/stop-tools-stacked-light.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
 <img className="evid-dark evid-tall" src="/images/evidence/stop-tools-stacked-dark.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
+
+[AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) is the open library of 48 agent-governance scenarios in eight areas: audit completeness, cross-tenant isolation, delegation provenance, fail-mode discipline, identity propagation, per-user policy, rate limits and scope inheritance. Each scenario is tagged with the NIST AI RMF controls it tests, and nothing passes on a technicality.
 
 | Setup | Scenarios handled |
 |---|---|
@@ -161,6 +159,11 @@ Reviewers in the AgenTrust integrations project [verified the records offline](h
 
 ### Prompt injection on AgentDojo
 
+<img className="evid-light evid-wide" src="/images/evidence/stop-agentdojo-light.svg" alt="Bar chart of AgentDojo prompt injections stopped across 949 attacked task pairs. Proofable stopped 93.8 percent with 87.0 percent of tasks still finished, against 83.6 percent without it and 92.0 percent for an injection filter that finished 21 percent of tasks." />
+<img className="evid-dark evid-wide" src="/images/evidence/stop-agentdojo-dark.svg" alt="Bar chart of AgentDojo prompt injections stopped across 949 attacked task pairs. Proofable stopped 93.8 percent with 87.0 percent of tasks still finished, against 83.6 percent without it and 92.0 percent for an injection filter that finished 21 percent of tasks." />
+<img className="evid-light evid-tall" src="/images/evidence/stop-agentdojo-stacked-light.svg" alt="Bar chart of AgentDojo prompt injections stopped across 949 attacked task pairs. Proofable stopped 93.8 percent with 87.0 percent of tasks still finished, against 83.6 percent without it and 92.0 percent for an injection filter that finished 21 percent of tasks." />
+<img className="evid-dark evid-tall" src="/images/evidence/stop-agentdojo-stacked-dark.svg" alt="Bar chart of AgentDojo prompt injections stopped across 949 attacked task pairs. Proofable stopped 93.8 percent with 87.0 percent of tasks still finished, against 83.6 percent without it and 92.0 percent for an injection filter that finished 21 percent of tasks." />
+
 **On [AgentDojo](https://agentdojo.spylab.ai/), the open prompt-injection benchmark from ETH Zurich, putting an owner-signed, per-task permission in front of every tool call cut the share of attacks that landed from 16.4% to 6.2% across all four suites, while the agent still completed 94.9% of its tasks (95.9% without the permission).** Same model, same 949 attacked task pairs, same attack template, scored by AgentDojo's own checkers; the only change is Proofable's authority engine deciding each call against the permission the owner signed for that task.
 
 | | Task done, no attack | Task done under attack | Attacks that landed |
@@ -172,12 +175,12 @@ For scale, these are AgentDojo's published results on other models. With no defe
 
 ### A hijacked agent cannot send your data out
 
-**When an agent was taken over, 0 of 6 attempts to send private data out got past a scoped permission. On an all-purpose key, 6 of 6 got out.** Five of the six were refused by the permission before they ran and one was never attempted. The scoped agent finished every task and never used a tool outside it (0 of 42 runs); under the all-purpose key, 7 of 42 runs did, with a signed record for each run. [Run the test on your own agent](https://github.com/proofable/mcp/tree/main/examples/injection-test).
-
 <img className="evid-light evid-wide" src="/images/evidence/stop-exfil-light.svg" alt="Bar chart of attempts to send private data out of a hijacked agent. 6 of 6 got out on an all-purpose key and 0 of 6 on an owner-scoped permission." />
 <img className="evid-dark evid-wide" src="/images/evidence/stop-exfil-dark.svg" alt="Bar chart of attempts to send private data out of a hijacked agent. 6 of 6 got out on an all-purpose key and 0 of 6 on an owner-scoped permission." />
 <img className="evid-light evid-tall" src="/images/evidence/stop-exfil-stacked-light.svg" alt="Bar chart of attempts to send private data out of a hijacked agent. 6 of 6 got out on an all-purpose key and 0 of 6 on an owner-scoped permission." />
 <img className="evid-dark evid-tall" src="/images/evidence/stop-exfil-stacked-dark.svg" alt="Bar chart of attempts to send private data out of a hijacked agent. 6 of 6 got out on an all-purpose key and 0 of 6 on an owner-scoped permission." />
+
+**When an agent was taken over, 0 of 6 attempts to send private data out got past a scoped permission. On an all-purpose key, 6 of 6 got out.** Five of the six were refused by the permission before they ran and one was never attempted. The scoped agent finished every task and never used a tool outside it (0 of 42 runs); under the all-purpose key, 7 of 42 runs did, with a signed record for each run. [Run the test on your own agent](https://github.com/proofable/mcp/tree/main/examples/injection-test).
 
 ### Records nobody can fake
 

@@ -430,6 +430,22 @@ body {
   max-width: 17rem !important;
 }
 
+/* Mintlify sets w-[19rem] pl-10 on #table-of-contents-layout and w-[16.5rem] on #table-of-contents,
+   totalling 20.5rem inside a 17rem rail and pushing the right 32px of every TOC label out the window. */
+#table-of-contents-layout,
+#table-of-contents {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  padding-left: 0 !important;
+  box-sizing: border-box !important;
+}
+
+#table-of-contents a {
+  overflow-wrap: break-word !important;
+  white-space: normal !important;
+}
+
 #content-area > #header,
 #content-area > #content,
 #content-area > #pagination,
