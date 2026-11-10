@@ -18,7 +18,7 @@
     "providerDescription": "Proofable typed memory behind the harness interface: each belief stored as one private record with the dataset's scope tags plus state and name tags; retrieval applies the dataset's filter as exact tag matching, then gemini-2.5-flash selects among the filtered candidates and may select none",
     "model": "gemini-2.5-flash",
     "modelRole": "label extraction at ingest (35 calls) and candidate selection at retrieval (77 calls); the harness scores retrieval mode with no model",
-    "adapter": "src/memory_bench/memory/proofable.py",
+    "adapter": "src/memory_bench/memory/proofable.py in the Agent Memory Benchmark harness (branch proofable-provider)",
     "adapterSha256": "9215190e7438711482f1cdbd5e1d0c207de239a6cc45774e72454da8a091853e",
     "targetUrl": "https://api.proofable.me",
     "benchProfile": "0x226fc211c8aa9fa460b302cd616204e1d84c467c",
@@ -36,7 +36,7 @@
     "structuralPasses": "24/25",
     "triviallyEmptyPasses": "9/9",
     "meanPrecision": 0.9556,
-    "meanRecall": 1.0,
+    "meanRecall": 1,
     "harnessModelCalls": 0,
     "providerModelCalls": 112,
     "durationMs": 171482,
@@ -44,21 +44,62 @@
     "costNote": "Vertex AI credits; not metered per run"
   },
   "baselines": [
-    { "provider": "hindsight", "display": "66 of 77 (85.7%), precision 0.85, recall 1.00", "value": 0.857, "source": "vectorize-io/agent-memory-benchmark outputs/precisionmembench/hindsight/retrieval/single-turn.json.gz (hindsight-cloud, same harness)" },
-    { "provider": "tenure", "display": "77 of 77, active 43 of 43 (upstream harness)", "value": 1.0, "source": "tenurehq/precisionMemBench README, evaluated 2026-09-16" },
-    { "provider": "supermemory", "display": "15 of 77, active 2 of 43 (upstream harness)", "value": 0.195, "source": "tenurehq/precisionMemBench README, evaluated 2026-09-17" },
-    { "provider": "hindsight (upstream)", "display": "11 of 77, active 0 of 43 (upstream harness)", "value": 0.143, "source": "tenurehq/precisionMemBench README, evaluated 2026-09-12" },
-    { "provider": "mem0", "display": "9 of 77, active 0 of 43 (upstream harness)", "value": 0.117, "source": "tenurehq/precisionMemBench README, evaluated 2026-09-15" },
-    { "provider": "zep", "display": "9 of 77, active 0 of 43 (upstream harness)", "value": 0.117, "source": "tenurehq/precisionMemBench README, evaluated 2026-09-15" },
-    { "provider": "cognee", "display": "9 of 77, active 0 of 43 (upstream harness)", "value": 0.117, "source": "tenurehq/precisionMemBench README, evaluated 2026-09-15" }
+    {
+      "provider": "hindsight",
+      "display": "66 of 77 (85.7%), precision 0.85, recall 1.00",
+      "value": 0.857,
+      "source": "vectorize-io/agent-memory-benchmark outputs/precisionmembench/hindsight/retrieval/single-turn.json.gz (hindsight-cloud, same harness)"
+    },
+    {
+      "provider": "tenure",
+      "display": "77 of 77, active 43 of 43 (upstream harness)",
+      "value": 1,
+      "source": "tenurehq/precisionMemBench README, evaluated 2026-09-16"
+    },
+    {
+      "provider": "supermemory",
+      "display": "15 of 77, active 2 of 43 (upstream harness)",
+      "value": 0.195,
+      "source": "tenurehq/precisionMemBench README, evaluated 2026-09-17"
+    },
+    {
+      "provider": "hindsight (upstream)",
+      "display": "11 of 77, active 0 of 43 (upstream harness)",
+      "value": 0.143,
+      "source": "tenurehq/precisionMemBench README, evaluated 2026-09-12"
+    },
+    {
+      "provider": "mem0",
+      "display": "9 of 77, active 0 of 43 (upstream harness)",
+      "value": 0.117,
+      "source": "tenurehq/precisionMemBench README, evaluated 2026-09-15"
+    },
+    {
+      "provider": "zep",
+      "display": "9 of 77, active 0 of 43 (upstream harness)",
+      "value": 0.117,
+      "source": "tenurehq/precisionMemBench README, evaluated 2026-09-15"
+    },
+    {
+      "provider": "cognee",
+      "display": "9 of 77, active 0 of 43 (upstream harness)",
+      "value": 0.117,
+      "source": "tenurehq/precisionMemBench README, evaluated 2026-09-15"
+    }
   ],
   "failures": [
-    { "caseId": "happy-writing-scope", "detail": "unexpected belief in relevantBeliefs: b-pov-shift-entity (structural case; one extra belief returned)" }
+    {
+      "caseId": "happy-writing-scope",
+      "detail": "unexpected belief in relevantBeliefs: b-pov-shift-entity (structural case; one extra belief returned)"
+    }
   ],
   "reproduce": {
     "command": "uv run amb run --dataset precisionmembench --split single-turn --memory proofable --mode retrieval",
     "env": "PROOFABLE_ACCESS_KEY (the bench profile), PROOFABLE_MEMORY_MODEL=gemini-2.5-flash, a Gemini client configuration (Vertex AI or an API key)",
-    "artifacts": "_workspace/artifacts/benchmarks/amb/2026-11-10/ (result file, adapter copy, SHA256SUMS, harness commit)"
+    "artifacts": "https://docs.proofable.me/evidence/precisionmembench/2026-11-10/ (per-case result file, this receipt body, SHA256SUMS)"
   },
-  "tags": ["bench:amb", "k:1"]
+  "tags": [
+    "bench:amb",
+    "k:1"
+  ]
 }
