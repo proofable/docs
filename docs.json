@@ -215,6 +215,10 @@
       "destination": "/benchmark"
     },
     {
+      "source": "/evidence/:path*",
+      "destination": "https://github.com/proofable/docs/tree/main/public/evidence/:path*"
+    },
+    {
       "source": "/use-cases/authority-at-dispatch",
       "destination": "/benchmark"
     },
