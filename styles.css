@@ -499,9 +499,9 @@ button,
 }
 
 /*
-  The body voice carries prose; everything that is chrome takes the working
-  face back. Geist Serif has one weight and no italic, so a heading, a control,
-  a code span or a table cell must never inherit it.
+  Every surface reads in the same face as the product. The list below pins the
+  chrome, code and table cells to it explicitly so a theme default cannot
+  substitute another family.
 */
 #sidebar,
 #navigation-items,

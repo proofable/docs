@@ -33,10 +33,10 @@
   --proofable-text-muted: rgb(var(--proofable-rgb-atmosphere-depth) / 0.66);
   --proofable-text-dimmed: rgb(var(--proofable-rgb-atmosphere-depth) / 0.58);
 
-  --proofable-font-sans: "Geist";
-  /* The body voice: the reading face for docs prose. Geist Serif ships one
-     weight, so it never carries a heading, a control, code or a data cell. */
-  --proofable-font-body: "Geist Serif", serif;
+  --proofable-font-sans: "Geist", sans-serif;
+  /* One face, the same as the product: Geist for prose, chrome, code and data.
+     The display serif is for brand work only and never appears in docs. */
+  --proofable-font-body: var(--proofable-font-sans);
   --proofable-text-body: 1rem;
   --proofable-text-body-sm: 0.875rem;
   --proofable-text-label: 0.9375rem;

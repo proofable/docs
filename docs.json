@@ -36,10 +36,8 @@
   },
   "fonts": {
     "body": {
-      "family": "Geist Serif",
-      "weight": 400,
-      "source": "/fonts/GeistSerif-Regular.woff2",
-      "format": "woff2"
+      "family": "Geist",
+      "weight": 400
     },
     "heading": {
       "family": "Geist",
