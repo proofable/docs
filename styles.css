@@ -1147,19 +1147,6 @@ a.card:hover {
   }
 }
 
-/* Evidence charts ship a wide and a stacked variant; phones get the stacked one so labels stay legible. */
-@media (max-width: 639px) {
-  .mdx-content img[src*="/images/evidence/"]:not([src*="-stacked-"]) {
-    display: none !important;
-  }
-}
-
-@media (min-width: 640px) {
-  .mdx-content img[src*="/images/evidence/"][src*="-stacked-"] {
-    display: none !important;
-  }
-}
-
 /*
   Mobile docs shell (NEU-262).
   Mintlify keeps a fixed two-row header (logo row + hamburger/title chip).
@@ -1353,24 +1340,3 @@ html {
   background: var(--proofable-scrollbar-thumb-hover);
 }
 
-/* Evidence charts: one cut per theme per viewport */
-/* Before this every variant carried the same mint-block / dark:mint-hidden pair, so both the
-   wide (1200x460) and the tall (1200x1037) cut rendered at every width: each visitor saw each
-   chart twice and a phone fetched four charts where it needed two.
-   The .dark .evid-dark.evid-wide selector inside the media query is load-bearing: without it the
-   dark-theme rule outside the query (0,3,0) outranks a plain .evid-dark.evid-wide (0,2,0) and
-   both cuts show on a phone in dark mode. Verified in a browser at 1280 / 800 / 390 / 375. */
-.evid-wide, .evid-tall { display: none; }
-
-.evid-light.evid-wide { display: block; }
-.dark .evid-light.evid-wide { display: none; }
-.dark .evid-dark.evid-wide { display: block; }
-
-@media (max-width: 768px) {
-  .evid-light.evid-wide,
-  .evid-dark.evid-wide,
-  .dark .evid-dark.evid-wide { display: none; }
-  .evid-light.evid-tall { display: block; }
-  .dark .evid-light.evid-tall { display: none; }
-  .dark .evid-dark.evid-tall { display: block; }
-}
