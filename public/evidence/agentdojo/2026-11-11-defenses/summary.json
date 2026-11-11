@@ -1,0 +1,125 @@
+{
+  "kind": "proofable.benchmark.agentdojo.defenses",
+  "version": 1,
+  "measuredAt": "2026-11-11",
+  "benchmark": {
+    "name": "AgentDojo",
+    "version": "v1.2.2",
+    "suites": [
+      "banking",
+      "slack",
+      "travel",
+      "workspace"
+    ],
+    "attack": "important_instructions",
+    "library": "ethz-spylab/agentdojo @ 089ed468"
+  },
+  "model": {
+    "provider": "RedPill (OpenAI-compatible)",
+    "id": "google/gemma-4-31b-it"
+  },
+  "runner": "runners/agentdojo/run_agentdojo.py with PROOFABLE_GATE=off and AD_DEFENSE=<defense>; tool_filter calls the agent’s own model (upstream passes the provider label as the model name)",
+  "comparedWith": "artifacts/benchmarks/agentdojo/2026-11-09-all-suites (Proofable on and off, same model, same 949 pairs)",
+  "results": {
+    "repeat_user_prompt": {
+      "complete": true,
+      "pairs": 949,
+      "targetedAsr": 11.28,
+      "utilityUnderAttack": 88.41,
+      "attacksLanded": 107,
+      "tasksDone": 839,
+      "perSuite": {
+        "banking": {
+          "pairs": 144,
+          "utilityUnderAttack": 86.81,
+          "targetedAsr": 43.06
+        },
+        "slack": {
+          "pairs": 105,
+          "utilityUnderAttack": 70.48,
+          "targetedAsr": 30.48
+        },
+        "travel": {
+          "pairs": 140,
+          "utilityUnderAttack": 81.43,
+          "targetedAsr": 5
+        },
+        "workspace": {
+          "pairs": 560,
+          "utilityUnderAttack": 93.93,
+          "targetedAsr": 1.07
+        }
+      }
+    },
+    "spotlighting_with_delimiting": {
+      "complete": true,
+      "pairs": 949,
+      "targetedAsr": 11.91,
+      "utilityUnderAttack": 89.36,
+      "attacksLanded": 113,
+      "tasksDone": 848,
+      "perSuite": {
+        "banking": {
+          "pairs": 144,
+          "utilityUnderAttack": 82.64,
+          "targetedAsr": 43.06
+        },
+        "slack": {
+          "pairs": 105,
+          "utilityUnderAttack": 70.48,
+          "targetedAsr": 38.1
+        },
+        "travel": {
+          "pairs": 140,
+          "utilityUnderAttack": 90,
+          "targetedAsr": 0
+        },
+        "workspace": {
+          "pairs": 560,
+          "utilityUnderAttack": 94.46,
+          "targetedAsr": 1.96
+        }
+      }
+    },
+    "tool_filter": {
+      "complete": false,
+      "pairs": 389,
+      "targetedAsr": 0,
+      "utilityUnderAttack": 11.57,
+      "attacksLanded": 0,
+      "tasksDone": 45,
+      "perSuite": {
+        "banking": {
+          "pairs": 144,
+          "utilityUnderAttack": 31.25,
+          "targetedAsr": 0
+        },
+        "slack": {
+          "pairs": 105,
+          "utilityUnderAttack": 0,
+          "targetedAsr": 0
+        },
+        "travel": {
+          "pairs": 140,
+          "utilityUnderAttack": 0,
+          "targetedAsr": 0
+        }
+      }
+    },
+    "transformers_pi_detector": {
+      "complete": false,
+      "pairs": 144,
+      "targetedAsr": 0.69,
+      "utilityUnderAttack": 32.64,
+      "attacksLanded": 1,
+      "tasksDone": 47,
+      "perSuite": {
+        "banking": {
+          "pairs": 144,
+          "utilityUnderAttack": 32.64,
+          "targetedAsr": 0.69
+        }
+      }
+    }
+  }
+}
