@@ -203,6 +203,14 @@
   },
   "redirects": [
     {
+      "source": "/api-reference/:path*",
+      "destination": "/api/overview"
+    },
+    {
+      "source": "/platform/llm-docs",
+      "destination": "/reference"
+    },
+    {
       "source": "/learn/compare/control-what-an-agent-can-do",
       "destination": "/use-cases/control-agent-actions"
     },
