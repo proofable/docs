@@ -48,7 +48,7 @@ Redoing a finished agent job took 2.79 s and 2,426 AI tokens. Checking its signe
 <img className="evid-light evid-tall" src="/images/evidence/save-handoff-stacked-light.svg" alt="Bar chart of the cost per correct outcome. Handing off with a Proofable receipt cost $0.024, redoing the work $0.078, and trusting forwarded text $0.009." />
 <img className="evid-dark evid-tall" src="/images/evidence/save-handoff-stacked-dark.svg" alt="Bar chart of the cost per correct outcome. Handing off with a Proofable receipt cost $0.024, redoing the work $0.078, and trusting forwarded text $0.009." />
 
-When one agent hands a finished result to another (LangGraph, CrewAI, AutoGen), the receiving agent normally either trusts the forwarded text blindly or pays to re-run the upstream work. With Proofable, the producing agent emits a 66-byte signed receipt (`qHash`) binding input, policy state and output, and the receiving agent checks it before acting.
+When one agent hands a finished result to another (LangGraph, CrewAI, AutoGen), the receiving agent normally either trusts the forwarded text blindly or pays to re-run the upstream work. With Proofable, the producing agent emits a signed receipt (`qHash`) binding input, policy state and output, and the receiving agent checks it before acting.
 
 - **3.3× cheaper than redoing the work:** \$0.024 per correct outcome (33,240 tokens, 2 model calls per task) against \$0.078 (124,715 tokens, 3 to 5 model calls per task).
 - **Trusting forwarded text is cheap and wrong:** it costs \$0.009 on untouched input, but when the text was changed in transit it used the tampered value **3 of 3** times. Checking the receipt caught every change **3 of 3** times and still completed every task, where blind trust caught **0 of 3**.
@@ -128,7 +128,7 @@ A person or business completes an interactive check once, and downstream apps an
 | No governance | 5 of 48 |
 | Claude Code, Codex CLI, Cursor, the agent SDKs, CrewAI or LangGraph on their own | 13 of 48 |
 
-Our row is the policy module the live service runs, pinned by hash, on the maintainers' current library (`479c5f0`). The ACP and agent-tool rows are the maintainers' [published runs](https://github.com/agentic-control-plane/agentgovbench/tree/main/results), the agent-tool rows on the earlier library (`e0ce93a`), where the same engine also handles 48 of 48.
+Our row is the policy module the live service runs, pinned by hash, on the maintainers' current library (`479c5f0`). The ACP and agent-tool rows are the maintainers' [published runs](https://github.com/agentic-control-plane/agentgovbench/tree/main/results), the agent-tool rows on the earlier library (`e0ce93a`).
 
 **Why coding agents on their own handle 13, the best gateway handles 46, and Proofable handles 48:**
 
@@ -242,7 +242,7 @@ Pin both refs to the same commit so a rerun measures the same kit. The action wr
   </Accordion>
 
   <Accordion title="How each result was measured">
-    - **Governance:** AgentGovBench at the maintainers' current library (commit `479c5f0`), run through the library's own runner against the policy code the live service runs, matched to it by hash, beside a gate that allows everything and a no-governance arm. The agent-tool rows are the maintainers' published runs on the earlier library (commit `e0ce93a`), where the same engine also handles 48 of 48.
+    - **Governance:** AgentGovBench at the maintainers' current library (commit `479c5f0`), run through the library's own runner against the policy code the live service runs, matched to it by hash, beside a gate that allows everything and a no-governance arm. The agent-tool rows are the maintainers' published runs on the earlier library (commit `e0ce93a`).
     - **Permissions:** each test on the live service with a dedicated agent under its own fixed permission, and the full suite again on a production release. A permission revoked while its job is running stops that job with a typed reason, and the next dispatch under it is refused.
     - **Takeover:** 84 live runs across five published attack templates and two models, with a signed record for each run.
     - **Reuse:** the median of ten runs on one finished job on the live service.
