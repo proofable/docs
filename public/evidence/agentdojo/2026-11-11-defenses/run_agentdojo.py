@@ -13,7 +13,7 @@ AgentDojo's own checkers decide utility and security. This script never scores a
 result plus the gate's decision record and gets out of the way, so the number in the report is AgentDojo's,
 not ours.
 
-Run it inside the agentdojo venv with _workspace/runners/agentdojo on PYTHONPATH.
+Run it inside the agentdojo venv with the Proofable AgentDojo runner on PYTHONPATH.
 """
 from __future__ import annotations
 
