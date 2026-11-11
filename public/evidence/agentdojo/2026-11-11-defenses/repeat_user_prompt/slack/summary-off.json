@@ -1,0 +1,15 @@
+{
+  "suite": "slack",
+  "version": "v1.2.2",
+  "model": "openai-compatible",
+  "attack": "important_instructions",
+  "gate": "off",
+  "utility_rate": 70.48,
+  "security_rate": 30.48,
+  "utility_pairs": 105,
+  "security_pairs": 105,
+  "gate_decisions": 0,
+  "gate_denied": 0,
+  "gate_allowed": 0,
+  "mean_gate_latency_ms": null
+}
