@@ -11,6 +11,8 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Added
 
+- **The permission tests' acceptance criterion.** A run is accepted only when `verify` passes and `controls` rejects eight altered copies, including genuine records swapped between cases; see the [authority-at-dispatch kit](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch#the-acceptance-criterion).
+
 - **Your app's users can talk to your agent, and your app pays.** [Talk to your agent from any app](/agents/talk-to-an-agent) shows the sign-in with `ProofableSignIn`, the call as the person (`agentChat` with `agentWallet` runs your public agent in their own profile, with nothing of yours in the conversation), and the billing. `proofable sponsor` turns sponsorship on once, and a client with `appId` and `billingWallet` makes your organization the payer within the daily cap. The refusal table gains `SPONSOR_CAP_EXCEEDED`.
 
 - **Benchmark.** [Benchmark](/benchmark) replaces the Evidence page. It opens on one table of outcomes, each beside the setup it was measured against: 48 of 48 governance scenarios, every out-of-permission action stopped before it runs, 0 of 6 data-theft attempts out of a hijacked agent, 150 of 150 forged records caught, $0.024 against $0.078 per handed-off result, reuse 750 times faster than redoing the work, 11.1 times fewer tokens for agent memory, 77 of 77 cases on the PrecisionMemBench memory test, a 3.1 times lower worst-case research spend, and one identity check reused by 100 apps for $1.75 against $150. How each result was measured is in one section for reviewers. `/evidence`, `/benchmarks` and `/use-cases/authority-at-dispatch` open it.
@@ -23,6 +25,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Changed
 
+- **Benchmark and Run the Chain show the 2 November permission run.** Each of the eight rows opens its record from that run, and Run the Chain prints its `verify` output.
 - **What a connection carries.** [MCP tools](/mcp/tools) lists every tool a signed-in connection gets on every plan. That covers the proof and permission tools, jobs, the hosted browser, connected apps, session notes, saved tools, web search, page fetch, remote MCP servers run through Proofable, and your saved keys (list, remove, or call a provider with one, never reading the key back). Web search, page fetch, connected-app actions and remote server calls are metered per call, and [Pricing](/pricing) lists the rates. A key is saved on your profile rather than through a client ([Secrets](/mcp/secrets)), and the [OAuth scope table](/mcp/oauth) says what each scope reaches.
 - **Jobs and the hosted computer on every plan; Advanced on Pro.** [Jobs](/jobs) and [Pricing](/pricing) list what a run costs: 1 credit per run on any model or key, hosted tokens by tier, and 2 credits per vCPU for each started minute of a hosted machine. The Advanced hosted tier is on Pro, Partner and Enterprise; any model runs on your own key on every plan.
 - **Two checks you can run on the published records.** `public/evidence/checks/tamper-check.mjs` forges each signed record ten ways and confirms every copy is rejected offline; `reuse-check.mjs` times reading and verifying a finished result with no account.
