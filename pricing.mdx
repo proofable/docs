@@ -90,6 +90,6 @@ Agent setup creates two separately signed proofs. Each is billed to its signer u
 
 ## When credits run out
 
-Billable calls return `402` with a quote. Add credits, or pay for the call with [x402](/gates/pay-per-call) and retry with the `PAYMENT-SIGNATURE` header.
+Signed in, a billable call returns `402` with your balance and a link to add credits. Not signed in, it returns a quote: pay for the call with [x402](/gates/pay-per-call) and retry with the `PAYMENT-SIGNATURE` header.
 
 Per-plan request limits are in [Rate limits](/api/rate-limits).

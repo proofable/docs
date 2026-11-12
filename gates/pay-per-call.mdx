@@ -60,7 +60,7 @@ curl \
 POST https://api.proofable.me/api/v1/verification
 ```
 
-Cost = gate check (1 credit) + each verifier's weight + proof write (2 credits) + optional add-ons. Verifier weights range from 1 (ownership-basic) to 70 (wallet-risk). [`GET /api/v1/payments/pricing`](/pricing) returns the per-verifier credit table.
+Cost = each verifier's weight + proof write (1 credit) + optional add-ons. Verifier weights range from 0 (ownership-basic) to 72 (wallet-risk). [`GET /api/v1/payments/pricing`](/pricing) returns the per-verifier credit table.
 
 ## Settlement
 
