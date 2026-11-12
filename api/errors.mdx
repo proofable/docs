@@ -38,7 +38,7 @@ The same schema is published on every public operation in [Proofable OpenAPI](ht
 | `PROOF_NOT_FOUND` | Gate/fulfill proof not found | Confirm the gate and the proof exist |
 | `WALLET_AUTH_REQUIRED` | Action needs an owner wallet signature/session | Authenticate the right wallet, then retry |
 | `RATE_LIMIT_EXCEEDED` | Too many requests | Back off and retry after `Retry-After` |
-| `INSUFFICIENT_CREDITS` | The account paying needs more credits | Add credits, or pay the call with x402 and retry |
+| `INSUFFICIENT_CREDITS` | The signed-in account needs more credits. The body carries `remaining`, `required` and `creditsUrl` | Add credits at `creditsUrl`, then retry |
 | `PAYMENT_ALREADY_USED` | A payment was already bound to this gate or proof | Do not reuse payment evidence across checkouts |
 | `SERVICE_PARAMETER_REQUIRED` | An AI service order is missing a required input | Send a value for every required entry in the listing's `serviceInputs` |
 | `SERVICE_PARAMETER_TOO_LONG` | An AI service input is over 512 characters | Shorten the value and retry |
@@ -53,7 +53,7 @@ The same schema is published on every public operation in [Proofable OpenAPI](ht
 | 202 | Accepted (async processing) |
 | 400 | Bad request |
 | 401 | Unauthorized |
-| 402 | Payment required. The response carries a quote; add credits or pay the call with x402 and retry |
+| 402 | Payment required. Signed in: `INSUFFICIENT_CREDITS` with your balance. Not signed in: an x402 quote to pay the call |
 | 403 | Forbidden |
 | 404 | Not found |
 | 429 | Rate limited |
