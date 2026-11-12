@@ -2,7 +2,7 @@
 
 Proofable's records for eight permission cases run on the live service. The plain summary, with a
 link to every record, is at
-[docs.proofable.me/use-cases/authority-at-dispatch](https://docs.proofable.me/use-cases/authority-at-dispatch).
+[docs.proofable.me/benchmark](https://docs.proofable.me/benchmark#agents-only-do-what-you-allowed).
 
 | Folder | What it is |
 | --- | --- |

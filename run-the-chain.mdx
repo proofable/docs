@@ -54,20 +54,18 @@ node aad.mjs run          # eight permission cases
 node aad.mjs verify runs/<run-id>
 ```
 
-On the published 24 October run, `verify` prints:
+On the published [2 November run](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/2026-11-02-suite), `verify` prints:
 
 ```text
-hosted_allow             PASS     2/2 envelopes
-binding_veto             PASS     2/2 envelopes
-approval_reachable       PASS     2/2 envelopes
-approval_unavailable     PASS     2/2 envelopes
-revoke_before_dispatch   PASS     1/1 envelopes
-expiry_before_dispatch   PASS     1/1 envelopes
-stale_authority          PASS     4/4 envelopes
-post_dispatch_revoke     PASS     3/3 envelopes
+trace digest OK (trace.jsonl)
+trace count OK (8 records read from trace.jsonl)
+envelopes OK (15 verified offline against 15 declared references)
+coverage OK (8/8 passed, 8 covered, computed from the trace rows; each pass bound to its own job and grant)
 
 all checks pass
 ```
+
+`node aad.mjs controls runs/<run-id>` then alters a copy eight ways (a case dropped, duplicated or flipped, a citation removed or stripped, genuine records swapped between cases) and passes only if `verify` rejects every one and accepts the unaltered copy. Both passing is the [acceptance criterion](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch#the-acceptance-criterion) for a run.
 
 `verify` needs no network and no account. The eight cases cover an allowed job, an action outside the
 delegation, an approval that arrives, an approval that never arrives, revocation before dispatch,

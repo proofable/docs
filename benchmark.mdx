@@ -140,20 +140,20 @@ Our row is the policy module the live service runs, pinned by hash, on the maint
 
 ### Agents only do what you allowed
 
-**8 of 8 permission tests pass on the live service.** Every action outside the agent's permission is stopped before it runs, and every action it is allowed to take runs. Each row opens its signed record.
+**8 of 8 permission tests pass on the live service** (run of 2 November, [all 15 records](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/2026-11-02-suite)). Every action outside the agent's permission is stopped before it runs, and every action it is allowed to take runs. Each row opens its signed record.
 
 | Test | What happened |
 |---|---|
-| [Permission granted](https://proofable.me/proof/0x64f293e61b826e03bd1de6564fc2db8cec0f50390bafc8bdf162ec9961262fca) | Ran and completed |
-| [Action outside the permission](https://proofable.me/proof/0xffdc0455b72732a8c6a31eb4e2861943b85dbc271fe2dfa8b18d0e85d2b33726) | Stopped before it ran |
-| [Needs approval, approved](https://proofable.me/proof/0xe662eaa54a5e3d7875827794d6a69b4e86973fee49cfa71e555f821d5ed28c35) | Held until approved, then ran |
-| [Needs approval, nobody answers](https://proofable.me/proof/0x6c53cb0005c9dc30fde5bb1bd06860d74ae51790be3869a6605bfc9f71e01954) | Never ran; a late approval was refused |
-| [Permission revoked](https://proofable.me/proof/0x8a3e5ff89c8a86423bae61db96c9732f319a6f6cdb34f4bde560c90d25366c95) | Stopped; no job created |
-| [Permission expired](https://proofable.me/proof/0xf1880cba0876acc2364e31892b261a47299c0a70177b61b32d465fcd1b61447a) | Stopped; no job created |
-| [Revoked permission reused](https://proofable.me/proof/0x1d987781eb519337fa9e62043831ee187340f6e589f217b16b99ed98be5acfbc) | Stopped every time |
-| [Revoked mid-job](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/2026-11-02-suite) | The running job stopped with its reason 18 seconds after the permission was revoked, and the next one was refused |
+| [Permission granted](https://proofable.me/proof/0x03ce9321248769b72e4c7d630d34bafbb00c60eb1c6799c6089bdb6791fa7813) | Ran and completed |
+| [Action outside the permission](https://proofable.me/proof/0xab4a4049a2902398a71e7a5e87993a8dd341da85134beb63d73fc607ff489954) | Stopped before it ran |
+| [Needs approval, approved](https://proofable.me/proof/0x5d476c527c886fda358d542fdc322525ce7c3fef5933a911c4903166ee60ae7e) | Held until approved, then ran |
+| [Needs approval, nobody answers](https://proofable.me/proof/0x1a66066e51ade3bdbb110ab6f9e88abd2967f6b52967f8345edc3d6ab7e48d8d) | Never ran; a late approval was refused |
+| [Permission revoked](https://proofable.me/proof/0xb84a54c04bb32a65c327f2045c6c53d262775050e1b52672b14f2b9eecdfee01) | Stopped; no job created |
+| [Permission expired](https://proofable.me/proof/0xb0dc6b40444f41635e4c0d06ad71ced9ce6ce00cbce79490ff77d7eddc6519d9) | Stopped; no job created |
+| [Revoked permission reused](https://proofable.me/proof/0x308df7fa625b481429069cc72a3288b1661d10146fc19b9d0533ea54243a1fdd) | Stopped every time |
+| [Revoked mid-job](https://proofable.me/proof/0x45606ad5d655a20abb838440cae024353b31a4a9a611680c152e2ff6e325b793) | The running job stopped with its reason 18 seconds after the permission was revoked, and the next one was refused |
 
-Reviewers in the AgenTrust integrations project [verified the records offline](https://github.com/agentrust-io/integrations/issues/333#issuecomment-6414048198) on their own machines. Every checksum matched and every signature verified. Its maintainers then [chose them](https://github.com/agentrust-io/integrations/issues/333#issuecomment-6436264551) as the dispatch evidence for their authority comparison. Rerun all eight on your own account with [Run the chain](/run-the-chain#run-it-end-to-end).
+Reviewers in the AgenTrust integrations project [verified the records offline](https://github.com/agentrust-io/integrations/issues/333#issuecomment-6414048198) on their own machines. Every checksum matched and every signature verified. Its maintainers then [chose them](https://github.com/agentrust-io/integrations/issues/333#issuecomment-6436264551) as the dispatch evidence for their authority comparison. In the AAIF Observability & Traceability working group, a reviewer [checked](https://github.com/aaif/wg-observability-and-traceability/issues/66#issuecomment-6796089967) that the verifier binds each test to its own records and rejects all eight altered copies. Rerun all eight on your own account with [Run the chain](/run-the-chain#run-it-end-to-end).
 
 ### Prompt injection on AgentDojo
 
