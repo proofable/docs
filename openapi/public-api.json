@@ -3,17 +3,56 @@
   "info": {
     "title": "Proofable API",
     "version": "1.3.9",
-    "description": "Public HTTP API for Proofable integrators.\n\nRecommended integration order (simplest first):\n1. Browser: VerifyGate widget or hosted verify at https://proofable.me/verify (wallet, passkey, and OAuth handled by Proofable).\n2. JavaScript: `@proofable/sdk` `client.verify()` signs and submits for signature-based verifiers; use VerifyGate for hosted/interactive verifiers.\n3. Server gate checks: `GET /api/v1/proofs/check` with `gateId` or criteria before granting access.\n4. Raw HTTP: two-phase signing below only when you cannot use the SDK or hosted flows.\n\nRaw HTTP verification uses POST /api/v1/verification/standardize → sign signerString → POST /api/v1/verification with the same body plus signature. Session-authenticated callers may skip the signature when a valid session is present.\n\nUse your deployment base URL (for example https://api.proofable.me). Some verifiers require pro access. Administrative endpoints are not included in this specification.\n\nVersioning: public HTTP is `/api/v1` on https://api.proofable.me. Breaking changes ship as a new path version. The current public surface stays `/api/v1`. Deprecations are announced in the public changelog. Retired paths will send `Deprecation` and `Sunset` headers.\n\nMachine-readable spec: https://api.proofable.me/openapi.json\nTyped errors use the ErrorResponse object (`success`, `error.code`, `error.message`). See https://docs.proofable.me/api/errors.",
+    "description": "Public HTTP API for Proofable integrators.\n\nRecommended integration order (simplest first):\n1. Browser: VerifyGate widget or hosted verify at https://proofable.me/verify (wallet, passkey, and OAuth handled by Proofable).\n2. JavaScript: `@proofable/sdk` `client.verify()` signs and submits for signature-based verifiers; use VerifyGate for hosted/interactive verifiers.\n3. Server gate checks: `GET /api/v1/proofs/check` with `gateId` or criteria before granting access.\n4. Raw HTTP: two-phase signing below only when you cannot use the SDK or hosted flows.\n\nRaw HTTP verification uses POST /api/v1/verification/standardize → sign signerString → POST /api/v1/verification with the same body plus signature. Session-authenticated callers may skip the signature when a valid session is present.\n\nUse your deployment base URL (for example https://api.proofable.me). Some verifiers require pro access. Administrative endpoints are not included in this specification.\n\nVersioning: public HTTP is `/api/v1` on https://api.proofable.me. Breaking changes ship as a new path version. The current public surface stays `/api/v1`. Deprecations are announced in the public changelog. Retired paths will send `Deprecation` and `Sunset` headers.\n\nMachine-readable spec: https://api.proofable.me/openapi.json\nTyped errors use the ErrorResponse object (`success`, `error.code`, `error.message`). See https://docs.proofable.me/api/errors.\n\nAuthentication: a server or agent sends a profile access key as `Authorization: Bearer npk_...`. A signed-in browser sends the `neus_auth` session cookie. Both resolve to the same profile. Wallet-signed reads use the `x-wallet-address`, `x-signature` and `x-signed-timestamp` headers documented on each operation. See https://docs.proofable.me/api/authentication.\n\nPay per call (x402): `POST /api/v1/verification` is an x402 payable resource. A request with no session, access key, app attribution or payment is answered `402` with the offer in the `PAYMENT-REQUIRED` header (scheme `exact`; price, network, asset and payTo are in the offer). Retry the same request with a `PAYMENT-SIGNATURE` header. A settled response carries `PAYMENT-RESPONSE`. Other `402` responses in this specification are credit or checkout refusals described on the operation, not x402 challenges.",
+    "contact": {
+      "name": "Proofable",
+      "url": "https://docs.proofable.me",
+      "email": "dev@proofable.me"
+    },
     "license": {
       "name": "Proprietary. All rights reserved.",
       "url": "https://proofable.me/legal/terms-of-use"
     }
+  },
+  "externalDocs": {
+    "description": "Proofable documentation",
+    "url": "https://docs.proofable.me"
   },
   "security": [],
   "servers": [
     {
       "url": "https://api.proofable.me",
       "description": "Production API"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Health",
+      "description": "Service status."
+    },
+    {
+      "name": "Verification",
+      "description": "Run a check and create a proof."
+    },
+    {
+      "name": "Proofs",
+      "description": "Read, check and revoke proofs."
+    },
+    {
+      "name": "Gates",
+      "description": "Gate access on proofs and fulfill paid listings."
+    },
+    {
+      "name": "Profile",
+      "description": "Profile usage."
+    },
+    {
+      "name": "Payments",
+      "description": "Pricing and payment methods."
+    },
+    {
+      "name": "Agents",
+      "description": "Import agents and run agent chat turns."
     }
   ],
   "components": {
@@ -1840,6 +1879,19 @@
           ]
         }
       }
+    },
+    "securitySchemes": {
+      "accessKey": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Profile access key (`npk_...`) created on a Proofable profile, sent as `Authorization: Bearer npk_...`. For servers, CI and agents."
+      },
+      "session": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "neus_auth",
+        "description": "Browser session cookie set after sign-in on proofable.me."
+      }
     }
   },
   "paths": {
@@ -2139,6 +2191,17 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "402": {
+            "description": "Payment required (x402). Sent to a caller with no session, access key, app attribution or payment. The offer is in the PAYMENT-REQUIRED header; retry the same request with a PAYMENT-SIGNATURE header.",
+            "headers": {
+              "PAYMENT-REQUIRED": {
+                "description": "x402 payment offer: scheme, price, network, asset and payTo.",
+                "schema": {
+                  "type": "string"
                 }
               }
             }
