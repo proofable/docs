@@ -9,7 +9,7 @@ Two endpoints accept per-call payment. Checking an existing proof is free.
 
 | Resource | Method | What it does | Base cost |
 |----------|--------|--------------|-----------|
-| `/api/v1/verification` | POST | Create a new proof | 4+ credits (gate + verifier + proof write) |
+| `/api/v1/verification` | POST | Create a new proof | 1+ credits (verifier + proof write) |
 | `/api/v1/verification/access/grant` | POST | Create a signed private-proof sharing capability | 2 credits, flat |
 
 The exact price for each request is in the `PAYMENT-REQUIRED` header. It scales with the verifier's weight and optional add-ons (IPFS pinning, extra chains).
