@@ -9,7 +9,7 @@ Two endpoints accept per-call payment. Checking an existing proof is free.
 
 | Resource | Method | What it does | Base cost |
 |----------|--------|--------------|-----------|
-| `/api/v1/verification` | POST | Create a new proof | 4+ credits (gate + verifier + proof write) |
+| `/api/v1/verification` | POST | Create a new proof | 1+ credits (verifier + proof write) |
 | `/api/v1/verification/access/grant` | POST | Create a signed private-proof sharing capability | 2 credits, flat |
 
 The exact price for each request is in the `PAYMENT-REQUIRED` header. It scales with the verifier's weight and optional add-ons (IPFS pinning, extra chains).
@@ -60,7 +60,7 @@ curl \
 POST https://api.proofable.me/api/v1/verification
 ```
 
-Cost = gate check (1 credit) + each verifier's weight + proof write (2 credits) + optional add-ons. Verifier weights range from 1 (ownership-basic) to 70 (wallet-risk). [`GET /api/v1/payments/pricing`](/pricing) returns the per-verifier credit table.
+Cost = each verifier's weight + proof write (1 credit) + optional add-ons. Verifier weights range from 0 (ownership-basic) to 72 (wallet-risk). [`GET /api/v1/payments/pricing`](/pricing) returns the per-verifier credit table.
 
 ## Settlement
 
