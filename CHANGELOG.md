@@ -9,6 +9,10 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ## [Unreleased]
 
+### Changed
+
+- **Results page.** [Proofable results](/benchmark) now opens on the two public benchmarks: AgentDojo, where successful prompt injections fell from 16.4% to 6.2%, and a perfect score on PrecisionMemBench. The governance scenarios move under Our own tests with the other runs you can repeat yourself.
+
 ### Added
 
 - **The permission tests' acceptance criterion.** A run is accepted only when `verify` passes and `controls` rejects eight altered copies, including genuine records swapped between cases; see the [authority-at-dispatch kit](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch#the-acceptance-criterion).
