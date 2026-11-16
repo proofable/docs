@@ -176,7 +176,7 @@ The MCP server accepts a token only when `aud`, `iss` and `token_use` match thes
 |-------|-------------|---------|
 | `proofable:core` | Public protocol tools (context, catalog, public proof reads) | Yes |
 | `proofable:profile` | Signed-in profile context and ownership checks | Yes |
-| `proofable:secrets` | Saved keys on your profile: list or remove one, or call a provider with one. Keys are saved in Proofable | Yes |
+| `proofable:secrets` | Reserved. No connection tool lists, reads or saves a key; keys are saved on your profile | Yes |
 | `offline_access` | Refresh token so the client can stay signed in | Yes |
 
 These four scopes are the complete public permission model. Access keys (`npk_*`) are a full-profile credential.

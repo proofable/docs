@@ -5,7 +5,7 @@ description: "Connect Proofable to any MCP client, so every agent you run carrie
 icon: plug
 ---
 
-Connect one Proofable profile to any supported MCP client. Your agents can reuse current proofs, read their permissions, and use protected tools without carrying credentials in prompts.
+Connect one Proofable profile to any supported MCP client. Your agents reuse current proofs, work within a permission you can revoke, and take the work you hand them.
 
 ## Start
 
@@ -28,7 +28,8 @@ Proofable returns **Passed**, **Action needed**, or **Blocked**. It reuses a cur
 - Check whether you already hold the proof a task requires.
 - Show the next verification step only when a current proof is missing.
 - Load an agent's current identity, permissions, skills, and selected context.
-- Run jobs, the hosted browser and connected apps on your credits, within the permissions on your profile.
+- Hand work to an agent as a job. The job uses the browser, search and connected apps its permission allows, on your credits.
+- Revoke a proof or an agent permission, everywhere at once.
 - Read the same authorized profile and proofs across supported MCP clients.
 
 Call `proofable_context` once after connecting. Use the [MCP tool reference](./tools) for exact inputs and result shapes.
@@ -48,6 +49,6 @@ When authorized, agents can read:
 - The signed-in profile and current agent permissions
 - Approved tools, skills, and selected context
 - Current proofs and verification status
-- Saved key names and metadata, never the stored values
+- Jobs, their status and any step waiting for your approval
 
 To load one registered agent into a project, see [Connect agent context](/agents/runtime-mount).

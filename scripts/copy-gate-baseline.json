@@ -1,8 +1,6 @@
 [
   "api/authentication.mdx|separator|→ sign → . [signing format].",
   "gates/checkout.mdx|separator|- : verifierid → qhash map (requires ). pass it as on so satisfied checks are not re-run.",
-  "mcp/secrets.mdx|separator|save a key in [profile → secrets] or through the [product api]. the value goes from your browser straight to proofable, so the agent never handles it. mcp tools",
-  "mcp/tools.mdx|separator|| default | connect → ** ** → ** ** for agents → ** ** before sensitive actions |",
   "mcp/verify-or-guide.mdx|separator|2. if satisfied → (continue silently)",
   "mcp/verify-or-guide.mdx|separator|3. if not, and signed in for an instant verifier → (no hosted link)",
   "mcp/verify-or-guide.mdx|separator|4. if not, and an outside login, payment, or different account is required → one hosted link",
