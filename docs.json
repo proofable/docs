@@ -73,7 +73,7 @@
         "groups": [
           {
             "group": "Overview",
-            "pages": ["index", "run-the-chain", "pricing", "security", "benchmark", "enterprise", "migrate"]
+            "pages": ["index", "run-the-chain", "pricing", "security", "benchmark", "enterprise"]
           },
           {
             "group": "Use cases",
@@ -134,7 +134,7 @@
               },
               {
                 "group": "Deployment",
-                "pages": ["deployment/access-keys", "deployment/private-cloud"]
+                "pages": ["deployment/access-keys", "deployment/private-cloud", "migrate"]
               }
             ]
           }
