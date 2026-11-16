@@ -7,18 +7,17 @@ description: "Agents that remember only what is current, follow the rules you se
 icon: chart-simple
 ---
 
-<CardGroup cols={2}>
-  <Card title="77/77 memory precision" icon="brain" href="https://proofable.me/benchmarks/memory">
-    Only the current fact comes back, never a stale or wrong one. Mem0 and Zep passed 9 of 77.
+Proofable checks each agent action against a permission its owner signed, before it runs, and signs a receipt after, linked so anyone can check both offline. Below are the results on public benchmarks that others built and score, then our own tests. Every result comes with a way to rerun it.
+
+<CardGroup cols={3}>
+  <Card title="Attacks that land cut by more than half" icon="shield-halved" href="https://proofable.me/benchmarks/security">
+    AgentDojo, ETH Zurich's prompt-injection benchmark: 16.4% to 6.2% on the same model, with 87% of tasks still done under attack.
   </Card>
-  <Card title="48/48 governance scenarios" icon="shield-check" href="https://proofable.me/benchmarks/governance">
-    Including the two a gateway cannot check. The best gateway handled 46, coding agents on their own 13.
+  <Card title="Perfect score on PrecisionMemBench" icon="brain" href="https://proofable.me/benchmarks/memory">
+    77 of 77. Only the current fact comes back. The benchmark author's own product also scored 77.
   </Card>
-  <Card title="93.8% of attacks stopped" icon="shield-halved" href="https://proofable.me/benchmarks/security">
-    Up from 83.6% for the same agent on AgentDojo, with 87% of tasks still finished under attack.
-  </Card>
-  <Card title="0/6 data leaks" icon="lock" href="https://proofable.me/benchmarks/security">
-    A hijacked agent got no private data out. On an all-purpose key, all 6 attempts did.
+  <Card title="Perfect score on AgentGovBench" icon="shield-check" href="https://proofable.me/benchmarks/governance">
+    48 of 48 open governance scenarios. The best gateway handled 46.
   </Card>
 </CardGroup>
 
@@ -30,7 +29,110 @@ icon: chart-simple
 | **Multi-agent handoffs & state** | Unstructured RAG memory (Mem0, Zep, vector chunks) and raw JSON/markdown passed between agents (LangGraph, CrewAI) | Unstructured chunks carry no active/revoked status or signer authority, so agents read full historical documents to guess which rule is current. Forwarded text carries no proof of what the upstream agent actually read or produced | Stores typed, revocable, owner-signed state (`rules`, `instruction`, `receipts`) and passes a signed receipt between agents |
 | **Portable verification** | Point-to-point identity, wallet or domain checks (Stripe Identity, Sumsub, OAuth) trapped inside one app's database | Every downstream app, partner or agent forces the user through the vendor check again and pays the vendor fee again | Wraps the verified result (ZKPassport, Webacy, DNS, OAuth) in a portable CAIP-380 proof so downstream apps and agents check eligibility without re-running the vendor flow |
 
-## What it saves
+## Public benchmarks
+
+### Prompt injection on AgentDojo
+
+<img className="evid-light evid-wide" src="/images/evidence/stop-agentdojo-light.svg" alt="Bar chart of AgentDojo prompt injections stopped across 949 attacked task pairs. Proofable stopped 93.8 percent with 87.0 percent of tasks still finished, against 83.6 percent without it and 92.0 percent for an injection filter that finished 21 percent of tasks." />
+<img className="evid-dark evid-wide" src="/images/evidence/stop-agentdojo-dark.svg" alt="Bar chart of AgentDojo prompt injections stopped across 949 attacked task pairs. Proofable stopped 93.8 percent with 87.0 percent of tasks still finished, against 83.6 percent without it and 92.0 percent for an injection filter that finished 21 percent of tasks." />
+<img className="evid-light evid-tall" src="/images/evidence/stop-agentdojo-stacked-light.svg" alt="Bar chart of AgentDojo prompt injections stopped across 949 attacked task pairs. Proofable stopped 93.8 percent with 87.0 percent of tasks still finished, against 83.6 percent without it and 92.0 percent for an injection filter that finished 21 percent of tasks." />
+<img className="evid-dark evid-tall" src="/images/evidence/stop-agentdojo-stacked-dark.svg" alt="Bar chart of AgentDojo prompt injections stopped across 949 attacked task pairs. Proofable stopped 93.8 percent with 87.0 percent of tasks still finished, against 83.6 percent without it and 92.0 percent for an injection filter that finished 21 percent of tasks." />
+
+**On [AgentDojo](https://agentdojo.spylab.ai/), the open prompt-injection benchmark from ETH Zurich, putting an owner-signed, per-task permission in front of every tool call cut the share of attacks that landed from 16.4% to 6.2% across all four suites, while the agent still completed 94.9% of its tasks (95.9% without the permission).** Same model, same 949 attacked task pairs, same attack template, scored by AgentDojo's own checkers; the only change is Proofable's authority engine deciding each call against the permission the owner signed for that task.
+
+| | Task done, no attack | Task done under attack | Attacks that landed |
+|---|---|---|---|
+| Agent as shipped | 95.9% | 88.1% | 16.4% |
+| Agent with a Proofable permission | 94.9% | 87.0% | 6.2% |
+
+For scale, these are AgentDojo's published results on other models. With no defense, attacks landed 27.2% of the time on gpt-4o-mini and 47.7% on gpt-4o; the strongest published defense (tool filtering) brought gpt-4o to 6.8% while task completion under attack fell to 56.3%. Our run used gemma-4-31b-it, a model attacks land on, so the rows are the same benchmark and metrics on a different model, not a ranking. The attacks that still land use the very tool the task needs, such as a send or a transfer; a permission cannot tell that call from the legitimate one, which is what spend caps and approvals are for. Per suite and per decision: [evidence folder](https://github.com/proofable/docs/tree/main/public/evidence/agentdojo/2026-11-09) (every one of the 6,934 engine decisions and each task's signed permission).
+
+### Memory that returns only the current fact
+
+<img className="evid-light evid-wide" src="/images/evidence/memory-precision-light.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
+<img className="evid-dark evid-wide" src="/images/evidence/memory-precision-dark.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
+<img className="evid-light evid-tall" src="/images/evidence/memory-precision-stacked-light.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
+<img className="evid-dark evid-tall" src="/images/evidence/memory-precision-stacked-dark.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
+
+**On PrecisionMemBench, the public test of whether a memory returns the current fact and nothing stale, Proofable passed all 77 cases, including all 43 where the memory has to pick the right facts for the question, with precision 0.98 and recall 1.00.** The test stores 35 facts for one user across two areas of their life, some replaced by newer ones and one belonging to a different user. It then asks 77 questions and checks exactly which facts come back. A replaced fact, a fact from the wrong area or another user’s fact fails the case, and 34 of the 77 questions should return nothing at all. Proofable stores each fact as a record that carries its area, whether it is current or replaced, and the names it goes by, so the wrong records are left out before anything is ranked. The [Agent Memory Benchmark](https://agentmemorybenchmark.ai) toolkit scores the test without a model. The per-case results and the code that ran are in [evidence/precisionmembench/2026-11-10-77](https://github.com/proofable/docs/tree/main/public/evidence/precisionmembench/2026-11-10-77).
+
+| Memory | Cases passed | Active cases | Precision | Source |
+| --- | --- | --- | --- | --- |
+| Proofable | **77 of 77** | **43 of 43** | 0.98 | [Run results](https://github.com/proofable/docs/tree/main/public/evidence/precisionmembench/2026-11-10-77) |
+| Tenure | 77 of 77 | 43 of 43 | 1.00 | [Benchmark author’s table](https://github.com/tenurehq/precisionMemBench) |
+| Hindsight (cloud) | 66 of 77 | 33 of 43 | 0.85 | [Vectorize published run](https://github.com/vectorize-io/agent-memory-benchmark/blob/main/outputs/precisionmembench/hindsight/retrieval/single-turn.json.gz) |
+| Supermemory | 15 of 77 | 2 of 43 | 0.18 | Author’s table above |
+| Mem0, Zep, Cognee | 9 of 77 | 0 of 43 | 0.06 | Author’s table above |
+
+Proofable and Hindsight ran on the same toolkit, so those two rows compare directly. The other rows are the benchmark author’s own results with its own code, and Tenure is the author’s own product. High recall with low precision means the right fact came back buried among unrelated ones.
+
+### Governance coverage
+
+<img className="evid-light evid-wide" src="/images/evidence/stop-tools-light.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
+<img className="evid-dark evid-wide" src="/images/evidence/stop-tools-dark.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
+<img className="evid-light evid-tall" src="/images/evidence/stop-tools-stacked-light.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
+<img className="evid-dark evid-tall" src="/images/evidence/stop-tools-stacked-dark.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
+
+[AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) is the open library of 48 agent-governance scenarios in eight areas: audit completeness, cross-tenant isolation, delegation provenance, fail-mode discipline, identity propagation, per-user policy, rate limits and scope inheritance. Each scenario is tagged with the NIST AI RMF controls it tests, and nothing passes on a technicality.
+
+| Setup | Scenarios handled |
+|---|---|
+| Proofable policy engine | **48 of 48** |
+| ACP, the maintainers' gateway ([published run](https://github.com/agentic-control-plane/agentgovbench/actions/runs/37759892335)) | 46 of 48 |
+| Anthropic Agent SDK with the ACP gateway | 46 of 48 |
+| OpenAI Agents SDK with the ACP gateway | 45 of 48 |
+| Claude Code or Codex CLI with ACP hooks | 43 of 48 |
+| CrewAI or LangGraph with the ACP gateway | 40 of 48 |
+| Cursor with ACP over MCP | 37 of 48 |
+| A gate that allows everything | 20 of 48 |
+| No governance | 5 of 48 |
+| Claude Code, Codex CLI, Cursor, the agent SDKs, CrewAI or LangGraph on their own | 13 of 48 |
+
+Our row is the policy module the live service runs, pinned by hash, on the maintainers' current library (`479c5f0`). The ACP and agent-tool rows are the maintainers' [published runs](https://github.com/agentic-control-plane/agentgovbench/tree/main/results), the agent-tool rows on the earlier library (`e0ce93a`).
+
+**Why coding agents on their own handle 13, the best gateway handles 46, and Proofable handles 48:**
+
+- **Coding agents on their own (13):** Claude Code, Codex CLI and Cursor only have local tool-permission prompts (`allow/deny` bash or file access). They have no owner-bound agent identity, no cross-agent delegation, no spend caps, no external policy engine and no signed audit trail.
+- **A stateless API/MCP gateway (46):** a proxy in front of tool calls enforces rate limits, role-based access, tool allowlists and server logs.
+- **The two checks a stateless gateway cannot pass (48):** a proxy only sees the request in flight. It cannot verify (1) an **owner-signed, revocable delegation** binding the person to that specific agent, task scope, spend cap and expiry, such as holding a sub-agent to a narrower scope than its parent, or (2) a **signed execution receipt** (`qHash`) binding input, policy state and output, so the next agent or an outside reviewer can verify what ran offline without trusting the gateway's database.
+
+**See where your own agent stands.** Paste your agent's repository. In about ten minutes you get what it can do without permission, with the file and line for each gap, where it lands on the same 48 scenarios, and the one command that puts your limits in front of every tool call: [audit your agent](https://proofable.me/verify?gateId=gate_208670b624d543f6b0b5).
+
+## Our own tests
+
+These are runs we designed and ran ourselves, not third-party benchmarks. Each one links its raw results and a way to rerun it on your own account or machine.
+
+### Agents only do what you allowed
+
+**8 of 8 permission tests pass on the live service** (run of 2 November, [all 15 records](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/2026-11-02-suite)). Every action outside the agent's permission is stopped before it runs, and every action it is allowed to take runs. Each row opens its signed record.
+
+| Test | What happened |
+|---|---|
+| [Permission granted](https://proofable.me/proof/0x03ce9321248769b72e4c7d630d34bafbb00c60eb1c6799c6089bdb6791fa7813) | Ran and completed |
+| [Action outside the permission](https://proofable.me/proof/0xab4a4049a2902398a71e7a5e87993a8dd341da85134beb63d73fc607ff489954) | Stopped before it ran |
+| [Needs approval, approved](https://proofable.me/proof/0x5d476c527c886fda358d542fdc322525ce7c3fef5933a911c4903166ee60ae7e) | Held until approved, then ran |
+| [Needs approval, nobody answers](https://proofable.me/proof/0x1a66066e51ade3bdbb110ab6f9e88abd2967f6b52967f8345edc3d6ab7e48d8d) | Never ran; a late approval was refused |
+| [Permission revoked](https://proofable.me/proof/0xb84a54c04bb32a65c327f2045c6c53d262775050e1b52672b14f2b9eecdfee01) | Stopped; no job created |
+| [Permission expired](https://proofable.me/proof/0xb0dc6b40444f41635e4c0d06ad71ced9ce6ce00cbce79490ff77d7eddc6519d9) | Stopped; no job created |
+| [Revoked permission reused](https://proofable.me/proof/0x308df7fa625b481429069cc72a3288b1661d10146fc19b9d0533ea54243a1fdd) | Stopped every time |
+| [Revoked mid-job](https://proofable.me/proof/0x45606ad5d655a20abb838440cae024353b31a4a9a611680c152e2ff6e325b793) | The running job stopped with its reason 18 seconds after the permission was revoked, and the next one was refused |
+
+Reviewers in the AgenTrust integrations project [verified the records offline](https://github.com/agentrust-io/integrations/issues/333#issuecomment-6414048198) on their own machines. Every checksum matched and every signature verified. In the AAIF Observability & Traceability working group, a reviewer [checked](https://github.com/aaif/wg-observability-and-traceability/issues/66#issuecomment-6796089967) that the verifier binds each test to its own records and rejects all eight altered copies. Rerun all eight on your own account with [Run the chain](/run-the-chain#run-it-end-to-end).
+
+### A hijacked agent cannot send your data out
+
+<img className="evid-light evid-wide" src="/images/evidence/stop-exfil-light.svg" alt="Bar chart of attempts to send private data out of a hijacked agent. 6 of 6 got out on an all-purpose key and 0 of 6 on an owner-scoped permission." />
+<img className="evid-dark evid-wide" src="/images/evidence/stop-exfil-dark.svg" alt="Bar chart of attempts to send private data out of a hijacked agent. 6 of 6 got out on an all-purpose key and 0 of 6 on an owner-scoped permission." />
+<img className="evid-light evid-tall" src="/images/evidence/stop-exfil-stacked-light.svg" alt="Bar chart of attempts to send private data out of a hijacked agent. 6 of 6 got out on an all-purpose key and 0 of 6 on an owner-scoped permission." />
+<img className="evid-dark evid-tall" src="/images/evidence/stop-exfil-stacked-dark.svg" alt="Bar chart of attempts to send private data out of a hijacked agent. 6 of 6 got out on an all-purpose key and 0 of 6 on an owner-scoped permission." />
+
+**When an agent was taken over, 0 of 6 attempts to send private data out got past a scoped permission. On an all-purpose key, 6 of 6 got out.** Five of the six were refused by the permission before they ran and one was never attempted. The scoped agent finished every task and never used a tool outside it (0 of 42 runs); under the all-purpose key, 7 of 42 runs did, with a signed record for each run. [Run the test on your own agent](https://github.com/proofable/mcp/tree/main/examples/injection-test).
+
+### Records nobody can fake
+
+**150 of 150 forged records caught.** Each of 15 real records was changed ten ways, such as editing the content, swapping the owner or flipping one bit of the signature. Every changed copy failed offline signature verification and every real record passed. A check that only reads the format accepted all 150.
+
+Rerun it from the kit in [Run it yourself](#run-it-yourself): `node tamper-check.mjs` changes all 15 records ten ways and verifies every copy offline.
 
 ### Reuse instead of redo
 
@@ -65,25 +167,6 @@ Most agent memory layers (Mem0, Zep, vector stores) return text chunks with no a
 
 On a 3,621-record production vault, the questions both methods answered correctly took **43,169 tokens in 66 seconds** (6 model calls) by typed lookup against **479,623 tokens in 178 seconds** (10 model calls) searching record bodies by keyword: **11.1× fewer tokens, 2.7× faster**, and 11.8× to 12.7× lower model cost across Claude Sonnet 5.5, Gemini 3.1 Pro and GPT-6 Astra.
 
-### Memory that returns only the current fact
-
-<img className="evid-light evid-wide" src="/images/evidence/memory-precision-light.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
-<img className="evid-dark evid-wide" src="/images/evidence/memory-precision-dark.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
-<img className="evid-light evid-tall" src="/images/evidence/memory-precision-stacked-light.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
-<img className="evid-dark evid-tall" src="/images/evidence/memory-precision-stacked-dark.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
-
-**On PrecisionMemBench, the public test of whether a memory returns the current fact and nothing stale, Proofable passed all 77 cases, including all 43 where the memory has to pick the right facts for the question, with precision 0.98 and recall 1.00.** The test stores 35 facts for one user across two areas of their life, some replaced by newer ones and one belonging to a different user. It then asks 77 questions and checks exactly which facts come back. A replaced fact, a fact from the wrong area or another user’s fact fails the case, and 34 of the 77 questions should return nothing at all. Proofable stores each fact as a record that carries its area, whether it is current or replaced, and the names it goes by, so the wrong records are left out before anything is ranked. The [Agent Memory Benchmark](https://agentmemorybenchmark.ai) toolkit scores the test without a model. The per-case results and the code that ran are in [evidence/precisionmembench/2026-11-10-77](https://github.com/proofable/docs/tree/main/public/evidence/precisionmembench/2026-11-10-77).
-
-| Memory | Cases passed | Active cases | Precision | Source |
-| --- | --- | --- | --- | --- |
-| Proofable | **77 of 77** | **43 of 43** | 0.98 | [Run results](https://github.com/proofable/docs/tree/main/public/evidence/precisionmembench/2026-11-10-77) |
-| Tenure | 77 of 77 | 43 of 43 | 1.00 | [Benchmark author’s table](https://github.com/tenurehq/precisionMemBench) |
-| Hindsight (cloud) | 66 of 77 | 33 of 43 | 0.85 | [Vectorize published run](https://github.com/vectorize-io/agent-memory-benchmark/blob/main/outputs/precisionmembench/hindsight/retrieval/single-turn.json.gz) |
-| Supermemory | 15 of 77 | 2 of 43 | 0.18 | Author’s table above |
-| Mem0, Zep, Cognee | 9 of 77 | 0 of 43 | 0.06 | Author’s table above |
-
-Proofable and Hindsight ran on the same toolkit, so those two rows compare directly. The other rows are the benchmark author’s own results with its own code, and Tenure is the author’s own product. High recall with low precision means the right fact came back buried among unrelated ones.
-
 ### Research with a cost ceiling
 
 <img className="evid-light evid-wide" src="/images/evidence/save-records-light.svg" alt="Bar chart of the worst-case tokens on six public questions. Typed Proofable records used 16,301 and the open web 50,554, about 3 times lower." />
@@ -103,88 +186,6 @@ A person or business completes an interactive check once, and downstream apps an
 | Sumsub Basic (\$1.35 per check) | **\$135.00** | **\$1.60**, 84× lower | sumsub.com/pricing |
 | Veriff Essential (\$0.80 per check) | **\$80.00** | **\$1.05**, 76× lower | veriff.com/pricing |
 | Footprint KYC (\$0.50 per check) | **\$50.00** | **\$0.75**, 67× lower | onefootprint.com/pricing |
-
-## What it stops
-
-### Governance coverage
-
-<img className="evid-light evid-wide" src="/images/evidence/stop-tools-light.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
-<img className="evid-dark evid-wide" src="/images/evidence/stop-tools-dark.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
-<img className="evid-light evid-tall" src="/images/evidence/stop-tools-stacked-light.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
-<img className="evid-dark evid-tall" src="/images/evidence/stop-tools-stacked-dark.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
-
-[AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) is the open library of 48 agent-governance scenarios in eight areas: audit completeness, cross-tenant isolation, delegation provenance, fail-mode discipline, identity propagation, per-user policy, rate limits and scope inheritance. Each scenario is tagged with the NIST AI RMF controls it tests, and nothing passes on a technicality.
-
-| Setup | Scenarios handled |
-|---|---|
-| Proofable policy engine | **48 of 48** |
-| ACP, the maintainers' gateway ([published run](https://github.com/agentic-control-plane/agentgovbench/actions/runs/37759892335)) | 46 of 48 |
-| Anthropic Agent SDK with the ACP gateway | 46 of 48 |
-| OpenAI Agents SDK with the ACP gateway | 45 of 48 |
-| Claude Code or Codex CLI with ACP hooks | 43 of 48 |
-| CrewAI or LangGraph with the ACP gateway | 40 of 48 |
-| Cursor with ACP over MCP | 37 of 48 |
-| A gate that allows everything | 20 of 48 |
-| No governance | 5 of 48 |
-| Claude Code, Codex CLI, Cursor, the agent SDKs, CrewAI or LangGraph on their own | 13 of 48 |
-
-Our row is the policy module the live service runs, pinned by hash, on the maintainers' current library (`479c5f0`). The ACP and agent-tool rows are the maintainers' [published runs](https://github.com/agentic-control-plane/agentgovbench/tree/main/results), the agent-tool rows on the earlier library (`e0ce93a`).
-
-**Why coding agents on their own handle 13, the best gateway handles 46, and Proofable handles 48:**
-
-- **Coding agents on their own (13):** Claude Code, Codex CLI and Cursor only have local tool-permission prompts (`allow/deny` bash or file access). They have no owner-bound agent identity, no cross-agent delegation, no spend caps, no external policy engine and no signed audit trail.
-- **A stateless API/MCP gateway (46):** a proxy in front of tool calls enforces rate limits, role-based access, tool allowlists and server logs.
-- **The two checks a stateless gateway cannot pass (48):** a proxy only sees the request in flight. It cannot verify (1) an **owner-signed, revocable delegation** binding the person to that specific agent, task scope, spend cap and expiry, such as holding a sub-agent to a narrower scope than its parent, or (2) a **signed execution receipt** (`qHash`) binding input, policy state and output, so the next agent or an outside reviewer can verify what ran offline without trusting the gateway's database.
-
-**See where your own agent stands.** Paste your agent's repository. In about ten minutes you get what it can do without permission, with the file and line for each gap, where it lands on the same 48 scenarios, and the one command that puts your limits in front of every tool call: [audit your agent](https://proofable.me/verify?gateId=gate_208670b624d543f6b0b5).
-
-### Agents only do what you allowed
-
-**8 of 8 permission tests pass on the live service** (run of 2 November, [all 15 records](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/2026-11-02-suite)). Every action outside the agent's permission is stopped before it runs, and every action it is allowed to take runs. Each row opens its signed record.
-
-| Test | What happened |
-|---|---|
-| [Permission granted](https://proofable.me/proof/0x03ce9321248769b72e4c7d630d34bafbb00c60eb1c6799c6089bdb6791fa7813) | Ran and completed |
-| [Action outside the permission](https://proofable.me/proof/0xab4a4049a2902398a71e7a5e87993a8dd341da85134beb63d73fc607ff489954) | Stopped before it ran |
-| [Needs approval, approved](https://proofable.me/proof/0x5d476c527c886fda358d542fdc322525ce7c3fef5933a911c4903166ee60ae7e) | Held until approved, then ran |
-| [Needs approval, nobody answers](https://proofable.me/proof/0x1a66066e51ade3bdbb110ab6f9e88abd2967f6b52967f8345edc3d6ab7e48d8d) | Never ran; a late approval was refused |
-| [Permission revoked](https://proofable.me/proof/0xb84a54c04bb32a65c327f2045c6c53d262775050e1b52672b14f2b9eecdfee01) | Stopped; no job created |
-| [Permission expired](https://proofable.me/proof/0xb0dc6b40444f41635e4c0d06ad71ced9ce6ce00cbce79490ff77d7eddc6519d9) | Stopped; no job created |
-| [Revoked permission reused](https://proofable.me/proof/0x308df7fa625b481429069cc72a3288b1661d10146fc19b9d0533ea54243a1fdd) | Stopped every time |
-| [Revoked mid-job](https://proofable.me/proof/0x45606ad5d655a20abb838440cae024353b31a4a9a611680c152e2ff6e325b793) | The running job stopped with its reason 18 seconds after the permission was revoked, and the next one was refused |
-
-Reviewers in the AgenTrust integrations project [verified the records offline](https://github.com/agentrust-io/integrations/issues/333#issuecomment-6414048198) on their own machines. Every checksum matched and every signature verified. Its maintainers then [chose them](https://github.com/agentrust-io/integrations/issues/333#issuecomment-6436264551) as the dispatch evidence for their authority comparison. In the AAIF Observability & Traceability working group, a reviewer [checked](https://github.com/aaif/wg-observability-and-traceability/issues/66#issuecomment-6796089967) that the verifier binds each test to its own records and rejects all eight altered copies. Rerun all eight on your own account with [Run the chain](/run-the-chain#run-it-end-to-end).
-
-### Prompt injection on AgentDojo
-
-<img className="evid-light evid-wide" src="/images/evidence/stop-agentdojo-light.svg" alt="Bar chart of AgentDojo prompt injections stopped across 949 attacked task pairs. Proofable stopped 93.8 percent with 87.0 percent of tasks still finished, against 83.6 percent without it and 92.0 percent for an injection filter that finished 21 percent of tasks." />
-<img className="evid-dark evid-wide" src="/images/evidence/stop-agentdojo-dark.svg" alt="Bar chart of AgentDojo prompt injections stopped across 949 attacked task pairs. Proofable stopped 93.8 percent with 87.0 percent of tasks still finished, against 83.6 percent without it and 92.0 percent for an injection filter that finished 21 percent of tasks." />
-<img className="evid-light evid-tall" src="/images/evidence/stop-agentdojo-stacked-light.svg" alt="Bar chart of AgentDojo prompt injections stopped across 949 attacked task pairs. Proofable stopped 93.8 percent with 87.0 percent of tasks still finished, against 83.6 percent without it and 92.0 percent for an injection filter that finished 21 percent of tasks." />
-<img className="evid-dark evid-tall" src="/images/evidence/stop-agentdojo-stacked-dark.svg" alt="Bar chart of AgentDojo prompt injections stopped across 949 attacked task pairs. Proofable stopped 93.8 percent with 87.0 percent of tasks still finished, against 83.6 percent without it and 92.0 percent for an injection filter that finished 21 percent of tasks." />
-
-**On [AgentDojo](https://agentdojo.spylab.ai/), the open prompt-injection benchmark from ETH Zurich, putting an owner-signed, per-task permission in front of every tool call cut the share of attacks that landed from 16.4% to 6.2% across all four suites, while the agent still completed 94.9% of its tasks (95.9% without the permission).** Same model, same 949 attacked task pairs, same attack template, scored by AgentDojo's own checkers; the only change is Proofable's authority engine deciding each call against the permission the owner signed for that task.
-
-| | Task done, no attack | Task done under attack | Attacks that landed |
-|---|---|---|---|
-| Agent as shipped | 95.9% | 88.1% | 16.4% |
-| Agent with a Proofable permission | 94.9% | 87.0% | 6.2% |
-
-For scale, these are AgentDojo's published results on other models. With no defense, attacks landed 27.2% of the time on gpt-4o-mini and 47.7% on gpt-4o; the strongest published defense (tool filtering) brought gpt-4o to 6.8% while task completion under attack fell to 56.3%. Our run used gemma-4-31b-it, a model attacks land on, so the rows are the same benchmark and metrics on a different model, not a ranking. The attacks that still land use the very tool the task needs, such as a send or a transfer; a permission cannot tell that call from the legitimate one, which is what spend caps and approvals are for. Per suite and per decision: [evidence folder](https://github.com/proofable/docs/tree/main/public/evidence/agentdojo/2026-11-09) (every one of the 6,934 engine decisions and each task's signed permission).
-
-### A hijacked agent cannot send your data out
-
-<img className="evid-light evid-wide" src="/images/evidence/stop-exfil-light.svg" alt="Bar chart of attempts to send private data out of a hijacked agent. 6 of 6 got out on an all-purpose key and 0 of 6 on an owner-scoped permission." />
-<img className="evid-dark evid-wide" src="/images/evidence/stop-exfil-dark.svg" alt="Bar chart of attempts to send private data out of a hijacked agent. 6 of 6 got out on an all-purpose key and 0 of 6 on an owner-scoped permission." />
-<img className="evid-light evid-tall" src="/images/evidence/stop-exfil-stacked-light.svg" alt="Bar chart of attempts to send private data out of a hijacked agent. 6 of 6 got out on an all-purpose key and 0 of 6 on an owner-scoped permission." />
-<img className="evid-dark evid-tall" src="/images/evidence/stop-exfil-stacked-dark.svg" alt="Bar chart of attempts to send private data out of a hijacked agent. 6 of 6 got out on an all-purpose key and 0 of 6 on an owner-scoped permission." />
-
-**When an agent was taken over, 0 of 6 attempts to send private data out got past a scoped permission. On an all-purpose key, 6 of 6 got out.** Five of the six were refused by the permission before they ran and one was never attempted. The scoped agent finished every task and never used a tool outside it (0 of 42 runs); under the all-purpose key, 7 of 42 runs did, with a signed record for each run. [Run the test on your own agent](https://github.com/proofable/mcp/tree/main/examples/injection-test).
-
-### Records nobody can fake
-
-**150 of 150 forged records caught.** Each of 15 real records was changed ten ways, such as editing the content, swapping the owner or flipping one bit of the signature. Every changed copy failed offline signature verification and every real record passed. A check that only reads the format accepted all 150.
-
-Rerun it from the kit in [Run it yourself](#run-it-yourself): `node tamper-check.mjs` changes all 15 records ten ways and verifies every copy offline.
 
 ## Run it yourself
 
