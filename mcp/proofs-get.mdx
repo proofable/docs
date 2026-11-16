@@ -45,16 +45,16 @@ Use when you need a proof by ID or need to find proof records, tags, or content.
 | `agentWallet` | Delegation (**`x-agent-wallet`**) |
 | `limit`, `offset` | Page size (default 15, max 25) and offset |
 | `include` | Defaults to `metadata`; `content` requires a known proof ID or narrowing filter and is capped for list reads |
-| `qHash` | When set, returns that one record instead of a vault page |
+| `qHash` | When set, returns that one proof instead of a page of proofs |
 | `includeComments` | Set `true` with `qHash` to include comments visible to the signed-in account. Private proof comments are available to the owner |
 
 When `identifier` is a DID, Proofable resolves the DID to its native account. Non-EVM signing and account context still use CAIP-2 `chain`; see [CAIP-380 Portable Proof](../learn/standards/caip-380).
 
 ## Response
 
-With no ID or filter, the tool returns an index hint instead of a vault page. `scope: "all"` returns paginated metadata. `include: "metadata"` returns proof ID, status, check IDs and outcomes, title, tags, timestamps, and content length when known; bodies and the profile summary are left out. With `includeComments: true`, comments appear under `data.feedback.comments`.
+With no ID or filter, the tool returns an index hint instead of a page of proofs. `scope: "all"` returns paginated metadata. `include: "metadata"` returns proof ID, status, check IDs and outcomes, title, tags, timestamps, and content length when known; bodies and the profile summary are left out. With `includeComments: true`, comments appear under `data.feedback.comments`.
 
-Use `include: "content"` for a specific proof or tightly filtered page when the body is required. A whole-vault read does not unlock bodies. Filtered content lists are capped at five records by default, so inspect pagination before inferring absence. A failed upstream read returns an error. A known `qHash` read returns its stored `portableProof` envelope to the owner, and to anyone for a public proof whose owner enables disclosure.
+Use `include: "content"` for a specific proof or tightly filtered page when the body is required. A read of every proof does not unlock bodies. Filtered content lists are capped at five records by default, so inspect pagination before inferring absence. A failed upstream read returns an error. A known `qHash` read returns its stored `portableProof` envelope to the owner, and to anyone for a public proof whose owner enables disclosure.
 
 ## Assistant output
 

@@ -34,19 +34,17 @@ Hosted sign-in and profile, Hosted Verify and reusable proofs, agent identity an
 
 ## What a tool call costs
 
-Signing in, checking a saved proof, and reading your own profile, proofs, agents and jobs are free. Creating a proof is charged as a check below. The calls that reach another service are metered per call:
+Signing in, checking a saved proof, and reading your own profile, proofs, agents and jobs are free. Creating a proof is charged as a check below. When chat or a job reaches another service, each call is metered:
 
 | Call | Credits |
 |---|---|
-| Web search (`proofable_web_search`) | 1 |
-| Read a page (`proofable_url_fetch`) | 1 |
-| Run a connected-app action (`proofable_composio_execute`) | 2 |
-| Run a tool on a saved remote MCP server (`proofable_mcp_tool_execute`) | 1 |
-| Call a provider with your saved key (`proofable_capability_call`) | 0 |
+| Web search | 1 |
+| Read a page | 1 |
+| Run a connected-app action | 2 |
+| Run a tool on a saved remote MCP server | 1 |
+| Call a provider with your saved key | 0 |
 
-These calls cost the same in chat, in a job, over the API and over MCP, on a hosted model or your own model key.
-
-A job started over MCP is charged as a job above, and operating a page with `proofable_browser` is charged as the hosted computer above. [MCP tools](/mcp/tools) lists every tool a connection carries.
+Same price on a hosted model or your own key. A job started over MCP is charged as a job above; a job browser time is charged as the hosted computer. [MCP tools](/mcp/tools) lists the 18 tools a connection serves.
 
 ## What checks cost
 
