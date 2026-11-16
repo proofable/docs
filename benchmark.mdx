@@ -9,15 +9,12 @@ icon: chart-simple
 
 Proofable checks each agent action against a permission its owner signed, before it runs, and signs a receipt after, linked so anyone can check both offline. Below are the results on public benchmarks that others built and score, then our own tests. Every result comes with a way to rerun it.
 
-<CardGroup cols={3}>
+<CardGroup cols={2}>
   <Card title="Attacks that land cut by more than half" icon="shield-halved" href="https://proofable.me/benchmarks/security">
     AgentDojo, ETH Zurich's prompt-injection benchmark: 16.4% to 6.2% on the same model, with 87% of tasks still done under attack.
   </Card>
-  <Card title="Perfect score on PrecisionMemBench" icon="brain" href="https://proofable.me/benchmarks/memory">
-    77 of 77. Only the current fact comes back. The benchmark author's own product also scored 77.
-  </Card>
-  <Card title="Perfect score on AgentGovBench" icon="shield-check" href="https://proofable.me/benchmarks/governance">
-    48 of 48 open governance scenarios. The best gateway handled 46.
+  <Card title="First place, NVIDIA Live Agent Gauntlet" icon="trophy">
+    98.00 and first place in NVIDIA's Live Agent Gauntlet.
   </Card>
 </CardGroup>
 
@@ -65,38 +62,6 @@ For scale, these are AgentDojo's published results on other models. With no defe
 | Mem0, Zep, Cognee | 9 of 77 | 0 of 43 | 0.06 | Author’s table above |
 
 Proofable and Hindsight ran on the same toolkit, so those two rows compare directly. The other rows are the benchmark author’s own results with its own code, and Tenure is the author’s own product. High recall with low precision means the right fact came back buried among unrelated ones.
-
-### Governance coverage
-
-<img className="evid-light evid-wide" src="/images/evidence/stop-tools-light.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
-<img className="evid-dark evid-wide" src="/images/evidence/stop-tools-dark.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
-<img className="evid-light evid-tall" src="/images/evidence/stop-tools-stacked-light.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
-<img className="evid-dark evid-tall" src="/images/evidence/stop-tools-stacked-dark.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
-
-[AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) is the open library of 48 agent-governance scenarios in eight areas: audit completeness, cross-tenant isolation, delegation provenance, fail-mode discipline, identity propagation, per-user policy, rate limits and scope inheritance. Each scenario is tagged with the NIST AI RMF controls it tests, and nothing passes on a technicality.
-
-| Setup | Scenarios handled |
-|---|---|
-| Proofable policy engine | **48 of 48** |
-| ACP, the maintainers' gateway ([published run](https://github.com/agentic-control-plane/agentgovbench/actions/runs/37759892335)) | 46 of 48 |
-| Anthropic Agent SDK with the ACP gateway | 46 of 48 |
-| OpenAI Agents SDK with the ACP gateway | 45 of 48 |
-| Claude Code or Codex CLI with ACP hooks | 43 of 48 |
-| CrewAI or LangGraph with the ACP gateway | 40 of 48 |
-| Cursor with ACP over MCP | 37 of 48 |
-| A gate that allows everything | 20 of 48 |
-| No governance | 5 of 48 |
-| Claude Code, Codex CLI, Cursor, the agent SDKs, CrewAI or LangGraph on their own | 13 of 48 |
-
-Our row is the policy module the live service runs, pinned by hash, on the maintainers' current library (`479c5f0`). The ACP and agent-tool rows are the maintainers' [published runs](https://github.com/agentic-control-plane/agentgovbench/tree/main/results), the agent-tool rows on the earlier library (`e0ce93a`).
-
-**Why coding agents on their own handle 13, the best gateway handles 46, and Proofable handles 48:**
-
-- **Coding agents on their own (13):** Claude Code, Codex CLI and Cursor only have local tool-permission prompts (`allow/deny` bash or file access). They have no owner-bound agent identity, no cross-agent delegation, no spend caps, no external policy engine and no signed audit trail.
-- **A stateless API/MCP gateway (46):** a proxy in front of tool calls enforces rate limits, role-based access, tool allowlists and server logs.
-- **The two checks a stateless gateway cannot pass (48):** a proxy only sees the request in flight. It cannot verify (1) an **owner-signed, revocable delegation** binding the person to that specific agent, task scope, spend cap and expiry, such as holding a sub-agent to a narrower scope than its parent, or (2) a **signed execution receipt** (`qHash`) binding input, policy state and output, so the next agent or an outside reviewer can verify what ran offline without trusting the gateway's database.
-
-**See where your own agent stands.** Paste your agent's repository. In about ten minutes you get what it can do without permission, with the file and line for each gap, where it lands on the same 48 scenarios, and the one command that puts your limits in front of every tool call: [audit your agent](https://proofable.me/verify?gateId=gate_208670b624d543f6b0b5).
 
 ## Our own tests
 
@@ -243,7 +208,6 @@ Pin both refs to the same commit so a rerun measures the same kit. The action wr
   </Accordion>
 
   <Accordion title="How each result was measured">
-    - **Governance:** AgentGovBench at the maintainers' current library (commit `479c5f0`), run through the library's own runner against the policy code the live service runs, matched to it by hash, beside a gate that allows everything and a no-governance arm. The agent-tool rows are the maintainers' published runs on the earlier library (commit `e0ce93a`).
     - **Permissions:** each test on the live service with a dedicated agent under its own fixed permission, and the full suite again on a production release. A permission revoked while its job is running stops that job with a typed reason, and the next dispatch under it is refused.
     - **Takeover:** 84 live runs across five published attack templates and two models, with a signed record for each run.
     - **Reuse:** the median of ten runs on one finished job on the live service.
@@ -255,7 +219,7 @@ Pin both refs to the same commit so a rerun measures the same kit. The action wr
 
     Every script behind these runs is public in [`public/evidence/benchmarks`](https://github.com/proofable/docs/tree/main/public/evidence/benchmarks), pinned by commit and checksum.
 
-    Third-party benchmarks are their authors' work: [AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) (Agentic Control Plane), [AgentDojo](https://github.com/ethz-spylab/agentdojo) (ETH Zurich SPY Lab, MIT licence), [PrecisionMemBench](https://github.com/tenurehq/precisionMemBench) (TenureHQ) and the [Agent Memory Benchmark](https://github.com/vectorize-io/agent-memory-benchmark) harness (Vectorize). None of them endorses these results; where a row is ours it says so.
+    Third-party benchmarks are their authors' work: [AgentDojo](https://github.com/ethz-spylab/agentdojo) (ETH Zurich SPY Lab, MIT licence), [PrecisionMemBench](https://github.com/tenurehq/precisionMemBench) (TenureHQ) and the [Agent Memory Benchmark](https://github.com/vectorize-io/agent-memory-benchmark) harness (Vectorize). None of them endorses these results; where a row is ours it says so.
   </Accordion>
 
   <Accordion title="Standards each result maps to">
@@ -269,8 +233,7 @@ Pin both refs to the same commit so a rerun measures the same kit. The action wr
     | 15 of 15 signed decision records verify offline, with no account | EU AI Act Article 12, record-keeping; NIST NCCoE Software and AI Agent Identity and Authorization project, auditing (concept paper) | Verify every record offline |
     | 150 of 150 changed copies rejected across ten kinds of forgery; 15 of 15 real records accepted; a check that only reads the format accepts all 150 | OWASP ASI07 Insecure Inter-Agent Communication | Records nobody can fake |
     | A finished result verified offline in 3.7 ms with zero AI tokens and no account; producing it took 2.79 s and 2,426 tokens | CAIP-380 Portable Proof | Reuse instead of redo |
-    | AgentGovBench, current library: 48 of 48, against 46 for the maintainers' gateway, 20 for a gate that allows everything and 5 with no governance | NIST AI RMF GOVERN-1.1, 1.2, 1.4; MAP-2.1, 4.1; MEASURE-2.3, 2.6, 2.7; MANAGE-2.1, 2.2, 4.1 (the controls tagged on the scenarios) | Governance coverage |
-    | AgentGovBench 48 of 48, the eight live permission tests and the decision records that verify offline | AARM (CSA) selected runtime-authorization controls. Evaluated against those controls with coverage and limitations documented; not a conformance assessment, a certification or a compliance opinion | Governance coverage |
+    | The eight live permission tests and the decision records that verify offline | AARM (CSA) selected runtime-authorization controls. Evaluated against those controls with coverage and limitations documented; not a conformance assessment, a certification or a compliance opinion | Agents only do what you allowed |
 
     The frameworks: [OWASP Top 10 for Agentic Applications 2026](https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/), the [EU AI Act](https://eur-lex.europa.eu/eli/reg/2024/1689/oj), the [NIST AI RMF](https://www.nist.gov/itl/ai-risk-management-framework), the [NIST NCCoE agent identity and authorization project](https://www.nccoe.nist.gov/projects/software-and-ai-agent-identity-and-authorization) and [CAIP-380](https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-380.md). [AARM](https://aarm.dev/) frames the runtime-authorization controls, and the evidence also sits in the [AAIF Identity & Trust](https://github.com/aaif/wg-identity-and-trust/issues/13) working-group comparison.
   </Accordion>
