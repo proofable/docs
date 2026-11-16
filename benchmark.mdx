@@ -140,7 +140,7 @@ Rerun it from the kit in [Run it yourself](#run-it-yourself): `node tamper-check
 <img className="evid-light evid-tall" src="/images/evidence/save-reuse-stacked-light.svg" alt="Bar chart of the time to trust a finished result. Checking the Proofable receipt took 3.7 milliseconds and redoing the job took 2.79 seconds, about 750 times faster." />
 <img className="evid-dark evid-tall" src="/images/evidence/save-reuse-stacked-dark.svg" alt="Bar chart of the time to trust a finished result. Checking the Proofable receipt took 3.7 milliseconds and redoing the job took 2.79 seconds, about 750 times faster." />
 
-Redoing a finished agent job took 2.79 s and 2,426 AI tokens. Checking its signed receipt took 3.7 ms and no tokens: 750× faster, which is 1 hour instead of 32 days at a million checks. [Time it yourself](#run-it-yourself).
+Redoing a finished agent job took 2.79 s and 2,426 AI tokens. Checking its signed receipt took 3.7 ms and no tokens, about 750× faster. [Time it yourself](#run-it-yourself).
 
 ### Handoffs between agents
 
@@ -177,14 +177,14 @@ Live pages change between requests: two fetches of the same page 221 seconds apa
 
 ### Identity checks paid for once
 
-A person or business completes an interactive check once, and downstream apps and agents verify the portable proof instead of paying the vendor to run the flow again. Priced from published vendor list prices and Proofable's \$0.0025 per check:
+A person or business completes an interactive check once, and downstream apps and agents verify the portable proof instead of paying the vendor to run the flow again. Priced from published vendor list prices. A saved proof is checked for 0 credits on every plan, so reusing it costs nothing:
 
 | Vendor check | 100 apps, each re-running the check | 100 apps reusing one check | Published source |
 |---|---|---|---|
-| Stripe Identity (\$1.50 pay-as-you-go) | **\$150.00** | **\$1.75**, 85× lower | stripe.com/pricing |
-| Sumsub Basic (\$1.35 per check) | **\$135.00** | **\$1.60**, 84× lower | sumsub.com/pricing |
-| Veriff Essential (\$0.80 per check) | **\$80.00** | **\$1.05**, 76× lower | veriff.com/pricing |
-| Footprint KYC (\$0.50 per check) | **\$50.00** | **\$0.75**, 67× lower | onefootprint.com/pricing |
+| Stripe Identity (\$1.50 pay-as-you-go) | **\$150.00** | **\$1.50**, 100× lower | stripe.com/pricing |
+| Sumsub Basic (\$1.35 per check) | **\$135.00** | **\$1.35**, 100× lower | sumsub.com/pricing |
+| Veriff Essential (\$0.80 per check) | **\$80.00** | **\$0.80**, 100× lower | veriff.com/pricing |
+| Footprint KYC (\$0.50 per check) | **\$50.00** | **\$0.50**, 100× lower | onefootprint.com/pricing |
 
 ## Run it yourself
 
