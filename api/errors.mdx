@@ -53,7 +53,7 @@ The same schema is published on every public operation in [Proofable OpenAPI](ht
 | 202 | Accepted (async processing) |
 | 400 | Bad request |
 | 401 | Unauthorized |
-| 402 | Payment required. Signed in: `INSUFFICIENT_CREDITS` with your balance. Not signed in: an x402 quote to pay the call |
+| 402 | Payment required. When signed in, returns `INSUFFICIENT_CREDITS` with your balance. When not signed in, returns an x402 quote to pay the call |
 | 403 | Forbidden |
 | 404 | Not found |
 | 429 | Rate limited |
