@@ -27,6 +27,7 @@ export const TELLS = [
     patterns: [
       /\b(?:scored|measured|captured|graded|judged|benchmarked) (?:by|on|at) (?:[A-Z]|\d)/,
       new RegExp(`\\b(?:on|as of|since|dated) \\d{1,2} ${MONTH} \\d{4}\\b`, 'i'),
+      new RegExp(`\\bas of (?:${MONTH}|\\d{4}|today|this writing)\\b`, 'i'),
       new RegExp(`\\b${MONTH} \\d{1,2}, \\d{4}\\b`),
       /\bwho ran (?:it|them|each)\b/i,
       /\bevery (?:row|number|result|figure) (?:names|says|cites|links)\b/i,
@@ -36,8 +37,9 @@ export const TELLS = [
     id: 'self-narration',
     fix: 'Say the thing instead of announcing it.',
     patterns: [
-      /^(?:Below (?:are|is)|Here(?:'s| is| are) (?:how|what|the|a)\b|In this (?:page|section)|This (?:page|section) (?:shows|lists|covers|explains|describes)|As shown)/i,
+      /^(?:Below (?:are|is)|The following\b|Here(?:'s| is| are) (?:how|what|the|a)\b|In this (?:page|section)|This (?:page|section) (?:shows|lists|covers|explains|describes)|As shown)/i,
       /\b(?:see|shown|listed|described) below\b/i,
+      /\bread on to\b/i,
     ],
   },
   {
@@ -47,6 +49,7 @@ export const TELLS = [
       /\bnot (?:just|only|merely|simply)\b/i,
       /\bisn['’]t (?:just|only)\b/i,
       /\bnot (?:a|an|the) [a-z][^.,;!?]{0,40}[,;] (?:but|it['’]s)\b/i,
+      /, not (?:from|by|through|because|just|only|merely)\b/i,
     ],
   },
   {
