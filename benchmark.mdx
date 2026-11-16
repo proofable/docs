@@ -1,7 +1,7 @@
 ---
-title: "Benchmark"
+title: "AI agent benchmarks"
 sidebarTitle: "Benchmark"
-description: "Agents that remember only what is current, follow the rules you set and keep your data in, scored against the tools teams use today. Rerun any result yourself."
+description: "#1 in NVIDIA's Live Agent Gauntlet. Prompt-injection attacks cut from 16.4% to 6.2% on AgentDojo. 77/77 on memory, 48/48 on agent rules."
 "og:image": "https://proofable.me/og/benchmarks"
 "twitter:image": "https://proofable.me/og/benchmarks"
 icon: chart-simple
@@ -95,15 +95,15 @@ Our row is the policy module the live service runs, pinned by hash, on the maint
 - **A stateless API/MCP gateway (46):** a proxy in front of tool calls enforces rate limits, role-based access, tool allowlists and server logs.
 - **The two checks a stateless gateway cannot pass (48):** a proxy only sees the request in flight. It cannot verify (1) an **owner-signed, revocable delegation** binding the person to that specific agent, task scope, spend cap and expiry, such as holding a sub-agent to a narrower scope than its parent, or (2) a **signed execution receipt** (`qHash`) binding input, policy state and output, so the next agent or an outside reviewer can verify what ran offline without trusting the gateway's database.
 
-**See where your own agent stands.** Paste your agent's repository. In about ten minutes you get what it can do without permission, with the file and line for each gap, where it lands on the same 48 scenarios, and the one command that puts your limits in front of every tool call: [audit your agent](https://proofable.me/verify?gateId=gate_208670b624d543f6b0b5).
+**See where your agent needs Proofable.** Paste its repo. Get every action it can take without your permission, with file and line, and the one command that fixes it. [Audit your agent free](https://proofable.me/verify?gateId=gate_e4071eed50bd4b78abea).
 
 ## Our own tests
 
-These are runs we designed and ran ourselves, not third-party benchmarks. Each one links its raw results and a way to rerun it on your own account or machine.
+Each one links its raw results. Rerun it on your own account or machine.
 
 ### Agents only do what you allowed
 
-**8 of 8 permission tests pass on the live service** (run of 2 November, [all 15 records](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/2026-11-02-suite)). Every action outside the agent's permission is stopped before it runs, and every action it is allowed to take runs. Each row opens its signed record.
+**8 of 8 permission tests pass on the live service.** [All 15 records](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch/2026-11-02-suite). Every action outside the agent's permission is stopped before it runs, and every action it is allowed to take runs. Each row opens its signed record.
 
 | Test | What happened |
 |---|---|
