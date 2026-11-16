@@ -1,6 +1,6 @@
 # Proofable Docs
 
-Proofable is the portable proof layer for people, businesses and AI agents. Give agents identity, scoped access and proof of what they did, and add verification and reusable proof to your app.
+Proofable lets you control what your AI agents can do and prove what they did. Every tool call is checked against limits you set and leaves a signed receipt. You can also add sign-in and reusable checks like proof of human to your app.
 
 Published site: [docs.proofable.me](https://docs.proofable.me)
 
