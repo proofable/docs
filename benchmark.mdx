@@ -1,24 +1,24 @@
 ---
-title: "AI agent benchmarks"
-sidebarTitle: "Benchmark"
-description: "#1 in NVIDIA's Live Agent Gauntlet. Prompt-injection attacks cut from 16.4% to 6.2% on AgentDojo. 77/77 on memory, 48/48 on agent rules."
+title: "Proofable results"
+sidebarTitle: "Results"
+description: "Proofable checks every action an AI agent tries before it runs, and proves what happened. Cut successful prompt injections by more than half on AgentDojo. Perfect score on PrecisionMemBench."
 "og:image": "https://proofable.me/og/benchmarks"
 "twitter:image": "https://proofable.me/og/benchmarks"
 icon: chart-simple
 ---
 
-Proofable checks every agent action against a permission its owner signed, before it runs, and signs a receipt anyone can check offline. Rerun any result yourself.
+Proofable checks every action an AI agent tries before it runs, and proves what happened. On [AgentDojo](https://agentdojo.spylab.ai/), ETH Zurich's prompt-injection benchmark, successful attacks fell from 16.4% to 6.2%. AgentDojo's own built-in defenses on the same model let about 11% through ([defense runs](https://github.com/proofable/docs/tree/main/public/evidence/agentdojo/2026-11-11-defenses)). Perfect score on PrecisionMemBench. Trust that travels: every check leaves a signed receipt any app can verify. Rerun it yourself.
 
 <CardGroup cols={2}>
-  <Card title="Attacks that land cut by more than half" icon="shield-halved" href="https://proofable.me/benchmarks/security">
+  <Card title="Successful prompt injections cut by more than half" icon="shield-halved" href="https://proofable.me/benchmarks/security">
     AgentDojo, ETH Zurich's prompt-injection benchmark: 16.4% to 6.2% on the same model, with 87% of tasks still done under attack.
   </Card>
-  <Card title="#1 in NVIDIA's Live Agent Gauntlet" icon="trophy" href="https://github.com/proofable/agent-gauntlet">
-    Top score of 20 teams: 98.00.
+  <Card title="Perfect score on PrecisionMemBench" icon="brain" href="#memory-that-returns-only-the-current-fact">
+    All 77 cases, including all 43 where the memory has to return only the current fact.
   </Card>
 </CardGroup>
 
-Same checks on every benchmark. Memory (PrecisionMemBench) and permission rules (AgentGovBench) are further down.
+Also: top score of 20 teams in NVIDIA's Live Agent Gauntlet ([run](https://github.com/proofable/agent-gauntlet)). Method, caveats and every run are below.
 
 ## Where it covers you
 
@@ -65,6 +65,12 @@ For scale, these are AgentDojo's published results on other models. With no defe
 
 Proofable and Hindsight ran on the same toolkit, so those two rows compare directly. The other rows are the benchmark author’s own results with its own code, and Tenure is the author’s own product. High recall with low precision means the right fact came back buried among unrelated ones.
 
+**See where your agent needs Proofable.** Paste its repo. Get every action it can take without your permission, with file and line, and the one command that fixes it. [Audit your agent free](https://proofable.me/verify?gateId=gate_e4071eed50bd4b78abea).
+
+## Our own tests
+
+Each one links its raw results. Rerun it on your own account or machine.
+
 ### Governance coverage
 
 <img className="evid-light evid-wide" src="/images/evidence/stop-tools-light.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
@@ -94,12 +100,6 @@ Our row is the policy module the live service runs, pinned by hash, on the maint
 - **Coding agents on their own (13):** Claude Code, Codex CLI and Cursor only have local tool-permission prompts (`allow/deny` bash or file access). They have no owner-bound agent identity, no cross-agent delegation, no spend caps, no external policy engine and no signed audit trail.
 - **A stateless API/MCP gateway (46):** a proxy in front of tool calls enforces rate limits, role-based access, tool allowlists and server logs.
 - **The two checks a stateless gateway cannot pass (48):** a proxy only sees the request in flight. It cannot verify (1) an **owner-signed, revocable delegation** binding the person to that specific agent, task scope, spend cap and expiry, such as holding a sub-agent to a narrower scope than its parent, or (2) a **signed execution receipt** (`qHash`) binding input, policy state and output, so the next agent or an outside reviewer can verify what ran offline without trusting the gateway's database.
-
-**See where your agent needs Proofable.** Paste its repo. Get every action it can take without your permission, with file and line, and the one command that fixes it. [Audit your agent free](https://proofable.me/verify?gateId=gate_e4071eed50bd4b78abea).
-
-## Our own tests
-
-Each one links its raw results. Rerun it on your own account or machine.
 
 ### Agents only do what you allowed
 
