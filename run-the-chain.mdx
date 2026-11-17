@@ -29,6 +29,8 @@ with hashes, so the pointer survives export.
   agent that produced it.
 - `argsDigest` is a `sha256` over the request as sent, so a reader holding the decision can recompute
   what was authorized without trusting a log.
+- The job record carries the `terminalQHash` of the signed receipt for that execution, and the same
+  `delegationQHash` and `agentIdentityQHash` the decision named.
 - `statusReadAtMs` and `maxStatusAgeMs` inside the signed decision say when the grant was read and how
   old that read may get while the job runs (60 seconds), so the age is checked from the record.
 - The signed receipt carries `authorityDecisionQHash`, the decision the job ran under. A reader goes from
