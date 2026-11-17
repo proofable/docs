@@ -6,7 +6,7 @@ link to every record, is at
 
 | Folder | What it is |
 | --- | --- |
-| [`2026-11-02-suite/`](./2026-11-02-suite/) | **Latest published run, 2 November.** Eight cases on revision `327e50de3`, 8 of 8, 15 signed records. A permission revoked while its job was running stopped that job with a typed reason 18 seconds later, and the next dispatch was refused |
+| [`2026-11-02-suite/`](./2026-11-02-suite/) | **Latest published run, 2 November.** Eight cases on revision `327e50de3`, 8 of 8, 15 signed records. A permission revoked while its job was running stopped that job with a typed reason, and the next dispatch was refused. The run did not measure how long the stop took |
 | [`2026-11-01-suite-c1/`](./2026-11-01-suite-c1/) | Previous run, 1 November, corrected 2 November. Its post-revocation record calls the outcome a refusal at the executor's tool call; the job record shows the running attempt stalled and was refused when it was retried, so that case is not supported by its own records. The 2 November run records the stop itself |
 | [`2026-11-01-suite/`](./2026-11-01-suite/) | The same run as first published, retained and hash-pinned. Corrected by `2026-11-01-suite-c1/` — wording and grading scope only |
 | [`2026-10-24-served/`](./2026-10-24-served/) | Previous run, 24 October. Eight cases on revision `61724c9f4`, 17 signed records, checksums, and a result for each case |
