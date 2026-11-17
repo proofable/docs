@@ -32,7 +32,7 @@ Also: top score of 20 teams in NVIDIA's Live Agent Gauntlet ([run](https://githu
 
 ### Prompt injection on AgentDojo
 
-![Fig. 01, prompt-injection attacks that landed on AgentDojo with Gemma 4 31B across 949 attacked tasks: Proofable 6.2%, repeat the prompt 11.3%, spotlighting 11.9%, no defense 16.4%.](/images/benchmarks/prompt-injection-attacks-that-landed.png)
+![Prompt-injection attacks that landed on AgentDojo with Gemma 4 31B across 949 attacked tasks: Proofable 6.2%, repeat the prompt 11.3%, spotlighting 11.9%, no defense 16.4%.](/images/benchmarks/prompt-injection-attacks-that-landed.png)
 
 **On [AgentDojo](https://agentdojo.spylab.ai/), the open prompt-injection benchmark from ETH Zurich, putting an owner-signed, per-task permission in front of every tool call cut the share of attacks that landed from 16.4% to 6.2% across all four suites, while the agent still completed 94.9% of its tasks (95.9% without the permission).** Same model, same 949 attacked task pairs, same attack template, scored by AgentDojo's own checkers; the only change is Proofable's authority engine deciding each call against the permission the owner signed for that task.
 
@@ -45,7 +45,7 @@ For scale, these are AgentDojo's published results on other models. With no defe
 
 ### Memory that returns only the current fact
 
-![Fig. 02, memory precision on PrecisionMemBench, cases passed of 77: Proofable 77, Tenure 77, Hindsight 66, Supermemory 15, Mem0 9, Zep and Cognee 9.](/images/benchmarks/memory-precision.png)
+![Memory precision on PrecisionMemBench, cases passed of 77: Proofable 77, Tenure 77, Hindsight 66, Supermemory 15, Mem0 9, Zep and Cognee 9.](/images/benchmarks/memory-precision.png)
 
 **On PrecisionMemBench, the public test of whether a memory returns the current fact and nothing stale, Proofable passed all 77 cases, including all 43 where the memory has to pick the right facts for the question, with precision 0.98 and recall 1.00.** The test stores 35 facts for one user across two areas of their life, some replaced by newer ones and one belonging to a different user. It then asks 77 questions and checks exactly which facts come back. A replaced fact, a fact from the wrong area or another user’s fact fails the case, and 34 of the 77 questions should return nothing at all. Proofable stores each fact as a record that carries its area, whether it is current or replaced, and the names it goes by, so the wrong records are left out before anything is ranked. The [Agent Memory Benchmark](https://agentmemorybenchmark.ai) toolkit scores the test without a model. The per-case results and the code that ran are in [evidence/precisionmembench/2026-11-10-77](https://github.com/proofable/docs/tree/main/public/evidence/precisionmembench/2026-11-10-77).
 
@@ -67,7 +67,7 @@ Each one links its raw results. Rerun it on your own account or machine.
 
 ### Governance coverage
 
-![Fig. 03, agent rules enforced on AgentGovBench, scenarios handled of 48: Proofable 48, ACP gateway 46, Anthropic Agent SDK with ACP 46, OpenAI Agents SDK with ACP 45, Claude Code or Codex with ACP 43, CrewAI or LangGraph with ACP 40, Cursor with ACP 37, coding agents alone 13, no rules at all 5.](/images/benchmarks/agent-rules-enforced.png)
+![Agent rules enforced on AgentGovBench, scenarios handled of 48: Proofable 48, ACP gateway 46, Anthropic Agent SDK with ACP 46, OpenAI Agents SDK with ACP 45, Claude Code or Codex with ACP 43, CrewAI or LangGraph with ACP 40, Cursor with ACP 37, coding agents alone 13, no rules at all 5.](/images/benchmarks/agent-rules-enforced.png)
 
 [AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) is the open library of 48 agent-governance scenarios in eight areas: audit completeness, cross-tenant isolation, delegation provenance, fail-mode discipline, identity propagation, per-user policy, rate limits and scope inheritance. Each scenario is tagged with the NIST AI RMF controls it tests, and nothing passes on a technicality.
 
