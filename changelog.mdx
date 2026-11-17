@@ -25,7 +25,7 @@ Published APIs and verifier schemas may change between minor versions. Breaking 
 >
 ## MCP 0.1.11: 18 tools on every connection
 
-- **One list everywhere.** Every connection serves the same [18 tools](/mcp/tools), signed in or out, in every client. Prove, reuse, revoke, hold an agent to a permission, and hand it work. ChatGPT serves 8 of them.
+- **One list everywhere.** Every connection serves the same [18 tools](/mcp/tools), signed in or out, in every client. Verify users, give AI agents their own ID and limits, and hand them work you can see and stop. ChatGPT serves 8 of them.
 - **Runtime work moves into jobs.** Web search, page fetch, the browser, connected apps, remote MCP servers and saved keys run inside a job, within the agent's permission. A client that calls one directly gets unknown tool. Hand the work to an agent with `proofable_job_create` instead.
 - **Only the owner approves.** A run waiting for approval is decided by its owner. The job's own agent cannot approve it.
 - **Upgrade:** reconnect or restart your client so it reloads the tool list.
