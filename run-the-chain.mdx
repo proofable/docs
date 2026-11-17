@@ -17,8 +17,8 @@ it, so the chain can be rebuilt from the records alone on any machine.
 | 1. Human | A verification proof for the person | The controller wallet, the check that ran, and its verifier | [Verification](/verification) |
 | 2. Agent | An agent identity proof | The agent id, its wallet, and the controller it answers to | [Agent identity](/agents/agent-identity) |
 | 3. Authority | A delegation proof | Scope, spend cap, expiry, and the agent it binds | [Delegation](/agents/agent-delegation) |
-| 4. Decision | An authority decision, before the job exists | The principal, the agent, `delegationQHash`, `agentIdentityQHash`, and `argsDigest` over the request exactly as sent | [Jobs](/jobs) |
-| 5. Receipt | A terminal receipt | The `jobId`, the prompt, the acceptance criterion, every tool call with its target, and the returned text | [Proofs](/proofs) |
+| 4. Decision | An authority decision, before the job exists | The principal, the agent, `delegationQHash`, `agentIdentityQHash`, `argsDigest` over the request exactly as sent, when the grant was read (`statusReadAtMs`) and the maximum status age (`maxStatusAgeMs`) | [Jobs](/jobs) |
+| 5. Receipt | A terminal receipt | The `jobId`, the decision it ran under (`authorityDecisionQHash`), the prompt, the acceptance criterion, every tool call with its target, and the returned text | [Proofs](/proofs) |
 
 ## The joins are hashes
 
@@ -29,12 +29,13 @@ with hashes, so the pointer survives export.
   agent that produced it.
 - `argsDigest` is a `sha256` over the request as sent, so a reader holding the decision can recompute
   what was authorized without trusting a log.
-- The job record carries the `terminalQHash` of the signed receipt for that execution, and the same
-  `delegationQHash` and `agentIdentityQHash` the decision named.
+- `statusReadAtMs` and `maxStatusAgeMs` inside the signed decision say when the grant was read and how
+  old that read may get while the job runs (60 seconds), so the age is checked from the record.
+- The signed receipt carries `authorityDecisionQHash`, the decision the job ran under. A reader goes from
+  the receipt to the decision with no other source.
 
-The decision is recorded before the job exists, so its own `jobId` is `null`. The create response
-returns the `jobId` and the decision `qHash` together, and the two hashes above tie the decision to the
-job record without it.
+The decision is recorded before the job exists, so its own `jobId` is `null`. The receipt points back
+to it instead.
 
 An external reviewer or another agent can audit a run they did not make without reading our database.
 
