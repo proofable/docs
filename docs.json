@@ -59,7 +59,12 @@
     }
   },
   "navbar": {
-    "links": [{ "label": "Sign in", "href": "https://proofable.me/verify?intent=login" }],
+    "links": [
+      {
+        "label": "Sign in",
+        "href": "https://proofable.me/verify?intent=login"
+      }
+    ],
     "primary": {
       "type": "button",
       "label": "Start free",
@@ -73,7 +78,14 @@
         "groups": [
           {
             "group": "Overview",
-            "pages": ["index", "run-the-chain", "pricing", "security", "benchmark", "enterprise"]
+            "pages": [
+              "index",
+              "run-the-chain",
+              "pricing",
+              "security",
+              "benchmark",
+              "enterprise"
+            ]
           },
           {
             "group": "Use cases",
@@ -97,7 +109,13 @@
           },
           {
             "group": "Reference",
-            "pages": ["agents/index", "proofs", "verification/index", "gates/index", "jobs"]
+            "pages": [
+              "agents/index",
+              "proofs",
+              "verification/index",
+              "gates/index",
+              "jobs"
+            ]
           },
           {
             "group": "Legal",
@@ -114,27 +132,73 @@
             "pages": [
               {
                 "group": "Agents",
-                "pages": ["mcp/guarded-action", "agents/talk-to-an-agent", "agents/agent-delegation", "agents/agent-identity", "agents/import", "agents/named-agent-card", "agents/team-agents", "agents/runtime-mount"]
+                "pages": [
+                  "mcp/guarded-action",
+                  "agents/talk-to-an-agent",
+                  "agents/agent-delegation",
+                  "agents/agent-identity",
+                  "agents/import",
+                  "agents/named-agent-card",
+                  "agents/team-agents",
+                  "agents/runtime-mount"
+                ]
               },
               {
                 "group": "Proofs",
-                "pages": ["verification/lifecycle", "learn/proof-links"]
+                "pages": [
+                  "verification/lifecycle",
+                  "learn/proof-links"
+                ]
               },
               {
                 "group": "Verification",
-                "pages": ["verification/hosted", "verification/presets", "verification/accounts", "verification/domain", "verification/layered", "verification/proof-of-human", "verification/ownership-social", "verification/ownership-org-oauth", "verification/ownership-dns-txt", "verification/ownership-pseudonym", "verification/wallet-link", "verification/wallet-risk", "verification/nft-ownership", "verification/token-holding", "verification/contract-ownership", "verification/ownership-basic", "verification/ai-content-moderation", "verification/propose-a-verifier"]
+                "pages": [
+                  "verification/hosted",
+                  "verification/presets",
+                  "verification/accounts",
+                  "verification/domain",
+                  "verification/layered",
+                  "verification/proof-of-human",
+                  "verification/ownership-social",
+                  "verification/ownership-org-oauth",
+                  "verification/ownership-dns-txt",
+                  "verification/ownership-pseudonym",
+                  "verification/wallet-link",
+                  "verification/wallet-risk",
+                  "verification/nft-ownership",
+                  "verification/token-holding",
+                  "verification/contract-ownership",
+                  "verification/ownership-basic",
+                  "verification/ai-content-moderation",
+                  "verification/propose-a-verifier"
+                ]
               },
               {
                 "group": "Gates",
-                "pages": ["gates/sell-access", "gates/your-server", "gates/checkout", "gates/nft-gating", "gates/pay-per-call"]
+                "pages": [
+                  "gates/sell-access",
+                  "gates/your-server",
+                  "gates/checkout",
+                  "gates/nft-gating",
+                  "gates/pay-per-call"
+                ]
               },
               {
                 "group": "Integrations",
-                "pages": ["mcp/setup", "integrations/server", "widgets/overview", "widgets/verifygate"]
+                "pages": [
+                  "mcp/setup",
+                  "integrations/server",
+                  "widgets/overview",
+                  "widgets/verifygate"
+                ]
               },
               {
                 "group": "Deployment",
-                "pages": ["deployment/access-keys", "deployment/private-cloud", "migrate"]
+                "pages": [
+                  "deployment/access-keys",
+                  "deployment/private-cloud",
+                  "migrate"
+                ]
               }
             ]
           }
@@ -145,7 +209,9 @@
         "groups": [
           {
             "group": "Overview",
-            "pages": ["reference"]
+            "pages": [
+              "reference"
+            ]
           },
           {
             "group": "MCP",
@@ -174,19 +240,39 @@
           },
           {
             "group": "JavaScript SDK",
-            "pages": ["sdks/javascript", "sdks/authentication", "sdks/verifications", "sdks/gates", "sdks/agents", "sdks/error-handling", "sdks/cli"]
+            "pages": [
+              "sdks/javascript",
+              "sdks/authentication",
+              "sdks/verifications",
+              "sdks/gates",
+              "sdks/agents",
+              "sdks/error-handling",
+              "sdks/cli"
+            ]
           },
           {
             "group": "HTTP API",
-            "pages": ["api/overview", "api/authentication", "api/errors", "api/rate-limits"]
+            "pages": [
+              "api/overview",
+              "api/authentication",
+              "api/errors",
+              "api/rate-limits"
+            ]
           },
           {
             "group": "Verifier catalog",
-            "pages": ["verification/verifiers"]
+            "pages": [
+              "verification/verifiers"
+            ]
           },
           {
             "group": "Standards",
-            "pages": ["learn/standards/index", "learn/standards/caip-380", "verification/signing-format", "whitepaper"]
+            "pages": [
+              "learn/standards/index",
+              "learn/standards/caip-380",
+              "verification/signing-format",
+              "whitepaper"
+            ]
           }
         ]
       },
@@ -195,7 +281,9 @@
         "groups": [
           {
             "group": "Updates",
-            "pages": ["changelog"]
+            "pages": [
+              "changelog"
+            ]
           }
         ]
       }
@@ -327,10 +415,6 @@
       "destination": "/integrations/server"
     },
     {
-      "source": "/content/get-started/brand-kit",
-      "destination": "https://proofable.me/brand"
-    },
-    {
       "source": "/get-started/overview",
       "destination": "/"
     },
@@ -345,14 +429,6 @@
     {
       "source": "/get-started/integration",
       "destination": "/integrations/server"
-    },
-    {
-      "source": "/get-started/brand-kit",
-      "destination": "https://proofable.me/brand"
-    },
-    {
-      "source": "/brand-kit",
-      "destination": "https://proofable.me/brand"
     },
     {
       "source": "/get-started/examples",
