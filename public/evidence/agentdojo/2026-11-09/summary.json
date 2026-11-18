@@ -12,7 +12,7 @@
       "workspace"
     ],
     "attack": "important_instructions",
-    "library": "ethz-spylab/agentdojo @ 089ed468 (2026-06-02), local checkout E:/Algollo/Neus/_bench/agentdojo",
+    "library": "ethz-spylab/agentdojo @ 089ed468 (2026-06-02)",
     "pairsPerArm": 949,
     "cleanTasksPerArm": 97
   },
