@@ -22,7 +22,7 @@ The terminal installer writes the same URL:
 npx -y @proofable/sdk setup
 ```
 
-Adding Proofable to a client asks you to sign in straight away. A request with no credential returns `401` with a `WWW-Authenticate` challenge on every method, `initialize` included, and that challenge is what opens the host's OAuth flow (DCR, PKCE and token exchange). Claude shows a **Connect** button in the chat and runs the call once you sign in. In Claude Code, run `/mcp`. In Codex, run `codex mcp login proofable`.
+Adding Proofable to a client asks you to sign in straight away. A request with no credential returns `401` with a `WWW-Authenticate` challenge on every method, `initialize` included, and that challenge is what opens the host's OAuth flow (DCR, PKCE and token exchange). Claude shows a **Connect** button in the chat and runs the call once you sign in. In Claude Code, run `/mcp`. In Codex, run `codex mcp login proofable`. <!-- language-gate: allow the step names each client's own sign-in command -->
 
 ```http
 HTTP/1.1 401 Unauthorized
