@@ -32,7 +32,10 @@ with hashes, so the pointer survives export.
 - The job record carries the `terminalQHash` of the signed receipt for that execution, and the same
   `delegationQHash` and `agentIdentityQHash` the decision named.
 - `statusReadAtMs` and `maxStatusAgeMs` inside the signed decision say when the grant was read and how
-  old that read may get while the job runs (60 seconds), so the age is checked from the record.
+  old that read may get while the job runs (60 seconds), so the age is checked from the record. While the
+  job runs its grant is re-read every 15 seconds; two consecutive reads that no longer permit the action
+  stop the run, and a grant that cannot be confirmed for 60 seconds stops it fail-closed with a typed
+  reason.
 - The signed receipt carries `authorityDecisionQHash`, the decision the job ran under. A reader goes from
   the receipt to the decision with no other source.
 
@@ -101,8 +104,10 @@ Published runs, with the records and a script that verifies every envelope in th
 - The effect at a target you control. Records state effects as the service observed them at the job
   boundary. A readback taken at a target outside that boundary is a separate observation, and the kit's
   URL fetch is where to add one.
-- How long a revocation takes to reach the check. A job running when its permission is revoked is
-  stopped with a typed reason, and the next dispatch is refused. No bound on that delay is claimed.
+- How long a revocation takes to reach the check. A job running when its permission is revoked is stopped
+  with a typed reason, and the next dispatch under that grant is refused. One sample exists: in the 2
+  November record a running job stopped 18 seconds after the revocation write. No bound is claimed from a
+  single sample.
 
 ## Build on it
 
