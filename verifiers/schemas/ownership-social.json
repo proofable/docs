@@ -12,11 +12,9 @@
       "enum": [
         "discord",
         "github",
-        "facebook",
         "x",
         "linkedin",
-        "telegram",
-        "coinbase"
+        "telegram"
       ],
       "type": "string"
     },
