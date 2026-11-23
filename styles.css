@@ -1,5 +1,6 @@
-/* Proofable Mintlify skin: tokens colocated in docs/ (Mintlify CDN does not resolve ../examples imports). */
-@import url('./proofable-tokens.css');
+/* Proofable Mintlify skin. Mintlify includes every .css file in the repo on every page, so
+   proofable-tokens.css loads on its own; an @import here resolved against the page path and
+   logged a 404 on every docs page. */
 
 /* Docs stay quiet so task content, code, and navigation carry the hierarchy. */
 html {
