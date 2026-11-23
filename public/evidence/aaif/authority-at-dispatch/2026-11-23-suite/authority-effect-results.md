@@ -76,4 +76,4 @@ Author-operated; independent reproduction not yet claimed. Revocation latency is
 - Custody is author-operated; there is no independent peer witness or target-side effect byte.
 - Revocation latency is not measured in this run; the freshness rule is delegation expiry, revocation and supersession (this path is not root-based, so root age is not applicable).
 - The public trace is a sanitized projection of the Proofable records, not the raw records themselves.
-- authority-at-dispatch/v1: 8 records under `cases/`, one per signed dispatch decision, each with its dispatched bytes; read them with the corpus reader of probityai/agent-evidence-vectors. Cases outside the contract are listed in `manifest.json` → `authority_at_dispatch_v1.not_written`.
+- authority-at-dispatch/v1: 8 records under `cases/`, one per signed allow or deny decision at dispatch, each with its dispatched bytes; read them with the corpus reader of probityai/agent-evidence-vectors. Cases outside the contract are listed in `manifest.json` → `authority_at_dispatch_v1.not_written`.

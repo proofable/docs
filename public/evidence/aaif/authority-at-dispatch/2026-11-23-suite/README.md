@@ -60,7 +60,7 @@ your own Proofable account, so the records it writes are yours, not Proofable's.
 | `authority-effect-results.md` | results under the shared authority/effect contract |
 | `authority-effect-results.json` | machine-readable results |
 | `trace.jsonl` | one sanitized record per supporting case (8 records, each names its v1 records) |
-| `cases/<id>/record.json` + `dispatched.bin` | 8 authority-at-dispatch/v1 records, one per signed dispatch decision, in the corpus layout |
+| `cases/<id>/record.json` + `dispatched.bin` | 8 authority-at-dispatch/v1 records, one per signed allow or deny decision at dispatch, in the corpus layout |
 | `portable-proofs.json` | disclosed CAIP-380 job and authority envelopes |
 | `verify-portable-proofs.mjs` | offline SDK verification of every envelope |
 | `SHA256SUMS` | SHA-256 for every payload file beside it |
