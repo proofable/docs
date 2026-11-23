@@ -15,6 +15,8 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Added
 
+- **Check who holds a listing seat.** `GET /api/v1/profile/gates/{gateId}/seats/{seat}?wallet=0x...` answers `{ held: true }` when that wallet, or another wallet of the same account, finished the claim that took the seat, and `{ held: false }` otherwise. It never says who holds a seat.
+
 - **The permission tests' acceptance criterion.** A run is accepted only when `verify` passes and `controls` rejects eight altered copies, including genuine records swapped between cases; see the [authority-at-dispatch kit](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch#the-acceptance-criterion).
 
 - **Your app's users can talk to your agent, and your app pays.** [Talk to your agent from any app](/agents/talk-to-an-agent) shows the sign-in with `ProofableSignIn`, the call as the person (`agentChat` with `agentWallet` runs your public agent in their own profile, with nothing of yours in the conversation), and the billing. `proofable sponsor` turns sponsorship on once, and a client with `appId` and `billingWallet` makes your organization the payer within the daily cap. The refusal table gains `SPONSOR_CAP_EXCEEDED`.
