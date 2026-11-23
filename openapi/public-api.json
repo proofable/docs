@@ -947,11 +947,9 @@
             "enum": [
               "discord",
               "github",
-              "facebook",
               "x",
               "linkedin",
-              "telegram",
-              "coinbase"
+              "telegram"
             ],
             "description": "OAuth provider to verify against."
           },
@@ -4209,7 +4207,7 @@
       "get": {
         "operationId": "getGate",
         "summary": "Get a published gate snapshot (checkout contract)",
-        "description": "Returns the public gate snapshot: requirements, monetization charge, schedule, checkout plan, and artifact metadata. Never includes the secret reward value.",
+        "description": "Returns the public gate snapshot: requirements, monetization charge, schedule, checkout plan, artifact metadata, and `supply` ({ claimed, remaining } for a listing with policy.maxFulfillments, otherwise null). Never includes the secret reward value.",
         "tags": [
           "Gates"
         ],
