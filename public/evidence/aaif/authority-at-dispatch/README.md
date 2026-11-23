@@ -6,7 +6,8 @@ link to every record, is at
 
 | Folder | What it is |
 | --- | --- |
-| [`2026-11-02-suite/`](./2026-11-02-suite/) | **Latest published run, 2 November.** Eight cases on revision `327e50de3`, 8 of 8, 15 signed records. A permission revoked while its job was running stopped that job with a typed reason, and the next dispatch was refused. The run did not measure how long the stop took |
+| [`2026-11-23-suite/`](./2026-11-23-suite/) | **Latest published run, 23 November.** Eight cases on revision `739d61eca`, 8 of 8, 15 signed records. Each signed dispatch decision is also an [authority-at-dispatch/v1](https://probityai.github.io/agent-evidence-observer/contract/authority-at-dispatch/v1) record in `cases/`, with the bytes that were dispatched, so the corpus reader decides it from the record alone: 8 records, and its decision matches the signed one on all 8. A permission revoked while its job was running stopped that job, and the next dispatch was refused |
+| [`2026-11-02-suite/`](./2026-11-02-suite/) | Previous run, 2 November. Eight cases on revision `327e50de3`, 8 of 8, 15 signed records. A permission revoked while its job was running stopped that job with a typed reason, and the next dispatch was refused |
 | [`2026-11-01-suite-c1/`](./2026-11-01-suite-c1/) | Previous run, 1 November, corrected 2 November. Its post-revocation record calls the outcome a refusal at the executor's tool call; the job record shows the running attempt stalled and was refused when it was retried, so that case is not supported by its own records. The 2 November run records the stop itself |
 | [`2026-11-01-suite/`](./2026-11-01-suite/) | The same run as first published, retained and hash-pinned. Corrected by `2026-11-01-suite-c1/` — wording and grading scope only |
 | [`2026-10-24-served/`](./2026-10-24-served/) | Previous run, 24 October. Eight cases on revision `61724c9f4`, 17 signed records, checksums, and a result for each case |
@@ -18,12 +19,20 @@ link to every record, is at
 To check the latest published run:
 
 ```sh
-cd 2026-11-02-suite
+cd 2026-11-23-suite
 sha256sum -c SHA256SUMS
 cd ../reproduce
-node aad.mjs verify ../2026-11-02-suite
-node aad.mjs report ../2026-11-02-suite
-node aad.mjs controls ../2026-11-02-suite
+node aad.mjs verify ../2026-11-23-suite
+node aad.mjs report ../2026-11-23-suite
+node aad.mjs controls ../2026-11-23-suite
+```
+
+To read the v1 records with the corpus reader of
+[probityai/agent-evidence-vectors](https://github.com/probityai/agent-evidence-vectors):
+
+```sh
+pip install agent-evidence-vectors
+for d in 2026-11-23-suite/cases/*/; do python -m agent_evidence_vectors.authoritydispatch "$d/record.json"; done
 ```
 
 `verify` recomputes every checksum, the trace digest and all 15 disclosed envelopes offline. It counts the

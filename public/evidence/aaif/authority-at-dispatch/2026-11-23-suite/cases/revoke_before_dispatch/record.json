@@ -1,0 +1,67 @@
+{
+  "contractId": "https://probityai.github.io/agent-evidence-observer/contract/authority-at-dispatch/v1",
+  "decisionTime": "2026-11-23T01:07:01.878Z",
+  "approvedAction": {
+    "tool": "execute_jobs",
+    "target": "agent:proofable-authority-review",
+    "approvedAt": "2026-11-23T01:07:01.878Z",
+    "payloadSha256": "688c52fc5a2ed70ed1177a83d6fbde05841143e04e7b4680a02f8822c1680cb2"
+  },
+  "dispatch": {
+    "tool": "execute_jobs",
+    "target": "agent:proofable-authority-review",
+    "payloadFile": "dispatched.bin"
+  },
+  "delegation": [
+    {
+      "grantId": "0xbd1f4ffe32729e3e0d8580e172103bebb9b3fbdf7342730ff02aa37fd7ed3b03",
+      "grantor": "did:pkh:eip155:8453:0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+      "grantee": "did:pkh:eip155:8453:0x738f1729be00dee66e3451156097c20a34ad3540",
+      "notBefore": "2026-11-23T01:06:47.001Z",
+      "expiresAt": "2026-11-23T03:06:45.112Z",
+      "scope": [
+        "read_context",
+        "read_proofs",
+        "create_proof",
+        "execute_jobs",
+        "run_command",
+        "manage_runtime"
+      ]
+    }
+  ],
+  "authorityEvidence": {
+    "source": "grant state read by the deciding service at the decision",
+    "revision": "739d61eca6e2a3278907bd6d5297be131d3a2635",
+    "observedAt": "2026-11-23T01:07:01.877Z",
+    "evidenceAgeSeconds": 0.001,
+    "maxAgeSeconds": 60,
+    "revokedGrants": [
+      {
+        "grantId": "0xbd1f4ffe32729e3e0d8580e172103bebb9b3fbdf7342730ff02aa37fd7ed3b03",
+        "revokedAt": "2026-11-23T01:06:59.116Z"
+      }
+    ]
+  },
+  "attempt": {
+    "runId": "aad-20261123T010452Z",
+    "attemptId": "revoke_before_dispatch-1"
+  },
+  "proofable": {
+    "signedDecision": {
+      "qHash": "0x60b767659633f76e9ed5efae81274fcace42112af636ae25a88a4ce1eb384768",
+      "outcome": "DENY",
+      "reason": "DELEGATION_PROOF_DENIED"
+    },
+    "sources": {
+      "decisionTime": "signedTimestamp of the authority decision envelope",
+      "payloadSha256": "argsDigest in the signed decision; dispatched.bin hashes to it",
+      "observedAt": "statusReadAtMs in the signed decision",
+      "maxAgeSeconds": "maxStatusAgeMs in the signed decision",
+      "notBefore": "signed time of the grant proof, read back from the service",
+      "expiresAt": "expiresAt the grant was minted with",
+      "revokedAt": "time the service acknowledged the revocation, observed by the runner",
+      "scope": "allow-list the grant was minted with (the signed decision of a refused dispatch carries no grant body)",
+      "tool": "job.dispatch is authorized by the grant action execute_jobs"
+    }
+  }
+}
