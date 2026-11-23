@@ -15,7 +15,7 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Added
 
-- **Check who holds a listing seat.** `GET /api/v1/profile/gates/{gateId}/seats/{seat}?wallet=0x...` answers `{ held: true }` when that wallet, or another wallet of the same account, finished the claim that took the seat, and `{ held: false }` otherwise. It never says who holds a seat.
+- **Check whether a wallet holds a listing seat.** `GET /api/v1/profile/gates/{gateId}/seats/{seat}?wallet=0x...` answers `{ held: true }` when that wallet, or another wallet of the same account, finished the claim that took the seat, and `{ held: false }` for any other wallet or an unknown listing or seat. It never says who holds a seat.
 
 - **The permission tests' acceptance criterion.** A run is accepted only when `verify` passes and `controls` rejects eight altered copies, including genuine records swapped between cases; see the [authority-at-dispatch kit](https://github.com/proofable/docs/tree/main/public/evidence/aaif/authority-at-dispatch#the-acceptance-criterion).
 
