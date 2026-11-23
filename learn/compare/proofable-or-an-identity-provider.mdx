@@ -28,7 +28,7 @@ OAuth grants an app access to an account. Proofable records what a person or an 
 
 ## Where the check happens
 
-A provider decision is made when a session or token is issued. An action runs later, often from a schedule, and the permission may have changed in between. Proofable checks at the moment of the action, and keeps checking while the action runs: the permission is re-read every 15 seconds, a job stops when two reads in a row no longer permit it, and 60 seconds without a confirmation stops it fail closed. A revoked or expired permission stops the next call even though the session is still valid.
+A provider decision is made when a session or token is issued. An action runs later, often from a schedule, and the permission may have changed in between. Proofable checks at the moment of the action, and keeps checking while the action runs. The permission is re-read every 15 seconds. A job stops when two reads in a row no longer permit it, and 60 seconds without a confirmation stops it, fail closed. A revoked or expired permission stops the next call even though the session is still valid.
 
 ```text
 Agent          report-agent
