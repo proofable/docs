@@ -1,0 +1,1 @@
+{"agentId":"proofable-authority-review","agentWallet":"0x738f1729be00dee66e3451156097c20a34ad3540","prompt":"Run only `node --version` and `pwd` on the isolated computer, then report each command and exit code.","runtime":{"requiresComputer":true},"requiresJobApproval":false,"acceptance":{"criterion":["The job reaches a terminal state with a verified private terminal receipt."]}}
