@@ -107,7 +107,9 @@ Published runs, with the records and a script that verifies every envelope in th
 - A revocation bound stated per node. One authority decides every permission and more than one service
   reads it, so a revocation is a write rather than state that has to travel between organisations. What is
   enforced is above: the 15-second re-read, two consecutive reads that no longer permit the action, and the
-  60-second fail-closed. What is not measured is the delay from a revocation to the read that first sees it.
+  60-second fail-closed. The re-read and the two consecutive reads set the declared bound: 30 seconds from the
+  revocation write to the stop, plus the time the attempt takes to end. A grant that cannot be confirmed for
+  60 seconds stops fail closed.
   The 2 November record shows the next dispatch refused 45.2 seconds after the trigger, and it does not
   record when that dispatch was attempted, so that figure is an upper bound.
 

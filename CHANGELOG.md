@@ -11,6 +11,8 @@ Product release notes: [docs.proofable.me/changelog](https://docs.proofable.me/c
 
 ### Changed
 
+- **The revocation bound is stated.** [Run the chain](/run-the-chain) and the [Results](/benchmark) row for a job revoked mid-run give the declared bound: 30 seconds from the revocation write to the stop, plus the time the attempt takes to end. The [changelog](/changelog) gains the SDK 0.1.12 to 0.1.14 entry.
+
 - **Results page.** [Proofable results](/benchmark) now opens on the two public benchmarks: AgentDojo, where successful prompt injections fell from 16.4% to 6.2%, and a perfect score on PrecisionMemBench. The governance scenarios move under Our own tests with the other runs you can repeat yourself.
 
 ### Added
