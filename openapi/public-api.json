@@ -947,11 +947,9 @@
             "enum": [
               "discord",
               "github",
-              "facebook",
               "x",
               "linkedin",
-              "telegram",
-              "coinbase"
+              "telegram"
             ],
             "description": "OAuth provider to verify against."
           },
@@ -4140,7 +4138,7 @@
       "get": {
         "operationId": "listDiscoverableGates",
         "summary": "List public, discoverable marketplace gates",
-        "description": "Returns public gates that are active, deployed, and tagged as marketplace listings.",
+        "description": "Returns public gates that are active, deployed, and tagged as marketplace listings. Each gate carries `supply` ({ claimed, remaining } for a listing with policy.maxFulfillments, otherwise null), as GET /gates/{gateId} does.",
         "tags": [
           "Gates"
         ],
@@ -4209,7 +4207,7 @@
       "get": {
         "operationId": "getGate",
         "summary": "Get a published gate snapshot (checkout contract)",
-        "description": "Returns the public gate snapshot: requirements, monetization charge, schedule, checkout plan, and artifact metadata. Never includes the secret reward value.",
+        "description": "Returns the public gate snapshot: requirements, monetization charge, schedule, checkout plan, artifact metadata, and `supply` ({ claimed, remaining } for a listing with policy.maxFulfillments, otherwise null). Never includes the secret reward value.",
         "tags": [
           "Gates"
         ],
@@ -4281,6 +4279,128 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/v1/profile/gates/{gateId}/seats/{seat}": {
+      "get": {
+        "operationId": "checkGateSeatHolder",
+        "summary": "Check whether a wallet holds a seat of a listing",
+        "description": "For a listing that numbers its claims, answers whether the given wallet, or another wallet of the same account, holds the given seat: the claim finished and its receipt carries that seat. Returns held only, never who holds a seat. An unknown listing or seat answers held: false.",
+        "tags": [
+          "Gates"
+        ],
+        "parameters": [
+          {
+            "name": "gateId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-zA-Z0-9:_-]+$",
+              "maxLength": 80
+            }
+          },
+          {
+            "name": "seat",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000000
+            }
+          },
+          {
+            "name": "wallet",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^0x[a-fA-F0-9]{40}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Seat check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "held": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid listing, seat or wallet"
+          },
+          "401": {
+            "description": "Authentication required",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Seats could not be read"
           }
         }
       }

@@ -1,0 +1,67 @@
+{
+  "contractId": "https://probityai.github.io/agent-evidence-observer/contract/authority-at-dispatch/v1",
+  "decisionTime": "2026-11-23T01:10:12.533Z",
+  "approvedAction": {
+    "tool": "execute_jobs",
+    "target": "agent:proofable-authority-review",
+    "approvedAt": "2026-11-23T01:10:12.533Z",
+    "payloadSha256": "eb205d55d46a7fa07bf1be25e255557266bd955cd476094a449b328567bc935a"
+  },
+  "dispatch": {
+    "tool": "execute_jobs",
+    "target": "agent:proofable-authority-review",
+    "payloadFile": "dispatched.bin"
+  },
+  "delegation": [
+    {
+      "grantId": "0x620c50272f98fb0beacc54c179e5478cc5ec3d40d5be717860982c7baea649cb",
+      "grantor": "did:pkh:eip155:8453:0x0d4e513a3a7eb92bab65c97786c67b198d9dca15",
+      "grantee": "did:pkh:eip155:8453:0x738f1729be00dee66e3451156097c20a34ad3540",
+      "notBefore": "2026-11-23T01:10:05.738Z",
+      "expiresAt": "2026-11-23T03:10:04.539Z",
+      "scope": [
+        "read_context",
+        "read_proofs",
+        "create_proof",
+        "execute_jobs",
+        "run_command",
+        "manage_runtime"
+      ]
+    }
+  ],
+  "authorityEvidence": {
+    "source": "grant state read by the deciding service at the decision",
+    "revision": "739d61eca6e2a3278907bd6d5297be131d3a2635",
+    "observedAt": "2026-11-23T01:10:12.533Z",
+    "evidenceAgeSeconds": 0,
+    "maxAgeSeconds": 60,
+    "revokedGrants": [
+      {
+        "grantId": "0x620c50272f98fb0beacc54c179e5478cc5ec3d40d5be717860982c7baea649cb",
+        "revokedAt": "2026-11-23T01:10:26.975Z"
+      }
+    ]
+  },
+  "attempt": {
+    "runId": "aad-20261123T010452Z",
+    "attemptId": "b2153ee8-60ba-41d9-b500-81120b8f3e2c"
+  },
+  "proofable": {
+    "signedDecision": {
+      "qHash": "0x0bf23f04e6ac098060ad7e4752d912186feefa342934e1326bba34a598d026a4",
+      "outcome": "ALLOW",
+      "reason": null
+    },
+    "sources": {
+      "decisionTime": "signedTimestamp of the authority decision envelope",
+      "payloadSha256": "argsDigest in the signed decision; dispatched.bin hashes to it",
+      "observedAt": "statusReadAtMs in the signed decision",
+      "maxAgeSeconds": "maxStatusAgeMs in the signed decision",
+      "notBefore": "signed time of the grant proof, read back from the service",
+      "expiresAt": "expiresAt the grant was minted with",
+      "revokedAt": "time the service acknowledged the revocation, observed by the runner",
+      "scope": "grant bounds carried in the signed decision",
+      "tool": "job.dispatch is authorized by the grant action execute_jobs"
+    }
+  }
+}
