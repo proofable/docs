@@ -32,6 +32,30 @@ Published APIs and verifier schemas may change between minor versions. Breaking 
 </Update>
 
 <Update
+  label="November 16, 2026"
+  description="v0.1.14"
+  tags={["SDK"]}
+  rss={{
+    title: "Proofable SDK v0.1.14",
+    description: "Your app's users talk to your agent, your app can pay for it, and the packaged skills match MCP 0.1.11."
+  }}
+>
+## Your app's users talk to your agent, and your app can pay
+
+`@proofable/sdk@0.1.14` covers 0.1.12 through 0.1.14.
+
+- **Your app's users can talk to your agent (0.1.12).** `ProofableSignIn` signs them in with Proofable: `start()`, `finish()`, `refresh()` and a one-time `register()` for your callback. Then `client.agentChat({ agentId, agentWallet })` as the person runs your public agent inside their own profile. See [Talk to your agent from any app](/agents/talk-to-an-agent).
+- **Your app can pay for those chats (0.1.12).** `client.sponsorApp()` or `proofable sponsor` turns sponsorship on once, within a daily cap of your credits, and every spend record names the app. `client.me()` says who a credential belongs to.
+- **Packaged skills match MCP 0.1.11 (0.1.14).** The trust workflow hands an agent work as a job and revokes proofs and permissions. Keys are saved on the profile page.
+- **`CLAUDE_PLUGIN_INSTALL` works on a fresh Claude Code (0.1.14),** and `proofable examples` suggests prompts that work over MCP.
+
+```bash
+npm install @proofable/sdk@0.1.14
+```
+
+</Update>
+
+<Update
   label="November 10, 2026"
   description="Docs"
   tags={["Docs"]}
