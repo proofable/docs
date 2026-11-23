@@ -48,6 +48,6 @@ For backend-created proofs after a user approves your product once, see [Server 
 
 ## Raw HTTP
 
-`POST /api/v1/verification/standardize` → sign `signerString` → `POST /api/v1/verification`. [Signing format](../verification/signing-format).
+Call `POST /api/v1/verification/standardize`, sign `signerString`, then call `POST /api/v1/verification`. [Signing format](../verification/signing-format).
 
 [MCP Auth](../mcp/auth) and [SDK Authentication](../sdks/authentication)

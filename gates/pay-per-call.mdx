@@ -70,7 +70,7 @@ Cost = each verifier's weight + proof write (1 credit) + optional add-ons. Verif
 | Network | Base mainnet (`eip155:8453`) |
 | Asset | USDC on Base |
 
-Each call settles at its exact credit cost, down to sub-cent amounts, with no rounded-up minimum and no settlement cap. Per-credit price: [Pricing](/pricing).
+Each call settles at its exact credit cost, down to sub-cent amounts. Any single charge floors at one-tenth of a cent, and there is no settlement cap. Per-credit price: [Pricing](/pricing).
 
 Always enforce a client-side maximum before signing. Treat the decoded `PAYMENT-REQUIRED` header as the source of truth for the current amount, asset, recipient, and timeout.
 

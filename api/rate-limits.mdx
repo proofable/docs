@@ -37,7 +37,7 @@ CORS exposes `Retry-After`, `RateLimit`, and `RateLimit-Policy` so browsers and 
 
 ## Tips
 
-- **Reuse proofs.** Checking an existing proof is free. Creating a new one costs 4 to 73 credits and counts against the new-proof budget, so cache the proof ID and check it.
+- **Reuse proofs.** Checking an existing proof is free. Creating a new one costs 1 to 73 credits and counts against the new-proof budget, so cache the proof ID and check it.
 - **Check before you create.** Use `gateCheck` with your `gateId` for access decisions. It reads saved proofs, so you create a new proof only for a missing check.
 - **Need higher limits?** Pro raises both budgets four times. Enterprise raises them ten times, by agreement. See [Pricing](/pricing).
 

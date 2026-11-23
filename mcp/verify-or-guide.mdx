@@ -11,9 +11,9 @@ icon: signs-post
 ## What it does
 
 1. Looks up existing proofs for the required verifiers
-2. If satisfied → `already_verified` (continue silently)
-3. If not, and signed in for an instant verifier → `next_action: call_proofable_verify` (no hosted link)
-4. If not, and an outside login, payment, or different account is required → one hosted link
+2. If satisfied, answer `already_verified` and continue silently
+3. If not, and signed in for an instant verifier, answer `next_action: call_proofable_verify` with no hosted link
+4. If not, and an outside login, payment, or different account is required, return one hosted link
 
 Summarize the outcome for users as **Passed**, **Action needed**, or **Blocked**. Ask the user to open a browser only when this tool returned a hosted link.
 

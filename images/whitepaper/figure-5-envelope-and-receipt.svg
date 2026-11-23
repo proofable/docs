@@ -25,7 +25,7 @@
   <text x="104" y="334" class="mono ink">signedTimestamp</text>
   <text x="104" y="368" class="mono ink">chainId  |  chain</text>
   <line x1="104" y1="395" x2="556" y2="395" stroke="#C9D3E4" stroke-width="2"/>
-  <text x="104" y="430" class="b ink">canonical JSON → SHAKE-256 → qHash</text>
+  <text x="104" y="430" class="b ink">canonical JSON, then SHAKE-256, then qHash</text>
   <text x="104" y="462" class="b ink">wallet signature over the signer string</text>
   <text x="104" y="502" class="s muted">Proves request integrity and signer authorization.</text>
 
