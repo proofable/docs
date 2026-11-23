@@ -46,7 +46,7 @@ Published APIs and verifier schemas may change between minor versions. Breaking 
 
 - **Your app's users can talk to your agent (0.1.12).** `ProofableSignIn` signs them in with Proofable: `start()`, `finish()`, `refresh()` and a one-time `register()` for your callback. Then `client.agentChat({ agentId, agentWallet })` as the person runs your public agent inside their own profile. See [Talk to your agent from any app](/agents/talk-to-an-agent).
 - **Your app can pay for those chats (0.1.12).** `client.sponsorApp()` or `proofable sponsor` turns sponsorship on once, within a daily cap of your credits, and every spend record names the app. `client.me()` says who a credential belongs to.
-- **Packaged skills match MCP 0.1.11 (0.1.14).** The trust workflow hands an agent work as a job and revokes proofs and permissions. Keys are saved on the profile page.
+- **Packaged skills match MCP 0.1.11 (0.1.14).** The trust workflow hands an agent work as a job and revokes proofs and permissions. Keys are saved on the profile page, with no tool to list or remove them.
 - **`CLAUDE_PLUGIN_INSTALL` works on a fresh Claude Code (0.1.14),** and `proofable examples` suggests prompts that work over MCP.
 
 ```bash
