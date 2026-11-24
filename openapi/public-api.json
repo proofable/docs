@@ -2137,7 +2137,7 @@
       "post": {
         "operationId": "submitVerification",
         "summary": "Phase 2: submit a verification request",
-        "description": "For raw HTTP callers, this request must continue a prior POST /api/v1/verification/standardize call using the same body and signedTimestamp. Do not treat this as a one-step schema-only POST; sign the exact signerString from phase 1 and submit that signature here.",
+        "description": "For raw HTTP callers, this request must continue a prior POST /api/v1/verification/standardize call using the same body and signedTimestamp. Do not treat this as a one-step schema-only POST; sign the exact signerString from phase 1 and submit that signature here. A listing checkout (gateId) from an account that already holds the claims the listing allows it, or started one in the last 10 minutes that has not finished, returns that receipt's qHash with existingClaim: true instead of a new receipt.",
         "tags": [
           "Verification"
         ],
@@ -4409,7 +4409,7 @@
       "post": {
         "operationId": "fulfillGate",
         "summary": "Deliver the gate reward after verification and payment",
-        "description": "Post-verify reward delivery. Requires a verified proof (qHash) for the caller wallet. Paid gates also require paymentCheckoutSessionId (Stripe) or paymentTxHash (USDC). Returns the fulfillment payload and optional rewardProof / rewardPack. Payments are bound to a single gateId + qHash pair. Reuse returns 409 PAYMENT_ALREADY_USED. For an AI service listing, send the buyer's values for the listing's serviceInputs as serviceParameters. The order unlocks as access_granted with no value, the response carries serviceJob, and the answer appears on the buyer's receipt at meta.marketplace.serviceJob.result when the run finishes.",
+        "description": "Post-verify reward delivery. Requires a verified proof (qHash) for the caller wallet. Paid gates also require paymentCheckoutSessionId (Stripe) or paymentTxHash (USDC). Returns the fulfillment payload and optional rewardProof / rewardPack. Payments are bound to a single gateId + qHash pair. Reuse returns 409 PAYMENT_ALREADY_USED. For an AI service listing, send the buyer's values for the listing's serviceInputs as serviceParameters. The order unlocks as access_granted with no value, the response carries serviceJob, and the answer appears on the buyer's receipt at meta.marketplace.serviceJob.result when the run finishes. When the listing declares an outputSchema, the run's answer is validated against it and the object also appears at meta.marketplace.serviceJob.output.",
         "tags": [
           "Gates"
         ],
