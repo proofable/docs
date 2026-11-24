@@ -1,24 +1,24 @@
 ---
-title: "Proofable results"
-sidebarTitle: "Results"
-description: "Every agent action is checked against a signed permission and leaves a receipt. Prompt injections that landed dropped by more than half on AgentDojo."
+title: "Benchmarks"
+sidebarTitle: "Benchmarks"
+description: "62% fewer prompt injections land, memory returns only the current fact, and all 48 governance scenarios hold. Every run is public, ready to rerun."
 "og:image": "https://proofable.me/og/benchmarks"
 "twitter:image": "https://proofable.me/og/benchmarks"
 icon: chart-simple
 ---
 
-Proofable checks every action an AI agent tries before it runs, and proves what happened. On [AgentDojo](https://agentdojo.spylab.ai/), ETH Zurich's prompt-injection benchmark, successful attacks fell from 16.4% to 6.2%. AgentDojo's own built-in defenses on the same model let about 11% through ([defense runs](https://github.com/proofable/docs/tree/main/public/evidence/agentdojo/2026-11-11-defenses)). Perfect score on PrecisionMemBench. Every check leaves a signed receipt any app can verify. Rerun it yourself.
+Proofable checks every action an AI agent tries before it runs, and proves what happened. On [AgentDojo](https://agentdojo.spylab.ai/), ETH Zurich's prompt-injection benchmark, attacks that landed fell from 16.4% to 6.2%, half what AgentDojo's own defenses let through on the same model ([defense runs](https://github.com/proofable/docs/tree/main/public/evidence/agentdojo/2026-11-11-defenses)), and 87% of tasks still got done. Perfect score on PrecisionMemBench, and all 48 AgentGovBench scenarios held. Every check leaves a signed receipt any app can verify.
 
 <CardGroup cols={2}>
-  <Card title="Successful prompt injections cut by more than half" icon="shield-halved" href="https://proofable.me/benchmarks/security">
-    AgentDojo, ETH Zurich's prompt-injection benchmark: 93.8% of attacks stopped, 16.4% to 6.2% landed on the same model, with 87% of tasks still done under attack.
+  <Card title="62% fewer prompt injections land" icon="shield-halved" href="https://proofable.me/benchmarks/security">
+    AgentDojo, ETH Zurich's prompt-injection benchmark: 6.2% of attacks landed against 16.4% with no defense, and 87% of tasks still got done.
   </Card>
   <Card title="Perfect score on PrecisionMemBench" icon="brain" href="#memory-that-returns-only-the-current-fact">
     All 77 cases, including all 43 where the memory has to return only the current fact.
   </Card>
 </CardGroup>
 
-Also: top score of 20 teams in NVIDIA's Live Agent Gauntlet ([run](https://github.com/proofable/agent-gauntlet)). Method, caveats and every run are below.
+Top score of 20 teams in NVIDIA's Live Agent Gauntlet ([run](https://github.com/proofable/agent-gauntlet)).
 
 ## Where it covers you
 
@@ -32,10 +32,10 @@ Also: top score of 20 teams in NVIDIA's Live Agent Gauntlet ([run](https://githu
 
 ### Prompt injection on AgentDojo
 
-<img className="evid-light evid-wide" src="/images/evidence/stop-agentdojo-light.svg" alt="Bar chart of AgentDojo prompt injections stopped across 949 attacked task pairs. Proofable stopped 93.8 percent with 87.0 percent of tasks still finished, against 83.6 percent without it and 92.0 percent for an injection filter that finished 21 percent of tasks." />
-<img className="evid-dark evid-wide" src="/images/evidence/stop-agentdojo-dark.svg" alt="Bar chart of AgentDojo prompt injections stopped across 949 attacked task pairs. Proofable stopped 93.8 percent with 87.0 percent of tasks still finished, against 83.6 percent without it and 92.0 percent for an injection filter that finished 21 percent of tasks." />
-<img className="evid-light evid-tall" src="/images/evidence/stop-agentdojo-stacked-light.svg" alt="Bar chart of AgentDojo prompt injections stopped across 949 attacked task pairs. Proofable stopped 93.8 percent with 87.0 percent of tasks still finished, against 83.6 percent without it and 92.0 percent for an injection filter that finished 21 percent of tasks." />
-<img className="evid-dark evid-tall" src="/images/evidence/stop-agentdojo-stacked-dark.svg" alt="Bar chart of AgentDojo prompt injections stopped across 949 attacked task pairs. Proofable stopped 93.8 percent with 87.0 percent of tasks still finished, against 83.6 percent without it and 92.0 percent for an injection filter that finished 21 percent of tasks." />
+<img className="evid-light evid-wide" src="/images/evidence/stop-agentdojo-light.svg" alt="Bar charts of AgentDojo attacks that landed and tasks finished under attack, same agent on 949 attacked tasks. Proofable 6.2 percent landed with 87.0 percent finished, repeat the prompt 11.3 and 88.4, spotlighting 11.9 and 89.4, and no defense 16.4 and 88.1." />
+<img className="evid-dark evid-wide" src="/images/evidence/stop-agentdojo-dark.svg" alt="Bar charts of AgentDojo attacks that landed and tasks finished under attack, same agent on 949 attacked tasks. Proofable 6.2 percent landed with 87.0 percent finished, repeat the prompt 11.3 and 88.4, spotlighting 11.9 and 89.4, and no defense 16.4 and 88.1." />
+<img className="evid-light evid-tall" src="/images/evidence/stop-agentdojo-stacked-light.svg" alt="Bar charts of AgentDojo attacks that landed and tasks finished under attack, same agent on 949 attacked tasks. Proofable 6.2 percent landed with 87.0 percent finished, repeat the prompt 11.3 and 88.4, spotlighting 11.9 and 89.4, and no defense 16.4 and 88.1." />
+<img className="evid-dark evid-tall" src="/images/evidence/stop-agentdojo-stacked-dark.svg" alt="Bar charts of AgentDojo attacks that landed and tasks finished under attack, same agent on 949 attacked tasks. Proofable 6.2 percent landed with 87.0 percent finished, repeat the prompt 11.3 and 88.4, spotlighting 11.9 and 89.4, and no defense 16.4 and 88.1." />
 
 **On [AgentDojo](https://agentdojo.spylab.ai/), the open prompt-injection benchmark from ETH Zurich, putting an owner-signed, per-task permission in front of every tool call cut the share of attacks that landed from 16.4% to 6.2% across all four suites, while the agent still completed 94.9% of its tasks (95.9% without the permission).** Same model, same 949 attacked task pairs, same attack template, scored by AgentDojo's own checkers; the only change is Proofable's authority engine deciding each call against the permission the owner signed for that task.
 
@@ -48,10 +48,10 @@ For scale, these are AgentDojo's published results on other models. With no defe
 
 ### Memory that returns only the current fact
 
-<img className="evid-light evid-wide" src="/images/evidence/memory-precision-light.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
-<img className="evid-dark evid-wide" src="/images/evidence/memory-precision-dark.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
-<img className="evid-light evid-tall" src="/images/evidence/memory-precision-stacked-light.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
-<img className="evid-dark evid-tall" src="/images/evidence/memory-precision-stacked-dark.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
+<img className="evid-light evid-wide" src="/images/evidence/memory-precision-light.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Tenure 77, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
+<img className="evid-dark evid-wide" src="/images/evidence/memory-precision-dark.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Tenure 77, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
+<img className="evid-light evid-tall" src="/images/evidence/memory-precision-stacked-light.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Tenure 77, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
+<img className="evid-dark evid-tall" src="/images/evidence/memory-precision-stacked-dark.svg" alt="Bar chart of PrecisionMemBench cases passed out of 77. Proofable 77 including all 43 cases that need the right facts, Tenure 77, Hindsight 66, Supermemory 15, and Mem0, Zep and Cognee 9." />
 
 **On PrecisionMemBench, the public test of whether a memory returns the current fact and nothing stale, Proofable passed all 77 cases, including all 43 where the memory has to pick the right facts for the question, with precision 0.98 and recall 1.00.** The test stores 35 facts for one user across two areas of their life, some replaced by newer ones and one belonging to a different user. It then asks 77 questions and checks exactly which facts come back. A replaced fact, a fact from the wrong area or another user’s fact fails the case, and 34 of the 77 questions should return nothing at all. Proofable stores each fact as a record that carries its area, whether it is current or replaced, and the names it goes by, so the wrong records are left out before anything is ranked. The [Agent Memory Benchmark](https://agentmemorybenchmark.ai) toolkit scores the test without a model. The per-case results and the code that ran are in [evidence/precisionmembench/2026-11-10-77](https://github.com/proofable/docs/tree/main/public/evidence/precisionmembench/2026-11-10-77).
 
@@ -73,10 +73,10 @@ Each one links its raw results. Rerun it on your own account or machine.
 
 ### Governance coverage
 
-<img className="evid-light evid-wide" src="/images/evidence/stop-tools-light.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
-<img className="evid-dark evid-wide" src="/images/evidence/stop-tools-dark.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
-<img className="evid-light evid-tall" src="/images/evidence/stop-tools-stacked-light.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
-<img className="evid-dark evid-tall" src="/images/evidence/stop-tools-stacked-dark.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, Claude Code or Codex with the ACP gateway 43, Cursor with ACP 37, and agent tools on their own 13." />
+<img className="evid-light evid-wide" src="/images/evidence/stop-tools-light.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, the ACP gateway 46, Claude Code or Codex with ACP 43, Cursor with ACP 37, and agent tools on their own 13." />
+<img className="evid-dark evid-wide" src="/images/evidence/stop-tools-dark.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, the ACP gateway 46, Claude Code or Codex with ACP 43, Cursor with ACP 37, and agent tools on their own 13." />
+<img className="evid-light evid-tall" src="/images/evidence/stop-tools-stacked-light.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, the ACP gateway 46, Claude Code or Codex with ACP 43, Cursor with ACP 37, and agent tools on their own 13." />
+<img className="evid-dark evid-tall" src="/images/evidence/stop-tools-stacked-dark.svg" alt="Bar chart of AgentGovBench scenarios handled out of 48. Proofable 48, the ACP gateway 46, Claude Code or Codex with ACP 43, Cursor with ACP 37, and agent tools on their own 13." />
 
 [AgentGovBench](https://github.com/agentic-control-plane/agentgovbench) is the open library of 48 agent-governance scenarios in eight areas: audit completeness, cross-tenant isolation, delegation provenance, fail-mode discipline, identity propagation, per-user policy, rate limits and scope inheritance. Each scenario is tagged with the NIST AI RMF controls it tests, and nothing passes on a technicality.
 
