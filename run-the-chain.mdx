@@ -34,8 +34,9 @@ with hashes, so the pointer survives export.
 - `statusReadAtMs` and `maxStatusAgeMs` inside the signed decision say when the grant was read and how
   old that read may get while the job runs (60 seconds), so the age is checked from the record. While the
   job runs its grant is re-read every 15 seconds; two consecutive reads that no longer permit the action
-  stop the run, and a grant that cannot be confirmed for 60 seconds stops it fail-closed with a typed
-  reason.
+  stop the run with `JOB_AUTHORITY_REVOKED`, and a grant that cannot be confirmed for 60 seconds stops it
+  fail-closed with `JOB_AUTHORITY_UNVERIFIABLE`. Every read is fresh, so that stop means the reads failed;
+  the receipt's `error` records how old the last confirmation was and how many reads in a row failed.
 - The signed receipt carries `authorityDecisionQHash`, the decision the job ran under. A reader goes from
   the receipt to the decision with no other source.
 
