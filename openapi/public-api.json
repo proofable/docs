@@ -696,6 +696,29 @@
                 },
                 "description": "Verifier IDs that still need a proof to satisfy the gate."
               },
+              "staleVerifierIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Missing verifier IDs whose matching proof is older than the gate allows. A gate with policy.gateFreshnessHours above 0 counts a proof only when its check ran within that many hours; 0 or unset sets no window. Run the check again to satisfy these rows."
+              },
+              "error": {
+                "type": "object",
+                "description": "Present when the gate cannot pass for a stated reason: the gate is outside its open window, or a proof is older than the gate allows (code GATE_REUSE_PROOF_STALE).",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "code",
+                  "message"
+                ]
+              },
               "reusedVerifierProofs": {
                 "type": "object",
                 "description": "Map of verifierId to qHash (or qHash array) of existing proofs that can be reused instead of re-running a check.",
@@ -719,6 +742,10 @@
                     },
                     "satisfied": {
                       "type": "boolean"
+                    },
+                    "stale": {
+                      "type": "boolean",
+                      "description": "True when a matching proof exists but is older than the gate allows."
                     },
                     "qHash": {
                       "type": "string",
