@@ -22,7 +22,8 @@
  * Environment (see README.md):
  *   PROOFABLE_ACCESS_KEY   npk_… access key (required)
  *   AAD_OPERATOR           who ran this, recorded as custodian (required for setup/run)
- *   AAD_AGENT_ID           review agent id (default aaif-authority-review)
+ *   AAD_AGENT_ID           review agent id base (default aaif-authority-review; a per-account
+ *                          suffix is used automatically if the base is registered elsewhere)
  *   AAD_RUN_ID             run id (default aad-<utc timestamp>)
  *   PROOFABLE_MCP_URL      default https://mcp.proofable.me/mcp
  *   PROOFABLE_API_URL      default https://api.proofable.me
@@ -45,10 +46,26 @@ const KIT_VERSION = 'aad-kit/1';
 const CONTRACT_ID = 'https://probityai.github.io/agent-evidence-observer/contract/authority-at-dispatch/v1';
 const MCP_URL = process.env.PROOFABLE_MCP_URL || 'https://mcp.proofable.me/mcp';
 const API_URL = process.env.PROOFABLE_API_URL || 'https://api.proofable.me';
-const AGENT_ID = process.env.AAD_AGENT_ID || 'aaif-authority-review';
+const BASE_AGENT_ID = process.env.AAD_AGENT_ID || 'aaif-authority-review';
 // The agent key lives outside the working tree, so a commit, archive or copy of this folder can
 // never carry it. Earlier kit versions kept it in ./.aad; that file is moved on first use.
 const STATE_DIR = process.env.AAD_STATE_DIR ? resolve(process.env.AAD_STATE_DIR) : join(homedir(), '.proofable', 'aad');
+// Agent ids are global: the base name may already belong to another account. The id actually
+// registered is saved beside the wallet, and every later command reads it back — otherwise `setup`
+// would register one id and `run` would address a different one, and every dispatch would be refused
+// with SETUP_REQUIRED.
+const AGENT_ID_FILE = join(STATE_DIR, 'agent-id');
+const readSavedAgentId = () => {
+  try { return readFileSync(AGENT_ID_FILE, 'utf8').trim() || null; } catch { return null; }
+};
+let AGENT_ID = process.env.AAD_AGENT_ID || readSavedAgentId() || BASE_AGENT_ID;
+const rememberAgentId = (id) => {
+  AGENT_ID = id;
+  try {
+    mkdirSync(STATE_DIR, { recursive: true, mode: 0o700 });
+    writeFileSync(AGENT_ID_FILE, `${id}\n`, { mode: 0o600 });
+  } catch { /* best effort: the run still works for this invocation */ }
+};
 const WALLET_FILE = join(STATE_DIR, 'agent-wallet.json');
 const LEGACY_WALLET_FILE = resolve('.aad', 'agent-wallet.json');
 const GRANT_CHAIN = 'eip155:8453';
@@ -163,20 +180,45 @@ async function setup() {
     expiresAt: 0,
     delegationAllowedActions: BASE_ACTIONS,
   });
+  // Agent ids are global: the default name is held by whichever account registers it first, so any
+  // other account gets AGENT_ID_TAKEN. Fall back once to a stable per-account suffix, so a first-time
+  // runner does not have to know the flag or edit the file.
+  const taken = (value) => /AGENT_ID_TAKEN/.test(JSON.stringify(value || {}));
+  const fallbackId = () => `${BASE_AGENT_ID}-${String(controller).replace(/^0x/, '').slice(0, 6).toLowerCase()}`;
   let res = await create();
-  const step1 = res?.signatures?.step1_agent_identity;
   let identityQHash = null;
-  if (step1) {
+  for (let attempt = 1; ; attempt += 1) {
+    if (taken(res) && attempt === 1) {
+      rememberAgentId(fallbackId());
+      console.log(`agent id "${BASE_AGENT_ID}" is registered to another account; registering "${AGENT_ID}" instead`);
+      res = await create();
+      continue;
+    }
+    const step1 = res?.signatures?.step1_agent_identity;
+    if (!step1) break;
     const signature = await signer.signMessage(step1.signerString);
     const p = step1.nextCall.params;
     const verified = await tool('proofable_verify', {
       walletAddress: p.walletAddress, verifierIds: p.verifierIds, data: p.data, chain: p.chain, signedTimestamp: p.signedTimestamp, signature,
     });
+    if (taken(verified) && attempt === 1) {
+      rememberAgentId(fallbackId());
+      console.log(`agent id "${BASE_AGENT_ID}" is registered to another account; registering "${AGENT_ID}" instead`);
+      res = await create();
+      continue;
+    }
     if (!QHASH.test(String(verified?.qHash || ''))) throw new Error(`agent identity proof failed: ${JSON.stringify(verified).slice(0, 300)}`);
     identityQHash = verified.qHash;
     // Identity first, then access: the identity proof lives on the agent wallet, which no grant
     // names yet, so the owner's session finds it by its proof ID and records the delegation after it.
     res = await create({ identityQHash });
+    if (taken(res) && attempt === 1) {
+      rememberAgentId(fallbackId());
+      console.log(`agent id "${BASE_AGENT_ID}" is registered to another account; registering "${AGENT_ID}" instead`);
+      res = await create();
+      continue;
+    }
+    break;
   }
   if (res?.linked !== true) {
     throw new Error(`Agent setup did not complete on this service revision (${JSON.stringify({ status: res?.status, next_action: res?.next_action, error: res?.error }).slice(0, 200)}). Rerun setup; if it repeats, the deployed service predates identity-first setup (proofable_agent_create identityQHash).`);
@@ -189,6 +231,7 @@ async function setup() {
   const live = link?.linked === true && QHASH.test(String(link?.proofs?.identity?.qHash || '')) ? link.proofs.identity : null;
   console.log(JSON.stringify({ operator, controller, agentId: AGENT_ID, agentWallet: agent, linked: link?.linked ?? null, agentRegistered: Boolean(live), identityQHash: live?.qHash || null, delegationQHash: link?.proofs?.delegation?.qHash || null, revision: await deployedRevision() }, null, 2));
   if (!live) throw new Error(`No agent identity named ${AGENT_ID} for wallet ${agent} is linked to this account; rerun setup.`);
+  rememberAgentId(AGENT_ID);
 }
 
 // ── per-run primitives (same calls the Proofable suite makes) ───────────────────────────
@@ -400,6 +443,10 @@ function revocationOutcome(job) {
 // ── verdicts: expected versus observed, from the record alone ───────────────────────────
 const proofOk = (r, { job = false } = {}) => QHASH.test(String(r?.qHash || '')) && r.offlineVerified === true
   && lower(r.envelope?.qHash) === lower(r.qHash) && (!job || r.status === 'verified');
+/** Refusals that mean the harness could not establish the precondition, not that the case refused. */
+const SETUP_LEVEL_CODES = new Set(['SETUP_REQUIRED', 'WALLET_REQUIRED', 'DELEGATION_REQUIRED']);
+const isCaseDenial = (code) => Boolean(code) && !SETUP_LEVEL_CODES.has(String(code));
+
 function verdict(rec) {
   const o = rec?.observed || {};
   const status = lower(o.status);
@@ -414,7 +461,9 @@ function verdict(rec) {
       return status === 'cancelled' && !o.executor && !rec.executorWhileHeld && rec.lateDecision?.success !== true && Boolean(rec.lateDecision?.error) && proofOk(rec.receipt, { job: true }) && decisionOutcome(rec.receipt?.authorityDecision) === 'STEP_UP';
     case 'revoke_before_dispatch':
     case 'expiry_before_dispatch':
-      return rec.dispatch?.decision === 'DENY' && Boolean(rec.dispatch?.code) && rec.observed_effect?.committed === false && proofOk(rec.dispatch?.authorityDecision);
+      // A refusal for a setup reason is not the refusal this case tests: the grant was never
+      // established, so nothing about revocation or expiry was observed.
+      return rec.dispatch?.decision === 'DENY' && isCaseDenial(rec.dispatch?.code) && rec.observed_effect?.committed === false && proofOk(rec.dispatch?.authorityDecision);
     case 'stale_authority':
       return rec.replayAttempts?.length >= 2 && rec.replayAttempts.every((a) => a.decision === 'DENY' && a.code && proofOk(a.authorityDecision))
         && lower(rec.control?.status) === 'completed' && proofOk(rec.control?.receipt, { job: true });
@@ -599,8 +648,18 @@ async function run(selected) {
       writeLf(join(dir, `${name}.json`), `${JSON.stringify(rec, null, 2)}\n`);
       console.log(rec.passed ? 'PASS' : 'FAIL');
     } catch (error) {
-      writeLf(join(dir, `${name}.error.json`), `${JSON.stringify({ case: name, ...identity, started, finished: nowIso(), error: String(error?.message || error) }, null, 2)}\n`);
-      console.log(`ERROR ${error?.message || error}`);
+      const message = String(error?.message || error);
+      writeLf(join(dir, `${name}.error.json`), `${JSON.stringify({ case: name, ...identity, started, finished: nowIso(), error: message }, null, 2)}\n`);
+      console.log(`ERROR ${message}`);
+      // A run whose agent is not active cannot grade anything: every case would be refused for the
+      // same setup reason, and the two refusal cases would report PASS for it. Stop and say so.
+      if (SETUP_LEVEL_CODES.has((message.match(/\b(SETUP_REQUIRED|WALLET_REQUIRED|DELEGATION_REQUIRED)\b/) || [])[1])) {
+        console.log(`\nThe agent "${AGENT_ID}" is not active for this account, so no case can run.`);
+        console.log('Run `node aad.mjs setup` again and use the agent id it prints; then rerun this command.');
+        seal(dir, identity);
+        process.exitCode = 1;
+        return;
+      }
     }
   }
   seal(dir, identity);

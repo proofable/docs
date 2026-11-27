@@ -1,16 +1,16 @@
 ---
 title: Update or comment on a proof
 sidebarTitle: Update a proof
-description: Rename, retag or change who can see a proof you own, or vote and comment on one you can access.
+description: Rename, retag or change who can see a proof you own, correct a record with a successor, or vote and comment on one you can access.
 keywords: ["proofable_proofs_update", "update a proof", "proof comments", "MCP"]
 icon: pen
 ---
 
-With the **`qHash`** in hand, edit the title, tags or visibility, or leave one vote or comment per call. Omit **`walletAddress`** when signed in.
+With the **`qHash`** in hand, edit the title, tags or visibility, correct a record, or leave one vote or comment per call. Omit **`walletAddress`** when signed in.
 
 ## What changes
 
-The title helps people recognize a proof. Tags are short values for retrieval with [**`proofable_proofs_get`**](./proofs-get). Votes and comments are feedback signals; they never mark a claim correct or approved. Verified content, verifier results and ownership stay unchanged. Owners can vote on their own proofs.
+The title helps people recognize a proof. Tags are short values for retrieval with [**`proofable_proofs_get`**](./proofs-get). Votes and comments are feedback signals; they never mark a claim correct or approved. A proof's body is the record as written and never changes. Correct one by writing its successor. `supersede` creates a copy with the new title or body, names the old proof as superseded, and retires it from current listings while the old proof stays readable by ID. Verified content, verifier results and ownership stay unchanged. Owners can vote on their own proofs.
 
 | Auth | Access |
 |------|------------|
@@ -36,14 +36,15 @@ The title helps people recognize a proof. Tags are short values for retrieval wi
 | `disclosePortableProof` | Allow the full portable envelope on anonymous reads of this public proof by ID. Default `false`. |
 | `vote` | `up`, `down`, or `clear` to change your vote. |
 | `comment` | Add a comment. Use `parentId` to reply to an existing comment. |
+| `supersede` | Correct this record with `{ "title": "…", "content": "…", "tags": ["…"] }`. Omit `title` or `content` to carry the current value forward. Send it alone in a call; the proof must use the ownership check only. |
 | `parentId` | Optional comment ID to reply to. Requires `comment`. |
 | `walletAddress` | Optional owner wallet. Omit when signed in to use the current account. |
 
-Send one kind of update per call, either metadata, one vote, or one comment. A delegated agent needs the `manage_proofs` action.
+Send one kind of update per call, either metadata, one supersede, one vote, or one comment. A delegated agent needs the `manage_proofs` action.
 
 ## Response
 
-Returns the proof ID and the result of the update, vote, or comment.
+Returns the proof ID and the result of the update, vote, or comment. A supersede returns the new proof ID in `qHash` and the replaced one in `previousQHash`.
 
 ## Read it back
 

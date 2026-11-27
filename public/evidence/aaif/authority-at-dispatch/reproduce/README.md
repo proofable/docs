@@ -28,6 +28,11 @@ node aad.mjs report runs/<run-id>
 `verify` needs no network and no account. Run one case with `node aad.mjs run <case>`; list them
 with `node aad.mjs cases`.
 
+Agent ids are global to Proofable. If `aaif-authority-review` is already registered to another
+account, `setup` registers `aaif-authority-review-<account>` instead and says so; the id it
+registers is saved beside the agent key and reused by every later command. Set `AAD_AGENT_ID` to
+choose your own base name.
+
 Verify with `@proofable/sdk` 0.1.9 or later, which this kit pins. Earlier versions require a
 non-canonical `walletAddress` field on the envelope, so they cannot verify a CAIP-380 envelope that
 omits it, including the CAIP's own test vectors.

@@ -17,7 +17,7 @@ icon: wrench
 | Prove it | `proofable_verify` | Runs the checks and saves the proof. Also grants agent permissions. |
 | Sign elsewhere | `proofable_verify_prepare`, then `proofable_verify_submit` | Another wallet signs; the proof saves when it passes. |
 | Read | `proofable_proofs_get` | One proof by ID, or search by text, tag or check. |
-| Edit or review | `proofable_proofs_update` | Title, tags, visibility, vote or comment. |
+| Edit or review | `proofable_proofs_update` | Title, tags, visibility, a supersede correction, vote or comment. |
 | Revoke | `proofable_proof_revoke` | Immediate, everywhere. Revoking a delegation ends that agent's permission. |
 
 ## Agents
@@ -47,7 +47,7 @@ A run costs what [Jobs](/jobs) lists. Keys are saved on your profile ([Secrets](
 | `proofable_proofs_check` | `wallet` | `verifiers` |
 | `proofable_verify`, `proofable_verify_prepare`, `proofable_verify_submit`, `proofable_verify_or_guide` | `walletAddress` | `verifierIds` |
 | `proofable_proofs_get` | `identifier` | optional `tags` (array or comma-separated string) |
-| `proofable_proofs_update` | `qHash` (proof ID) | optional metadata, visibility, `vote`, or `comment` |
+| `proofable_proofs_update` | `qHash` (proof ID) | optional metadata, visibility, `supersede`, `vote`, or `comment` |
 
 Wallet address in native format, or `did:pkh:…`. Delegated reads: **`agentWallet`** on **`proofable_proofs_get`** (**`x-agent-wallet`** on the API).
 
